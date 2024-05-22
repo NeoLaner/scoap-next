@@ -15,7 +15,6 @@ const ScrollAreaY = ({
     if (ref.current) {
       // Get the first div within the parent container
       const firstDiv = ref.current.querySelector("div");
-      console.log(firstDiv);
 
       if (firstDiv) {
         // Remove all styles
