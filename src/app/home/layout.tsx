@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
-import MainHeader from "~/app/_components/mainHeader";
-import MainNav from "../_components/mainNav";
+import MainHeader from "~/app/_ui/mainHeader";
+import MainNav from "../_ui/mainNav";
 
 function Layout({ children }: { children: ReactNode }) {
   return (
