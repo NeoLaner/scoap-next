@@ -1,10 +1,4 @@
-import {
-  blackA,
-  bronzeDark,
-  violet,
-  crimsonDark,
-  crimson,
-} from "@radix-ui/colors";
+import { blackA, bronzeDark, crimson } from "@radix-ui/colors";
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
@@ -19,13 +13,6 @@ for (let index = 0; index < 12; index++) {
 //   primary[`primary-${index + 1}`] = crimsonDark[key];
 // });
 
-const accent = {};
-
-Object.keys(crimson).forEach((key, index) => {
-  //eslint-disable-next-line
-  accent[`accent-${index + 1}`] = crimson[key];
-});
-
 const gray = {};
 
 Object.keys(bronzeDark).forEach((key, index) => {
@@ -38,9 +25,7 @@ export default {
   theme: {
     colors: {
       ...blackA,
-      ...violet,
       ...primary,
-      ...accent,
       ...gray,
     },
     extend: {
