@@ -1,7 +1,11 @@
 import LogoSVG from "./logoSVG";
 import UserProfile from "./userProfile";
+import { getServerAuthSession } from "~/server/auth";
 
-function MainHeader() {
+async function MainHeader() {
+  const session = await getServerAuthSession();
+  if (!session) return null;
+
   return (
     <header className="fixed z-20  h-[72px] w-full  bg-black">
       <div className="flex h-full w-full items-center justify-between px-4">
@@ -10,7 +14,7 @@ function MainHeader() {
         {/* SEARCH */}
         <input className="w-32" />
         {/* USER PROFILE */}
-        <UserProfile />
+        <UserProfile user={session?.user} />
       </div>
     </header>
   );
