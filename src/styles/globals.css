@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --crimson-1: #191114;
+  --crimson-2: #201318;
+  --crimson-3: #381525;
+  --crimson-4: #4d122f;
+  --crimson-5: #5c1839;
+  --crimson-6: #6d2545;
+  --crimson-7: #873356;
+  --crimson-8: #b0436e;
+  --crimson-9: #e93d82;
+  --crimson-10: #ee518a;
+  --crimson-11: #ff92ad;
+  --crimson-12: #fdd3e8;
+
+  --red-1: #191111;
+  --red-2: #201314;
+  --red-3: #3b1219;
+  --red-4: #500f1c;
+  --red-5: #611623;
+  --red-6: #72232d;
+  --red-7: #8c333a;
+  --red-8: #b54548;
+  --red-9: #e5484d;
+  --red-10: #ec5d5e;
+  --red-11: #ff9592;
+  --red-12: #ffd1d9;
+}
+
+/* var(--blue-12) */

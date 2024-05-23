@@ -8,7 +8,7 @@ async function StreamHeader() {
   if (!session) return null;
   return (
     <header
-      className="absolute top-0 w-full p-4 pt-8 text-gray-200 md:p-8"
+      className="text-gray-2 absolute top-0 w-full p-4 pt-8 md:p-8"
       style={{
         backgroundImage: `linear-gradient(to bottom, #000000a9 0%, rgba(0, 0, 0, 0) 100%)`,
       }}

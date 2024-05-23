@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`h-dvh font-sans ${inter.variable}`}>
         <TRPCReactProvider>
-          <main className="flex h-full flex-col items-center justify-center overflow-y-auto bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+          <main className="bg-gray-1 text-gray-12 flex h-full flex-col items-center justify-center overflow-y-auto">
             <ScrollAreaY className="!bottom-[72px] !top-[72px] md:!bottom-0">
               {children}
             </ScrollAreaY>

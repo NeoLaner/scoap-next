@@ -1,18 +1,51 @@
-import { blackA, mauve, violet } from "@radix-ui/colors";
+import {
+  blackA,
+  bronzeDark,
+  violet,
+  crimsonDark,
+  crimson,
+} from "@radix-ui/colors";
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
+
+const primaryColor = "red";
+const primary = {};
+for (let index = 0; index < 12; index++) {
+  primary[`primary-${index + 1}`] = `var(--${primaryColor}-${index + 1})`;
+}
+
+// Object.keys(crimsonDark).forEach((key, index) => {
+//   //eslint-disable-next-line
+//   primary[`primary-${index + 1}`] = crimsonDark[key];
+// });
+
+const accent = {};
+
+Object.keys(crimson).forEach((key, index) => {
+  //eslint-disable-next-line
+  accent[`accent-${index + 1}`] = crimson[key];
+});
+
+const gray = {};
+
+Object.keys(bronzeDark).forEach((key, index) => {
+  //eslint-disable-next-line
+  gray[`gray-${index + 1}`] = bronzeDark[key];
+});
 
 export default {
   content: ["./src/**/*.tsx"],
   theme: {
+    colors: {
+      ...blackA,
+      ...violet,
+      ...primary,
+      ...accent,
+      ...gray,
+    },
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
-      },
-      colors: {
-        ...blackA,
-        ...mauve,
-        ...violet,
       },
       keyframes: {
         slideUpAndFade: {

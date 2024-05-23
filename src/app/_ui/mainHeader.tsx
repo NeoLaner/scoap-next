@@ -7,10 +7,10 @@ async function MainHeader() {
   if (!session) return null;
 
   return (
-    <header className="fixed z-20  h-[72px] w-full  bg-black">
+    <header className="bg-primary-1 fixed  z-20 h-[72px]  w-full">
       <div className="flex h-full w-full items-center justify-between px-4">
         {/* LOGO */}
-        <LogoSVG fill="red" />
+        <LogoSVG fill="var(--red-10)" />
         {/* SEARCH */}
         <input className="w-32" />
         {/* USER PROFILE */}

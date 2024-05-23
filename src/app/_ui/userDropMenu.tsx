@@ -16,7 +16,7 @@ const UserDropMenu = ({
     <Popover.Root>
       <Popover.Trigger asChild>
         <button
-          className="inline-flex h-[35px] w-[35px] cursor-default items-center justify-center rounded-full bg-white text-violet11 shadow-[0_2px_10px] shadow-blackA4 outline-none hover:bg-violet3 focus:shadow-[0_0_0_2px] focus:shadow-black"
+          className="text-primary-10 hover:bg-primary-3 inline-flex h-[35px] w-[35px] cursor-default items-center justify-center rounded-full bg-white shadow-[0_2px_10px] shadow-blackA4 outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
           aria-label="Update dimensions"
         >
           <div className="flex gap-5">
@@ -27,7 +27,7 @@ const UserDropMenu = ({
                 alt="Pedro Duarte"
               />
               <Avatar.Fallback
-                className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
+                className="leading-1 text-primary-11 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium"
                 delayMs={600}
               >
                 JD
@@ -38,8 +38,8 @@ const UserDropMenu = ({
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content
-          className="mr-3 w-[260px] rounded bg-white p-5 shadow-[0_10px_38px_-10px_hsla(206,22%,7%,.35),0_10px_20px_-15px_hsla(206,22%,7%,.2)] will-change-[transform,opacity] focus:shadow-[0_10px_38px_-10px_hsla(206,22%,7%,.35),0_10px_20px_-15px_hsla(206,22%,7%,.2),0_0_0_2px_theme(colors.violet7)] data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=top]:animate-slideDownAndFade"
-          sideOffset={20}
+          className="text-gray-12 bg-primary-1 shadow-primary-8 z-20 mr-3 w-[260px] rounded bg-white p-5 shadow-[0_10px_38px_-10px_hsla(206,22%,7%,.35),0_10px_20px_-15px_hsla(206,22%,7%,.2)] will-change-[transform,opacity] focus:shadow-[0_10px_38px_-10px_hsla(206,22%,7%,.35),0_10px_20px_-15px_hsla(206,22%,7%,.2),0_0_0_2px_theme(colors.primary-7)] data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=top]:animate-slideDownAndFade"
+          sideOffset={19}
         >
           <div>
             <div className="flex gap-2">
@@ -50,7 +50,7 @@ const UserDropMenu = ({
                   alt={user.name ?? "No Name"}
                 />
                 <Avatar.Fallback
-                  className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
+                  className="leading-1 text-primary-11 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium"
                   delayMs={600}
                 >
                   JD
