@@ -1,6 +1,7 @@
 import Image from "next/image";
 import ScrollAreaX from "~/app/_ui/ScrollAreaX";
-import { MetaInfo } from "~/app/services/stremIo/types";
+import { MetaInfo } from "~/app/_services/stremIo/types";
+import Link from "next/link";
 
 function PopularMedias({
   heading,
@@ -18,8 +19,12 @@ function PopularMedias({
       <ScrollAreaX>
         <div className="flex min-w-0 shrink grow basis-0 gap-4 overflow-x-auto py-6">
           {items.map((item) => (
-            <div key={item.id} className="flex flex-col items-center gap-4">
-              <div className="relative h-52 w-36 overflow-hidden rounded-lg">
+            <Link
+              href={`/stream/movie/${item.imdb_id}`}
+              key={item.id}
+              className="flex flex-col items-center gap-4"
+            >
+              <div className="relative h-40 w-28 overflow-hidden rounded-lg md:h-52 md:w-36">
                 <Image
                   src={item.poster}
                   alt={item.name}
@@ -29,7 +34,7 @@ function PopularMedias({
                 />
               </div>
               <div className="text-center text-xs font-medium">{item.name}</div>
-            </div>
+            </Link>
           ))}
         </div>
       </ScrollAreaX>

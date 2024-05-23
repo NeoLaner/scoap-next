@@ -18,7 +18,7 @@ const ScrollAreaY = ({
 
       if (firstDiv) {
         // Remove all styles
-        firstDiv.style.cssText = "";
+        firstDiv.style.cssText = "height: 100%;";
       }
     }
   }, []);

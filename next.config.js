@@ -16,9 +16,33 @@ const config = {
       },
       {
         protocol: "https",
+        hostname: "images.metahub.space",
+        port: "",
+        pathname: "/background/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.metahub.space",
+        port: "",
+        pathname: "/logo/**",
+      },
+      {
+        protocol: "https",
         hostname: "live.metahub.space",
         port: "",
         pathname: "/poster/**",
+      },
+      {
+        protocol: "https",
+        hostname: "live.metahub.space",
+        port: "",
+        pathname: "/background/**",
+      },
+      {
+        protocol: "https",
+        hostname: "live.metahub.space",
+        port: "",
+        pathname: "/logo/**",
       },
     ],
   },

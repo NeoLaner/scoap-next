@@ -1,5 +1,5 @@
 import PopularMedias from "./_ui/PopularMedias";
-import StremioService from "../services/stremIo/stremIoServices";
+import StremioService from "../_services/stremIo/stremIoServices";
 
 const items = [
   {
@@ -59,7 +59,7 @@ export default async function Home() {
   const popularSeries = await StremioService.getPopularSeries();
 
   return (
-    <div className="space-y-10 px-10 pt-20">
+    <div className="space-y-10">
       <PopularMedias items={popularMovies} heading="Popular Movies" />
       <PopularMedias items={popularSeries} heading="Popular Series" />
     </div>

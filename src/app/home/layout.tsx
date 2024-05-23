@@ -7,8 +7,8 @@ function Layout({ children }: { children: ReactNode }) {
     <div>
       <MainHeader />
       <MainNav />
-      <section className="py-[72px] pb-72 md:pb-0 md:pl-[72px]">
-        {children}
+      <section className="py-[72px] md:py-[72px] md:pl-[72px]">
+        <div className="px-4 py-8 md:px-8">{children}</div>
       </section>
     </div>
   );

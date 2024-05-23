@@ -4,7 +4,7 @@ import {
   OPENSUBTITLES_URL,
   STREMIO_API_URL,
   STREMIO_STREAMING_SERVER,
-} from "~/app/config/API";
+} from "~/app/_config/API";
 import { type MetaInfo } from "./types";
 
 export type MovieSearchResult = {
