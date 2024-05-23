@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import * as Avatar from "@radix-ui/react-avatar";
 import * as Popover from "@radix-ui/react-popover";
-import ButtonFullscreen from "./buttonFullscreen";
+import ButtonFullscreen from "./ButtonFullscreen";
 
 const UserDropMenu = ({
   user,

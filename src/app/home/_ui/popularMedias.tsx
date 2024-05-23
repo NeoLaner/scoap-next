@@ -1,5 +1,5 @@
 import Image from "next/image";
-import ScrollAreaX from "~/app/_ui/scrollAreaX";
+import ScrollAreaX from "~/app/_ui/ScrollAreaX";
 import { MetaInfo } from "~/app/services/stremIo/types";
 
 function PopularMedias({

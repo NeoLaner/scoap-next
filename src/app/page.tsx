@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CreatePost } from "~/app/_ui/create-post";
+import { CreatePost } from "~/app/_ui/CreatePost";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 

@@ -1,5 +1,5 @@
-import LogoSVG from "./logoSVG";
-import UserDropMenu from "./userDropMenu";
+import LogoSVG from "./LogoSVG";
+import UserDropMenu from "./UserDropMenu";
 import { getServerAuthSession } from "~/server/auth";
 
 async function MainHeader() {

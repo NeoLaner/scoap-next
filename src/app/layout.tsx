@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import ScrollAreaY from "~/app/_ui/scrollAreaY";
+import ScrollAreaY from "~/app/_ui/ScrollAreaY";
 
 const inter = Inter({
   subsets: ["latin"],
