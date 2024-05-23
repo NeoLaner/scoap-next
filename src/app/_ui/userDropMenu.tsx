@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import * as Avatar from "@radix-ui/react-avatar";
 import * as Popover from "@radix-ui/react-popover";
 import ButtonFullscreen from "./ButtonFullscreen";
+import * as Separator from "@radix-ui/react-separator";
 
 const UserDropMenu = ({
   user,
@@ -43,7 +44,7 @@ const UserDropMenu = ({
         >
           <div>
             <div className="flex gap-2">
-              <Avatar.Root className="inline-flex h-[35px] w-[35px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
+              <Avatar.Root className="inline-flex h-[35px] w-[40px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
                 <Avatar.Image
                   className="h-full w-full rounded-[inherit] object-cover"
                   src={user.image ?? ""}
@@ -57,11 +58,18 @@ const UserDropMenu = ({
                 </Avatar.Fallback>
               </Avatar.Root>
 
-              <div className="flex flex-col">
-                <p className="text-sm">{user.name}</p>
-                <p className="text-xs">Guest</p>
+              <div className="flex w-full items-center justify-between">
+                <div className="flex flex-col">
+                  <p className="text-sm">{user.name}</p>
+                  <p className="text-xs">Guest</p>
+                </div>
+
+                <div>
+                  <button>Logout</button>
+                </div>
               </div>
             </div>
+            <Separator.Root className="bg-primary-7 my-[15px] data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px" />
             <ButtonFullscreen />
           </div>
         </Popover.Content>
