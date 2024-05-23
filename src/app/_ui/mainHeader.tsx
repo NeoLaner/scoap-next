@@ -1,5 +1,5 @@
 import LogoSVG from "./logoSVG";
-import UserProfile from "./userProfile";
+import UserDropMenu from "./userDropMenu";
 import { getServerAuthSession } from "~/server/auth";
 
 async function MainHeader() {
@@ -14,7 +14,7 @@ async function MainHeader() {
         {/* SEARCH */}
         <input className="w-32" />
         {/* USER PROFILE */}
-        <UserProfile user={session?.user} />
+        <UserDropMenu user={session?.user} />
       </div>
     </header>
   );
