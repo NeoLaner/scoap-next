@@ -5,9 +5,11 @@ import { HiArrowCircleLeft } from "react-icons/hi";
 function ButtonGoBack() {
   const router = useRouter();
   return (
-    <button onClick={() => router.back()}>
-      <HiArrowCircleLeft size={30} />
-    </button>
+    <div className="flex items-center justify-center rounded-full bg-gray-1">
+      <button onClick={() => router.back()} className="rounded-full   ">
+        <HiArrowCircleLeft size={30} />
+      </button>
+    </div>
   );
 }
 
