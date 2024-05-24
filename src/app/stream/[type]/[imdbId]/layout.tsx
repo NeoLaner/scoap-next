@@ -1,9 +1,11 @@
 import { type ReactNode } from "react";
-import StreamHeader from "../../_ui/StreamHeader";
+import StreamHeader from "./_ui/StreamHeader";
 import Image from "next/image";
 import StremioService from "~/app/_services/stremIo/stremIoServices";
-import StreamFooter from "../../_ui/StreamFooter";
-import StreamMenuFooter from "../../_ui/StreamMenuFooter";
+import StreamFooter from "./_ui/StreamFooter";
+import StreamMenuFooter from "./_ui/StreamMenuFooter";
+import BgMedia from "./_ui/BgMedia";
+import BgLogo from "./_ui/BgLogo";
 
 async function layout({
   children,
@@ -14,41 +16,15 @@ async function layout({
 }) {
   const imdbId = params.imdbId;
   const type = params.type;
-  console.log("type: ", type);
-
-  let mediaData;
-  if (type === "movie") mediaData = await StremioService.getMetaMovie(imdbId);
-  if (type === "series") mediaData = await StremioService.getMetaSeries(imdbId);
-
-  if (!mediaData) return <div>Not found</div>;
 
   return (
-    <section className="relative h-full">
+    <section className="relative h-full w-full">
       {/* <StreamHeader /> */}
-      {mediaData.background && (
-        <Image
-          src={mediaData.background}
-          alt={mediaData.name}
-          fill
-          className="h-full object-cover object-top opacity-70"
-          quality="80"
-        />
-      )}
-      {mediaData.logo && (
-        <div className="flex h-full items-center justify-center">
-          <Image
-            src={mediaData.logo}
-            alt={mediaData.name}
-            width={800}
-            height={310}
-            className="z-10 w-96"
-            quality="100"
-          />
-        </div>
-      )}
       <StreamHeader />
-      {children}
 
+      <BgMedia imdbId={imdbId} type={type} />
+      <BgLogo imdbId={imdbId} type={type} />
+      {children}
       <StreamMenuFooter />
     </section>
   );
