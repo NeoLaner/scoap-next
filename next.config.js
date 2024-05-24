@@ -44,6 +44,12 @@ const config = {
         port: "",
         pathname: "/logo/**",
       },
+      {
+        protocol: "https",
+        hostname: "m.media-amazon.com",
+        port: "",
+        pathname: "/images/**",
+      },
     ],
   },
 };

@@ -17,7 +17,7 @@ const UserDropMenu = ({
     <Popover.Root>
       <Popover.Trigger asChild>
         <button
-          className="text-primary-10 hover:bg-primary-3 inline-flex h-[35px] w-[35px] cursor-default items-center justify-center rounded-full bg-white shadow-[0_2px_10px] shadow-blackA4 outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
+          className="bg-white focus:shadow-black inline-flex h-[35px] w-[35px] cursor-default items-center justify-center rounded-full text-primary-10 shadow-[0_2px_10px] shadow-blackA4 outline-none hover:bg-primary-3 focus:shadow-[0_0_0_2px]"
           aria-label="Update dimensions"
         >
           <div className="flex gap-5">
@@ -28,7 +28,7 @@ const UserDropMenu = ({
                 alt="Pedro Duarte"
               />
               <Avatar.Fallback
-                className="leading-1 text-primary-11 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium"
+                className="leading-1 bg-white flex h-full w-full items-center justify-center text-[15px] font-medium text-primary-11"
                 delayMs={600}
               >
                 JD
@@ -39,7 +39,7 @@ const UserDropMenu = ({
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content
-          className="text-gray-12 bg-primary-1 shadow-primary-8 z-20 mr-3 w-[260px] rounded bg-white p-5 shadow-[0_10px_38px_-10px_hsla(206,22%,7%,.35),0_10px_20px_-15px_hsla(206,22%,7%,.2)] will-change-[transform,opacity] focus:shadow-[0_10px_38px_-10px_hsla(206,22%,7%,.35),0_10px_20px_-15px_hsla(206,22%,7%,.2),0_0_0_2px_theme(colors.primary-7)] data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=top]:animate-slideDownAndFade"
+          className="bg-white z-20 mr-3 w-[260px] rounded bg-gray-2 p-5 text-gray-12 shadow-[0_10px_38px_-10px_hsla(206,22%,7%,.35),0_10px_20px_-15px_hsla(206,22%,7%,.2)] shadow-primary-3 will-change-[transform,opacity] focus:shadow-[0_10px_38px_-10px_hsla(206,22%,7%,.35),0_10px_20px_-15px_hsla(206,22%,7%,.2),0_0_0_2px_theme(colors.primary-7)] data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=top]:animate-slideDownAndFade"
           sideOffset={19}
         >
           <div>
@@ -51,7 +51,7 @@ const UserDropMenu = ({
                   alt={user.name ?? "No Name"}
                 />
                 <Avatar.Fallback
-                  className="leading-1 text-primary-11 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium"
+                  className="leading-1 bg-white flex h-full w-full items-center justify-center text-[15px] font-medium text-primary-11"
                   delayMs={600}
                 >
                   JD
@@ -69,7 +69,7 @@ const UserDropMenu = ({
                 </div>
               </div>
             </div>
-            <Separator.Root className="bg-primary-7 my-[15px] data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px" />
+            <Separator.Root className="my-[15px] bg-primary-7 data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px" />
             <ButtonFullscreen />
           </div>
         </Popover.Content>

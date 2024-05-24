@@ -68,16 +68,24 @@ const StremioService = {
   },
 
   async searchMovies(title: string) {
-    const { data } = await axios.get(
+    const { data } = (await axios.get(
       `${CINEMETA_URL}/catalog/movie/top/search=${title}.json`,
-    );
-    return data.metas as MovieSearchResult[];
+    )) as unknown as {
+      data: {
+        metas: MovieSearchResult[];
+      };
+    };
+    return data.metas;
   },
 
   async searchSeries(title: string) {
-    const { data } = await axios.get(
+    const { data } = (await axios.get(
       `${CINEMETA_URL}/catalog/series/top/search=${title}.json`,
-    );
+    )) as unknown as {
+      data: {
+        metas: MovieSearchResult[];
+      };
+    };
     return data.metas;
   },
 

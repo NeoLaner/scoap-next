@@ -1,4 +1,4 @@
-import PopularMedias from "./_ui/PopularMedias";
+import PopularMedias from "../_ui/PopularMedias";
 import StremioService from "../_services/stremIo/stremIoServices";
 
 const items = [
