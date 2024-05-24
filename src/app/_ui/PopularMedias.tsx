@@ -3,6 +3,13 @@ import ScrollAreaX from "~/app/_ui/ScrollAreaX";
 import Link from "next/link";
 import { BsImage } from "react-icons/bs";
 
+const truncateText = (text: string, maxLength: number) => {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.substring(0, maxLength) + "...";
+};
+
 function PopularMedias({
   heading,
   items,
@@ -28,6 +35,7 @@ function PopularMedias({
               href={`/stream/${item.type}/${item.imdb_id}`}
               key={item.id}
               className="flex flex-col items-center gap-4"
+              title={item.name}
             >
               <div className="relative h-40 w-28 overflow-hidden rounded-lg bg-gray-4 md:h-52 md:w-36">
                 {item.poster && (
@@ -46,7 +54,9 @@ function PopularMedias({
                   </div>
                 )}
               </div>
-              <div className="text-center text-xs font-medium">{item.name}</div>
+              <div className="max-h-8 max-w-32 overflow-hidden text-center text-xs font-medium">
+                {truncateText(item.name, 28)}
+              </div>
             </Link>
           ))}
         </div>
