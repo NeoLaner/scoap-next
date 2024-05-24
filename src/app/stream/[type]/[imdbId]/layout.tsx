@@ -10,30 +10,35 @@ async function layout({
   params,
 }: {
   children: ReactNode;
-  params: { imdbId: string };
+  params: { imdbId: string; type: string };
 }) {
   const imdbId = params.imdbId;
-  const movieMeta = await StremioService.getMetaMovie(imdbId);
+  const type = params.type;
+  console.log("type: ", type);
 
-  if (!movieMeta) return <div>Not found</div>;
+  let mediaData;
+  if (type === "movie") mediaData = await StremioService.getMetaMovie(imdbId);
+  if (type === "series") mediaData = await StremioService.getMetaSeries(imdbId);
+
+  if (!mediaData) return <div>Not found</div>;
 
   return (
     <section className="relative h-full">
       {/* <StreamHeader /> */}
-      {movieMeta.background && (
+      {mediaData.background && (
         <Image
-          src={movieMeta.background}
-          alt={movieMeta.name}
+          src={mediaData.background}
+          alt={mediaData.name}
           fill
           className="h-full object-cover object-top opacity-70"
           quality="80"
         />
       )}
-      {movieMeta.logo && (
+      {mediaData.logo && (
         <div className="flex h-full items-center justify-center">
           <Image
-            src={movieMeta.logo}
-            alt={movieMeta.name}
+            src={mediaData.logo}
+            alt={mediaData.name}
             width={800}
             height={310}
             className="z-10 w-96"

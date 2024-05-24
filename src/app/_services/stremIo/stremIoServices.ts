@@ -57,7 +57,7 @@ const StremioService = {
     const { data } = await axios.get(
       `${CINEMETA_URL}/meta/series/${imdbId}.json`,
     );
-    return data.meta;
+    return data.meta as MetaInfo;
   },
 
   async getMetaMovie(imdbId: string) {
