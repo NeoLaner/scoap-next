@@ -1,7 +1,7 @@
 function StreamFooter({ director }: { director: string[] }) {
   return (
     <div
-      className="absolute bottom-0 w-full p-4 pb-8 pt-6 text-gray-3 md:p-8"
+      className="absolute bottom-0 w-full p-4 pb-8 pt-6 text-gray-9 md:p-8"
       style={{
         backgroundImage: `linear-gradient(to top, #000000a9 0%, rgba(0, 0, 0, 0) 100%)`,
       }}

@@ -3,6 +3,7 @@ import StreamHeader from "../../_ui/StreamHeader";
 import Image from "next/image";
 import StremioService from "~/app/_services/stremIo/stremIoServices";
 import StreamFooter from "../../_ui/StreamFooter";
+import StreamMenuFooter from "../../_ui/StreamMenuFooter";
 
 async function layout({
   children,
@@ -42,7 +43,8 @@ async function layout({
       )}
       <StreamHeader />
       {children}
-      <StreamFooter director={movieMeta.director} />
+
+      <StreamMenuFooter />
     </section>
   );
 }
