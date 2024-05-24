@@ -13,28 +13,33 @@ async function layout({
 }) {
   const imdbId = params.imdbId;
   const movieMeta = await StremioService.getMetaMovie(imdbId);
-  console.log(movieMeta);
+
+  if (!movieMeta) return <div>Not found</div>;
 
   return (
     <section className="relative h-full">
       {/* <StreamHeader /> */}
-      <Image
-        src={movieMeta.background}
-        alt={movieMeta.name}
-        fill
-        className="h-full object-cover object-top opacity-70"
-        quality="80"
-      />
-      <div className="flex h-full items-center justify-center">
+      {movieMeta.background && (
         <Image
-          src={movieMeta.logo}
+          src={movieMeta.background}
           alt={movieMeta.name}
-          width={800}
-          height={310}
-          className="z-10 w-96"
-          quality="100"
+          fill
+          className="h-full object-cover object-top opacity-70"
+          quality="80"
         />
-      </div>
+      )}
+      {movieMeta.logo && (
+        <div className="flex h-full items-center justify-center">
+          <Image
+            src={movieMeta.logo}
+            alt={movieMeta.name}
+            width={800}
+            height={310}
+            className="z-10 w-96"
+            quality="100"
+          />
+        </div>
+      )}
       <StreamHeader />
       {children}
       <StreamFooter director={movieMeta.director} />
