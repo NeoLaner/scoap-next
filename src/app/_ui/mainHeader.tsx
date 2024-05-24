@@ -1,4 +1,3 @@
-import Link from "next/link";
 import LogoSVG from "./LogoSVG";
 import SearchHeader from "./SearchHeader";
 import UserDropMenu from "./UserDropMenu";
@@ -17,7 +16,6 @@ async function MainHeader() {
         <SearchHeader />
         {/* USER PROFILE */}
         <div className="flex items-center justify-center gap-2">
-          <Link href="/addons">Addons</Link>
           <UserDropMenu user={session?.user} />
         </div>
       </div>

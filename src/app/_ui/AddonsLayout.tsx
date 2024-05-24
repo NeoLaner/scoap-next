@@ -9,6 +9,7 @@ function AddonsLayout({ children }: { children: ReactNode }) {
     <ScrollAreaY className="!bottom-[72px] !top-[72px] md:!bottom-0">
       <div>
         <AddonsHeader />
+
         <MainNav />
         <div className="py-[72px] md:py-[72px] md:pl-[72px]">{children}</div>
       </div>

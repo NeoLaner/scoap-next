@@ -4,6 +4,7 @@ import * as Avatar from "@radix-ui/react-avatar";
 import * as Popover from "@radix-ui/react-popover";
 import ButtonFullscreen from "./ButtonFullscreen";
 import * as Separator from "@radix-ui/react-separator";
+import Link from "next/link";
 
 const UserDropMenu = ({
   user,
@@ -71,6 +72,9 @@ const UserDropMenu = ({
             </div>
             <Separator.Root className="my-[15px] bg-primary-7 data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px" />
             <ButtonFullscreen />
+            <Link href="/addons" className="w-full">
+              Addons
+            </Link>
           </div>
         </Popover.Content>
       </Popover.Portal>

@@ -1,6 +1,4 @@
-import Link from "next/link";
 import LogoSVG from "./LogoSVG";
-import SearchHeader from "./SearchHeader";
 import UserDropMenu from "./UserDropMenu";
 import { getServerAuthSession } from "~/server/auth";
 
@@ -15,7 +13,6 @@ async function AddonsHeader() {
         <LogoSVG fill="var(--red-10)" />
         {/* USER PROFILE */}
         <div className="flex items-center justify-center gap-2">
-          <Link href="/addons">Addons</Link>
           <UserDropMenu user={session?.user} />
         </div>
       </div>
