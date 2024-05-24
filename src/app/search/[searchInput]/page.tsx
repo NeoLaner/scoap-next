@@ -1,22 +1,17 @@
-import { type ReactNode } from "react";
-import StremioService from "~/app/_services/stremIo/stremIoServices";
-import PopularMedias from "~/app/_ui/PopularMedias";
+import { Suspense } from "react";
+import PopularMediasSkeleton from "~/app/_ui/PopularMediasSkeleton";
+import PopularMovies from "../_ui/PopularMovies";
+import PopularSeries from "../_ui/PopularSeries";
 
-async function page({
-  children,
-  params,
-}: {
-  children: ReactNode;
-  params: { searchInput: string };
-}) {
-  const { searchInput } = params;
-  const searchMovieData = await StremioService.searchMovies(searchInput);
-  const searchSeriesData = await StremioService.searchSeries(searchInput);
-
+async function page({ params }: { params: { searchInput: string } }) {
   return (
     <div className="space-y-10">
-      <PopularMedias items={searchMovieData} heading="Popular Movies" />
-      <PopularMedias items={searchSeriesData} heading="Popular Series" />
+      <Suspense fallback={<PopularMediasSkeleton />}>
+        <PopularMovies params={params} />
+      </Suspense>
+      <Suspense fallback={<PopularMediasSkeleton />}>
+        <PopularSeries params={params} />
+      </Suspense>
     </div>
   );
 }
