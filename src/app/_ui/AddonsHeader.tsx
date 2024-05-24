@@ -4,7 +4,7 @@ import SearchHeader from "./SearchHeader";
 import UserDropMenu from "./UserDropMenu";
 import { getServerAuthSession } from "~/server/auth";
 
-async function MainHeader() {
+async function AddonsHeader() {
   const session = await getServerAuthSession();
   if (!session) return null;
 
@@ -13,8 +13,6 @@ async function MainHeader() {
       <div className="flex h-full w-full items-center justify-between px-4">
         {/* LOGO */}
         <LogoSVG fill="var(--red-10)" />
-        {/* SEARCH */}
-        <SearchHeader />
         {/* USER PROFILE */}
         <div className="flex items-center justify-center gap-2">
           <Link href="/addons">Addons</Link>
@@ -25,4 +23,4 @@ async function MainHeader() {
   );
 }
 
-export default MainHeader;
+export default AddonsHeader;
