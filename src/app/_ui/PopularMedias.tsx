@@ -20,7 +20,6 @@ function PopularMedias({
     <section>
       <div className="flex justify-between">
         <h2 className="text-xl font-semibold">{heading}</h2>
-        <div>See All</div>
       </div>
       <ScrollAreaX>
         <div className="flex min-w-0 shrink grow basis-0 gap-4 overflow-x-auto py-6">

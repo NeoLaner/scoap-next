@@ -1,15 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 
 function SearchHeader() {
-  const [searchInput, setSearchInput] = useState("");
+  const params = useParams();
+  const [searchInput, setSearchInput] = useState(
+    decodeURIComponent((params.searchInput as string) ?? ""),
+  );
   const router = useRouter();
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!searchInput) return;
-    router.push(`/search/${searchInput.toLowerCase()}`);
+
+    router.push(`/search/${encodeURIComponent(searchInput.toLowerCase())}`);
   }
 
   return (
