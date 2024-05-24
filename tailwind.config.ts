@@ -1,8 +1,8 @@
-import { blackA, bronzeDark, crimson } from "@radix-ui/colors";
+import { blackA, mauveDark, crimson } from "@radix-ui/colors";
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
-const primaryColor = "red";
+const primaryColor = "red-dark";
 const primary = {};
 for (let index = 0; index < 12; index++) {
   primary[`primary-${index + 1}`] = `var(--${primaryColor}-${index + 1})`;
@@ -15,9 +15,9 @@ for (let index = 0; index < 12; index++) {
 
 const gray = {};
 
-Object.keys(bronzeDark).forEach((key, index) => {
+Object.keys(mauveDark).forEach((key, index) => {
   //eslint-disable-next-line
-  gray[`gray-${index + 1}`] = bronzeDark[key];
+  gray[`gray-${index + 1}`] = mauveDark[key];
 });
 
 export default {
@@ -27,6 +27,28 @@ export default {
       ...blackA,
       ...primary,
       ...gray,
+      "app-color-primary-1": "var(--bg-primary-app-1)",
+      "app-color-primary-2": "var(--bg-primary-app-2)",
+      "app-color-gray-1": "var(--bg-gray-app-1)",
+      "app-color-gray-2": "var(--bg-gray-app-2)",
+
+      "component-color-normal": "var(--bg-component-normal)",
+      "component-color-hover": "var(--bg-component-hover)",
+      "component-color-selected": "var(--bg-component-selected)",
+
+      "border-color-non-interactive": "var(--border-color-non-interactive)",
+      "border-color-interactive": "var(--border-color-interactive)",
+      "border-color-stronger-focus": "var(--border-color-stronger-focus)",
+
+      "solid-primary-1": "var(--bg-solid-primary-app-1)",
+      "solid-primary-2": "var(--bg-solid-primary-app-2)",
+      "solid-gray-1": "var(--bg-solid-gray-app-1)",
+      "solid-gray-2": "var(--bg-solid-gray-app-2)",
+
+      "text-primary-1": "var(--text-primary-low-contrast)",
+      "text-primary-2": "var(--text-primary-high-contrast)",
+      "text-gray-1": "var(--text-gray-low-contrast)",
+      "text-gray-2": "var(--text-gray-high-contrast)",
     },
     extend: {
       fontFamily: {

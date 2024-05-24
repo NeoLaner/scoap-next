@@ -3,18 +3,65 @@
 @tailwind utilities;
 
 :root {
-  --red-1: #191111;
-  --red-2: #201314;
-  --red-3: #3b1219;
-  --red-4: #500f1c;
-  --red-5: #611623;
-  --red-6: #72232d;
-  --red-7: #8c333a;
-  --red-8: #b54548;
-  --red-9: #e5484d;
-  --red-10: #ec5d5e;
-  --red-11: #ff9592;
-  --red-12: #ffd1d9;
+  /* Primary Colors */
+  --red-dark-1: #191111;
+  --red-dark-2: #201314;
+  --red-dark-3: #3b1219;
+  --red-dark-4: #500f1c;
+  --red-dark-5: #611623;
+  --red-dark-6: #72232d;
+  --red-dark-7: #8c333a;
+  --red-dark-8: #b54548;
+  --red-dark-9: #e5484d;
+  --red-dark-10: #ec5d5e;
+  --red-dark-11: #ff9592;
+  --red-dark-12: #ffd1d9;
+
+  .mauveDark {
+    --mauve-1: #121113;
+    --mauve-2: #1a191b;
+    --mauve-3: #232225;
+    --mauve-4: #2b292d;
+    --mauve-5: #323035;
+    --mauve-6: #3c393f;
+    --mauve-7: #49474e;
+    --mauve-8: #625f69;
+    --mauve-9: #6f6d78;
+    --mauve-10: #7c7a85;
+    --mauve-11: #b5b2bc;
+    --mauve-12: #eeeef0;
+  }
+
+  /* BG */
+  --bg-primary-app-1: var(--red-dark-1);
+  --bg-primary-app-2: var(--red-dark-2);
+
+  --bg-gray-app-1: var(--mauve-1);
+  --bg-gray-app-2: var(--mauve-2);
+
+  /* Component BG */
+  /* in Transparent background normal use for hover */
+  --bg-component-normal: var(--red-dark-3);
+  --bg-component-hover-in-transparent: var(--red-dark-3);
+  --bg-component-hover: var(--red-dark-4);
+  --bg-component-selected: var(var(--red-dark-5));
+
+  /* Borders */
+  --border-color-non-interactive: var(--red-dark-6);
+  --border-color-interactive: var(--red-dark-7);
+  --border-color-stronger-focus: var(--red-dark-8);
+
+  /* Solid BG */
+  --bg-solid-primary-app-1: var(--red-dark-9);
+  --bg-solid-primary-app-2: var(--red-dark-10);
+  --bg-solid-gray-app-1: var(--mauve-9);
+  --bg-solid-gray-app-2: var(var(--mauve-10));
+
+  --text-primary-low-contrast: var(--red-dark-11);
+  --text-primary-high-contrast: var(--red-dark-12);
+
+  --text-gray-low-contrast: var(--mauve-11);
+  --text-gray-high-contrast: var(--mauve-12);
 }
 
 @layer components {
