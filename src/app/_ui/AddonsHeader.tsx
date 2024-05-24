@@ -13,6 +13,7 @@ async function AddonsHeader() {
         <LogoSVG fill="var(--red-10)" />
         {/* USER PROFILE */}
         <div className="flex items-center justify-center gap-2">
+          <button>Add Addon</button>
           <UserDropMenu user={session?.user} />
         </div>
       </div>
