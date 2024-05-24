@@ -1,7 +1,7 @@
 import Image from "next/image";
 import ScrollAreaX from "~/app/_ui/ScrollAreaX";
-import { MetaInfo } from "~/app/_services/stremIo/types";
 import Link from "next/link";
+import { BsImage } from "react-icons/bs";
 
 function PopularMedias({
   heading,
@@ -11,7 +11,7 @@ function PopularMedias({
   items: {
     id: string;
     imdb_id: string;
-    poster: string;
+    poster: string | null;
     name: string;
     type: string;
   }[];
@@ -30,14 +30,22 @@ function PopularMedias({
               key={item.id}
               className="flex flex-col items-center gap-4"
             >
-              <div className="relative h-40 w-28 overflow-hidden rounded-lg md:h-52 md:w-36">
-                <Image
-                  src={item.poster}
-                  alt={item.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  style={{ objectFit: "cover", opacity: 0.9 }}
-                />
+              <div className="relative h-40 w-28 overflow-hidden rounded-lg bg-gray-4 md:h-52 md:w-36">
+                {item.poster && (
+                  <Image
+                    src={item.poster}
+                    alt={item.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    style={{ objectFit: "cover", opacity: 0.9 }}
+                  />
+                )}
+
+                {!item.poster && (
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary-8">
+                    <BsImage size={30} />
+                  </div>
+                )}
               </div>
               <div className="text-center text-xs font-medium">{item.name}</div>
             </Link>
