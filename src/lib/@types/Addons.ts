@@ -1,4 +1,4 @@
-export interface addon {
+export interface Addon {
   manifest: AddonManifest;
   transportUrl: string;
   installed: boolean;

@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import Link from "next/link";
+import { addAddon } from "../action";
+import ButtonSubmit from "./ButtonSubmit";
 
 const AddAddonModal = () => {
-  const [transportUrl, setTransportUrl] = useState("");
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -31,31 +32,23 @@ const AddAddonModal = () => {
             </Link>
             , which will appear under Installed addons.
           </Dialog.Description>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          >
+          <form action={addAddon} className="mb-14">
             <input
               className="w-48 rounded-md !border-none bg-gray-4  px-4 py-1 outline-none transition-all hover:outline hover:outline-border-color-stronger-focus focus:outline focus:outline-border-color-stronger-focus md:w-96"
               placeholder="Copy addon's url"
               id="transportUrl"
-              value={transportUrl}
-              onChange={(e) => setTransportUrl(e.target.value)}
+              name="transportUrl"
               autoCorrect="off"
               autoComplete="off"
               autoCapitalize="off"
               spellCheck="false"
             />
+
+            {/* <div className="h-35">x</div> */}
+            <ButtonSubmit />
           </form>
 
-          <div className="mt-[25px] flex justify-end">
-            <Dialog.Close asChild>
-              <button className="inline-flex h-[35px] items-center justify-center rounded-[4px] bg-solid-green-1 px-[15px] font-medium leading-none hover:bg-solid-green-2 focus:shadow-[0_0_0_2px] focus:shadow-solid-green-2 focus:outline-none">
-                Save addon
-              </button>
-            </Dialog.Close>
-          </div>
+          <div className="mt-[25px] flex justify-end"></div>
           <Dialog.Close asChild>
             <button
               className="text-violet11 hover:bg-violet4 focus:shadow-violet7 absolute right-[10px] top-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"

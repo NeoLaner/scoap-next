@@ -3,7 +3,6 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import ScrollAreaY from "~/app/_ui/ScrollAreaY";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,7 +29,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`h-dvh font-sans ${inter.variable}`}>
         <TRPCReactProvider>
-          <main className="bg-app-color-gray-1 flex h-full flex-col items-center  justify-center text-gray-12">
+          <main className="flex h-full flex-col items-center justify-center  bg-app-color-gray-1 text-gray-12">
             {children}
           </main>
         </TRPCReactProvider>
