@@ -7,11 +7,11 @@ import AddonsHeader from "./AddonsHeader";
 function AddonsLayout({ children }: { children: ReactNode }) {
   return (
     <ScrollAreaY className="!bottom-[72px] !top-[72px] md:!bottom-0">
-      <div>
-        <AddonsHeader />
+      <AddonsHeader />
 
-        <MainNav />
-        <div className="py-[72px] md:py-[72px] md:pl-[72px]">{children}</div>
+      <MainNav />
+      <div className="h-full w-full py-[72px] md:pb-[32px] md:pl-[72px] md:pt-[72px]">
+        {children}
       </div>
     </ScrollAreaY>
   );

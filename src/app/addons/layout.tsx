@@ -4,7 +4,7 @@ import AddonsLayout from "../_ui/AddonsLayout";
 function Layout({ children }: { children: ReactNode }) {
   return (
     <AddonsLayout>
-      <section>Addons</section>
+      <section className="h-full w-full">{children}</section>
     </AddonsLayout>
   );
 }

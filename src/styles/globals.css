@@ -30,6 +30,19 @@
   --mauve-11: #b5b2bc;
   --mauve-12: #eeeef0;
 
+  --green-dark-1: #0e1512;
+  --green-dark-2: #121b17;
+  --green-dark-3: #132d21;
+  --green-dark-4: #113b29;
+  --green-dark-5: #174933;
+  --green-dark-6: #20573e;
+  --green-dark-7: #28684a;
+  --green-dark-8: #2f7c57;
+  --green-dark-9: #30a46c;
+  --green-dark-10: #33b074;
+  --green-dark-11: #3dd68c;
+  --green-dark-12: #b1f1cb;
+
   /* BG */
   --bg-primary-app-1: var(--red-dark-1);
   --bg-primary-app-2: var(--red-dark-2);
@@ -54,6 +67,8 @@
   --bg-solid-primary-app-2: var(--red-dark-10);
   --bg-solid-gray-app-1: var(--mauve-9);
   --bg-solid-gray-app-2: var(var(--mauve-10));
+  --bg-solid-green-app-1: var(--green-dark-9);
+  --bg-solid-green-app-2: var(--green-dark-10);
 
   --text-primary-low-contrast: var(--red-dark-11);
   --text-primary-high-contrast: var(--red-dark-12);

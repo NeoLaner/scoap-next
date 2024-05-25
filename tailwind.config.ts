@@ -45,6 +45,8 @@ export default {
       "solid-primary-2": "var(--bg-solid-primary-app-2)",
       "solid-gray-1": "var(--bg-solid-gray-app-1)",
       "solid-gray-2": "var(--bg-solid-gray-app-2)",
+      "solid-green-1": "var(--bg-solid-green-app-1)",
+      "solid-green-2": "var(--bg-solid-green-app-2)",
 
       "text-primary-1": "var(--text-primary-low-contrast)",
       "text-primary-2": "var(--text-primary-high-contrast)",
