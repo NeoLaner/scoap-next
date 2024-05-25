@@ -55,11 +55,12 @@ model User {
   email         String?    @unique
   emailVerified DateTime?
   image         String?
+  addons        String[]   @default([])
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
   rooms         Room[]
-  Instance      Instance[]
+  instance      Instance[]
 }
 
 model VerificationToken {
@@ -83,7 +84,7 @@ model Room {
   videoLinks      VideoLink[]
 
   roomOwner User       @relation(fields: [roomOwnerId], references: [id])
-  Instance  Instance[]
+  instance  Instance[]
 
   @@index([roomName])
 }
