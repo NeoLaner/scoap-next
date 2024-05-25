@@ -20,7 +20,7 @@ function SearchHeader() {
   return (
     <form onSubmit={handleSubmit}>
       <input
-        className="w-48 rounded-full !border-none bg-gray-4  px-4 py-1 outline-none hover:outline hover:outline-primary-9 focus:outline focus:outline-primary-9 md:w-96"
+        className="hover:outline-border-color-stronger-focus focus:outline-border-color-stronger-focus w-48 rounded-full  !border-none bg-gray-4 px-4 py-1 outline-none transition-all hover:outline focus:outline md:w-96"
         placeholder="Searching..."
         id="search"
         value={searchInput}

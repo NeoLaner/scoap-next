@@ -5,7 +5,7 @@ import { HiArrowCircleLeft } from "react-icons/hi";
 function ButtonGoBack() {
   const router = useRouter();
   return (
-    <div className="flex items-center justify-center rounded-full bg-gray-1">
+    <div className="bg-app-color-gray-1 flex items-center justify-center rounded-full">
       <button onClick={() => router.back()} className="rounded-full   ">
         <HiArrowCircleLeft size={30} />
       </button>

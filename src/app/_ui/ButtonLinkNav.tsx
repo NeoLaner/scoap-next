@@ -19,7 +19,7 @@ function ButtonLinkNav({
   return (
     <Link
       href={href}
-      className={`flex h-16 w-16 flex-col items-center rounded-lg p-2 py-2 transition-all ${active ? "text-primary-10" : "text-gray-12"} `}
+      className={` hover:text-solid-primary-2 flex h-16 w-16 flex-col items-center rounded-lg p-2 py-2 transition-all ${active ? "text-solid-primary-1" : "text-gray-11"} `}
     >
       {active ? IconActive : Icon}
 

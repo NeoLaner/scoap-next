@@ -18,7 +18,7 @@ const UserDropMenu = ({
     <Popover.Root>
       <Popover.Trigger asChild>
         <button
-          className="bg-white focus:shadow-black inline-flex h-[35px] w-[35px] cursor-default items-center justify-center rounded-full text-primary-10 shadow-[0_2px_10px] shadow-blackA4 outline-none hover:bg-primary-3 focus:shadow-[0_0_0_2px]"
+          className="bg-white focus:shadow-black text-border-color-stronger-focus inline-flex h-[35px]  w-[35px] items-center justify-center rounded-full shadow-[0_2px_10px] shadow-blackA4 outline-none hover:bg-primary-3 focus:shadow-[0_0_0_2px]"
           aria-label="Update dimensions"
         >
           <div className="flex gap-5">
@@ -26,7 +26,7 @@ const UserDropMenu = ({
               <Avatar.Image
                 className="h-full w-full rounded-[inherit] object-cover"
                 src={user.image ?? ""}
-                alt="Pedro Duarte"
+                alt={user.name ?? ""}
               />
               <Avatar.Fallback
                 className="leading-1 bg-white flex h-full w-full items-center justify-center text-[15px] font-medium text-primary-11"

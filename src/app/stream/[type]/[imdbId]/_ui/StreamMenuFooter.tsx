@@ -7,7 +7,7 @@ function StreamMenuFooter() {
         <BsShare size={18} />
       </button>
 
-      <button className="rounded-md bg-gray-1">
+      <button className="bg-app-color-gray-1 rounded-md">
         <BsFillPlayCircleFill size={30} />
       </button>
     </div>

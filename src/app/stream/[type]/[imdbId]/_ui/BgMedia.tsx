@@ -16,7 +16,7 @@ async function BgMedia({ imdbId, type }: { imdbId: string; type: string }) {
           alt={mediaData.name}
           fill
           className="h-full object-cover object-top opacity-70"
-          quality="80"
+          quality="90"
         />
       )}
     </>

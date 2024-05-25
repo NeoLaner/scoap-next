@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`h-dvh font-sans ${inter.variable}`}>
         <TRPCReactProvider>
-          <main className="flex h-full flex-col items-center justify-center  bg-gray-1 text-gray-12">
+          <main className="bg-app-color-gray-1 flex h-full flex-col items-center  justify-center text-gray-12">
             {children}
           </main>
         </TRPCReactProvider>

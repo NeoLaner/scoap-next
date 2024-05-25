@@ -33,6 +33,7 @@ export default {
       "app-color-gray-2": "var(--bg-gray-app-2)",
 
       "component-color-normal": "var(--bg-component-normal)",
+      "component-color-hover-in-transparent": "var(--bg-component-normal)",
       "component-color-hover": "var(--bg-component-hover)",
       "component-color-selected": "var(--bg-component-selected)",
 

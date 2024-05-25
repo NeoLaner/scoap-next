@@ -7,10 +7,10 @@ async function AddonsHeader() {
   if (!session) return null;
 
   return (
-    <header className="fixed z-20  h-[72px] w-full bg-gray-1">
+    <header className="bg-app-color-gray-1 fixed  z-20 h-[72px] w-full">
       <div className="flex h-full w-full items-center justify-between px-4">
         {/* LOGO */}
-        <LogoSVG fill="var(--red-10)" />
+        <LogoSVG fill="var(--red-dark-10)" />
         {/* USER PROFILE */}
         <div className="flex items-center justify-center gap-2">
           <button>Add Addon</button>
