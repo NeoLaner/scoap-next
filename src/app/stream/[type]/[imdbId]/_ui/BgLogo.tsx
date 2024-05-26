@@ -10,7 +10,7 @@ async function BgLogo({ imdbId, type }: { imdbId: string; type: string }) {
   return (
     <>
       {mediaData.logo && (
-        <div className="flex h-full items-center justify-center">
+        <div className="flex h-full items-center justify-center transition-all">
           <Image
             src={mediaData.logo}
             alt={mediaData.name}

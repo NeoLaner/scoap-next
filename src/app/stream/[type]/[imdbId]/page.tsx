@@ -1,9 +1,5 @@
 async function page({ params }: { params: { imdbId: string } }) {
-  return (
-    <div>
-      <div></div>
-    </div>
-  );
+  return <div></div>;
 }
 
 export default page;

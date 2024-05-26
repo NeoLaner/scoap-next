@@ -1,26 +1,17 @@
 "use client";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useParams, usePathname } from "next/navigation";
 import { BsFillPlayCircleFill } from "react-icons/bs";
 
 function ButtonPlay() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams],
-  );
+  const { imdbId } = useParams<{ imdbId: string }>();
+  const streamPath = pathname + `/${imdbId}`;
+  console.log(streamPath);
 
   return (
     <Link
-      href={pathname + "?" + createQueryString("showStreams", "true")}
+      href={"/stream/movie/tt5177120/tt5177120"}
       className="rounded-md bg-app-color-gray-1"
     >
       <BsFillPlayCircleFill size={30} />
