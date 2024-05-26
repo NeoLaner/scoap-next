@@ -1,4 +1,3 @@
-import { BsFillPlayCircleFill } from "react-icons/bs";
 import { BsShare } from "react-icons/bs";
 import ButtonPlay from "./ButtonPlay";
 function StreamMenuFooter() {

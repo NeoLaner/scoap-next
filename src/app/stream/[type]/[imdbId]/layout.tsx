@@ -1,8 +1,5 @@
 import { type ReactNode } from "react";
 import StreamHeader from "./_ui/StreamHeader";
-import Image from "next/image";
-import StremioService from "~/app/_services/stremIo/stremIoServices";
-import StreamFooter from "./_ui/StreamFooter";
 import StreamMenuFooter from "./_ui/StreamMenuFooter";
 import BgMedia from "./_ui/BgMedia";
 import BgLogo from "./_ui/BgLogo";
@@ -19,12 +16,14 @@ async function layout({
 
   return (
     <section className="relative h-full w-full">
-      {/* <StreamHeader /> */}
+      {/* header */}
       <StreamHeader />
-
+      {/* images bg and logo */}
       <BgMedia imdbId={imdbId} type={type} />
       <BgLogo imdbId={imdbId} type={type} />
+      {/* main part */}
       {children}
+      {/* footer menu */}
       <StreamMenuFooter />
     </section>
   );
