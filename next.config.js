@@ -50,6 +50,13 @@ const config = {
         port: "",
         pathname: "/images/**",
       },
+      //addons
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+        port: "",
+        pathname: "**",
+      },
     ],
   },
 };
