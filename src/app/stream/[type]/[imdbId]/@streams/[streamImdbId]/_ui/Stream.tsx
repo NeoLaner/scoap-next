@@ -31,7 +31,7 @@ function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
       }
       disabled={isPending}
     >
-      <div className="mr-[0.6rem] flex gap-2 text-sm transition-all hover:bg-app-color-gray-1">
+      <div className="mr-[0.6rem] flex gap-2 text-sm transition-all hover:bg-app-color-primary-2">
         <div className="w-full rounded-lg p-6">
           <div className="mb-3 flex w-full">
             <div className="flex items-center">

@@ -12,7 +12,7 @@ async function Page({ params }: { params: { imdbId: string; type: string } }) {
   );
 
   return (
-    <div className="flex flex-col gap-2 rounded-md bg-blackA4 backdrop-blur-lg">
+    <div className="flex flex-col gap-2 rounded-md bg-app-color-gray-1">
       {torrentIoStreamsSorted.map((stream) => (
         <Stream key={stream.infoHash} stream={stream} />
       ))}

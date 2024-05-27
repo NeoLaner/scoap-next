@@ -24,7 +24,7 @@ async function layout({
         <div className="relative">
           <BgLogo imdbId={imdbId} type={type} />
         </div>
-        <div className="flex-1 md:flex-none ">{streams}</div>
+        <div className="flex-1 overflow-y-auto md:flex-none">{streams}</div>
       </div>
 
       <StreamHeader />
