@@ -26,6 +26,7 @@
     "@trpc/client": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
+    "@vidstack/react": "^1.11.21",
     "axios": "^1.7.2",
     "next": "^14.2.1",
     "next-auth": "^4.24.6",

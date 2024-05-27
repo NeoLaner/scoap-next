@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import FilePlayer from "./_ui/FilePlayer";
 
 async function layout({
   params,
@@ -9,7 +10,7 @@ async function layout({
   const { roomId } = params;
   return (
     <section className="relative h-full w-full overflow-hidden">
-      {roomId}
+      <FilePlayer />
     </section>
   );
 }

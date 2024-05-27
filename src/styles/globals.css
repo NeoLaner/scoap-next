@@ -122,3 +122,19 @@
 }
 
 /* var(--blue-12) */
+
+[data-media-player] {
+  display: block;
+}
+
+[data-media-provider] {
+  height: 100%;
+  border: none;
+}
+
+[data-media-provider] video {
+  width: 100%;
+  height: 100% !important;
+  object-fit: contain;
+  display: block;
+}

@@ -1,6 +1,7 @@
 import { blackA, mauveDark, crimson } from "@radix-ui/colors";
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
+import vidstack from "@vidstack/react/tailwind.cjs";
 
 const primaryColor = "red-dark";
 const primary = {};
@@ -99,5 +100,9 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    vidstack({
+      prefix: "media",
+    }),
+  ],
 } satisfies Config;
