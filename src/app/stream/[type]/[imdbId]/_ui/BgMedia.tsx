@@ -1,25 +1,21 @@
+"use client";
 import Image from "next/image";
-import StremioService from "~/app/_services/stremIo/stremIoServices";
+import { useParams } from "next/navigation";
 
-async function BgMedia({ imdbId, type }: { imdbId: string; type: string }) {
-  let mediaData;
-  if (type === "movie") mediaData = await StremioService.getMetaMovie(imdbId);
-  if (type === "series") mediaData = await StremioService.getMetaSeries(imdbId);
-
-  if (!mediaData) return <div>Not found</div>;
-
+function BgMedia({ background, name }: { background: string; name: string }) {
+  const { streamImdbId } = useParams<{ streamImdbId: string }>();
   return (
-    <>
-      {mediaData.background && (
+    <div>
+      {background && (
         <Image
-          src={mediaData.background}
-          alt={mediaData.name}
+          src={background}
+          alt={name}
           fill
-          className="h-full object-cover object-top opacity-70"
+          className={`h-full object-cover object-top opacity-70 ${streamImdbId ? "blur-sm" : ""}`}
           quality="90"
         />
       )}
-    </>
+    </div>
   );
 }
 

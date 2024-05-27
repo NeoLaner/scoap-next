@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 import ScrollAreaY from "~/app/_ui/ScrollAreaY";
 
 function Layout({ children }: { children: ReactNode }) {
