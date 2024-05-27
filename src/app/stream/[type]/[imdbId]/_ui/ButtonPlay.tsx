@@ -10,10 +10,7 @@ function ButtonPlay() {
   console.log(streamPath);
 
   return (
-    <Link
-      href={"/stream/movie/tt5177120/tt5177120"}
-      className="rounded-md bg-app-color-gray-1"
-    >
+    <Link href={streamPath} className="rounded-md bg-app-color-gray-1">
       <BsFillPlayCircleFill size={30} />
     </Link>
   );
