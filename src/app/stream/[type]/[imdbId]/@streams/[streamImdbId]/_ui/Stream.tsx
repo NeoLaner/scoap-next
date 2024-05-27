@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
 import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
+import { usePlayerContext } from "~/app/_hooks/usePlayerProvider";
+
 import {
   type GetStreamsFromTorrentIo,
   type Stream,
@@ -8,11 +11,25 @@ import {
 
 function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
   const { mutate, data, isPending } = useCreateTorrentStream();
+  const { dispatch } = usePlayerContext();
+
+  useEffect(
+    function () {
+      if (!data) return;
+      dispatch({
+        type: "SET_MEDIA_SOURCE",
+        payload: { mediaSrc: { src: data, type: "video/mp4" } },
+      });
+    },
+    [data, dispatch],
+  );
+
   return (
     <button
       onClick={() =>
         mutate({ fileIdx: stream.fileIdx, infoHash: stream.infoHash })
       }
+      disabled={isPending}
     >
       <div className="mr-[0.6rem] flex gap-2 text-sm transition-all hover:bg-app-color-gray-1">
         <div className="w-full rounded-lg p-6">

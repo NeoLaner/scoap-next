@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
+import { PlayerProvider } from "./_providers/PlayerProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,9 +30,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`h-dvh font-sans ${inter.variable}`}>
         <TRPCReactProvider>
-          <main className="flex h-full flex-col items-center justify-center  bg-app-color-gray-1 text-gray-12">
-            {children}
-          </main>
+          <PlayerProvider>
+            <main className="flex h-full flex-col items-center justify-center  bg-app-color-gray-1 text-gray-12">
+              {children}
+            </main>
+          </PlayerProvider>
         </TRPCReactProvider>
       </body>
     </html>
