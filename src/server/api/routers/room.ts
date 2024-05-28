@@ -8,7 +8,7 @@ export const roomRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.room.findFirst({
         where: { id: input.roomId },
-        select: { source: true }, // Correcting select to include isPrivate and isActive
+        select: { source: true, imdbId: true }, // Correcting select to include isPrivate and isActive
       });
     }),
 

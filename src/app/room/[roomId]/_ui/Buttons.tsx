@@ -11,6 +11,14 @@ import {
   type TooltipPlacement,
 } from "@vidstack/react";
 
+import {
+  PiPauseCircleFill,
+  PiPlayCircleFill,
+  PiSpeakerHighFill,
+  PiSpeakerLowFill,
+  PiSpeakerXFill,
+} from "react-icons/pi";
+
 import { useState } from "react";
 
 export interface MediaButtonProps {
@@ -18,7 +26,7 @@ export interface MediaButtonProps {
 }
 
 export const buttonClass =
-  "bg-blackA10 group ring-media-focus relative inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md outline-none ring-inset hover:bg-white/20 data-[focus]:ring-4";
+  "group ring-media-focus relative inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md outline-none ring-inset hover:bg-white/20 data-[focus]:ring-4";
 
 export const tooltipClass =
   "animate-out fade-out slide-out-to-bottom-2 data-[visible]:animate-in data-[visible]:fade-in data-[visible]:slide-in-from-bottom-4 z-10 rounded-sm bg-black/90 px-2 py-0.5 text-sm font-medium text-white parent-data-[open]:hidden";
@@ -33,11 +41,12 @@ export function Play({
       <Tooltip.Trigger asChild>
         <PlayButton className={buttonClass} disabled={disabled}>
           {isPaused ? (
-            // <PlayIcon className={`h-6 w-6 ${disabled && "opacity-30"}`} />
-            <div>icon</div>
+            <PiPlayCircleFill
+              className={`h-6 w-6 ${disabled && "opacity-30"} text-solid-primary-2`}
+            />
           ) : (
-            // <PauseIcon className="h-6 w-6" />
-            <div>icon</div>
+            // <div>icon</div>
+            <PiPauseCircleFill size={26} className="text-solid-primary-2" />
           )}
         </PlayButton>
       </Tooltip.Trigger>
@@ -56,14 +65,11 @@ export function Mute({ tooltipPlacement }: MediaButtonProps) {
       <Tooltip.Trigger asChild>
         <MuteButton className={buttonClass}>
           {isMuted || volume == 0 ? (
-            // <MuteIcon className="h-6 w-6" />
-            <div>icon</div>
+            <PiSpeakerXFill className="h-6 w-6 text-solid-primary-2" />
           ) : volume < 0.5 ? (
-            // <VolumeLowIcon className="h-6 w-6" />
-            <div>icon</div>
+            <PiSpeakerLowFill className="h-6 w-6 text-solid-primary-2" />
           ) : (
-            // <VolumeHighIcon className="h-6 w-6" />
-            <div>icon</div>
+            <PiSpeakerHighFill className="h-6 w-6 text-solid-primary-2" />
           )}
         </MuteButton>
       </Tooltip.Trigger>

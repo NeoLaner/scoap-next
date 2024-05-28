@@ -1,9 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
-import { usePlayerContext } from "~/app/_hooks/usePlayerProvider";
+import { useParams, useRouter } from "next/navigation";
 
 import {
   type GetStreamsFromTorrentIo,
@@ -13,30 +10,18 @@ import { api } from "~/trpc/react";
 
 function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
   const router = useRouter();
-  const { mutate, data, isPending } = useCreateTorrentStream();
-  const { mutate: roomMutate } = api.room.create.useMutation({
+  const { imdbId } = useParams<{ imdbId: string }>();
+  const { mutate: roomMutate, isPending } = api.room.create.useMutation({
     onSuccess: (data) => {
       router.push(`/room/${data.id}`);
     },
   });
-  const { dispatch } = usePlayerContext();
-
-  useEffect(
-    function () {
-      if (!data) return;
-      dispatch({
-        type: "SET_MEDIA_SOURCE",
-        payload: { mediaSrc: { src: data, type: "video/mp4" } },
-      });
-    },
-    [data, dispatch],
-  );
 
   return (
     <button
       onClick={() => {
-        mutate({ fileIdx: stream.fileIdx, infoHash: stream.infoHash });
         roomMutate({
+          imdbId: imdbId,
           roomName: "test",
           fileIdx: stream.fileIdx,
           infoHash: stream.infoHash,
