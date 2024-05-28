@@ -10,10 +10,10 @@ import { api } from "~/trpc/react";
 
 function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
   const router = useRouter();
-  const { imdbId } = useParams<{ imdbId: string }>();
+  const { imdbId, type } = useParams<{ imdbId: string; type: string }>();
   const { mutate: roomMutate, isPending } = api.room.create.useMutation({
     onSuccess: (data) => {
-      router.push(`/room/${data.id}`);
+      router.push(`/room/${type}/${imdbId}/${data.id}`);
     },
   });
 

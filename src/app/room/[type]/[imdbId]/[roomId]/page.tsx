@@ -6,13 +6,13 @@ import StremioService from "~/app/_services/stremIo/stremIoServices";
 async function layout({
   params,
 }: {
-  params: { roomId: string };
+  params: { roomId: string; imdbId: string };
   children: ReactNode;
 }) {
-  const { roomId } = params;
+  const { roomId, imdbId } = params;
   const room = await api.room.get({ roomId });
 
-  const metaInfo = await StremioService.getMetaMovie(room?.imdbId);
+  const metaInfo = await StremioService.getMetaMovie(imdbId);
 
   return (
     <section className="relative h-full w-full overflow-hidden">
