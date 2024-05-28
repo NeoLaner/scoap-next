@@ -14,10 +14,8 @@ import { api } from "~/trpc/react";
 function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
   const router = useRouter();
   const { mutate, data, isPending } = useCreateTorrentStream();
-  const { mutate: roomMutate, data: roomData } = api.room.create.useMutation({
+  const { mutate: roomMutate } = api.room.create.useMutation({
     onSuccess: (data) => {
-      console.log(`room/${data.id}`);
-
       router.push(`/room/${data.id}`);
     },
   });

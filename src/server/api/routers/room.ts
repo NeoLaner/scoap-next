@@ -29,9 +29,9 @@ export const roomRouter = createTRPCRouter({
         data: {
           roomName: input.roomName,
           roomOwnerId: ctx.session.user.id,
+          imdbId: input.imdbId,
           source: {
             create: {
-              imdbId: input.imdbId,
               videoLink: input.videoLink,
               infoHash: input.infoHash,
               fileIdx: input.fileIdx,

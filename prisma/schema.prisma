@@ -81,8 +81,8 @@ model Room {
   crossorigin     Boolean  @default(false)
   subtitles       String[] @default([])
   roomDescription String?  @default("")
-  source          Source?  @relation(fields: [sourceId], references: [id])
-  sourceId        String?  @db.ObjectId
+  imdbId    String?
+  source          Source? 
 
   roomOwner User       @relation(fields: [roomOwnerId], references: [id])
   instance  Instance[]
@@ -93,13 +93,12 @@ model Room {
 model Source {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   name      String  @default("default")
-  imdbId    String?
   videoLink String?
   infoHash  String?
   fileIdx   Int?
-  roomId    String  @db.ObjectId
 
-  Room Room[]
+  room Room   @relation(fields: [roomId], references: [id])
+  roomId String @unique @db.ObjectId
 }
 
 model Instance {
