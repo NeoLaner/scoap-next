@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
 import { usePlayerContext } from "~/app/_hooks/usePlayerProvider";
@@ -8,9 +9,18 @@ import {
   type GetStreamsFromTorrentIo,
   type Stream,
 } from "~/lib/streams/getStreams";
+import { api } from "~/trpc/react";
 
 function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
+  const router = useRouter();
   const { mutate, data, isPending } = useCreateTorrentStream();
+  const { mutate: roomMutate, data: roomData } = api.room.create.useMutation({
+    onSuccess: (data) => {
+      console.log(`room/${data.id}`);
+
+      router.push(`/room/${data.id}`);
+    },
+  });
   const { dispatch } = usePlayerContext();
 
   useEffect(
@@ -26,9 +36,14 @@ function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
 
   return (
     <button
-      onClick={() =>
-        mutate({ fileIdx: stream.fileIdx, infoHash: stream.infoHash })
-      }
+      onClick={() => {
+        mutate({ fileIdx: stream.fileIdx, infoHash: stream.infoHash });
+        roomMutate({
+          roomName: "test",
+          fileIdx: stream.fileIdx,
+          infoHash: stream.infoHash,
+        });
+      }}
       disabled={isPending}
     >
       <div className="mr-[0.6rem] flex gap-2 text-sm transition-all hover:bg-app-color-primary-2">

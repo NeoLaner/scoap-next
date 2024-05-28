@@ -73,15 +73,16 @@ model VerificationToken {
 }
 
 model Room {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
   roomName        String
-  roomOwnerId     String      @db.ObjectId
-  isActive        Boolean     @default(true)
-  isPrivate       Boolean     @default(false)
-  crossorigin     Boolean     @default(false)
-  subtitles       String[]    @default([])
-  roomDescription String?     @default("")
-  videoLinks      VideoLink[]
+  roomOwnerId     String   @db.ObjectId
+  isActive        Boolean  @default(true)
+  isPrivate       Boolean  @default(false)
+  crossorigin     Boolean  @default(false)
+  subtitles       String[] @default([])
+  roomDescription String?  @default("")
+  source          Source?  @relation(fields: [sourceId], references: [id])
+  sourceId        String?  @db.ObjectId
 
   roomOwner User       @relation(fields: [roomOwnerId], references: [id])
   instance  Instance[]
@@ -89,22 +90,23 @@ model Room {
   @@index([roomName])
 }
 
-model VideoLink {
+model Source {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  name      String  @default("Primary")
+  name      String  @default("default")
+  imdbId    String?
   videoLink String?
   infoHash  String?
   fileIdx   Int?
   roomId    String  @db.ObjectId
 
-  room Room @relation(fields: [roomId], references: [id])
+  Room Room[]
 }
 
 model Instance {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
   rootRoomId String  @db.ObjectId
   hostId     String  @db.ObjectId
-  password   String? @default("") 
+  password   String? @default("")
 
   rootRoom Room @relation(fields: [rootRoomId], references: [id])
   host     User @relation(fields: [hostId], references: [id])

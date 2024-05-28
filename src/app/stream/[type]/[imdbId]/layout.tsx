@@ -15,7 +15,7 @@ async function layout({
   streams: ReactNode;
   children: ReactNode;
 }) {
-  const { imdbId, streamImdbId, type } = params;
+  const { imdbId, type } = params;
   return (
     <section className="relative h-full w-full overflow-hidden">
       <div className="relative h-full w-full ">
