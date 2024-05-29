@@ -17,7 +17,7 @@ export const metadata = {
     default: "Scoap",
   },
   description:
-    "Gather your friends and watch videos together, even if you're miles apart. Simply share a link to your chosen video, and Scoap will seamlessly synchronize playback for everyone in the room. Enjoy live reactions, shared laughter, and a deeper connection to your content, all in real-time.",
+    "Gather your friends and watch videos together, even if you're miles apart. Enjoy live reactions, shared laughter, and a deeper connection to your content, all in real-time.",
   icons: [{ rel: "icon", url: "/favicon.png" }],
 };
 

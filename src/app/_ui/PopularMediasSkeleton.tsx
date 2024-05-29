@@ -7,7 +7,7 @@ function PopularMediasSkeleton() {
         <h2 className="h-6 w-32 rounded-xl bg-gray-4 text-xl font-semibold" />
       </div>
       <>
-        <div className="flex min-w-0 shrink grow basis-0 gap-4 overflow-hidden py-6">
+        <div className="flex min-w-0 shrink grow basis-0 animate-pulse gap-4 overflow-hidden py-6">
           <Card />
           <Card />
           <Card />
