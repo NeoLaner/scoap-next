@@ -97,18 +97,52 @@ const StremioService = {
     return data;
   },
 
+  // async createTorrentStream(stream: { infoHash: string; fileIdx: number }) {
+  //   let { infoHash, fileIdx = null } = stream;
+  //   const { data } = await axios.get(
+  //     `${STREMIO_STREAMING_SERVER}/${infoHash}/create`,
+  //   );
+  //   const { files } = data;
+  //   if (!fileIdx)
+  //     fileIdx = files.indexOf(
+  //       //@ts-ignore
+  //       files.sort((a, b) => a.length - b.length).reverse()[0],
+  //     );
+  //   return `${STREMIO_STREAMING_SERVER}/${infoHash}/${fileIdx}`;
+  // },
+
   async createTorrentStream(stream: { infoHash: string; fileIdx: number }) {
     let { infoHash, fileIdx = null } = stream;
     const { data } = await axios.get(
-      `${STREMIO_STREAMING_SERVER}/${infoHash}/create`,
+      `http://127.0.0.1:11470/hlsv2/probe?mediaURL=http://127.0.0.1:11470/${infoHash}/${fileIdx}`,
     );
-    const { files } = data;
-    if (!fileIdx)
-      fileIdx = files.indexOf(
-        //@ts-ignore
-        files.sort((a, b) => a.length - b.length).reverse()[0],
+    console.log(data.format.name.split(","));
+
+    if (
+      data.format.name.split(",").filter((format) => format === "mp4").length >
+      0
+    ) {
+      const type = "video/mp4";
+      let { infoHash, fileIdx = null } = stream;
+      const { data } = await axios.get(
+        `${STREMIO_STREAMING_SERVER}/${infoHash}/create`,
       );
-    return `${STREMIO_STREAMING_SERVER}/${infoHash}/${fileIdx}`;
+      const { files } = data;
+      if (!fileIdx)
+        fileIdx = files.indexOf(
+          //@ts-ignore
+          files.sort((a, b) => a.length - b.length).reverse()[0],
+        );
+      return {
+        type,
+        src: `${STREMIO_STREAMING_SERVER}/${infoHash}/${fileIdx}`,
+      };
+    } else {
+      return {
+        type: "video/mpegurl",
+        src: `http://127.0.0.1:11470/hlsv2/d6a27e2395785e62b3cd21688b358f1e/master.m3u8?mediaURL=http%3A%2F%2F127.0.0.1%3A11470%2F${infoHash}%2F${fileIdx}&videoCodecs=h264&videoCodecs=h265&videoCodecs=hevc&audioCodecs=aac&audioCodecs=mp3&audioCodecs=opus&maxAudioChannels=2`,
+      };
+    }
   },
 
   async getStats(streamUrl: string) {
