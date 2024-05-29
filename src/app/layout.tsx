@@ -8,7 +8,7 @@ import { PlayerProvider } from "./_providers/PlayerProvider";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  // variable: "--font-sans",
 });
 
 export const metadata = {
@@ -17,7 +17,7 @@ export const metadata = {
     default: "Scoap",
   },
   description:
-    "Gather your friends and watch videos together, even if you're miles apart. Enjoy live reactions, shared laughter, and a deeper connection to your content, all in real-time.",
+    "Gather your friends and watch videos together, even if you're miles apart. Simply share a link to your chosen video, and Scoap will seamlessly synchronize playback for everyone in the room. Enjoy live reactions, shared laughter, and a deeper connection to your content, all in real-time.",
   icons: [{ rel: "icon", url: "/favicon.png" }],
 };
 
@@ -28,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`h-dvh font-sans ${inter.variable}`}>
+      <body className={`h-dvh  ${inter.className}`}>
         <TRPCReactProvider>
           <PlayerProvider>
             <main className="flex h-full flex-col items-center justify-center  bg-app-color-gray-1 text-gray-12">
