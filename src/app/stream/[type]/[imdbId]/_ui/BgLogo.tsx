@@ -5,12 +5,13 @@ import { useSearchParams } from "next/navigation";
 function BgLogo({ logo, name }: { logo: string; name: string }) {
   const searchParams = useSearchParams();
   const showStreams = searchParams.get("showStreams");
+  const season = searchParams.get("season");
 
   return (
     <>
       {logo && (
         <div
-          className={`${showStreams ? "opacity-0" : "opacity-100"} flex h-full items-center justify-center transition-all transition-all`}
+          className={`${showStreams ?? season ? "opacity-0" : "opacity-100"} flex h-full items-center justify-center transition-all transition-all`}
         >
           <Image
             src={logo}

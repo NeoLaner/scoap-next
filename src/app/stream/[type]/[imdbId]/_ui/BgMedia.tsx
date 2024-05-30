@@ -4,7 +4,8 @@ import { useSearchParams } from "next/navigation";
 
 function BgMedia({ background, name }: { background: string; name: string }) {
   const searchParams = useSearchParams();
-  const showStreams = searchParams.get("showStreams") === "true";
+  const showStreams = searchParams.get("showStreams");
+  const season = searchParams.get("season");
   return (
     <div>
       {background && (
@@ -12,7 +13,7 @@ function BgMedia({ background, name }: { background: string; name: string }) {
           src={background}
           alt={name}
           fill
-          className={`h-full object-cover object-top opacity-70 ${showStreams ? "blur-sm" : ""}`}
+          className={`h-full object-cover object-top opacity-70 ${showStreams ?? season ? "blur-sm" : ""}`}
           quality="90"
         />
       )}

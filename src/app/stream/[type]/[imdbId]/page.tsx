@@ -18,13 +18,13 @@ async function page({
   if (!mediaData) return <div>Not found</div>;
 
   return (
-    <div className="w-full">
+    <div className="h-full w-full">
       <div className="relative h-full w-full ">
         <BgMediaBox background={mediaData.background} name={mediaData.name} />
         <BgLogoBox logo={mediaData.logo} name={mediaData.name} />
       </div>
 
-      <div className="flex-1 overflow-y-auto md:flex-none">
+      <div className="overflow-y-auto md:flex-none">
         <StreamsServer params={{ imdbId, type }} />
       </div>
 

@@ -18,7 +18,7 @@ async function StreamsServer({
   );
 
   return (
-    <div className="absolute right-0 top-[96px] h-full bg-app-color-gray-1">
+    <div className="absolute right-0 top-[96px] h-full w-full bg-app-color-gray-1 md:w-fit">
       <Streams torrentIoStreamsSorted={torrentIoStreamsSorted} />
     </div>
   );
