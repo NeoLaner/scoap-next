@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 function BgMedia({ background, name }: { background: string; name: string }) {
-  const { streamImdbId } = useParams<{ streamImdbId: string }>();
+  const searchParams = useSearchParams();
+  const showStreams = searchParams.get("showStreams") === "true";
   return (
     <div>
       {background && (
@@ -11,7 +12,7 @@ function BgMedia({ background, name }: { background: string; name: string }) {
           src={background}
           alt={name}
           fill
-          className={`h-full object-cover object-top opacity-70 ${streamImdbId ? "blur-sm" : ""}`}
+          className={`h-full object-cover object-top opacity-70 ${showStreams ? "blur-sm" : ""}`}
           quality="90"
         />
       )}

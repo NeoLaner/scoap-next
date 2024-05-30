@@ -1,34 +1,36 @@
 import { type ReactNode } from "react";
 import StreamHeader from "./_ui/StreamHeader";
 import StreamMenuFooter from "./_ui/StreamMenuFooter";
-import BgMedia from "./_ui/BgMedia";
-import BgLogo from "./_ui/BgLogo";
 import BgLogoBox from "./_ui/BgLogoBox";
 import BgMediaBox from "./_ui/BgMediaBox";
+import Episodes from "./_ui/Episodes";
+import StremioService from "~/app/_services/stremIo/stremIoServices";
+import { MetaInfo } from "~/app/_services/stremIo/types";
 
 async function layout({
   streams,
   children,
   params,
 }: {
-  params: { imdbId: string; type: string; streamImdbId: string };
+  params: { imdbId: string; type: "movie" | "series" };
   streams: ReactNode;
   children: ReactNode;
 }) {
   const { imdbId, type } = params;
+  let mediaData = {} as MetaInfo;
+  if (type === "movie") mediaData = await StremioService.getMetaMovie(imdbId);
+  if (type === "series") mediaData = await StremioService.getMetaSeries(imdbId);
+
+  if (!mediaData) return <div>Not found</div>;
+
   return (
     <section className="relative h-full w-full overflow-hidden">
-      <div className="relative h-full w-full ">
-        <BgMediaBox type={type} imdbId={imdbId} />
-        <BgLogoBox type={type} imdbId={imdbId} />
-      </div>
-
-      <div className="absolute left-0 top-0 flex h-full w-full flex-col justify-between gap-4 md:flex-row">
-        <div />
-        <div className="flex-1 overflow-y-auto md:flex-none">{streams}</div>
-      </div>
-
       <StreamHeader />
+      <div className="absolute left-0 top-0 flex h-full w-full flex-col justify-between gap-4 md:flex-row">
+        {children}
+      </div>
+
+      <div className="absolute right-0">{streams}</div>
       <StreamMenuFooter />
     </section>
   );

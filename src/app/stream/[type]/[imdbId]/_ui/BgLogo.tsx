@@ -1,15 +1,16 @@
 "use client";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 function BgLogo({ logo, name }: { logo: string; name: string }) {
-  const { streamImdbId } = useParams<{ streamImdbId: string }>();
+  const searchParams = useSearchParams();
+  const showStreams = searchParams.get("showStreams");
 
   return (
     <>
       {logo && (
         <div
-          className={`${streamImdbId ? "opacity-0" : "opacity-100"} flex h-full items-center justify-center transition-all transition-all`}
+          className={`${showStreams ? "opacity-0" : "opacity-100"} flex h-full items-center justify-center transition-all transition-all`}
         >
           <Image
             src={logo}

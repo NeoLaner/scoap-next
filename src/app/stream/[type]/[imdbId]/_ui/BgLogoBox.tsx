@@ -1,15 +1,9 @@
-import StremioService from "~/app/_services/stremIo/stremIoServices";
 import BgLogo from "./BgLogo";
 
-async function BgLogoBox({ imdbId, type }: { imdbId: string; type: string }) {
-  let mediaData;
-  if (type === "movie") mediaData = await StremioService.getMetaMovie(imdbId);
-  if (type === "series") mediaData = await StremioService.getMetaSeries(imdbId);
-
-  if (!mediaData) return <div>not found</div>;
+async function BgLogoBox({ name, logo }: { name: string; logo: string }) {
   return (
     <div className="relative h-full">
-      <BgLogo name={mediaData.name} logo={mediaData.logo} />
+      <BgLogo name={name} logo={logo} />
     </div>
   );
 }
