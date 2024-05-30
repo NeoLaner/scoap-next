@@ -7,13 +7,11 @@ import React, {
   type ReactNode,
 } from "react";
 
+import { type HLSSrc, type VideoSrc } from "@vidstack/react";
 // Define your application's state
 type PlayerState = {
   // Define your state properties here
-  mediaSrc: {
-    src: string;
-    type: string;
-  };
+  mediaSrc: HLSSrc | VideoSrc;
   // Add more as needed
 };
 
@@ -21,10 +19,7 @@ type PlayerState = {
 type PlayerAction = {
   type: "SET_MEDIA_SOURCE";
   payload: {
-    mediaSrc: {
-      src: string;
-      type: string;
-    };
+    mediaSrc: HLSSrc | VideoSrc;
   };
 };
 
@@ -32,7 +27,7 @@ type PlayerAction = {
 const initialPlayerState: PlayerState = {
   mediaSrc: {
     src: "",
-    type: "",
+    type: "video/mp4",
   },
   // Initialize other state properties here
 };

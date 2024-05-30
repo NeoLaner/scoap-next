@@ -15,7 +15,7 @@ export function useCreateTorrentStream() {
     onSuccess: (data) => {
       dispatch({
         type: "SET_MEDIA_SOURCE",
-        payload: { mediaSrc: { src: data.src, type: data.type } },
+        payload: { mediaSrc: data },
       });
     },
   });

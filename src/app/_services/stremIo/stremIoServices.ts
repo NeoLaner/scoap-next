@@ -7,6 +7,7 @@ import {
   STREMIO_STREAMING_SERVER,
 } from "~/app/_config/API";
 import { type MetaInfo } from "./types";
+import { type HLSSrc, type VideoSrc } from "@vidstack/react";
 
 export type MovieSearchResult = {
   id: string;
@@ -111,7 +112,10 @@ const StremioService = {
   //   return `${STREMIO_STREAMING_SERVER}/${infoHash}/${fileIdx}`;
   // },
 
-  async createTorrentStream(stream: { infoHash: string; fileIdx: number }) {
+  async createTorrentStream(stream: {
+    infoHash: string;
+    fileIdx: number;
+  }): Promise<VideoSrc | HLSSrc> {
     let { infoHash, fileIdx = null } = stream;
     const { data } = await axios.get(
       `http://127.0.0.1:11470/hlsv2/probe?mediaURL=http://127.0.0.1:11470/${infoHash}/${fileIdx}`,
