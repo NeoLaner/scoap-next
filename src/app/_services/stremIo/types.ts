@@ -30,7 +30,7 @@ export type MetaInfo = {
   id: string;
   genres: string[];
   releaseInfo: string;
-  videos: any[];
+  videos: Video[];
   trailerStreams: TrailerStream[];
   links: Link[];
   behaviorHints: {
@@ -65,6 +65,22 @@ export interface ProbeResponse {
 export interface Format {
   name: string;
   duration: number;
+}
+
+//for series
+export interface Video {
+  name: string;
+  season: number;
+  number: number;
+  firstAired: string;
+  tvdb_id: number;
+  rating: string;
+  overview: string;
+  thumbnail: string;
+  id: string;
+  released: string;
+  episode: number;
+  description: string;
 }
 
 type VideoTrack = {

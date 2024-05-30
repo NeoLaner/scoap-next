@@ -60,6 +60,13 @@ const config = {
         port: "",
         pathname: "/images/**",
       },
+      //episodes
+      {
+        protocol: "https",
+        hostname: "episodes.metahub.space",
+        port: "",
+        pathname: "/**",
+      },
       //addons
       {
         protocol: "https",
