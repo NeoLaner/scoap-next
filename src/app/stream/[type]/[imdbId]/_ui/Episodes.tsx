@@ -1,16 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { type Video } from "~/app/_services/stremIo/types";
 import ScrollAreaY from "~/app/_ui/ScrollAreaY";
-
-const extractUniqueSeasons = (videos: Video[]) => {
-  const seasons = new Set(videos.map((video) => video.season));
-  return Array.from(seasons);
-};
+import EpisodesHeading from "./EpisodesHeading";
 
 const formatDate = (isoString: string) => {
   const date = new Date(isoString);
@@ -21,24 +15,8 @@ const formatDate = (isoString: string) => {
 function Episodes({ videos }: { videos: Video[] }) {
   const searchParams = useSearchParams();
   const season = searchParams.get("season");
-  const router = useRouter();
-  const pathname = usePathname();
-
-  // Get a new searchParams string by merging the current
-  // searchParams with a provided key/value pair
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams],
-  );
 
   if (!season) return null;
-
-  const uniqueSeasons = extractUniqueSeasons(videos);
 
   const episodesOfSeason = videos.filter(
     (video) => video.season === Number(season),
@@ -47,23 +25,7 @@ function Episodes({ videos }: { videos: Video[] }) {
   return (
     <div className="absolute right-0 top-[96px] h-full w-full bg-app-color-gray-1 md:w-[420px]">
       {/* heading */}
-      <div className="flex items-center justify-center">
-        <select
-          value={Number(season)}
-          onChange={(e) =>
-            router.push(
-              pathname + "?" + createQueryString("season", e.target.value),
-            )
-          }
-        >
-          {uniqueSeasons.map((season) => (
-            <option key={season} value={season}>
-              season {season}
-            </option>
-          ))}
-        </select>
-      </div>
-
+      <EpisodesHeading videos={videos} />
       {/* Episodes */}
       <div className="h-full pb-[150px]">
         <ScrollAreaY>
