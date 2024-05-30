@@ -5,10 +5,17 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { type Video } from "~/app/_services/stremIo/types";
+import ScrollAreaY from "~/app/_ui/ScrollAreaY";
 
 const extractUniqueSeasons = (videos: Video[]) => {
   const seasons = new Set(videos.map((video) => video.season));
   return Array.from(seasons);
+};
+
+const formatDate = (isoString: string) => {
+  const date = new Date(isoString);
+  const options = { year: "numeric", month: "short", day: "numeric" } as const;
+  return date.toLocaleDateString("en-US", options);
 };
 
 function Episodes({ videos }: { videos: Video[] }) {
@@ -38,9 +45,9 @@ function Episodes({ videos }: { videos: Video[] }) {
   );
 
   return (
-    <div className="absolute right-0 top-[96px] h-full w-full bg-app-color-gray-1 md:w-fit">
+    <div className="absolute right-0 top-[96px] h-full w-full bg-app-color-gray-1 md:w-[420px]">
       {/* heading */}
-      <div>
+      <div className="flex items-center justify-center">
         <select
           value={Number(season)}
           onChange={(e) =>
@@ -58,20 +65,29 @@ function Episodes({ videos }: { videos: Video[] }) {
       </div>
 
       {/* Episodes */}
-      <div className="flex flex-col">
-        {episodesOfSeason.map((episode) => (
-          <div key={episode.episode} className="flex gap-2">
-            <div>
-              <Image
-                src={episode.thumbnail}
-                alt={episode.name}
-                width={112}
-                height={70}
-              />
-            </div>
-            {episode.episode}:{episode.name}
+      <div className="h-full pb-[150px]">
+        <ScrollAreaY>
+          <div className="flex h-full flex-col gap-6 ">
+            {episodesOfSeason.map((episode) => (
+              <div key={episode.episode} className="flex items-center gap-4">
+                <div>
+                  <Image
+                    src={episode.thumbnail}
+                    alt={episode.name}
+                    width={112}
+                    height={70}
+                  />
+                </div>
+                <div className="flex flex-col justify-between gap-2">
+                  {episode.episode}.{episode.name}
+                  <div className="text-xs">
+                    {formatDate(episode.firstAired)}{" "}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </ScrollAreaY>
       </div>
     </div>
   );
