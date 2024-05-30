@@ -14,6 +14,8 @@ import {
 import {
   PiPauseCircleFill,
   PiPlayCircleFill,
+  PiSelectionBackgroundDuotone,
+  PiSelectionForegroundDuotone,
   PiSpeakerHighFill,
   PiSpeakerLowFill,
   PiSpeakerXFill,
@@ -110,11 +112,10 @@ export function PIP({ tooltipPlacement }: MediaButtonProps) {
       <Tooltip.Trigger asChild>
         <PIPButton className={buttonClass}>
           {isActive ? (
-            // <PictureInPictureExitIcon className="h-6 w-6" />
-            <div>icon</div>
+            <PiSelectionBackgroundDuotone size={26} />
           ) : (
             // <PictureInPictureIcon className="h-6 w-6" />
-            <div>icon</div>
+            <PiSelectionForegroundDuotone size={26} />
           )}
         </PIPButton>
       </Tooltip.Trigger>

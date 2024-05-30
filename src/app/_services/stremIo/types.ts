@@ -54,3 +54,72 @@ type Link = {
   category: string;
   url: string;
 };
+
+// probe media
+export interface ProbeResponse {
+  format: Format;
+  streams: MediaTrack[];
+  samples: undefined;
+}
+
+export interface Format {
+  name: string;
+  duration: number;
+}
+
+type VideoTrack = {
+  id: number;
+  index: number;
+  track: "video";
+  codec: string;
+  streamBitRate: number;
+  streamMaxBitRate: number;
+  startTime: number;
+  startTimeTs: number;
+  timescale: number;
+  width: number;
+  height: number;
+  frameRate: number;
+  numberOfFrames: number | null;
+  isHdr: boolean;
+  isDoVi: boolean;
+  hasBFrames: boolean;
+  formatBitRate: number;
+  formatMaxBitRate: number;
+  bps: number;
+  numberOfBytes: number;
+  formatDuration: number;
+};
+
+type AudioTrack = {
+  id: number;
+  index: number;
+  track: "audio";
+  codec: string;
+  streamBitRate: number;
+  streamMaxBitRate: number;
+  startTime: number;
+  startTimeTs: number;
+  timescale: number;
+  sampleRate: number;
+  channels: number;
+  channelLayout: string;
+  title: string;
+  language: string;
+};
+
+type SubtitleTrack = {
+  id: number;
+  index: number;
+  track: "subtitle";
+  codec: string;
+  streamBitRate: number;
+  streamMaxBitRate: number;
+  startTime: number;
+  startTimeTs: number;
+  timescale: number;
+  title: string;
+  language: string;
+};
+
+export type MediaTrack = VideoTrack | AudioTrack | SubtitleTrack;

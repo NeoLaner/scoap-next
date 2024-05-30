@@ -6,7 +6,7 @@ import {
   STREMIO_API_URL,
   STREMIO_STREAMING_SERVER,
 } from "~/app/_config/API";
-import { type MetaInfo } from "./types";
+import { ProbeResponse, type MetaInfo } from "./types";
 import { type HLSSrc, type VideoSrc } from "@vidstack/react";
 
 export type MovieSearchResult = {
@@ -117,10 +117,9 @@ const StremioService = {
     fileIdx: number;
   }): Promise<VideoSrc | HLSSrc> {
     let { infoHash, fileIdx = null } = stream;
-    const { data } = await axios.get(
+    const { data } = (await axios.get(
       `http://127.0.0.1:11470/hlsv2/probe?mediaURL=http://127.0.0.1:11470/${infoHash}/${fileIdx}`,
-    );
-    console.log(data.format.name.split(","));
+    )) as { data: ProbeResponse };
 
     if (
       data.format.name.split(",").filter((format) => format === "mp4").length >
@@ -144,7 +143,8 @@ const StremioService = {
     } else {
       return {
         type: "video/mpegurl",
-        src: `http://127.0.0.1:11470/hlsv2/d6a27e2395785e62b3cd21688b358f1e/master.m3u8?mediaURL=http%3A%2F%2F127.0.0.1%3A11470%2F${infoHash}%2F${fileIdx}&videoCodecs=h264&videoCodecs=h265&videoCodecs=hevc&audioCodecs=aac&audioCodecs=mp3&audioCodecs=opus&maxAudioChannels=2`,
+        // src: `http://127.0.0.1:11470/hlsv2/d6a27e2395785e62b3cd21688b358f1e/master.m3u8?mediaURL=http%3A%2F%2F127.0.0.1%3A11470%2F${infoHash}%2F${fileIdx}&videoCodecs=h264&videoCodecs=h265&videoCodecs=hevc&audioCodecs=aac&audioCodecs=mp3&audioCodecs=opus&maxAudioChannels=2`,
+        src: `http://127.0.0.1:11470/hlsv2/d6a27e2395785e62b3cd21688b358f1e/master.m3u8?mediaURL=http%3A%2F%2F127.0.0.1%3A11470%2F${infoHash}%2F${fileIdx}`,
       };
     }
   },

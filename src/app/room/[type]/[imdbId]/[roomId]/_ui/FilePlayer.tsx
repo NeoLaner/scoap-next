@@ -36,7 +36,6 @@ function FilePlayer({
         source?.infoHash !== undefined &&
         source?.infoHash !== null
       ) {
-        console.log(source?.fileIdx, source?.infoHash);
         mutate({ fileIdx: source.fileIdx, infoHash: source.infoHash });
       }
     },

@@ -28,6 +28,7 @@ function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
         });
       }}
       disabled={isPending}
+      title={stream.title}
     >
       <div className="mr-[0.6rem] flex gap-2 text-sm transition-all hover:bg-app-color-primary-2">
         <div className="w-full rounded-lg p-6">

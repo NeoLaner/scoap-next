@@ -138,3 +138,7 @@
   object-fit: contain;
   display: block;
 }
+
+.unique-captions-class > *:nth-child(n + 2) {
+  display: none;
+}

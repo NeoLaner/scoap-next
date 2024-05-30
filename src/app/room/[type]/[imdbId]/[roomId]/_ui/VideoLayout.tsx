@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Captions, Controls, Gesture, useMediaState } from "@vidstack/react";
 import captionStyles from "./css-modules/captions.module.css";
 import styles from "./css-modules/video-layout.module.css";
@@ -24,11 +24,13 @@ export default function VideoLayout({
   return (
     <>
       <Gestures />
+
       <Captions
-        className={`${captionStyles.captions} media-captions:opacity-100 media-controls:bottom-[85px] media-preview:opacity-0 absolute inset-0 bottom-2 select-none break-words opacity-0 transition-[opacity,bottom] duration-300`}
+        className={`bg-none ${captionStyles.captions} unique-captions-class absolute inset-0 bottom-2 select-none break-words opacity-0 transition-[opacity,bottom] duration-300 media-captions:opacity-100 media-controls:bottom-[85px] media-preview:opacity-0`}
       />
+
       <Controls.Root
-        className={`${styles.controls} from-black/10 to-transparent media-buffering:opacity-100 media-controls:opacity-100 absolute inset-0 flex h-full w-full flex-col bg-gradient-to-t opacity-0 transition-opacity`}
+        className={`${styles.controls} from-black/10 to-transparent absolute inset-0 flex h-full w-full flex-col bg-gradient-to-t opacity-0 transition-opacity media-buffering:opacity-100 media-controls:opacity-100`}
       >
         <Controls.Group className="flex w-full justify-end">
           <div className="h-24"></div>
@@ -48,8 +50,7 @@ export default function VideoLayout({
           <TimeGroup />
           <Title />
           <div className="flex-1" />
-          <Buttons.Caption tooltipPlacement="top" />
-          {/* <Menus.Settings placement="top end" tooltipPlacement="top" /> */}
+          <Menus.Settings placement="top end" tooltipPlacement="top" />
           <Buttons.PIP tooltipPlacement="top" />
         </Controls.Group>
       </Controls.Root>
@@ -60,11 +61,11 @@ export default function VideoLayout({
 function Gestures() {
   return (
     <>
-      {/* <Gesture
+      <Gesture
         className="absolute inset-0 z-0 block h-full w-full"
         event="pointerup"
         action="toggle:paused"
-      /> */}
+      />
       <Gesture
         className="absolute inset-0 z-0 block h-full w-full"
         event="dblpointerup"
