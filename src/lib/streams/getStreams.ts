@@ -18,9 +18,18 @@ export interface BehaviorHints {
   bingeGroup: string;
 }
 
-export async function getStreamsFromTorrentIo(type: string, imdbId: string) {
+export async function getStreamsFromTorrentIo(
+  type: string,
+  imdbId: string,
+  season?: string | null,
+  episode?: string | null,
+) {
   // https://torrentio.strem.fun/stream/movie/tt5177120.json
-  const url = `https://torrentio.strem.fun/stream/${type}/${imdbId}.json`;
+  let url = `https://torrentio.strem.fun/stream/${type}/${imdbId}.json`;
+  if (type === "series")
+    url = `https://torrentio.strem.fun/stream/${type}/${imdbId}:${season}:${episode}.json`;
+
+  console.log(url);
 
   const res = await fetch(url);
 

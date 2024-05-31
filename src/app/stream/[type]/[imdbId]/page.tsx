@@ -7,8 +7,10 @@ import StremioService from "~/app/_services/stremIo/stremIoServices";
 
 async function page({
   params,
+  searchParams,
 }: {
   params: { imdbId: string; type: "movie" | "series" };
+  searchParams?: { season?: string; episode?: string };
 }) {
   const { type, imdbId } = params;
   let mediaData;
@@ -25,7 +27,13 @@ async function page({
       </div>
 
       <div className="overflow-y-auto md:flex-none">
-        <StreamsServer params={{ imdbId, type }} />
+        <StreamsServer
+          params={{ imdbId, type }}
+          searchParams={{
+            episode: searchParams?.episode,
+            season: searchParams?.season,
+          }}
+        />
       </div>
 
       {type === "series" && (
