@@ -29,6 +29,7 @@
     "@trpc/server": "next",
     "@vidstack/react": "^1.11.21",
     "axios": "^1.7.2",
+    "classnames": "^2.5.1",
     "hls.js": "^1.5.8",
     "next": "^14.2.1",
     "next-auth": "^4.24.6",

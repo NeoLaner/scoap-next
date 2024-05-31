@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { type Video } from "~/app/_services/stremIo/types";
 import ScrollAreaY from "~/app/_ui/ScrollAreaY";
 import EpisodesHeading from "./EpisodesHeading";
+import Link from "next/link";
 
 const formatDate = (isoString: string) => {
   const date = new Date(isoString);
@@ -23,16 +24,20 @@ function Episodes({ videos }: { videos: Video[] }) {
   );
 
   return (
-    <div className="absolute right-0 top-[96px] h-full w-full bg-app-color-gray-1 md:w-[420px]">
+    <div className="absolute right-0 top-[96px] h-full w-full rounded-lg bg-app-color-gray-1 pl-6 md:w-[420px]">
       {/* heading */}
       <EpisodesHeading videos={videos} />
       {/* Episodes */}
-      <div className="h-full pb-[150px]">
+      <div className="h-full pb-[200px]">
         <ScrollAreaY>
           <div className="flex h-full flex-col gap-6 ">
             {episodesOfSeason.map((episode) => (
-              <div key={episode.episode} className="flex items-center gap-4">
-                <div>
+              <Link
+                href={`?season=${season}&episode=${episode.episode}&showStreams="true"`}
+                key={episode.episode}
+                className="flex items-center gap-4"
+              >
+                <div className="overflow-hidden rounded-md">
                   <Image
                     src={episode.thumbnail}
                     alt={episode.name}
@@ -46,7 +51,7 @@ function Episodes({ videos }: { videos: Video[] }) {
                     {formatDate(episode.firstAired)}{" "}
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </ScrollAreaY>
