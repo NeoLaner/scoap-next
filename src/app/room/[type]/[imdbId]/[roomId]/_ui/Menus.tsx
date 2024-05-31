@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { ComponentType, ReactElement } from "react";
 
 import {
   Menu,
@@ -11,13 +11,14 @@ import {
 import {
   PiArrowLeftBold,
   PiArrowRightBold,
-  PiChatFill,
   PiCheckFatFill,
   PiClosedCaptioningFill,
   PiGearFill,
+  PiSpeakerNoneFill,
 } from "react-icons/pi";
 
 import { buttonClass, tooltipClass } from "./Buttons";
+import { IconType } from "react-icons/lib";
 
 export interface SettingsProps {
   placement: MenuPlacement;
@@ -60,7 +61,7 @@ function CaptionSubmenu() {
         label="Captions"
         hint={hint}
         disabled={options.disabled}
-        icon={<div>ridam</div>}
+        icon={<PiClosedCaptioningFill size={25} />}
       />
       <Menu.Content className={submenuClass}>
         <Menu.RadioGroup
@@ -84,10 +85,10 @@ function AudioSubmenu() {
   return (
     <Menu.Root>
       <SubmenuButton
-        label="Captions"
+        label="Audios"
         hint={hint}
         disabled={options.disabled}
-        icon={<div>ridam</div>}
+        icon={<PiSpeakerNoneFill size={25} />}
       />
       <Menu.Content className={submenuClass}>
         <Menu.RadioGroup
@@ -111,7 +112,7 @@ function Radio({ children, ...props }: Menu.RadioProps) {
       className="ring-media-focus data-[hocus]:bg-white/10 group relative flex w-full cursor-pointer select-none items-center justify-start rounded-sm p-2.5 outline-none data-[focus]:ring-[3px]"
       {...props}
     >
-      <PiClosedCaptioningFill size={25} />
+      {/* <PiClosedCaptioningFill size={25} /> */}
       <PiCheckFatFill size={14} className="hidden group-data-[checked]:block" />
 
       <span className="ml-2">{children}</span>
@@ -126,12 +127,7 @@ export interface SubmenuButtonProps {
   icon: ReactElement;
 }
 
-function SubmenuButton({
-  label,
-  hint,
-  icon: Icon,
-  disabled,
-}: SubmenuButtonProps) {
+function SubmenuButton({ label, hint, icon, disabled }: SubmenuButtonProps) {
   return (
     <Menu.Button
       className="ring-media-focus parent bg-black/60 data-[hocus]:bg-white/10 left-0 z-10 flex w-full cursor-pointer select-none items-center justify-start rounded-sm p-2.5 outline-none ring-inset aria-disabled:hidden data-[open]:sticky data-[open]:-top-2.5 data-[focus]:ring-[3px]"
@@ -139,6 +135,7 @@ function SubmenuButton({
     >
       <PiArrowLeftBold className="parent-data-[open]:block -ml-0.5 mr-1.5 hidden h-[18px] w-[18px]" />
 
+      {icon}
       <span className="parent-data-[open]:ml-0 ml-1.5">{label}</span>
       <span className="text-white/50 ml-auto text-sm">{hint}</span>
       <PiArrowRightBold className="parent-data-[open]:hidden text-white/50 ml-0.5 h-[18px] w-[18px] text-sm" />

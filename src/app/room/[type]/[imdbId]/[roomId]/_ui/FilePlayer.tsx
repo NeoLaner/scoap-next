@@ -1,5 +1,5 @@
 "use client";
-import { MediaPlayer, MediaProvider, Poster } from "@vidstack/react";
+import { MediaPlayer, MediaProvider } from "@vidstack/react";
 import "@vidstack/react/player/styles/base.css";
 import VideoLayout from "./VideoLayout";
 import { usePlayerContext } from "~/app/_hooks/usePlayerProvider";

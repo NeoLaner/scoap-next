@@ -7,13 +7,13 @@ function BgMedia({ background, name }: { background: string; name: string }) {
   const showStreams = searchParams.get("showStreams");
   const season = searchParams.get("season");
   return (
-    <div>
+    <div className="absolute h-full w-full">
       {background && (
         <Image
           src={background}
           alt={name}
           fill
-          className={`h-full object-cover object-top opacity-70 ${showStreams ?? season ? "blur-sm" : ""}`}
+          className={`h-full w-full object-cover object-top opacity-70 ${showStreams ?? season ? "blur-sm" : ""}`}
           quality="90"
         />
       )}

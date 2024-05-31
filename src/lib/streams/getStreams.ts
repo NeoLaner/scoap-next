@@ -29,8 +29,6 @@ export async function getStreamsFromTorrentIo(
   if (type === "series")
     url = `https://torrentio.strem.fun/stream/${type}/${imdbId}:${season}:${episode}.json`;
 
-  console.log(url);
-
   const res = await fetch(url);
 
   const data = (await res.json()) as TorrentIoResponse;

@@ -37,15 +37,16 @@ function Episodes({ videos }: { videos: Video[] }) {
                 key={episode.episode}
                 className="flex items-center gap-4"
               >
-                <div className="overflow-hidden rounded-md">
+                <div className="h-[70px] overflow-hidden rounded-md">
                   <Image
                     src={episode.thumbnail}
                     alt={episode.name}
                     width={112}
                     height={70}
+                    className="h-[70px] w-28"
                   />
                 </div>
-                <div className="flex flex-col justify-between gap-2">
+                <div className="flex flex-1 flex-col justify-between gap-2">
                   {episode.episode}.{episode.name}
                   <div className="text-xs">
                     {formatDate(episode.firstAired)}{" "}

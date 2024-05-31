@@ -15,6 +15,7 @@ async function StreamsServer({
   const season = searchParams?.season;
   const episode = searchParams?.episode;
 
+  if (type === "series" && !episode) return null;
   const torrentIoStreams = await getStreamsFromTorrentIo(
     type,
     imdbId,
