@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className={`h-dvh  ${inter.className}`}>
         <TRPCReactProvider>
           <PlayerProvider>
-            <main className="flex h-full flex-col items-center justify-center  bg-app-color-gray-1 text-gray-12">
+            <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-app-color-gray-1 to-app-color-primary-2  text-gray-12">
               {children}
             </main>
           </PlayerProvider>
