@@ -18,7 +18,7 @@ const UserDropMenu = ({
     <Popover.Root>
       <Popover.Trigger asChild>
         <button
-          className="bg-white focus:shadow-black text-border-color-stronger-focus inline-flex h-[35px]  w-[35px] items-center justify-center rounded-full shadow-[0_2px_10px] shadow-blackA4 outline-none hover:bg-primary-3 focus:shadow-[0_0_0_2px]"
+          className="bg-white focus:shadow-black inline-flex h-[35px] w-[35px]  items-center justify-center rounded-full text-border-color-stronger-focus shadow-[0_2px_10px] shadow-blackA4 outline-none hover:bg-primary-3 focus:shadow-[0_0_0_2px]"
           aria-label="Update dimensions"
         >
           <div className="flex gap-5">
@@ -66,15 +66,12 @@ const UserDropMenu = ({
                 </div>
 
                 <div>
-                  <button>Logout</button>
+                  <Link href="/api/auth/signout">Logout</Link>
                 </div>
               </div>
             </div>
             <Separator.Root className="my-[15px] bg-primary-7 data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px" />
             <ButtonFullscreen />
-            <Link href="/addons" className="w-full">
-              Addons
-            </Link>
           </div>
         </Popover.Content>
       </Popover.Portal>
