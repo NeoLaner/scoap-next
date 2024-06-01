@@ -47,8 +47,6 @@ const AddonService = {
   },
 
   async getStreams(collection: any[], type: string, id: string) {
-    console.log(collection, type, id);
-
     return (
       await Promise.all(
         collection.map(async (addon) => {

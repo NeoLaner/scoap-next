@@ -42,8 +42,6 @@ function FilePlayer({
     [mutate, source?.fileIdx, source?.infoHash],
   );
 
-  console.log(state.mediaSrc);
-
   return (
     <>
       <MediaPlayer

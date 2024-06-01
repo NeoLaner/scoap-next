@@ -151,7 +151,7 @@ const StremioService = {
 
   async getStats(streamUrl: string) {
     const { data } = await axios.get(`${streamUrl}/stats.json`);
-    console.log(data);
+   
 
     return data;
   },

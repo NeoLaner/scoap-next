@@ -5,7 +5,6 @@ import { type Addon } from "~/lib/@types/Addons";
 async function InstalledAddon({ transportUrl }: { transportUrl: string }) {
   const addon = (await AddonService.detectFromURL(transportUrl)) as Addon;
   const addonLogo = addon.manifest.logo ?? addon.manifest.background;
-  console.log(addonLogo);
 
   return (
     <div

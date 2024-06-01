@@ -22,7 +22,6 @@ async function StreamsServer({
     season,
     episode,
   );
-  console.log(torrentIoStreams);
 
   const torrentIoStreamsSorted = torrentIoStreams.sort(
     (streamA, streamB) => streamB.seeds! - streamA.seeds!,
