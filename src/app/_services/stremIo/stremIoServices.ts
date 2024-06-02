@@ -9,6 +9,16 @@ import {
 import { ProbeResponse, type MetaInfo } from "./types";
 import { type HLSSrc, type VideoSrc } from "@vidstack/react";
 
+function generateRandomId(): string {
+  const characters = "0123456789abcdef";
+  let result = "";
+  for (let i = 0; i < 32; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters[randomIndex];
+  }
+  return result;
+}
+
 export type MovieSearchResult = {
   id: string;
   imdb_id: string;
@@ -141,17 +151,18 @@ const StremioService = {
         src: `${STREMIO_STREAMING_SERVER}/${infoHash}/${fileIdx}`,
       };
     } else {
+      const randomId = generateRandomId();
       return {
-        type: "video/mpegurl",
+        type: "application/mpegurl",
         // src: `http://127.0.0.1:11470/hlsv2/d6a27e2395785e62b3cd21688b358f1e/master.m3u8?mediaURL=http%3A%2F%2F127.0.0.1%3A11470%2F${infoHash}%2F${fileIdx}&videoCodecs=h264&videoCodecs=h265&videoCodecs=hevc&audioCodecs=aac&audioCodecs=mp3&audioCodecs=opus&maxAudioChannels=2`,
-        src: `http://127.0.0.1:11470/hlsv2/d6a27e2395785e62b3cd21688b358f1e/master.m3u8?mediaURL=http%3A%2F%2F127.0.0.1%3A11470%2F${infoHash}%2F${fileIdx}`,
-      };
+        src: `http://127.0.0.1:11470/hlsv2/${randomId}/master.m3u8?mediaURL=http%3A%2F%2F127.0.0.1%3A11470%2F${infoHash}%2F${fileIdx}`,
+        // src: `http://127.0.0.1:11470/hlsv2/0017ec9182a4cd6fb35bf0cc00f258a5/master.m3u8?mediaURL=http%3A%2F%2F127.0.0.1%3A11470%2Fea704f6e0d91240ac0aa797c1d966f2f287b871e%2F0`,
+      } as HLSSrc;
     }
   },
 
   async getStats(streamUrl: string) {
     const { data } = await axios.get(`${streamUrl}/stats.json`);
-   
 
     return data;
   },
