@@ -30,7 +30,7 @@ export default function VideoLayout({
       />
 
       <Controls.Root
-        className={`${styles.controls} from-black/10 to-transparent absolute inset-0 flex h-full w-full flex-col bg-gradient-to-t opacity-0 transition-opacity media-buffering:opacity-100 media-controls:opacity-100`}
+        className={`${styles.controls} from-black/10 to-transparent absolute inset-0 flex h-full w-full flex-col  opacity-0 transition-opacity media-buffering:opacity-100 media-controls:opacity-100`}
       >
         <Controls.Group className="flex w-full justify-end">
           <div className="h-24"></div>

@@ -13,14 +13,16 @@ function Streams({
   const showStreams = useSearchParams().get("showStreams");
   if (!showStreams) return null;
   return (
-    <div className="z-40 h-full">
-      <ScrollAreaY>
-        <div className="flex flex-col gap-2 rounded-md bg-app-color-gray-1">
-          {torrentIoStreamsSorted.map((stream) => (
-            <Stream key={stream.title} stream={stream} />
-          ))}
-        </div>
-      </ScrollAreaY>
+    <div className="absolute right-0 top-[96px] z-30 h-full w-full bg-app-color-gray-1 md:w-fit">
+      <div className="z-40 h-full ">
+        <ScrollAreaY>
+          <div className="flex flex-col gap-2 rounded-md bg-app-color-gray-1">
+            {torrentIoStreamsSorted.map((stream) => (
+              <Stream key={stream.title} stream={stream} />
+            ))}
+          </div>
+        </ScrollAreaY>
+      </div>
     </div>
   );
 }

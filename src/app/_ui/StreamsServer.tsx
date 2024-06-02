@@ -1,6 +1,4 @@
 import { getStreamsFromTorrentIo } from "~/lib/streams/getStreams";
-import Stream from "./Stream";
-import ScrollAreaY from "~/app/_ui/ScrollAreaY";
 import Streams from "./Streams";
 
 // http://127.0.0.1:11470/6ee1a751d67aae51dfd067b0a11e2f06d1098461/create
@@ -27,11 +25,7 @@ async function StreamsServer({
     (streamA, streamB) => streamB.seeds! - streamA.seeds!,
   );
 
-  return (
-    <div className="absolute right-0 top-[96px] z-30 h-full w-full bg-app-color-gray-1 md:w-fit">
-      <Streams torrentIoStreamsSorted={torrentIoStreamsSorted} />
-    </div>
-  );
+  return <Streams torrentIoStreamsSorted={torrentIoStreamsSorted} />;
 }
 
 export default StreamsServer;

@@ -1,5 +1,6 @@
 import { HiHome, HiOutlineHome } from "react-icons/hi";
 import ButtonLinkNav from "./ButtonLinkNav";
+import { PiGearFine, PiGearFineBold, PiGearFineFill } from "react-icons/pi";
 
 function MainNav() {
   return (
@@ -24,10 +25,10 @@ function MainNav() {
           IconActive={<HiHome size={30} />}
         />
         <ButtonLinkNav
-          name="Setting"
+          name="Settings"
           href="/settings"
-          Icon={<HiOutlineHome size={30} />}
-          IconActive={<HiHome size={30} />}
+          Icon={<PiGearFine size={30} />}
+          IconActive={<PiGearFineFill size={30} />}
         />
       </div>
     </nav>
