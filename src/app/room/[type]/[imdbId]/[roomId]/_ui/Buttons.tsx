@@ -12,16 +12,21 @@ import {
 } from "@vidstack/react";
 
 import {
+  PiCardsThreeFill,
   PiPauseCircleFill,
   PiPlayCircleFill,
+  PiQueueBold,
   PiSelectionBackgroundDuotone,
   PiSelectionForegroundDuotone,
   PiSpeakerHighFill,
   PiSpeakerLowFill,
   PiSpeakerXFill,
+  PiUsersThreeDuotone,
 } from "react-icons/pi";
 
 import { useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -112,15 +117,73 @@ export function PIP({ tooltipPlacement }: MediaButtonProps) {
       <Tooltip.Trigger asChild>
         <PIPButton className={buttonClass}>
           {isActive ? (
-            <PiSelectionBackgroundDuotone size={26} />
+            <PiSelectionBackgroundDuotone
+              size={26}
+              className="text-solid-primary-2"
+            />
           ) : (
             // <PictureInPictureIcon className="h-6 w-6" />
-            <PiSelectionForegroundDuotone size={26} />
+            <PiSelectionForegroundDuotone
+              size={26}
+              className="text-solid-primary-2"
+            />
           )}
         </PIPButton>
       </Tooltip.Trigger>
       <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
         {isActive ? "Exit PIP" : "Enter PIP"}
+      </Tooltip.Content>
+    </Tooltip.Root>
+  );
+}
+
+export function Episodes({ tooltipPlacement }: MediaButtonProps) {
+  const pathname = usePathname();
+  return (
+    <Tooltip.Root>
+      <Tooltip.Trigger asChild>
+        <Link href={pathname + "?season=1"} className={buttonClass}>
+          <PiCardsThreeFill size={26} className="text-solid-primary-2" />
+        </Link>
+      </Tooltip.Trigger>
+      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
+        Episodes
+      </Tooltip.Content>
+    </Tooltip.Root>
+  );
+}
+
+export function Together({ tooltipPlacement }: MediaButtonProps) {
+  const isActive = useMediaState("pictureInPicture");
+  return (
+    <Tooltip.Root>
+      <Tooltip.Trigger asChild>
+        <PIPButton className={buttonClass}>
+          {isActive ? (
+            <PiUsersThreeDuotone size={26} className="text-solid-primary-2" />
+          ) : (
+            // <PictureInPictureIcon className="h-6 w-6" />
+            <PiUsersThreeDuotone size={26} className="text-solid-primary-2" />
+          )}
+        </PIPButton>
+      </Tooltip.Trigger>
+      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
+        {isActive ? "Watch Alone" : "Watch Together"}
+      </Tooltip.Content>
+    </Tooltip.Root>
+  );
+}
+
+export function Streams({ tooltipPlacement }: MediaButtonProps) {
+  return (
+    <Tooltip.Root>
+      <Tooltip.Trigger asChild>
+        <PIPButton className={buttonClass}>
+          <PiQueueBold size={26} className="text-solid-primary-2" />
+        </PIPButton>
+      </Tooltip.Trigger>
+      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
+        Streams
       </Tooltip.Content>
     </Tooltip.Root>
   );

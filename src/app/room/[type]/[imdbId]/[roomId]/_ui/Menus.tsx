@@ -37,7 +37,7 @@ export function Settings({ placement, tooltipPlacement }: SettingsProps) {
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
           <Menu.Button className={buttonClass}>
-            <PiGearFill size={25} />
+            <PiGearFill size={26} className="text-solid-primary-2" />
           </Menu.Button>
         </Tooltip.Trigger>
         <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>

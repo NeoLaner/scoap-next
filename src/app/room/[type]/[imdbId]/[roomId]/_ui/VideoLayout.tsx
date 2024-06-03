@@ -42,16 +42,19 @@ export default function VideoLayout({
         </Controls.Group>
         <Controls.Group className="flex w-full items-center px-2">
           <Sliders.Time thumbnails={thumbnails} disabled={disablePlay} />
+          <TimeGroup />
         </Controls.Group>
         <Controls.Group className="-mt-0.5 flex w-full items-center px-2 pb-2">
           <Buttons.Play tooltipPlacement="top start" disabled={disablePlay} />
           <Buttons.Mute tooltipPlacement="top" />
           <Sliders.Volume />
-          <TimeGroup />
-          <Title />
+          {/* <Title /> */}
           <div className="flex-1" />
+          <Buttons.Together tooltipPlacement="top" />
           <Menus.Settings placement="top end" tooltipPlacement="top" />
           <Buttons.PIP tooltipPlacement="top" />
+          <Buttons.Episodes tooltipPlacement="top" />
+          <Buttons.Streams tooltipPlacement="top" />
         </Controls.Group>
       </Controls.Root>
     </>

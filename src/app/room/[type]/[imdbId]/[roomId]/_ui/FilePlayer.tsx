@@ -51,7 +51,7 @@ function FilePlayer({
         //   type: "video/mp4",
         // }}
         // src="http://127.0.0.1:11470/hlsv2/8d64c8c24eecb02a4f60fc5eeeca8393fdafad/master.m3u8?mediaURL=http%3A%2F%2F127.0.0.1%3A11470%2F90b15a09117ec699ee5d335c7fd39a12035dbabc%2F1&videoCodecs=h264&videoCodecs=h265&videoCodecs=hevc&audioCodecs=aac&audioCodecs=mp3&audioCodecs=opus&maxAudioChannels=2"
-        autoPlay
+        autoPlay={false}
         playsInline
         className="text-white ring-media-focus absolute aspect-video h-dvh w-full overflow-hidden bg-blackA12 font-sans data-[focus]:ring-4"
       >
