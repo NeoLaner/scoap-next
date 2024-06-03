@@ -14,6 +14,7 @@ function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
   const searchParams = useSearchParams();
   const season = searchParams.get("season");
   const episode = searchParams.get("episode");
+
   const { mutate: roomMutate, isPending } = api.room.create.useMutation({
     onSuccess: (data) => {
       router.push(`/room/${type}/${imdbId}/${data.id}`);
@@ -27,7 +28,7 @@ function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
           season,
           episode,
           imdbId,
-          roomName: "",
+          roomName: "scoap",
           fileIdx: stream.fileIdx,
           infoHash: stream.infoHash,
         });

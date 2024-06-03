@@ -33,7 +33,7 @@ export const roomRouter = createTRPCRouter({
           roomOwnerId: ctx.session.user.id,
           imdbId: input.imdbId,
           season: input.season,
-          episode: input.season,
+          episode: input.episode,
           source: {
             create: {
               videoLink: input.videoLink,

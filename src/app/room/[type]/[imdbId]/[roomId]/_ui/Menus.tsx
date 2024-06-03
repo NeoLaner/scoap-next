@@ -3,6 +3,7 @@ import type { ComponentType, ReactElement } from "react";
 import {
   Menu,
   Tooltip,
+  useVideoQualityOptions,
   useAudioOptions,
   useCaptionOptions,
   type MenuPlacement,
@@ -47,6 +48,7 @@ export function Settings({ placement, tooltipPlacement }: SettingsProps) {
       <Menu.Content className={menuClass} placement={placement}>
         <CaptionSubmenu />
         <AudioSubmenu />
+        <QualitySubmenu />
       </Menu.Content>
     </Menu.Root>
   );
@@ -87,6 +89,33 @@ function AudioSubmenu() {
       <SubmenuButton
         label="Audios"
         hint={hint}
+        disabled={options.disabled}
+        icon={<PiSpeakerNoneFill size={25} />}
+      />
+      <Menu.Content className={submenuClass}>
+        <Menu.RadioGroup
+          className="flex w-full flex-col"
+          value={options.selectedValue}
+        >
+          {options.map(({ label, value, select }) => (
+            <Radio value={value} onSelect={select} key={value}>
+              {label}
+            </Radio>
+          ))}
+        </Menu.RadioGroup>
+      </Menu.Content>
+    </Menu.Root>
+  );
+}
+
+function QualitySubmenu() {
+  const options = useVideoQualityOptions();
+
+  return (
+    <Menu.Root>
+      <SubmenuButton
+        label="Qualities"
+        hint={""}
         disabled={options.disabled}
         icon={<PiSpeakerNoneFill size={25} />}
       />
