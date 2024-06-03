@@ -82,6 +82,9 @@ model Room {
   subtitles       String[] @default([])
   roomDescription String?  @default("")
   imdbId    String?
+  season    String? 
+  episode   String?
+
   source          Source? 
 
   roomOwner User       @relation(fields: [roomOwnerId], references: [id])

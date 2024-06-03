@@ -18,6 +18,8 @@ export const roomRouter = createTRPCRouter({
       z.object({
         roomName: z.string().min(1).max(32),
         imdbId: z.string().optional(),
+        season: z.string().optional().nullable(),
+        episode: z.string().optional().nullable(),
         name: z.string().optional(),
         infoHash: z.string().optional(),
         fileIdx: z.number().optional(),
@@ -30,6 +32,8 @@ export const roomRouter = createTRPCRouter({
           roomName: input.roomName,
           roomOwnerId: ctx.session.user.id,
           imdbId: input.imdbId,
+          season: input.season,
+          episode: input.season,
           source: {
             create: {
               videoLink: input.videoLink,

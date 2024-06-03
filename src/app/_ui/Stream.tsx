@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 import {
   type GetStreamsFromTorrentIo,
@@ -11,6 +11,9 @@ import { api } from "~/trpc/react";
 function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
   const router = useRouter();
   const { imdbId, type } = useParams<{ imdbId: string; type: string }>();
+  const searchParams = useSearchParams();
+  const season = searchParams.get("season");
+  const episode = searchParams.get("episode");
   const { mutate: roomMutate, isPending } = api.room.create.useMutation({
     onSuccess: (data) => {
       router.push(`/room/${type}/${imdbId}/${data.id}`);
@@ -21,8 +24,10 @@ function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
     <button
       onClick={() => {
         roomMutate({
-          imdbId: imdbId,
-          roomName: "test",
+          season,
+          episode,
+          imdbId,
+          roomName: "",
           fileIdx: stream.fileIdx,
           infoHash: stream.infoHash,
         });
