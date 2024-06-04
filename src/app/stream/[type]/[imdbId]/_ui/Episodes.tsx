@@ -13,7 +13,13 @@ const formatDate = (isoString: string) => {
   return date.toLocaleDateString("en-US", options);
 };
 
-function Episodes({ videos }: { videos: Video[] }) {
+function Episodes({
+  videos,
+  className,
+}: {
+  videos: Video[];
+  className: string;
+}) {
   const searchParams = useSearchParams();
   const season = searchParams.get("season");
 
@@ -24,11 +30,13 @@ function Episodes({ videos }: { videos: Video[] }) {
   );
 
   return (
-    <div className="absolute right-0 top-[96px] h-full w-full rounded-lg bg-app-color-gray-1 pl-6 md:w-[420px]">
+    <div
+      className={`${className}  h-full w-full rounded-lg bg-app-color-gray-1 pl-6 `}
+    >
       {/* heading */}
       <EpisodesHeading videos={videos} />
       {/* Episodes */}
-      <div className="h-full pb-[200px]">
+      <div className="h-full">
         <ScrollAreaY>
           <div className="flex h-full flex-col gap-6 ">
             {episodesOfSeason.map((episode) => (

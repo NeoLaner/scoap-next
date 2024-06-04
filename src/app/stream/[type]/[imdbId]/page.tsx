@@ -37,9 +37,10 @@ async function page({
       </div>
 
       {type === "series" && (
-        <div className="flex-1 overflow-y-auto md:flex-none">
-          <Episodes videos={mediaData.videos} />
-        </div>
+        <Episodes
+          videos={mediaData.videos}
+          className="absolute right-0 top-[96px] flex-1 pb-[200px] md:w-[420px] md:flex-none"
+        />
       )}
     </div>
   );
