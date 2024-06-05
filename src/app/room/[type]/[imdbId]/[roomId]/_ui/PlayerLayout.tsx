@@ -3,16 +3,20 @@ import PlayerMedia from "./PlayerMedia";
 import { api } from "~/trpc/server";
 import StremioService from "~/app/_services/stremIo/stremIoServices";
 import EpisodesPanel from "./EpisodesPanel";
+import { MetaInfo } from "~/app/_services/stremIo/types";
 
 async function FilePlayer({
   params,
 }: {
-  params: { roomId: string; imdbId: string };
+  params: { roomId: string; imdbId: string; type: string };
 }) {
-  const { roomId, imdbId } = params;
+  const { roomId, imdbId, type } = params;
   const room = await api.room.get({ roomId });
-
-  const metaInfo = await StremioService.getMetaSeries(room?.imdbId);
+  let metaInfo: MetaInfo;
+  if (type === "series")
+    metaInfo = await StremioService.getMetaSeries(room?.imdbId);
+  if (type === "movie")
+    metaInfo = await StremioService.getMetaMovie(room?.imdbId);
 
   console.log(metaInfo);
   return (

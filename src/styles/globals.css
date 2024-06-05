@@ -139,6 +139,6 @@
   display: block;
 }
 
-.unique-captions-class > *:nth-child(n + 2) {
+.unique-captions-class > *:not(:last-child) {
   display: none;
 }

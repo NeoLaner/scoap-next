@@ -55,6 +55,7 @@ export default function VideoLayout({
           <Buttons.PIP tooltipPlacement="top" />
           <Buttons.Episodes tooltipPlacement="top" />
           <Buttons.Streams tooltipPlacement="top" />
+          <Buttons.FullScreen tooltipPlacement="top" />
         </Controls.Group>
       </Controls.Root>
     </>

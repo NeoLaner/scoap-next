@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { PiCornersInBold, PiCornersOutBold } from "react-icons/pi";
 
-export default function ButtonFullscreen() {
+export default function ButtonFullscreen({ className }: { className: string }) {
   // const isActive = useMediaState("fullscreen");
   const [isActive, setIsActive] = useState(false);
   const toggleFullscreen = () => {
@@ -35,16 +36,17 @@ export default function ButtonFullscreen() {
     }
   };
   return (
-    <button onClick={toggleFullscreen} className="w-full">
+    <button
+      onClick={toggleFullscreen}
+      className={`${className} text-solid-primary-2`}
+    >
       {isActive ? (
         <div>
-          <p>Exit Fullscreen</p>
-          {/* <FullscreenExitIcon className="h-6 w-6" /> */}
+          <PiCornersInBold size={26} />
         </div>
       ) : (
         <div>
-          <p>Enter Fullscreen</p>
-          {/* <FullscreenIcon className="h-5 w-5" /> */}
+          <PiCornersOutBold size={26} />
         </div>
       )}
     </button>

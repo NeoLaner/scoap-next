@@ -1,7 +1,6 @@
 "use client";
 import {
   CaptionButton,
-  FullscreenButton,
   isTrackCaptionKind,
   MuteButton,
   PIPButton,
@@ -27,6 +26,7 @@ import {
 import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import ButtonFullscreen from "~/app/_ui/ButtonFullscreen";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -141,11 +141,10 @@ export function Episodes({ tooltipPlacement }: MediaButtonProps) {
   const pathname = usePathname();
   return (
     <Tooltip.Root>
-      <Tooltip.Trigger asChild>
-        <Link href={pathname + "?season=1"} className={buttonClass}>
-          <PiCardsThreeFill size={26} className="text-solid-primary-2" />
-        </Link>
-      </Tooltip.Trigger>
+      <Link href={pathname + "?season=1"} className={buttonClass}>
+        <PiCardsThreeFill size={26} className="text-solid-primary-2" />
+      </Link>
+
       <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
         Episodes
       </Tooltip.Content>
@@ -182,6 +181,18 @@ export function Streams({ tooltipPlacement }: MediaButtonProps) {
           <PiQueueBold size={26} className="text-solid-primary-2" />
         </PIPButton>
       </Tooltip.Trigger>
+      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
+        Streams
+      </Tooltip.Content>
+    </Tooltip.Root>
+  );
+}
+
+export function FullScreen({ tooltipPlacement }: MediaButtonProps) {
+  return (
+    <Tooltip.Root>
+      <ButtonFullscreen className={buttonClass} />
+
       <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
         Streams
       </Tooltip.Content>
