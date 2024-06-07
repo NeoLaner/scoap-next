@@ -1,17 +1,19 @@
 import { type ReactNode } from "react";
 import FilePlayer from "./_ui/PlayerLayout";
 
-async function layout({
+async function Page({
   params,
+  searchParams,
 }: {
-  params: { roomId: string; imdbId: string };
+  params: { roomId: string; imdbId: string; type: "string" };
+  searchParams: { season?: string; episode?: string };
   children: ReactNode;
 }) {
   return (
     <section className="relative h-full w-full overflow-hidden">
-      <FilePlayer params={params} />
+      <FilePlayer params={params} searchParams={searchParams} />
     </section>
   );
 }
 
-export default layout;
+export default Page;

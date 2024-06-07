@@ -9,6 +9,7 @@ import * as Menus from "./Menus";
 import * as Sliders from "./Sliders";
 import { TimeGroup } from "./Time-group";
 import { Title } from "./Title";
+import TitleLayout from "./TitleLayout";
 
 export interface VideoLayoutProps {
   thumbnails?: string;
@@ -18,7 +19,7 @@ export default function VideoLayout({
   thumbnails,
   disablePlay = false,
 }: VideoLayoutProps & { disablePlay?: boolean }) {
-  const isFullscreen = useMediaState("fullscreen");
+  const isFullscreen = true;
   const [isChatActive, setIsChatActive] = useState(false);
 
   return (
@@ -32,9 +33,10 @@ export default function VideoLayout({
       <Controls.Root
         className={`${styles.controls} from-black/10 to-transparent absolute inset-0 flex h-full w-full flex-col  opacity-0 transition-opacity media-buffering:opacity-100 media-controls:opacity-100`}
       >
-        <Controls.Group className="flex w-full justify-end">
-          <div className="h-24"></div>
-          {isFullscreen && <div className="mr-2 flex items-end gap-2"></div>}
+        <Controls.Group className="flex w-full justify-center">
+          <div className="mt-4 h-24">
+            <TitleLayout />
+          </div>
         </Controls.Group>
         <Controls.Group className="flex w-full flex-1 overflow-hidden">
           <div className="flex-1" />

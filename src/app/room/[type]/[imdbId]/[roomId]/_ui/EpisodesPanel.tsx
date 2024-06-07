@@ -17,7 +17,6 @@ function EpisodesPanel({ metaInfo }: { metaInfo: MetaInfo }) {
         videos={metaInfo.videos}
         className="absolute right-0 md:w-[420px]"
       />
-      {/* <div>23231</div> */}
     </>
   );
 }

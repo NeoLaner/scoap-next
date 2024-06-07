@@ -57,6 +57,9 @@ export function Settings({ placement, tooltipPlacement }: SettingsProps) {
 function CaptionSubmenu() {
   const options = useCaptionOptions(),
     hint = options.selectedTrack?.label ?? "Off";
+
+  console.log(options);
+
   return (
     <Menu.Root>
       <SubmenuButton
@@ -70,8 +73,8 @@ function CaptionSubmenu() {
           className="flex w-full flex-col"
           value={options.selectedValue}
         >
-          {options.map(({ label, value, select }) => (
-            <Radio value={value} onSelect={select} key={value}>
+          {options.map(({ label, value, select }, i) => (
+            <Radio value={String(i)} onSelect={select} key={String(i)}>
               {label}
             </Radio>
           ))}

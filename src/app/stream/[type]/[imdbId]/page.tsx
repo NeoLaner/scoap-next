@@ -28,6 +28,8 @@ async function page({
 
       <div className="overflow-y-auto md:flex-none">
         <StreamsServer
+          name={mediaData.name}
+          className="absolute right-0 top-[96px] z-30 h-full w-full bg-app-color-gray-1 md:w-[420px]"
           params={{ imdbId, type }}
           searchParams={{
             episode: searchParams?.episode,

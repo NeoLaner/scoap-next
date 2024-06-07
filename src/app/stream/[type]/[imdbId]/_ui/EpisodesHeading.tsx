@@ -29,8 +29,13 @@ function EpisodesHeading({ videos }: { videos: Video[] }) {
   const uniqueSeasons = extractUniqueSeasons(videos);
   if (!season) return null;
 
+  function handleOnClick() {
+    router.push(pathname);
+  }
+
   return (
-    <div className="flex items-center justify-center py-5">
+    <div className="flex w-full items-center justify-between px-2 py-5">
+      <button onClick={handleOnClick}>X</button>
       <Select.Root
         value={season}
         onValueChange={(value) =>

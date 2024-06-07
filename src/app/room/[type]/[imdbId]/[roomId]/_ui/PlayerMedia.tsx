@@ -24,8 +24,9 @@ function PlayerMedia({
     | null
     | undefined;
 }) {
-  const { state } = usePlayerContext();
+  const { dispatch, state } = usePlayerContext();
   const { mutate, isPending } = useCreateTorrentStream();
+  console.log({ fileIdx: source.fileIdx, infoHash: source.infoHash });
 
   useEffect(
     function () {
@@ -37,15 +38,20 @@ function PlayerMedia({
       ) {
         mutate({ fileIdx: source.fileIdx, infoHash: source.infoHash });
       }
+      () => {
+        dispatch({ type: "CLEAR_MEDIA_SOURCE" });
+      };
     },
-    [mutate, source?.fileIdx, source?.infoHash],
+    [mutate, source?.fileIdx, source?.infoHash, dispatch],
   );
+
+  console.log(state.mediaSrc);
 
   return (
     <MediaPlayer
       src={state.mediaSrc}
       playsInline
-      className="text-white ring-media-focus absolute aspect-video h-dvh w-full overflow-hidden bg-blackA12 font-sans data-[focus]:ring-4"
+      className="text-white ring-media-focus absolute aspect-video h-dvh w-full overflow-hidden rounded-md bg-blackA11 font-sans data-[focus]:ring-4"
     >
       <MediaProvider>
         <Image

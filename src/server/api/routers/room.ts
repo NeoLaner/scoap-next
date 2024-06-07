@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
@@ -15,7 +16,8 @@ export const roomRouter = createTRPCRouter({
           season: true,
           id: true,
           roomOwnerId: true,
-        }, // Correcting select to include isPrivate and isActive
+          roomName: true,
+        },
       });
     }),
 
@@ -51,5 +53,48 @@ export const roomRouter = createTRPCRouter({
           },
         },
       });
+    }),
+
+  // Edit a room
+  edit: protectedProcedure
+    .input(
+      z.object({
+        roomId: z.string(),
+        roomName: z.string().min(1).max(32).optional(),
+        imdbId: z.string().optional(),
+        season: z.string().optional().nullable(),
+        episode: z.string().optional().nullable(),
+        name: z.string().optional(),
+        infoHash: z.string().optional(),
+        fileIdx: z.number().optional(),
+        videoLink: z.string().optional(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      const { roomId, ...updateData } = input;
+      const updatedData = ctx.db.room.update({
+        where: { id: roomId },
+        data: {
+          roomName: input.roomName,
+          roomOwnerId: ctx.session.user.id,
+          imdbId: input.imdbId,
+          season: input.season,
+          episode: input.episode,
+          source: {
+            update: {
+              videoLink: updateData.videoLink,
+              infoHash: updateData.infoHash,
+              fileIdx: updateData.fileIdx,
+              name: updateData.name,
+            },
+          },
+        },
+      });
+      const type = input.episode ? "series" : "movie";
+      const path = `/room/${type}/${input.imdbId}/${roomId}`;
+
+      revalidatePath(path, "layout");
+
+      return updatedData;
     }),
 });

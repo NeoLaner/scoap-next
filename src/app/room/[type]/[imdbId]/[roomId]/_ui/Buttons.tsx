@@ -24,9 +24,10 @@ import {
 } from "react-icons/pi";
 
 import { useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ButtonFullscreen from "~/app/_ui/ButtonFullscreen";
+import { api } from "~/trpc/react";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -138,10 +139,18 @@ export function PIP({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Episodes({ tooltipPlacement }: MediaButtonProps) {
+  const params = useParams<{ type: "movie " | "series"; roomId: string }>();
+
+  const { data } = api.room.get.useQuery({
+    roomId: params.roomId,
+  });
   const pathname = usePathname();
   return (
     <Tooltip.Root>
-      <Link href={pathname + "?season=1"} className={buttonClass}>
+      <Link
+        href={pathname + `?season=${data?.season ?? "1"}`}
+        className={buttonClass}
+      >
         <PiCardsThreeFill size={26} className="text-solid-primary-2" />
       </Link>
 
@@ -174,17 +183,49 @@ export function Together({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Streams({ tooltipPlacement }: MediaButtonProps) {
+  const params = useParams<{ type: "movie " | "series"; roomId: string }>();
+
   return (
     <Tooltip.Root>
-      <Tooltip.Trigger asChild>
-        <PIPButton className={buttonClass}>
-          <PiQueueBold size={26} className="text-solid-primary-2" />
-        </PIPButton>
-      </Tooltip.Trigger>
+      {params.type === "series" ? <StreamsForSeries /> : <StreamsForMovie />}
+
       <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
         Streams
       </Tooltip.Content>
     </Tooltip.Root>
+  );
+}
+
+function StreamsForMovie() {
+  const pathname = usePathname();
+
+  return (
+    <Link className={buttonClass} href={pathname + "?showStreams=true"}>
+      <PiQueueBold size={26} className="text-solid-primary-2" />
+    </Link>
+  );
+}
+
+function StreamsForSeries() {
+  const pathname = usePathname();
+  const params = useParams<{ type: "movie " | "series"; roomId: string }>();
+
+  const { data } = api.room.get.useQuery({
+    roomId: params.roomId,
+  });
+
+  return (
+    <Link
+      className={buttonClass}
+      href={
+        pathname +
+        `?season=${data?.season}` +
+        `&episode=${data?.episode}` +
+        "&showStreams=true"
+      }
+    >
+      <PiQueueBold size={26} className="text-solid-primary-2" />
+    </Link>
   );
 }
 

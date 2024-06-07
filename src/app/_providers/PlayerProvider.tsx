@@ -16,12 +16,14 @@ type PlayerState = {
 };
 
 // Define action types for the reducer
-type PlayerAction = {
-  type: "SET_MEDIA_SOURCE";
-  payload: {
-    mediaSrc: HLSSrc | VideoSrc;
-  };
-};
+type PlayerAction =
+  | {
+      type: "SET_MEDIA_SOURCE";
+      payload: {
+        mediaSrc: HLSSrc | VideoSrc;
+      };
+    }
+  | { type: "CLEAR_MEDIA_SOURCE" };
 
 // Create the initial state for your application
 const initialPlayerState: PlayerState = {
@@ -49,6 +51,8 @@ const playerReducer = (
   switch (action.type) {
     case "SET_MEDIA_SOURCE":
       return { ...state, mediaSrc: action.payload.mediaSrc };
+    case "CLEAR_MEDIA_SOURCE":
+      return { ...state, mediaSrc: { src: "", type: "application/mpegurl" } };
     default:
       return state;
   }

@@ -46,13 +46,13 @@ function Episodes({
                 className="flex items-center gap-4"
               >
                 <div className="h-[70px] overflow-hidden rounded-md">
-                  <Image
+                  {/* <Image
                     src={episode.thumbnail}
                     alt={episode.name}
                     width={112}
                     height={70}
                     className="h-[70px] w-28"
-                  />
+                  /> */}
                 </div>
                 <div className="flex flex-1 flex-col justify-between gap-2">
                   {episode.episode}.{episode.name}
