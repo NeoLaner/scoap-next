@@ -9,10 +9,12 @@ import Link from "next/link";
 const UserDropMenu = ({
   user,
 }: {
-  user: {
-    name?: string | null;
-    image?: string | null;
-  };
+  user:
+    | {
+        name?: string | null;
+        image?: string | null;
+      }
+    | undefined;
 }) => {
   return (
     <Popover.Root>
@@ -25,8 +27,8 @@ const UserDropMenu = ({
             <Avatar.Root className="inline-flex h-[35px] w-[35px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
               <Avatar.Image
                 className="h-full w-full rounded-[inherit] object-cover"
-                src={user.image ?? ""}
-                alt={user.name ?? ""}
+                src={user?.image ?? ""}
+                alt={user?.name ?? "Anonymous"}
               />
               <Avatar.Fallback
                 className="leading-1 bg-white flex h-full w-full items-center justify-center text-[15px] font-medium text-primary-11"
@@ -48,8 +50,8 @@ const UserDropMenu = ({
               <Avatar.Root className="inline-flex h-[35px] w-[40px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
                 <Avatar.Image
                   className="h-full w-full rounded-[inherit] object-cover"
-                  src={user.image ?? ""}
-                  alt={user.name ?? "No Name"}
+                  src={user?.image ?? ""}
+                  alt={user?.name ?? "Anonymous Image"}
                 />
                 <Avatar.Fallback
                   className="leading-1 bg-white flex h-full w-full items-center justify-center text-[15px] font-medium text-primary-11"
@@ -61,17 +63,23 @@ const UserDropMenu = ({
 
               <div className="flex w-full items-center justify-between">
                 <div className="flex flex-col">
-                  <p className="text-sm">{user.name}</p>
+                  <p className="text-sm">{user?.name ?? "Anonymous"}</p>
                   <p className="text-xs">Guest</p>
                 </div>
 
-                <div>
-                  <Link href="/api/auth/signout">Logout</Link>
-                </div>
+                {user ? (
+                  <div>
+                    <Link href="/api/auth/signout">Logout</Link>
+                  </div>
+                ) : (
+                  <div>
+                    <Link href="/api/auth/signin">Login</Link>
+                  </div>
+                )}
               </div>
             </div>
             <Separator.Root className="my-[15px] bg-primary-7 data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px" />
-            <ButtonFullscreen />
+            <ButtonFullscreen className="" />
           </div>
         </Popover.Content>
       </Popover.Portal>

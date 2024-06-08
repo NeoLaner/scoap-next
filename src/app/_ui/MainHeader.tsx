@@ -5,7 +5,6 @@ import { getServerAuthSession } from "~/server/auth";
 
 async function MainHeader() {
   const session = await getServerAuthSession();
-  if (!session) return null;
 
   return (
     <header className="fixed z-20 h-[72px] w-full  bg-gradient-to-r from-app-color-gray-1 to-app-color-primary-2">
