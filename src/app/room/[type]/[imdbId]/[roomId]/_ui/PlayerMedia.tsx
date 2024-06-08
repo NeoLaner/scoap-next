@@ -26,7 +26,6 @@ function PlayerMedia({
 }) {
   const { dispatch, state } = usePlayerContext();
   const { mutate, isPending } = useCreateTorrentStream();
-  console.log({ fileIdx: source.fileIdx, infoHash: source.infoHash });
 
   useEffect(function () {
     if (
