@@ -28,22 +28,20 @@ function PlayerMedia({
   const { mutate, isPending } = useCreateTorrentStream();
   console.log({ fileIdx: source.fileIdx, infoHash: source.infoHash });
 
-  useEffect(
-    function () {
-      if (
-        source?.fileIdx !== undefined &&
-        source?.fileIdx !== null &&
-        source?.infoHash !== undefined &&
-        source?.infoHash !== null
-      ) {
-        mutate({ fileIdx: source.fileIdx, infoHash: source.infoHash });
-      }
-      () => {
-        dispatch({ type: "CLEAR_MEDIA_SOURCE" });
-      };
-    },
-    [mutate, source?.fileIdx, source?.infoHash, dispatch],
-  );
+  useEffect(function () {
+    if (
+      source?.fileIdx !== undefined &&
+      source?.fileIdx !== null &&
+      source?.infoHash !== undefined &&
+      source?.infoHash !== null
+    ) {
+      mutate({ fileIdx: source.fileIdx, infoHash: source.infoHash });
+    }
+    () => {
+      dispatch({ type: "CLEAR_MEDIA_SOURCE" });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   console.log(state.mediaSrc);
 
