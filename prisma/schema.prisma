@@ -60,7 +60,7 @@ model User {
   sessions      Session[]
   posts         Post[]
   rooms         Room[]
-  instances      Instance[]
+  instances     Instance[]
 }
 
 model VerificationToken {
@@ -73,32 +73,31 @@ model VerificationToken {
 }
 
 model Room {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   roomName    String
-  roomOwnerId String   @db.ObjectId
-  isPrivate   Boolean  @default(false)
-  crossorigin Boolean  @default(false)
+  roomOwnerId String     @db.ObjectId
+  isPrivate   Boolean    @default(false)
+  crossorigin Boolean    @default(false)
   imdbId      String
   season      String?
   episode     String?
   videoLinks  String[]
   subtitles   String[]
-  instances  Instance[]
-  source    Source?
+  instances   Instance[]
+  source      Source?
 
-  roomOwner User       @relation(fields: [roomOwnerId], references: [id])
-
+  roomOwner User @relation(fields: [roomOwnerId], references: [id])
 }
 
 model Source {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   name      String  @default("default")
-  roomId String @unique @db.ObjectId
+  roomId    String  @unique @db.ObjectId
   videoLink String?
   infoHash  String?
   fileIdx   Int?
 
-  room   Room   @relation(fields: [roomId], references: [id])
+  room Room @relation(fields: [roomId], references: [id])
 }
 
 model Instance {
@@ -111,5 +110,5 @@ model Instance {
   room Room @relation(fields: [roomId], references: [id])
   host User @relation(fields: [hostId], references: [id])
 
-  guests   String[]
+  guests String[]
 }
