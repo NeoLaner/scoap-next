@@ -2,7 +2,7 @@
 import { BsShare } from "react-icons/bs";
 import ButtonPlay from "./ButtonPlay";
 import { useSearchParams } from "next/navigation";
-function StreamMenuFooter() {
+function StreamMenuFooter({ userId }: { userId: string }) {
   const searchParams = useSearchParams();
   const showStreams = searchParams.get("showStreams");
   const season = searchParams.get("season");
@@ -15,7 +15,7 @@ function StreamMenuFooter() {
         <BsShare size={18} />
       </button>
 
-      <ButtonPlay />
+      <ButtonPlay userId={userId} />
     </div>
   );
 }

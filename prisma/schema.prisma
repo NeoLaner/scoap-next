@@ -77,11 +77,13 @@ model Room {
   id         String     @id @default(auto()) @map("_id") @db.ObjectId
   ownerId    String     @db.ObjectId
   imdbId     String
+  type       String
   videoLinks String[]
   instances  Instance[]
 
   owner User @relation(fields: [ownerId], references: [id])
-  @@unique([ownerId, imdbId])
+
+  @@unique(name:"userImdbId" , [ownerId, imdbId])
 }
 
 model Instance {
@@ -97,7 +99,7 @@ model Instance {
   room        Room      @relation(fields: [roomId], references: [id])
   owner       User      @relation(fields: [ownerId], references: [id])
 
-  guests  String[]
+  guests  String[] @db.ObjectId
   Sources Source[]
 }
 

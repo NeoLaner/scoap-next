@@ -25,16 +25,32 @@ export const roomRouter = createTRPCRouter({
       z.object({
         ownerId: z.string(),
         imdbId: z.string(),
-        videoLinks: z.array(z.string()),
+        type: z.string(),
+        videoLinks: z.array(z.string()).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      // Check if a room with the same ownerId and imdbId already exists
+      const existingRoom = await ctx.db.room.findFirst({
+        where: {
+          ownerId: input.ownerId,
+          imdbId: input.imdbId,
+        },
+      });
+
+      if (existingRoom) {
+        // If the room exists, return it
+        return existingRoom;
+      }
+
+      // If the room does not exist, create a new one
       try {
         return await ctx.db.room.create({
           data: {
             ownerId: input.ownerId,
             imdbId: input.imdbId,
-            videoLinks: input.videoLinks,
+            type: input.type,
+            videoLinks: input.videoLinks ?? [],
           },
         });
       } catch (error) {
