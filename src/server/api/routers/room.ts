@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
@@ -6,13 +6,15 @@ export const roomRouter = createTRPCRouter({
   // Get a room
   get: protectedProcedure
     .input(z.object({ roomId: z.string() }))
-    .query(({ ctx, input }) => {
-      return ctx.db.room.findFirst({
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.room.findFirst({
         where: { id: input.roomId },
         select: {
-          imdbId: true,
           id: true,
           ownerId: true,
+          imdbId: true,
+          videoLinks: true,
+          instances: true, // This will include related instances
         },
       });
     }),
@@ -21,53 +23,30 @@ export const roomRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
+        ownerId: z.string(),
         imdbId: z.string(),
-        season: z.string().optional().nullable(),
-        episode: z.string().optional().nullable(),
-        name: z.string().optional(),
-        infoHash: z.string().optional(),
-        fileIdx: z.number().optional(),
-        videoLink: z.string().optional(),
+        videoLinks: z.array(z.string()),
       }),
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.room.create({
-        data: {
-          ownerId: ctx.session.user.id,
-          imdbId: input.imdbId,
-        },
-      });
-    }),
-
-  // Edit a room
-  edit: protectedProcedure
-    .input(
-      z.object({
-        roomId: z.string(),
-        roomName: z.string().min(1).max(32).optional(),
-        imdbId: z.string().optional(),
-        season: z.string().optional().nullable(),
-        episode: z.string().optional().nullable(),
-        name: z.string().optional(),
-        infoHash: z.string().optional(),
-        fileIdx: z.number().optional(),
-        videoLink: z.string().optional(),
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      const { roomId, ...updateData } = input;
-      const updatedData = ctx.db.room.update({
-        where: { id: roomId },
-        data: {
-          ownerId: ctx.session.user.id,
-          imdbId: input.imdbId,
-        },
-      });
-      const type = input.episode ? "series" : "movie";
-      const path = `/room/${type}/${input.imdbId}/${roomId}`;
-
-      revalidatePath(path, "layout");
-
-      return updatedData;
+    .mutation(async ({ ctx, input }) => {
+      try {
+        return await ctx.db.room.create({
+          data: {
+            ownerId: input.ownerId,
+            imdbId: input.imdbId,
+            videoLinks: input.videoLinks,
+          },
+        });
+      } catch (error) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === "P2002"
+        ) {
+          throw new Error(
+            "A room with this IMDb ID already exists for this user.",
+          );
+        }
+        throw error;
+      }
     }),
 });

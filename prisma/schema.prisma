@@ -81,6 +81,7 @@ model Room {
   instances  Instance[]
 
   owner User @relation(fields: [ownerId], references: [id])
+  @@unique([ownerId, imdbId])
 }
 
 model Instance {
