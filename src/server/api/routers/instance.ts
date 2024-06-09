@@ -52,4 +52,35 @@ export const instanceRouter = createTRPCRouter({
         },
       });
     }),
+
+  // Update an instance
+  update: protectedProcedure
+    .input(
+      z.object({
+        instanceId: z.string(),
+        name: z.string().optional(),
+        ownerId: z.string().optional(),
+        roomId: z.string().optional(),
+        online: z.boolean().optional(),
+        timeWatched: z.date().optional(),
+        season: z.number().optional(),
+        episode: z.number().optional(),
+        guests: z.array(z.string()).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.instance.update({
+        where: { id: input.instanceId },
+        data: {
+          name: input.name,
+          ownerId: input.ownerId,
+          roomId: input.roomId,
+          online: input.online,
+          timeWatched: input.timeWatched,
+          season: input.season,
+          episode: input.episode,
+          guests: input.guests,
+        },
+      });
+    }),
 });

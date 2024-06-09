@@ -12,16 +12,19 @@ import { useCreateTorrentStream } from "../_hooks/useCreateTorrentStream";
 
 function Stream({
   name,
+  userId,
   stream,
 }: {
   name: string;
+  userId: string;
   stream: GetStreamsFromTorrentIo[number];
 }) {
   const router = useRouter();
-  const { imdbId, type, roomId } = useParams<{
+  const { imdbId, type, roomId, instanceId } = useParams<{
     imdbId: string;
     type: string;
     roomId: string;
+    instanceId: string;
   }>();
   const utils = api.useUtils();
   const searchParams = useSearchParams();
@@ -29,60 +32,49 @@ function Stream({
   const episode = searchParams.get("episode");
   const { mutate: createTorrentStreams } = useCreateTorrentStream();
   const { dispatch } = usePlayerContext();
-  const { data } = api.room.get.useQuery({ roomId });
+  const { data: instanceData } = api.instance.get.useQuery({ instanceId });
+  const { data: roomData } = api.room.get.useQuery({ instanceId });
 
-  const { mutate: createRoom, isPending } = api.room.create.useMutation({
-    onSuccess: (data) => {
-      router.push(`/room/${type}/${imdbId}/${data.id}`);
+  const { mutate: createInstance, isPending } = api.instance.create.useMutation(
+    {
+      onSuccess: (data) => {
+        router.push(`/room/${type}/${imdbId}/${data.roomId}/${data.id}`);
+      },
     },
-  });
+  );
 
-  const { mutate: editRoom, isPending: isEditing } = api.room.edit.useMutation({
-    onSuccess: async () => {
-      await utils.room.get.invalidate({ roomId });
-    },
-  });
+  const { mutate: updateInstance, isPending: isUpdating } =
+    api.instance.update.useMutation({
+      onSuccess: async () => {
+        await utils.instance.get.invalidate({ instanceId });
+      },
+    });
 
   function handleOnClick() {
-    if (roomId && type === "movie") {
+    if (instanceId) {
       createTorrentStreams({
         fileIdx: stream.fileIdx,
         infoHash: stream.infoHash,
       });
 
-      editRoom({
-        roomId,
-        imdbId,
-        roomName: name,
-        fileIdx: stream.fileIdx,
-        infoHash: stream.infoHash,
-      });
-    } else if (type === "series" && data?.season === season) {
-      createTorrentStreams({
-        fileIdx: stream.fileIdx,
-        infoHash: stream.infoHash,
-      });
-
-      editRoom({
-        roomId,
-        season,
-        episode,
-        imdbId,
-        roomName: name ?? data.roomName,
-        fileIdx: stream.fileIdx,
-        infoHash: stream.infoHash,
-      });
+      // updateInstance({
+      //   roomId,
+      //   imdbId,
+      //   roomName: name,
+      //   fileIdx: stream.fileIdx,
+      //   infoHash: stream.infoHash,
+      // });
+      //update source and instance
     } else
-      createRoom({
-        season,
-        episode,
-        imdbId,
-        roomName: name,
-        fileIdx: stream.fileIdx,
-        infoHash: stream.infoHash,
+      createInstance({
+        season: Number(season),
+        episode: Number(episode),
+        name: name,
+        online: false,
+        ownerId: userId,
+        roomId,
       });
   }
-
   return (
     <button onClick={handleOnClick} disabled={isPending} title={stream.title}>
       <div className="mr-[0.6rem] flex gap-2 text-sm transition-all hover:bg-app-color-primary-2">

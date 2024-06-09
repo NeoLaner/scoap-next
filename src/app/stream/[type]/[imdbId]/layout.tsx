@@ -1,11 +1,8 @@
 import { type ReactNode } from "react";
 import StreamHeader from "./_ui/StreamHeader";
 import StreamMenuFooter from "./_ui/StreamMenuFooter";
-import BgLogoBox from "./_ui/BgLogoBox";
-import BgMediaBox from "./_ui/BgMediaBox";
-import Episodes from "./_ui/Episodes";
 import StremioService from "~/app/_services/stremIo/stremIoServices";
-import { MetaInfo } from "~/app/_services/stremIo/types";
+import { type MetaInfo } from "~/app/_services/stremIo/types";
 import { getServerAuthSession } from "~/server/auth";
 
 async function layout({
@@ -19,6 +16,7 @@ async function layout({
 }) {
   const { imdbId, type } = params;
   const session = await getServerAuthSession();
+  if (!session) return null;
   let mediaData = {} as MetaInfo;
   if (type === "movie") mediaData = await StremioService.getMetaMovie(imdbId);
   if (type === "series") mediaData = await StremioService.getMetaSeries(imdbId);
@@ -33,7 +31,7 @@ async function layout({
       </div>
 
       <div className="absolute right-0">{streams}</div>
-      <StreamMenuFooter userId={session?.user.id} />
+      <StreamMenuFooter userId={session.user.id} />
     </section>
   );
 }

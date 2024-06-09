@@ -1,5 +1,4 @@
-import { type ReactNode } from "react";
-import FilePlayer from "./_ui/PlayerLayout";
+import FilePlayer from "../_ui/PlayerLayout";
 
 async function Page({
   params,
