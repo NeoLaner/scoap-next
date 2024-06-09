@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { BsFillPlayCircleFill } from "react-icons/bs";
 import { makeRoom } from "~/app/_actions/makeRoom";
 

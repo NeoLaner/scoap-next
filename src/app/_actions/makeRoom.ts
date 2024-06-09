@@ -8,6 +8,12 @@ export async function makeRoom(inputs: {
   type: string;
 }) {
   const { imdbId, ownerId, type } = inputs;
-  const data = await api.room.create({ imdbId, ownerId, type });
-  redirect(`/room/${type}/${data.imdbId}/${data.id}`);
+  const roomData = await api.room.create({ imdbId, ownerId, type });
+  const instanceData = await api.instance.create({
+    name: "test",
+    online: false,
+    ownerId: ownerId,
+    roomId: roomData.id,
+  });
+  redirect(`${roomData.imdbId}/${roomData.id}/${instanceData.id}`);
 }
