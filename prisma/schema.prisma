@@ -106,6 +106,7 @@ model Instance {
   password String? @default("")
   hostId   String  @db.ObjectId
   roomId   String  @db.ObjectId
+  online   Boolean
 
   room Room @relation(fields: [roomId], references: [id])
   host User @relation(fields: [hostId], references: [id])
