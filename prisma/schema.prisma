@@ -61,6 +61,7 @@ model User {
   posts         Post[]
   rooms         Room[]
   instances     Instance[]
+  Sources       Source[]
 }
 
 model VerificationToken {
@@ -73,42 +74,40 @@ model VerificationToken {
 }
 
 model Room {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  roomName    String
-  roomOwnerId String     @db.ObjectId
-  isPrivate   Boolean    @default(false)
-  crossorigin Boolean    @default(false)
-  imdbId      String
-  season      String?
-  episode     String?
-  videoLinks  String[]
-  subtitles   String[]
-  instances   Instance[]
-  source      Source?
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  roomName   String
+  ownerId    String     @db.ObjectId
+  imdbId     String
+  videoLinks String[]
+  instances  Instance[]
 
-  roomOwner User @relation(fields: [roomOwnerId], references: [id])
-}
-
-model Source {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  name      String  @default("default")
-  roomId    String  @unique @db.ObjectId
-  videoLink String?
-  infoHash  String?
-  fileIdx   Int?
-
-  room Room @relation(fields: [roomId], references: [id])
+  owner User @relation(fields: [ownerId], references: [id])
 }
 
 model Instance {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  password String? @default("")
-  hostId   String  @db.ObjectId
-  roomId   String  @db.ObjectId
-  online   Boolean
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  password    String?   @default("")
+  ownerId     String    @db.ObjectId
+  roomId      String    @db.ObjectId
+  online      Boolean
+  timeWatched DateTime?
+  season      Int?
+  episode     Int?
+  room        Room      @relation(fields: [roomId], references: [id])
+  owner       User      @relation(fields: [ownerId], references: [id])
 
-  room Room @relation(fields: [roomId], references: [id])
-  host User @relation(fields: [hostId], references: [id])
+  guests  String[]
+  Sources Source[]
+}
 
-  guests String[]
+model Source {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  instanceId String  @unique @db.ObjectId
+  userId     String  @unique @db.ObjectId
+  videoLink  String?
+  infoHash   String?
+  fileIdx    Int?
+
+  instance Instance @relation(fields: [instanceId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
 }
