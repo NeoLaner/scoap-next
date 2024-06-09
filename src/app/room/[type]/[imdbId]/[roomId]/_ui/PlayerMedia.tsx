@@ -34,6 +34,7 @@ function PlayerMedia({
       source?.infoHash !== undefined &&
       source?.infoHash !== null
     ) {
+      dispatch({ type: "CLEAR_MEDIA_SOURCE" });
       mutate({ fileIdx: source.fileIdx, infoHash: source.infoHash });
     }
     () => {

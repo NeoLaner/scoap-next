@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import { PlayerProvider } from "./_providers/PlayerProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ProtectedRoute from "./_ui/ProtectedRoute";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,14 +31,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`h-dvh  ${inter.className}`}>
-        <TRPCReactProvider>
-          <PlayerProvider>
-            <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-app-color-gray-1 to-app-color-primary-2  text-gray-12">
-              {children}
-            </main>
-          </PlayerProvider>
-          {/* <ReactQueryDevtools /> */}
-        </TRPCReactProvider>
+        <ProtectedRoute>
+          <TRPCReactProvider>
+            <PlayerProvider>
+              <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-app-color-gray-1 to-app-color-primary-2  text-gray-12">
+                {children}
+              </main>
+            </PlayerProvider>
+            {/* <ReactQueryDevtools /> */}
+          </TRPCReactProvider>
+        </ProtectedRoute>
       </body>
     </html>
   );

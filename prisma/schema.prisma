@@ -60,7 +60,7 @@ model User {
   sessions      Session[]
   posts         Post[]
   rooms         Room[]
-  instance      Instance[]
+  instances      Instance[]
 }
 
 model VerificationToken {
@@ -73,43 +73,42 @@ model VerificationToken {
 }
 
 model Room {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  roomName        String
-  roomOwnerId     String   @db.ObjectId
-  isActive        Boolean  @default(true)
-  isPrivate       Boolean  @default(false)
-  crossorigin     Boolean  @default(false)
-  subtitles       String[] @default([])
-  roomDescription String?  @default("")
-  imdbId    String?
-  season    String? 
-  episode   String?
-
-  source          Source? 
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  roomName    String
+  roomOwnerId String   @db.ObjectId
+  isPrivate   Boolean  @default(false)
+  crossorigin Boolean  @default(false)
+  imdbId      String
+  season      String?
+  episode     String?
+  videoLinks  String[]
+  subtitles   String[]
+  instances  Instance[]
+  source    Source?
 
   roomOwner User       @relation(fields: [roomOwnerId], references: [id])
-  instance  Instance[]
 
-  @@index([roomName])
 }
 
 model Source {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   name      String  @default("default")
+  roomId String @unique @db.ObjectId
   videoLink String?
   infoHash  String?
   fileIdx   Int?
 
-  room Room   @relation(fields: [roomId], references: [id])
-  roomId String @unique @db.ObjectId
+  room   Room   @relation(fields: [roomId], references: [id])
 }
 
 model Instance {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  rootRoomId String  @db.ObjectId
-  hostId     String  @db.ObjectId
-  password   String? @default("")
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  password String? @default("")
+  hostId   String  @db.ObjectId
+  roomId   String  @db.ObjectId
 
-  rootRoom Room @relation(fields: [rootRoomId], references: [id])
-  host     User @relation(fields: [hostId], references: [id])
+  room Room @relation(fields: [roomId], references: [id])
+  host User @relation(fields: [hostId], references: [id])
+
+  guests   String[]
 }
