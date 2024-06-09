@@ -75,7 +75,6 @@ model VerificationToken {
 
 model Room {
   id         String     @id @default(auto()) @map("_id") @db.ObjectId
-  roomName   String
   ownerId    String     @db.ObjectId
   imdbId     String
   videoLinks String[]
@@ -87,6 +86,7 @@ model Room {
 model Instance {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   password    String?   @default("")
+  name        String
   ownerId     String    @db.ObjectId
   roomId      String    @db.ObjectId
   online      Boolean

@@ -10,13 +10,9 @@ export const roomRouter = createTRPCRouter({
       return ctx.db.room.findFirst({
         where: { id: input.roomId },
         select: {
-          source: true,
           imdbId: true,
-          episode: true,
-          season: true,
           id: true,
-          roomOwnerId: true,
-          roomName: true,
+          ownerId: true,
         },
       });
     }),
@@ -25,8 +21,7 @@ export const roomRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        roomName: z.string().min(1).max(32),
-        imdbId: z.string().optional(),
+        imdbId: z.string(),
         season: z.string().optional().nullable(),
         episode: z.string().optional().nullable(),
         name: z.string().optional(),
@@ -38,19 +33,8 @@ export const roomRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.room.create({
         data: {
-          roomName: input.roomName,
-          roomOwnerId: ctx.session.user.id,
+          ownerId: ctx.session.user.id,
           imdbId: input.imdbId,
-          season: input.season,
-          episode: input.episode,
-          source: {
-            create: {
-              videoLink: input.videoLink,
-              infoHash: input.infoHash,
-              fileIdx: input.fileIdx,
-              name: input.name,
-            },
-          },
         },
       });
     }),
@@ -75,19 +59,8 @@ export const roomRouter = createTRPCRouter({
       const updatedData = ctx.db.room.update({
         where: { id: roomId },
         data: {
-          roomName: input.roomName,
-          roomOwnerId: ctx.session.user.id,
+          ownerId: ctx.session.user.id,
           imdbId: input.imdbId,
-          season: input.season,
-          episode: input.episode,
-          source: {
-            update: {
-              videoLink: updateData.videoLink,
-              infoHash: updateData.infoHash,
-              fileIdx: updateData.fileIdx,
-              name: updateData.name,
-            },
-          },
         },
       });
       const type = input.episode ? "series" : "movie";
