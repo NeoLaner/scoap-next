@@ -1,6 +1,5 @@
 import { getStreamsFromTorrentIo } from "~/lib/streams/getStreams";
 import Streams from "./Streams";
-import { getServerAuthSession } from "~/server/auth";
 
 // http://127.0.0.1:11470/6ee1a751d67aae51dfd067b0a11e2f06d1098461/create
 async function StreamsServer({
@@ -12,8 +11,6 @@ async function StreamsServer({
   searchParams?: { season?: string; episode?: string };
   className?: string;
 }) {
-  const session = await getServerAuthSession();
-  if (!session) return null;
   const { type, imdbId } = params;
   const season = searchParams?.season;
   const episode = searchParams?.episode;
@@ -32,7 +29,6 @@ async function StreamsServer({
 
   return (
     <Streams
-      userId={session.user.id}
       torrentIoStreamsSorted={torrentIoStreamsSorted}
       className={className}
     />

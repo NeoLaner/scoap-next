@@ -10,14 +10,9 @@ import { useMetaData } from "~/app/_hooks/useMetaData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
 import { updateStream } from "~/app/_actions/updateStream";
 import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
+import { useUserData } from "~/app/_hooks/useUserData";
 
-function Stream({
-  userId,
-  stream,
-}: {
-  userId: string;
-  stream: GetStreamsFromTorrentIo[number];
-}) {
+function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
   const { imdbId, type, instanceId } = useParams<{
     imdbId: string;
     type: string;
@@ -30,12 +25,13 @@ function Stream({
   const episode = searchParams.get("episode");
   const { sourceData } = useSourceData();
   const { mutate } = useCreateTorrentStream();
+  const { userData } = useUserData();
   async function handleOnClick() {
     await updateStream({
       imdbId,
       instanceId,
       name: metaData.name,
-      ownerId: userId,
+      ownerId: userData?.id,
       sourceId: sourceData?.id,
       type,
       season,

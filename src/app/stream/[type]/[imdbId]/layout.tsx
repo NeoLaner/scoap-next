@@ -1,10 +1,10 @@
 import { type ReactNode } from "react";
-import StreamHeader from "./_ui/StreamHeader";
-import StreamMenuFooter from "./_ui/StreamMenuFooter";
 import StremioService from "~/app/_services/stremIo/stremIoServices";
 import { type MetaInfo } from "~/app/_services/stremIo/types";
 import { getServerAuthSession } from "~/server/auth";
 import { MetaDataProvider } from "~/app/_providers/MetaProvider";
+import ProtectedRoute from "~/app/_ui/ProtectedRoute";
+import { redirect } from "next/navigation";
 
 async function layout({
   children,
@@ -15,14 +15,18 @@ async function layout({
 }) {
   const { imdbId, type } = params;
   const session = await getServerAuthSession();
-  if (!session) return null;
+  if (!session) return redirect("/api/auth/signin");
   let metaData = {} as MetaInfo;
   if (type === "movie") metaData = await StremioService.getMetaMovie(imdbId);
   if (type === "series") metaData = await StremioService.getMetaSeries(imdbId);
 
   if (!metaData) return <div>Not found</div>;
 
-  return <MetaDataProvider metaData={metaData}>{children}</MetaDataProvider>;
+  return (
+    <ProtectedRoute>
+      <MetaDataProvider metaData={metaData}>{children}</MetaDataProvider>
+    </ProtectedRoute>
+  );
 }
 
 export default layout;

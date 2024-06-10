@@ -31,16 +31,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`h-dvh  ${inter.className}`}>
-        <ProtectedRoute>
-          <TRPCReactProvider>
-            <PlayerProvider>
-              <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-app-color-gray-1 to-app-color-primary-2  text-gray-12">
-                {children}
-              </main>
-            </PlayerProvider>
-            {/* <ReactQueryDevtools /> */}
-          </TRPCReactProvider>
-        </ProtectedRoute>
+        <TRPCReactProvider>
+          <PlayerProvider>
+            <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-app-color-gray-1 to-app-color-primary-2  text-gray-12">
+              {children}
+            </main>
+          </PlayerProvider>
+          {/* <ReactQueryDevtools /> */}
+        </TRPCReactProvider>
       </body>
     </html>
   );

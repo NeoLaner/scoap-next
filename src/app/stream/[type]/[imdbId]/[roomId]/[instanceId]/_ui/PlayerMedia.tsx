@@ -21,7 +21,6 @@ function PlayerMedia() {
       sourceData?.infoHash !== undefined &&
       sourceData?.infoHash !== null
     ) {
-     
       dispatch({ type: "CLEAR_MEDIA_SOURCE" });
       mutate({ fileIdx: sourceData.fileIdx, infoHash: sourceData.infoHash });
     }

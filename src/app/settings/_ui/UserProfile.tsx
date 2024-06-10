@@ -1,19 +1,15 @@
 "use client";
 import * as Avatar from "@radix-ui/react-avatar";
+import { useUserData } from "~/app/_hooks/useUserData";
 
-function UserProfile({
-  image,
-  name,
-}: {
-  image?: string | null;
-  name?: string | null;
-}) {
+function UserProfile() {
+  const { userData } = useUserData();
   return (
     <Avatar.Root className="inline-flex h-[70px] w-[70px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
       <Avatar.Image
         className="h-full w-full rounded-[inherit] object-cover"
-        src={image ?? ""}
-        alt={name ?? ""}
+        src={userData.image ?? ""}
+        alt={userData.name ?? ""}
       />
       <Avatar.Fallback
         className="leading-1 bg-white flex h-full w-full items-center justify-center text-[15px] font-medium text-primary-11"
