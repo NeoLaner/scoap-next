@@ -3,17 +3,23 @@ import { api } from "~/trpc/server";
 import { redirect } from "next/navigation";
 
 export async function makeRoom(inputs: {
+  name: string;
   imdbId: string;
   ownerId: string;
   type: string;
+  season?: number;
+  episode?: number;
 }) {
-  const { imdbId, ownerId, type } = inputs;
+  const { imdbId, ownerId, type, name } = inputs;
   const roomData = await api.room.create({ imdbId, ownerId, type });
   const instanceData = await api.instance.create({
-    name: "test",
+    name,
     online: false,
     ownerId: ownerId,
     roomId: roomData.id,
+    season: inputs.season,
+    episode: inputs.episode,
   });
+  await api.source.create({ instanceId: instanceData.id, userId: ownerId });
   redirect(`${roomData.imdbId}/${roomData.id}/${instanceData.id}`);
 }

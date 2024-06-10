@@ -1,19 +1,11 @@
-import { useParams } from "next/navigation";
-import { api } from "~/trpc/react";
-
-type Params = {
-  roomId: string;
-  imdbId: string;
-  type: string;
-};
+import { useInstanceData } from "~/app/_hooks/useInstanceData";
 
 function TitleLayout() {
-  const params = useParams<Params>();
-  const { data } = api.room.get.useQuery({ roomId: params.roomId });
+  const { instanceData } = useInstanceData();
 
   return (
     <div>
-      {data?.roomName} S{data?.season}E{data?.episode}
+      {instanceData?.name} S{instanceData?.season}E{instanceData?.episode}
     </div>
   );
 }

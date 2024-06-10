@@ -7,15 +7,16 @@ import {
   type Stream,
 } from "~/lib/streams/getStreams";
 import { api } from "~/trpc/react";
-import { usePlayerContext } from "../_hooks/usePlayerProvider";
-import { useCreateTorrentStream } from "../_hooks/useCreateTorrentStream";
+import { usePlayerContext } from "~/app/_hooks/usePlayerProvider";
+import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
+import { useMetaData } from "~/app/_hooks/useMetaData";
+import { useSourceData } from "~/app/_hooks/useSourceData";
+import invalidate from "~/app/_actions/invalidatePath";
 
 function Stream({
-  name,
   userId,
   stream,
 }: {
-  name: string;
   userId: string;
   stream: GetStreamsFromTorrentIo[number];
 }) {
@@ -26,6 +27,7 @@ function Stream({
     roomId: string;
     instanceId: string;
   }>();
+  const { metaData } = useMetaData();
   const utils = api.useUtils();
   const searchParams = useSearchParams();
   const season = searchParams.get("season");
@@ -33,7 +35,8 @@ function Stream({
   const { mutate: createTorrentStreams } = useCreateTorrentStream();
   const { dispatch } = usePlayerContext();
   const { data: instanceData } = api.instance.get.useQuery({ instanceId });
-  const { data: roomData } = api.room.get.useQuery({ instanceId });
+  const { data: roomData } = api.room.get.useQuery({ roomId });
+  const { sourceData } = useSourceData();
 
   const { mutate: createInstance, isPending } = api.instance.create.useMutation(
     {
@@ -44,36 +47,31 @@ function Stream({
   );
 
   const { mutate: updateInstance, isPending: isUpdating } =
-    api.instance.update.useMutation({
-      onSuccess: async () => {
-        await utils.instance.get.invalidate({ instanceId });
-      },
-    });
+    api.instance.update.useMutation();
+
+  const { mutate: updateSource } = api.source.update.useMutation();
 
   function handleOnClick() {
-    if (instanceId) {
-      createTorrentStreams({
-        fileIdx: stream.fileIdx,
-        infoHash: stream.infoHash,
-      });
-
-      // updateInstance({
-      //   roomId,
-      //   imdbId,
-      //   roomName: name,
-      //   fileIdx: stream.fileIdx,
-      //   infoHash: stream.infoHash,
-      // });
-      //update source and instance
-    } else
-      createInstance({
-        season: Number(season),
-        episode: Number(episode),
-        name: name,
-        online: false,
-        ownerId: userId,
-        roomId,
-      });
+    // createInstance({
+    //   season: Number(season),
+    //   episode: Number(episode),
+    //   name: metaData.name,
+    //   online: false,
+    //   ownerId: userId,
+    //   roomId,
+    // });
+    updateInstance({
+      instanceId,
+      episode: Number(episode),
+      season: Number(season),
+      name: metaData.name,
+    });
+    updateSource({
+      id: sourceData?.id,
+      fileIdx: stream.fileIdx,
+      infoHash: stream.infoHash,
+    });
+    invalidate();
   }
   return (
     <button onClick={handleOnClick} disabled={isPending} title={stream.title}>

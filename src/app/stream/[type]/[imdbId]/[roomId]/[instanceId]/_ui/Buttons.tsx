@@ -28,6 +28,7 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ButtonFullscreen from "~/app/_ui/ButtonFullscreen";
 import { api } from "~/trpc/react";
+import { useInstanceData } from "~/app/_hooks/useInstanceData";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -139,16 +140,12 @@ export function PIP({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Episodes({ tooltipPlacement }: MediaButtonProps) {
-  const params = useParams<{ type: "movie " | "series"; roomId: string }>();
-
-  const { data } = api.room.get.useQuery({
-    roomId: params.roomId,
-  });
+  const { instanceData } = useInstanceData();
   const pathname = usePathname();
   return (
     <Tooltip.Root>
       <Link
-        href={pathname + `?season=${data?.season ?? "1"}`}
+        href={pathname + `?season=${instanceData?.season ?? "1"}`}
         className={buttonClass}
       >
         <PiCardsThreeFill size={26} className="text-solid-primary-2" />
@@ -208,19 +205,15 @@ function StreamsForMovie() {
 
 function StreamsForSeries() {
   const pathname = usePathname();
-  const params = useParams<{ type: "movie " | "series"; roomId: string }>();
-
-  const { data } = api.room.get.useQuery({
-    roomId: params.roomId,
-  });
+  const { instanceData } = useInstanceData();
 
   return (
     <Link
       className={buttonClass}
       href={
         pathname +
-        `?season=${data?.season}` +
-        `&episode=${data?.episode}` +
+        `?season=${instanceData?.season}` +
+        `&episode=${instanceData?.episode}` +
         "&showStreams=true"
       }
     >

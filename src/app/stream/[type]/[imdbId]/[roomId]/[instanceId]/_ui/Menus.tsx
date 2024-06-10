@@ -1,4 +1,4 @@
-import type { ComponentType, ReactElement } from "react";
+import type { ReactElement } from "react";
 
 import {
   Menu,
@@ -19,7 +19,6 @@ import {
 } from "react-icons/pi";
 
 import { buttonClass, tooltipClass } from "./Buttons";
-import { IconType } from "react-icons/lib";
 
 export interface SettingsProps {
   placement: MenuPlacement;
@@ -57,8 +56,6 @@ export function Settings({ placement, tooltipPlacement }: SettingsProps) {
 function CaptionSubmenu() {
   const options = useCaptionOptions(),
     hint = options.selectedTrack?.label ?? "Off";
-
-  console.log(options);
 
   return (
     <Menu.Root>

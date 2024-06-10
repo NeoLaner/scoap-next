@@ -4,12 +4,10 @@ import { getServerAuthSession } from "~/server/auth";
 
 // http://127.0.0.1:11470/6ee1a751d67aae51dfd067b0a11e2f06d1098461/create
 async function StreamsServer({
-  name,
   params,
   searchParams,
   className,
 }: {
-  name: string;
   params: { imdbId: string; type: string };
   searchParams?: { season?: string; episode?: string };
   className?: string;
@@ -34,7 +32,6 @@ async function StreamsServer({
 
   return (
     <Streams
-      name={name}
       userId={session.user.id}
       torrentIoStreamsSorted={torrentIoStreamsSorted}
       className={className}

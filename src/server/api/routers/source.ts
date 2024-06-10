@@ -4,10 +4,10 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 export const sourceRouter = createTRPCRouter({
   // Get a source
   get: protectedProcedure
-    .input(z.object({ sourceId: z.string() }))
+    .input(z.object({ instanceId: z.string(), userId: z.string() }))
     .query(async ({ ctx, input }) => {
       return await ctx.db.source.findFirst({
-        where: { id: input.sourceId },
+        where: { instanceId: input.instanceId, userId: input.userId },
         select: {
           id: true,
           instanceId: true,
@@ -35,6 +35,27 @@ export const sourceRouter = createTRPCRouter({
         data: {
           instanceId: input.instanceId,
           userId: input.userId,
+          videoLink: input.videoLink,
+          infoHash: input.infoHash,
+          fileIdx: input.fileIdx,
+        },
+      });
+    }),
+
+  // Update a source
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        videoLink: z.string().optional(),
+        infoHash: z.string().optional(),
+        fileIdx: z.number().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.source.update({
+        where: { id: input.id },
+        data: {
           videoLink: input.videoLink,
           infoHash: input.infoHash,
           fileIdx: input.fileIdx,

@@ -4,38 +4,26 @@ import { useEffect } from "react";
 import { MediaPlayer, MediaProvider } from "@vidstack/react";
 import { usePlayerContext } from "~/app/_hooks/usePlayerProvider";
 import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
-import { type MetaInfo } from "~/app/_services/stremIo/types";
 import VideoLayout from "./VideoLayout";
+import { useMetaData } from "~/app/_hooks/useMetaData";
+import { useSourceData } from "~/app/_hooks/useSourceData";
 
-function PlayerMedia({
-  source,
-  metaInfo,
-}: {
-  metaInfo: MetaInfo;
-  source:
-    | {
-        id: string;
-        name: string;
-        videoLink: string | null;
-        infoHash: string | null;
-        fileIdx: number | null;
-        roomId: string;
-      }
-    | null
-    | undefined;
-}) {
+function PlayerMedia() {
   const { dispatch, state } = usePlayerContext();
   const { mutate, isPending } = useCreateTorrentStream();
+  const { metaData } = useMetaData();
+  const { sourceData } = useSourceData();
 
   useEffect(function () {
     if (
-      source?.fileIdx !== undefined &&
-      source?.fileIdx !== null &&
-      source?.infoHash !== undefined &&
-      source?.infoHash !== null
+      sourceData?.fileIdx !== undefined &&
+      sourceData?.fileIdx !== null &&
+      sourceData?.infoHash !== undefined &&
+      sourceData?.infoHash !== null
     ) {
+     
       dispatch({ type: "CLEAR_MEDIA_SOURCE" });
-      mutate({ fileIdx: source.fileIdx, infoHash: source.infoHash });
+      mutate({ fileIdx: sourceData.fileIdx, infoHash: sourceData.infoHash });
     }
     () => {
       dispatch({ type: "CLEAR_MEDIA_SOURCE" });
@@ -53,8 +41,8 @@ function PlayerMedia({
     >
       <MediaProvider>
         <Image
-          src={metaInfo.background}
-          alt={metaInfo.name}
+          src={metaData.background}
+          alt={metaData.name}
           fill
           className={`h-full object-cover object-top  ${isPending ? "opacity-70" : "opacity-0"} transition-all`}
           quality="90"
@@ -67,8 +55,8 @@ function PlayerMedia({
 
       <div className="absolute hidden h-full w-full animate-pulse items-center justify-center transition-all media-buffering:flex">
         <Image
-          src={metaInfo.logo}
-          alt={metaInfo.name}
+          src={metaData.logo}
+          alt={metaData.name}
           width={800}
           height={310}
           className="z-10 w-96"
