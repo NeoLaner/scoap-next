@@ -9,6 +9,7 @@ import {
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
 import { updateStream } from "~/app/_actions/updateStream";
+import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
 
 function Stream({
   userId,
@@ -28,7 +29,7 @@ function Stream({
   const season = searchParams.get("season");
   const episode = searchParams.get("episode");
   const { sourceData } = useSourceData();
-
+  const { mutate } = useCreateTorrentStream();
   async function handleOnClick() {
     await updateStream({
       imdbId,
@@ -42,6 +43,7 @@ function Stream({
       fileIdx: stream.fileIdx,
       infoHash: stream.infoHash,
     });
+    mutate({ fileIdx: stream.fileIdx, infoHash: stream.infoHash });
   }
   return (
     <button onClick={handleOnClick} title={stream.title}>
