@@ -22,19 +22,7 @@ async function layout({
 
   if (!metaData) return <div>Not found</div>;
 
-  return (
-    <section className="relative h-full w-full overflow-hidden">
-      <StreamHeader />
-
-      <MetaDataProvider metaData={metaData}>
-        <div className="absolute left-0 top-0 flex h-full w-full flex-col justify-between gap-4 md:flex-row">
-          {children}
-        </div>
-
-        <StreamMenuFooter userId={session.user.id} />
-      </MetaDataProvider>
-    </section>
-  );
+  return <MetaDataProvider metaData={metaData}>{children}</MetaDataProvider>;
 }
 
 export default layout;

@@ -13,8 +13,8 @@ function ButtonPlay({ userId }: { userId: string }) {
   return (
     <button
       className="rounded-md bg-app-color-gray-1"
-      onClick={() =>
-        makeRoom({ imdbId, type, ownerId: userId, name: metaData.name })
+      onClick={async () =>
+        await makeRoom({ imdbId, type, ownerId: userId, name: metaData.name })
       }
     >
       <BsFillPlayCircleFill size={30} />

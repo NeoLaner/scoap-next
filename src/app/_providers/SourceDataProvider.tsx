@@ -3,7 +3,7 @@
 import React, { createContext, type ReactNode } from "react";
 import { type api } from "~/trpc/server";
 
-type SourceData = Awaited<ReturnType<typeof api.source.get>>;
+type SourceData = NonNullable<Awaited<ReturnType<typeof api.source.get>>>;
 
 interface SourceDataContextType {
   sourceData: SourceData; // Define your SourceData type here

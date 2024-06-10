@@ -28,11 +28,14 @@ async function Layout({
     userId: session.user.id,
   });
 
+  //TODO: It must not happen so throw error
+  if (!sourceData) return null;
+
   return (
     <RoomDataProvider roomData={roomData}>
       <InstanceDataProvider instanceData={instanceData}>
         <SourceDataProvider sourceData={sourceData}>
-          <div className="h-full w-full">{children}</div>;
+          <div className="relative h-full w-full">{children}</div>
         </SourceDataProvider>
       </InstanceDataProvider>
     </RoomDataProvider>

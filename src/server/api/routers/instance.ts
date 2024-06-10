@@ -39,6 +39,15 @@ export const instanceRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const existingInstance = await ctx.db.instance.findFirst({
+        where: {
+          roomId: input.roomId,
+          ownerId: input.ownerId,
+        },
+      });
+
+      if (existingInstance) return existingInstance;
+
       return await ctx.db.instance.create({
         data: {
           name: input.name,

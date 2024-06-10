@@ -1,6 +1,6 @@
 "use server";
 import { api } from "~/trpc/server";
-import { redirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 
 export async function makeRoom(inputs: {
   name: string;
@@ -21,5 +21,7 @@ export async function makeRoom(inputs: {
     episode: inputs.episode,
   });
   await api.source.create({ instanceId: instanceData.id, userId: ownerId });
-  redirect(`${roomData.imdbId}/${roomData.id}/${instanceData.id}`);
+  permanentRedirect(
+    `/stream/${roomData.type}/${roomData.imdbId}/${roomData.id}/${instanceData.id}`,
+  );
 }
