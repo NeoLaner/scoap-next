@@ -80,23 +80,22 @@ function updateMediaInstance({
   );
 }
 //get real-time updates from server
-export function useSocketListeners({ token }: { token: string }) {
+export function useSocketListeners() {
   const queryClient = useQueryClient();
   const instanceId = useParams().instanceId!;
 
   useEffect(function () {
-    const instanceJwt = token;
     // socket.auth = {
     //   instanceJwt,
     // };
     userSocket.auth = {
-      instanceJwt,
+      instanceId,
     };
     mediaSocket.auth = {
-      instanceJwt,
+      instanceId,
     };
     chatSocket.auth = {
-      instanceJwt,
+      instanceId,
     };
     // socket.connect();
     userSocket.connect();

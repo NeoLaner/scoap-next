@@ -23,4 +23,5 @@ export const mediaSocket = io(MEDIA_URL, {
 });
 export const chatSocket = io(CHAT_URL, {
   autoConnect: false,
+  withCredentials: true,
 });

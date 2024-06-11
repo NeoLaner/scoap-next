@@ -1,35 +1,9 @@
-import jwt from "jsonwebtoken";
 import "@vidstack/react/player/styles/base.css";
 import PlayerMedia from "./PlayerMedia";
-import { api } from "~/trpc/server";
-import StremioService from "~/app/_services/stremIo/stremIoServices";
 import EpisodesPanel from "./EpisodesPanel";
-import { type MetaInfo } from "~/app/_services/stremIo/types";
 import StreamsServer from "~/app/stream/[type]/[imdbId]/[roomId]/[instanceId]/_ui/StreamsServer";
-import { env } from "~/env";
 import PlayerSocket from "./PlayerSocket";
-import { useUserData } from "~/app/_hooks/useUserData";
 import { getServerAuthSession } from "~/server/auth";
-
-interface TokenPayload {
-  userId: string;
-  instanceId: string;
-}
-
-export const generateToken = (userId: string, instanceId: string): string => {
-  // Define the payload
-  const payload: TokenPayload = {
-    userId,
-    instanceId,
-  };
-
-  // Sign the token with the payload, secret key, and optional options
-  const token = jwt.sign(payload, env.NEXTAUTH_SECRET!, {
-    expiresIn: "12h", // Token expiration time
-  });
-
-  return token;
-};
 
 async function PlayerLayout({
   params,
@@ -55,7 +29,7 @@ async function PlayerLayout({
         />
       </div>
       {/* Socket */}
-      <PlayerSocket token={generateToken(session.user.id, params.instanceId)} />
+      <PlayerSocket />
     </div>
   );
 }
