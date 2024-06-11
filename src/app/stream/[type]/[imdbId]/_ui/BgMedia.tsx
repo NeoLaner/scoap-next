@@ -1,17 +1,19 @@
 "use client";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import { useMetaData } from "~/app/_hooks/useMetaData";
 
-function BgMedia({ background, name }: { background: string; name: string }) {
+function BgMedia() {
   const searchParams = useSearchParams();
   const showStreams = searchParams.get("showStreams");
   const season = searchParams.get("season");
+  const { metaData } = useMetaData();
   return (
     <div className="absolute h-full w-full">
-      {background && (
+      {metaData.background && (
         <Image
-          src={background}
-          alt={name}
+          src={metaData.background}
+          alt={metaData.name}
           fill
           className={`h-full w-full object-cover object-top opacity-70 ${showStreams ?? season ? "blur-sm" : ""}`}
           quality="90"

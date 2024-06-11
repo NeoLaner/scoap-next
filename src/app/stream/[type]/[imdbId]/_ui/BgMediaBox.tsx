@@ -1,15 +1,9 @@
 import BgMedia from "./BgMedia";
 
-async function BgMediaBox({
-  background,
-  name,
-}: {
-  background: string;
-  name: string;
-}) {
+async function BgMediaBox() {
   return (
     <div>
-      <BgMedia background={background} name={name} />
+      <BgMedia />
     </div>
   );
 }

@@ -29,7 +29,7 @@ function pausedVideo({
   playedSeconds,
   caused,
 }: Required<EmitMediaFnProps>) {
-  const isHost = instance.hostId === userData.data.user._id;
+  const isHost = instance.ownerId === userData.id;
   const wsData: MediaWsDataClientToServer = {
     payload: {
       caused,

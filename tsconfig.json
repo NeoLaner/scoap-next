@@ -26,7 +26,8 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@socket/*": ["../scoap-socket/src/utils/*"]
     }
   },
   "include": [

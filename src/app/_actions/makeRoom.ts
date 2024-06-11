@@ -1,6 +1,6 @@
 "use server";
 import { api } from "~/trpc/server";
-import { permanentRedirect, redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
 export async function makeRoom(inputs: {
   name: string;

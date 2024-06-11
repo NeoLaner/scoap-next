@@ -4,8 +4,6 @@ import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { PlayerProvider } from "./_providers/PlayerProvider";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import ProtectedRoute from "./_ui/ProtectedRoute";
 
 const inter = Inter({
   subsets: ["latin"],

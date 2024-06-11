@@ -23,13 +23,17 @@ async function Layout({
   const { roomId, instanceId } = params;
   const roomData = await api.room.get({ roomId });
   const instanceData = await api.instance.get({ instanceId });
-  const sourceData = await api.source.get({
+  let sourceData = await api.source.get({
     instanceId,
     userId: session.user.id,
   });
 
   //TODO: It must not happen so throw error
-  if (!sourceData) return null;
+  if (!sourceData)
+    sourceData = await api.source.create({
+      instanceId,
+      userId: session.user.id,
+    });
 
   return (
     <RoomDataProvider roomData={roomData}>
