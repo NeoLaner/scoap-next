@@ -4,6 +4,7 @@ import EpisodesPanel from "./EpisodesPanel";
 import StreamsServer from "~/app/stream/[type]/[imdbId]/[roomId]/[instanceId]/_ui/StreamsServer";
 import PlayerSocket from "./PlayerSocket";
 import { getServerAuthSession } from "~/server/auth";
+import Player from "./Player";
 
 async function PlayerLayout({
   params,
@@ -16,7 +17,7 @@ async function PlayerLayout({
   if (!session) return null;
   return (
     <div className="flex">
-      <PlayerMedia />
+      <Player />
       {/* Right Panel */}
       <div>
         {/* just for series */}
@@ -29,7 +30,6 @@ async function PlayerLayout({
         />
       </div>
       {/* Socket */}
-      <PlayerSocket />
     </div>
   );
 }

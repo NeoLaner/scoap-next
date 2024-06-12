@@ -6,7 +6,7 @@ import type {
   MediaWsDataClientToServer,
   MessageDataApi,
   UserDataRes,
-} from "@backend/utils/@types";
+} from "@socket/@types";
 import type { Socket } from "socket.io-client";
 
 function sendMessage(data: MessageDataApi) {
@@ -15,7 +15,7 @@ function sendMessage(data: MessageDataApi) {
 
 type EmitFnProps = {
   userData: UserDataRes;
-  instance: InstanceRes["data"]["instance"];
+  instance: InstanceRes;
 };
 
 //Media
@@ -43,13 +43,17 @@ function pausedVideo({
 }
 
 function playedVideo({ userData, instance, playedSeconds }: EmitMediaFnProps) {
-  const isHost = instance.hostId === userData.data.user._id;
+  console.log(instance.ownerId, userData.id);
+
+  const isHost = instance.ownerId === userData.id;
   const wsData: MediaWsDataClientToServer = {
     payload: {
       playedSeconds: playedSeconds,
     },
   };
   if (!isHost) return; // only host can emit media event.
+  console.log(1);
+
   mediaSocket.emit(EVENT_NAMES.MEDIA_PLAYED, wsData);
 }
 
@@ -80,9 +84,9 @@ function unsync({
 }: {
   userData: UserDataRes;
   userId: string;
-  instance: InstanceRes["data"]["instance"];
+  instance: InstanceRes;
 }) {
-  const isHost = instance.hostId === userData.data.user._id;
+  const isHost = instance.ownerId === userData.id;
   const wsData = {
     payload: {
       targetId: userId,
@@ -98,7 +102,7 @@ function kick({
   instance,
 }: {
   userData: UserDataRes;
-  instance: InstanceRes["data"]["instance"];
+  instance: InstanceRes;
   userId: string;
 }) {
   const wsData: MediaWsDataClientToServer = {
@@ -106,7 +110,7 @@ function kick({
       targetId: userId,
     },
   };
-  const isHost = instance.hostId === userData.data.user._id;
+  const isHost = instance.ownerId === userData.id;
   if (!isHost) return; // only host can emit media event.
   mediaSocket.emit(EVENT_NAMES.KICK, wsData);
   unsync({ userData, userId, instance });
@@ -122,7 +126,7 @@ function seeked({
       playedSeconds: curTime,
     },
   };
-  const isHost = instance.hostId === userData.data.user._id;
+  const isHost = instance.ownerId === userData.id;
   if (!isHost) return; // only host can emit media event.
   mediaSocket.emit(EVENT_NAMES.MEDIA_SEEKED, wsData);
 }

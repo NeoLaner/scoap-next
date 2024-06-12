@@ -107,9 +107,9 @@ export function useSocketListeners() {
     });
 
     //Media
-    mediaSocket.on("media", function (data: MediaWsDataServerToClient) {
-      updateMediaInstance({ queryClient, data, instanceId });
-    });
+    // mediaSocket.on("media", function (data: MediaWsDataServerToClient) {
+    //   updateMediaInstance({ queryClient, data, instanceId });
+    // });
 
     //Chat
     chatSocket.on("chat", function (data: ChatWsDataServerToClient) {

@@ -1,34 +1,22 @@
 "use client";
-import { useMediaRemote, useMediaStore } from "@vidstack/react";
-import { useEffect, useState } from "react";
+import { type MediaPlayerInstance, useMediaRemote } from "@vidstack/react";
+import { type RefObject, useEffect, useState } from "react";
 import { useSocketListeners } from "~/app/_hooks/useSocketListeners";
 import socketEmitters from "~/app/_services/socket/socketEmit";
 import { mediaSocket, userSocket } from "~/lib/socket/socket";
 import type { MediaWsDataServerToClient } from "@socket/@types";
-import { useInstanceData } from "~/app/_hooks/useInstanceData";
-import { useUserData } from "~/app/_hooks/useUserData";
 
-function PlayerSocket() {
-  const { instanceData } = useInstanceData();
-  const { userData } = useUserData();
+function PlayerSocket({
+  playerRef,
+}: {
+  playerRef: RefObject<MediaPlayerInstance>;
+}) {
   const [playerRemoteState, setPlayerRemoteState] =
     useState<MediaWsDataServerToClient>();
-  const remote = useMediaRemote();
-  const store = useMediaStore();
-
-  useEffect(
-    function () {
-      socketEmitters.pausedVideo({
-        caused: "manual",
-        instance: instanceData?.id,
-        playedSeconds: 10,
-        userData,
-      });
-    },
-    [store.paused],
-  );
+  const remote = useMediaRemote(playerRef);
 
   useSocketListeners();
+
   //join-room
   useEffect(() => {
     socketEmitters.joinRoom(userSocket);
@@ -37,16 +25,20 @@ function PlayerSocket() {
 
   useEffect(() => {
     mediaSocket.on("media", function (data: MediaWsDataServerToClient) {
-      console.log(231);
+      console.log("media event", data.payload.status);
+      console.log(remote.getPlayer());
 
-      setPlayerRemoteState({ data });
+      if (data.payload.status === "paused") {
+        console.log("pause");
+        remote.seek(data.payload.playedSeconds!);
+        remote.pause();
+      } else if (data.payload.status === "played") {
+        console.log("played");
+        remote.seek(data.payload.playedSeconds!);
+        remote.play();
+      }
     });
-  }, []);
-
-  useEffect(() => {
-    if (playerRemoteState?.payload.status === "paused") remote.pause();
-    else remote.play();
-  }, [playerRemoteState]);
+  }, [remote]);
 
   return null;
 }
