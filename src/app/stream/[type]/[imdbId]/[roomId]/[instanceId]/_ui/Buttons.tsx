@@ -23,11 +23,9 @@ import {
   PiUsersThreeDuotone,
 } from "react-icons/pi";
 
-import { useState } from "react";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import ButtonFullscreen from "~/app/_ui/ButtonFullscreen";
-import { api } from "~/trpc/react";
 import { useInstanceData } from "~/app/_hooks/useInstanceData";
 
 export interface MediaButtonProps {

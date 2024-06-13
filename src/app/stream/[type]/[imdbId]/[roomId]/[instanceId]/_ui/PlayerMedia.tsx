@@ -162,6 +162,7 @@ function PlayerMedia({
       onPlay={onPlay}
       onPause={onPause}
       onSeeked={onSeeked}
+      keyDisabled
       // onWaiting={onWaiting}
       // onProgress={onCanPlayThrough}
       // onCanPlay={onCanPlay}
