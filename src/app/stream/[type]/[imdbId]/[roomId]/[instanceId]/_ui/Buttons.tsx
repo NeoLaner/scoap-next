@@ -20,6 +20,7 @@ import {
   PiSpeakerHighFill,
   PiSpeakerLowFill,
   PiSpeakerXFill,
+  PiUser,
   PiUsersThreeDuotone,
 } from "react-icons/pi";
 
@@ -27,6 +28,9 @@ import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import ButtonFullscreen from "~/app/_ui/ButtonFullscreen";
 import { useInstanceData } from "~/app/_hooks/useInstanceData";
+import socketEmitters from "~/app/_services/socket/socketEmit";
+import { useUserData } from "~/app/_hooks/useUserData";
+import { changeInstanceStatus } from "~/app/_actions/changeInstanceStatus";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -43,19 +47,51 @@ export function Play({
   disabled = false,
 }: MediaButtonProps & { disabled?: boolean }) {
   const isPaused = useMediaState("paused");
+  const { instanceData: instance } = useInstanceData();
+  const { userData } = useUserData();
+
   return (
     <Tooltip.Root>
       <Tooltip.Trigger asChild>
-        <PlayButton className={buttonClass} disabled={disabled}>
-          {isPaused ? (
-            <PiPlayCircleFill
-              className={`h-6 w-6 ${disabled && "opacity-30"} text-solid-primary-2`}
-            />
-          ) : (
-            // <div>icon</div>
-            <PiPauseCircleFill size={26} className="text-solid-primary-2" />
-          )}
-        </PlayButton>
+        {instance.online ? (
+          <>
+            {isPaused ? (
+              <button
+                className={buttonClass}
+                disabled={disabled}
+                onClick={() => {
+                  console.log(2);
+
+                  socketEmitters.playedVideo({
+                    instance,
+                    userData,
+                    playedSeconds: 23,
+                  });
+                }}
+              >
+                <PiPlayCircleFill
+                  className={`h-6 w-6 ${disabled && "opacity-30"} text-solid-primary-2`}
+                />
+              </button>
+            ) : (
+              // <div>icon</div>
+              <PlayButton className={buttonClass} disabled={disabled}>
+                <PiPauseCircleFill size={26} className="text-solid-primary-2" />
+              </PlayButton>
+            )}
+          </>
+        ) : (
+          <PlayButton className={buttonClass} disabled={disabled}>
+            {isPaused ? (
+              <PiPlayCircleFill
+                className={`h-6 w-6 ${disabled && "opacity-30"} text-solid-primary-2`}
+              />
+            ) : (
+              // <div>icon</div>
+              <PiPauseCircleFill size={26} className="text-solid-primary-2" />
+            )}
+          </PlayButton>
+        )}
       </Tooltip.Trigger>
       <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
         {isPaused ? "Play" : "Pause"}
@@ -157,21 +193,26 @@ export function Episodes({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Together({ tooltipPlacement }: MediaButtonProps) {
-  const isActive = useMediaState("pictureInPicture");
+  const { instanceData: instance } = useInstanceData();
+  async function handleOnClick(online: boolean) {
+    await changeInstanceStatus(instance, online);
+  }
+
   return (
     <Tooltip.Root>
-      <Tooltip.Trigger asChild>
-        <PIPButton className={buttonClass}>
-          {isActive ? (
-            <PiUsersThreeDuotone size={26} className="text-solid-primary-2" />
-          ) : (
-            // <PictureInPictureIcon className="h-6 w-6" />
-            <PiUsersThreeDuotone size={26} className="text-solid-primary-2" />
-          )}
-        </PIPButton>
-      </Tooltip.Trigger>
+      {instance.online ? (
+        <button className={buttonClass} onClick={() => handleOnClick(false)}>
+          <PiUser size={26} className="text-solid-primary-2" />
+        </button>
+      ) : (
+        // <PictureInPictureIcon className="h-6 w-6" />
+        <button className={buttonClass} onClick={() => handleOnClick(true)}>
+          <PiUsersThreeDuotone size={26} className="text-solid-primary-2" />
+        </button>
+      )}
+
       <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
-        {isActive ? "Watch Alone" : "Watch Together"}
+        {instance.online ? "Watch Alone" : "Watch Together"}
       </Tooltip.Content>
     </Tooltip.Root>
   );

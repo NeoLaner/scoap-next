@@ -5,14 +5,16 @@ import { useSocketListeners } from "~/app/_hooks/useSocketListeners";
 import socketEmitters from "~/app/_services/socket/socketEmit";
 import { mediaSocket, userSocket } from "~/lib/socket/socket";
 import type { MediaWsDataServerToClient } from "@socket/@types";
+import { useIsUserConnected } from "~/app/_hooks/useIsUserConnected";
+import { useIsMediaConnected } from "~/app/_hooks/useIsMediaConnected";
 
 function PlayerSocket({
   playerRef,
 }: {
   playerRef: RefObject<MediaPlayerInstance>;
 }) {
-  const [playerRemoteState, setPlayerRemoteState] =
-    useState<MediaWsDataServerToClient>();
+  const { isUserConnected } = useIsUserConnected();
+  const { isMediaConnected } = useIsMediaConnected();
   const remote = useMediaRemote(playerRef);
 
   useSocketListeners();
@@ -20,8 +22,12 @@ function PlayerSocket({
   //join-room
   useEffect(() => {
     socketEmitters.joinRoom(userSocket);
+  }, [isUserConnected]);
+
+  //join-room
+  useEffect(() => {
     socketEmitters.joinRoom(mediaSocket);
-  }, []);
+  }, [isMediaConnected]);
 
   useEffect(() => {
     mediaSocket.on("media", function (data: MediaWsDataServerToClient) {
@@ -34,7 +40,6 @@ function PlayerSocket({
         remote.pause();
       } else if (data.payload.status === "played") {
         console.log("played");
-        remote.seek(data.payload.playedSeconds!);
         remote.play();
       }
     });

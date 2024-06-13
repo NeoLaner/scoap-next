@@ -66,20 +66,21 @@ export const instanceRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        instanceId: z.string(),
+        id: z.string(),
         name: z.string().optional(),
         ownerId: z.string().optional(),
         roomId: z.string().optional(),
         online: z.boolean().optional(),
-        timeWatched: z.date().optional(),
-        season: z.number().optional(),
-        episode: z.number().optional(),
+        timeWatched: z.date().optional().nullable(),
+        season: z.number().optional().nullable(),
+        episode: z.number().optional().nullable(),
         guests: z.array(z.string()).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      if (input.ownerId !== ctx.session.user.id) return; // TODO: return error
       return await ctx.db.instance.update({
-        where: { id: input.instanceId },
+        where: { id: input.id },
         data: {
           name: input.name,
           ownerId: input.ownerId,

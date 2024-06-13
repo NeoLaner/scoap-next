@@ -18,7 +18,7 @@ export async function updateStream(inputs: {
     inputs;
 
   await api.instance.update({
-    instanceId,
+    id: instanceId,
     episode: Number(episode),
     season: Number(season),
     name: name,
