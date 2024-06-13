@@ -12,7 +12,7 @@ export function useIsChatConnected() {
         setIsChatConnected(true);
       });
     },
-    [setIsChatConnected, chatSocket],
+    [setIsChatConnected],
   );
   return { isChatConnected };
 }

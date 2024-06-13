@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { Captions, Controls, Gesture, useMediaState } from "@vidstack/react";
+import { useState } from "react";
+import { Captions, Controls, Gesture } from "@vidstack/react";
 import captionStyles from "./css-modules/captions.module.css";
 import styles from "./css-modules/video-layout.module.css";
 

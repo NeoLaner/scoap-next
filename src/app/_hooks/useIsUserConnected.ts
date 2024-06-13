@@ -12,7 +12,7 @@ export function useIsUserConnected() {
         setIsUserConnected(true);
       });
     },
-    [setIsUserConnected, userSocket],
+    [setIsUserConnected],
   );
   return { isUserConnected };
 }

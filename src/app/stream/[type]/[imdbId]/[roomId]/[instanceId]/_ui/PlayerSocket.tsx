@@ -1,6 +1,6 @@
 "use client";
 import { type MediaPlayerInstance, useMediaRemote } from "@vidstack/react";
-import { type RefObject, useEffect, useState } from "react";
+import { type RefObject, useEffect } from "react";
 import { useSocketListeners } from "~/app/_hooks/useSocketListeners";
 import socketEmitters from "~/app/_services/socket/socketEmit";
 import { mediaSocket, userSocket } from "~/lib/socket/socket";
@@ -32,7 +32,6 @@ function PlayerSocket({
   useEffect(() => {
     mediaSocket.on("media", function (data: MediaWsDataServerToClient) {
       console.log("media event", data.payload.status);
-      console.log(remote.getPlayer());
 
       if (data.payload.status === "paused") {
         console.log("pause");

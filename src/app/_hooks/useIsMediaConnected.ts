@@ -14,7 +14,7 @@ export function useIsMediaConnected() {
         setIsMediaConnected(true);
       });
     },
-    [setIsMediaConnected, mediaSocket],
+    [setIsMediaConnected],
   );
   return { isMediaConnected };
 }
