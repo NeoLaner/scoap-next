@@ -52,7 +52,6 @@ function playedVideo({ userData, instance, playedSeconds }: EmitMediaFnProps) {
     },
   };
   if (!isHost) return; // only host can emit media event.
-  console.log(1);
 
   mediaSocket.emit(EVENT_NAMES.MEDIA_PLAYED, wsData);
 }
@@ -68,8 +67,6 @@ function waitingForData({ userData, instance }: EmitFnProps) {
 }
 
 function sourceChanged() {
-  console.log(1);
-
   userSocket.emit(EVENT_NAMES.USER_CHANGE_SOURCE);
 }
 

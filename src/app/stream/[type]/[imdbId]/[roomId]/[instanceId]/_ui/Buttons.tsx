@@ -60,8 +60,6 @@ export function Play({
                 className={buttonClass}
                 disabled={disabled}
                 onClick={() => {
-                  console.log(2);
-
                   socketEmitters.playedVideo({
                     instance,
                     userData,

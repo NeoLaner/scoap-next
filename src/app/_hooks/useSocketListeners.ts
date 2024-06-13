@@ -6,7 +6,7 @@ import type {
   InstanceRes,
   MediaWsDataServerToClient,
   UserWsDataServerToClient,
-} from "@backend/utils/@types";
+} from "@socket/@types";
 import { type QueryClient, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
@@ -51,43 +51,12 @@ function updateChatInstance({
   );
 }
 
-type UpdateMediaInstance = {
-  queryClient: QueryClient;
-  data: MediaWsDataServerToClient;
-  instanceId: string;
-};
-
-function updateMediaInstance({
-  queryClient,
-  data,
-  instanceId,
-}: UpdateMediaInstance) {
-  queryClient.setQueryData(
-    ["instance", instanceId],
-    (oldData: InstanceQuery): InstanceQuery => {
-      const newData: InstanceQuery = {
-        status: oldData.status,
-        data: {
-          ...oldData.data,
-          instance: {
-            ...oldData.data.instance,
-            media: { ...data.payload },
-          },
-        },
-      };
-      return newData;
-    },
-  );
-}
 //get real-time updates from server
 export function useSocketListeners() {
   const queryClient = useQueryClient();
   const instanceId = useParams().instanceId!;
 
   useEffect(function () {
-    // socket.auth = {
-    //   instanceJwt,
-    // };
     userSocket.auth = {
       instanceId,
     };
@@ -97,6 +66,7 @@ export function useSocketListeners() {
     chatSocket.auth = {
       instanceId,
     };
+
     // socket.connect();
     userSocket.connect();
     mediaSocket.connect();
@@ -106,19 +76,12 @@ export function useSocketListeners() {
       updateGuestsInstance({ queryClient, data, instanceId });
     });
 
-    //Media
-    // mediaSocket.on("media", function (data: MediaWsDataServerToClient) {
-    //   updateMediaInstance({ queryClient, data, instanceId });
-    // });
-
     //Chat
     chatSocket.on("chat", function (data: ChatWsDataServerToClient) {
       updateChatInstance({ queryClient, data, instanceId });
     });
 
     () => {
-      console.log(1);
-
       userSocket.disconnect();
       mediaSocket.disconnect();
       chatSocket.disconnect();
