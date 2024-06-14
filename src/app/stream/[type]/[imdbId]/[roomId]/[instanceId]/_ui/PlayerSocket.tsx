@@ -35,11 +35,24 @@ function PlayerSocket({
 
       if (data.payload.status === "paused") {
         console.log("pause");
-        remote.seek(data.payload.playedSeconds!);
+        const playedSeconds = data.payload.playedSeconds;
+        if (playedSeconds) remote.seek(playedSeconds);
         remote.pause();
-      } else if (data.payload.status === "played") {
+      }
+      if (data.payload.status === "played") {
         console.log("played");
-        remote.play();
+        const createdAt = data.payload.createdAt;
+        const PLAY_AFTER_SECONDS = 500;
+        if (createdAt) {
+          const delay = Date.now() - createdAt;
+          console.log("delay", delay);
+
+          if (delay > 0)
+            setTimeout(() => {
+              remote.play();
+            }, PLAY_AFTER_SECONDS - delay);
+          else remote.play();
+        }
       }
     });
   }, [remote]);

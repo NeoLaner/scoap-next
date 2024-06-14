@@ -1,5 +1,5 @@
 import { chatSocket, mediaSocket, userSocket } from "~/lib/socket/socket";
-import { EVENT_NAMES } from "scoap-type/build/constants";
+import { EVENT_NAMES } from "@socket/constants";
 import type {
   InstanceRes,
   MediaCaused,
@@ -58,12 +58,18 @@ function playedVideo({ userData, instance, playedSeconds }: EmitMediaFnProps) {
 
 //User
 
-function readyToPlay({ userData, instance }: EmitFnProps) {
+function readyToPlay() {
   userSocket.emit(EVENT_NAMES.USER_READY);
 }
 
-function waitingForData({ userData, instance }: EmitFnProps) {
+function waitingForData() {
   userSocket.emit(EVENT_NAMES.USER_WAITING_FOR_DATA);
+  mediaSocket.emit(EVENT_NAMES.MEDIA_WAITING_FOR_DATA);
+}
+
+function receivedData() {
+  userSocket.emit(EVENT_NAMES.USER_READY);
+  mediaSocket.emit(EVENT_NAMES.MEDIA_RECEIVED_DATA);
 }
 
 function sourceChanged() {
@@ -136,6 +142,7 @@ const socketEmitters = {
   joinRoom,
   readyToPlay,
   waitingForData,
+  receivedData,
   unsync,
   kick,
   sourceChanged,

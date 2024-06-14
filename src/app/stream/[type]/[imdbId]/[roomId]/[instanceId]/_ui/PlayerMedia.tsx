@@ -32,20 +32,6 @@ function PlayerMedia({
   const isHost = instance.ownerId === userData.id;
   const { waiting } = useMediaStore(playerRef);
 
-  useEffect(
-    function () {
-      if (waiting) {
-        console.log("waiting");
-        socketEmitters.waitingForData({ userData, instance });
-      } else {
-        console.log("playing");
-
-        socketEmitters.readyToPlay({ userData, instance });
-      }
-    },
-    [waiting, userData, instance],
-  );
-
   useEffect(function () {
     if (
       sourceData?.fileIdx !== undefined &&
@@ -61,8 +47,20 @@ function PlayerMedia({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   console.log(state.mediaSrc);
+
+  useEffect(
+    function () {
+      if (waiting) {
+        console.log("waiting");
+        socketEmitters.waitingForData();
+      } else {
+        console.log("playing");
+        socketEmitters.receivedData();
+      }
+    },
+    [waiting, userData, instance],
+  );
 
   function onPlay(e: MediaPlayEvent) {
     const videoElement = playerRef.current;
@@ -118,39 +116,7 @@ function PlayerMedia({
     // ...
     dispatch({ type: "mediaLoaded" });
   }
-
- 
  */
-  function onWaiting() {
-    const videoElement = playerRef.current;
-
-    if (videoElement) {
-      const playedSeconds = videoElement.currentTime;
-      console.log("waiting for data");
-      socketEmitters.pausedVideo({
-        userData,
-        instance,
-        playedSeconds,
-        caused: "auto",
-      });
-      socketEmitters.waitingForData({ userData, instance });
-    }
-  }
-
-  function onCanPlayThrough() {
-    const videoElement = playerRef.current;
-    console.log("🍔🍔🍔not waiting for data");
-    if (videoElement) {
-      const playedSeconds = videoElement.currentTime;
-      socketEmitters.playedVideo({
-        userData,
-        instance,
-        playedSeconds: playedSeconds,
-        caused: "auto",
-      });
-      socketEmitters.readyToPlay({ userData, instance });
-    }
-  }
 
   return (
     <MediaPlayer
