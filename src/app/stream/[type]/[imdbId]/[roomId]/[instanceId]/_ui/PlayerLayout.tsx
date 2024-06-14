@@ -1,8 +1,6 @@
 import "@vidstack/react/player/styles/base.css";
-import PlayerMedia from "./PlayerMedia";
 import EpisodesPanel from "./EpisodesPanel";
 import StreamsServer from "~/app/stream/[type]/[imdbId]/[roomId]/[instanceId]/_ui/StreamsServer";
-import PlayerSocket from "./PlayerSocket";
 import { getServerAuthSession } from "~/server/auth";
 import Player from "./Player";
 

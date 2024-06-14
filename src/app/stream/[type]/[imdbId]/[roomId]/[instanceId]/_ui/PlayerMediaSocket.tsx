@@ -8,7 +8,7 @@ import type { MediaWsDataServerToClient } from "@socket/@types";
 import { useIsUserConnected } from "~/app/_hooks/useIsUserConnected";
 import { useIsMediaConnected } from "~/app/_hooks/useIsMediaConnected";
 
-function PlayerSocket({
+function PlayerMediaSocket({
   playerRef,
 }: {
   playerRef: RefObject<MediaPlayerInstance>;
@@ -60,4 +60,4 @@ function PlayerSocket({
   return null;
 }
 
-export default PlayerSocket;
+export default PlayerMediaSocket;

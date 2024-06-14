@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { InstanceDataProvider } from "~/app/_providers/InstanceDataProivder";
 import { RoomDataProvider } from "~/app/_providers/RoomDataProvider";
 import { SourceDataProvider } from "~/app/_providers/SourceDataProvider";
+import UsersSocketProvider from "~/app/_providers/UsersSocketProvider";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
@@ -39,7 +40,9 @@ async function Layout({
     <RoomDataProvider roomData={roomData}>
       <InstanceDataProvider instanceData={instanceData}>
         <SourceDataProvider sourceData={sourceData}>
-          <div className="relative h-full w-full">{children}</div>
+          <UsersSocketProvider>
+            <div className="relative h-full w-full">{children}</div>
+          </UsersSocketProvider>
         </SourceDataProvider>
       </InstanceDataProvider>
     </RoomDataProvider>

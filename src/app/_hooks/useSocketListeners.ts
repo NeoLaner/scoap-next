@@ -72,9 +72,6 @@ export function useSocketListeners() {
     mediaSocket.connect();
     chatSocket.connect();
     //User
-    userSocket.on("user", function (data: UserWsDataServerToClient) {
-      updateGuestsInstance({ queryClient, data, instanceId });
-    });
 
     //Chat
     chatSocket.on("chat", function (data: ChatWsDataServerToClient) {

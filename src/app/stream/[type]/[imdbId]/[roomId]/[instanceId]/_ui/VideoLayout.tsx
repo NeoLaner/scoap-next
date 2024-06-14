@@ -10,6 +10,7 @@ import * as Sliders from "./Sliders";
 import { TimeGroup } from "./Time-group";
 import { Title } from "./Title";
 import TitleLayout from "./TitleLayout";
+import UsersStatus from "./UsersStatus";
 
 export interface VideoLayoutProps {
   thumbnails?: string;
@@ -34,14 +35,19 @@ export default function VideoLayout({
         className={`${styles.controls} from-black/10 to-transparent absolute inset-0 flex h-full w-full flex-col  opacity-0 transition-opacity media-buffering:opacity-100 media-controls:opacity-100`}
       >
         <Controls.Group className="flex w-full justify-center">
-          <div className="mt-4 h-24">
+          <div className="mt-4 h-10">
             <TitleLayout />
           </div>
         </Controls.Group>
+
         <Controls.Group className="flex w-full flex-1 overflow-hidden">
+          <UsersStatus />
           <div className="flex-1" />
-          {isFullscreen && isChatActive && <div className="h-full"></div>}
+          {isFullscreen && isChatActive && (
+            <div className="h-full">dsadasd</div>
+          )}
         </Controls.Group>
+
         <Controls.Group className="flex w-full items-center px-2">
           <Sliders.Time thumbnails={thumbnails} disabled={disablePlay} />
           <TimeGroup />
