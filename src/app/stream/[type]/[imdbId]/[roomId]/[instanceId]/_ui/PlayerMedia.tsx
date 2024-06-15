@@ -8,6 +8,9 @@ import {
   MediaPlayer,
   MediaProvider,
   useMediaStore,
+  type MediaProviderAdapter,
+  type MediaProviderChangeEvent,
+  isHLSProvider,
 } from "@vidstack/react";
 import { usePlayerContext } from "~/app/_hooks/usePlayerProvider";
 import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
@@ -17,6 +20,7 @@ import { useSourceData } from "~/app/_hooks/useSourceData";
 import socketEmitters from "~/app/_services/socket/socketEmit";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { useInstanceData } from "~/app/_hooks/useInstanceData";
+import HLS from "hls.js";
 
 function PlayerMedia({
   playerRef,
@@ -118,6 +122,18 @@ function PlayerMedia({
   }
  */
 
+  function onProviderChange(
+    provider: MediaProviderAdapter | null,
+    nativeEvent: MediaProviderChangeEvent,
+  ) {
+    if (isHLSProvider(provider)) {
+      // Static import
+
+      provider.config.maxBufferLength = 800;
+      provider.library = HLS;
+    }
+  }
+
   return (
     <MediaPlayer
       ref={playerRef}
@@ -129,6 +145,7 @@ function PlayerMedia({
       onPause={onPause}
       onSeeked={onSeeked}
       keyDisabled
+      onProviderChange={onProviderChange}
       // onWaiting={onWaiting}
       // onProgress={onCanPlayThrough}
       // onCanPlay={onCanPlay}
