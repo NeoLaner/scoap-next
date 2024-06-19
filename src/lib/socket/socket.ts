@@ -13,11 +13,8 @@ const CHAT_URL =
 
 // export const socket = io(URL, { autoConnect: false });
 
-export const userSocket = io(USER_URL, {
-  autoConnect: false,
-  withCredentials: true,
-});
 export const mediaSocket = io(MEDIA_URL, {
+  transports: ["websocket"],
   autoConnect: false,
   withCredentials: true,
 });

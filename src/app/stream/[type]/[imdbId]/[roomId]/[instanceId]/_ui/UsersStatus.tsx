@@ -12,6 +12,8 @@ function UsersStatus() {
     (user) => user.status === "waitingForData",
   );
 
+  if (!instanceData.online) return null;
+
   const notReadyDataUsers = state.filter((user) => user.status === "notReady");
 
   if (state.length === 0) return null;
