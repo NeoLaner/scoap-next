@@ -44,12 +44,12 @@ declare global {
   }
 }
 
-window.watchparty = {
-  ourStream: undefined,
-  videoRefs: {},
-  videoPCs: {},
-  webtorrent: null,
-};
+// window.watchparty = {
+//   ourStream: undefined,
+//   videoRefs: {},
+//   videoPCs: {},
+//   webtorrent: null,
+// };
 
 interface AppProps {
   vanity?: string;
@@ -253,17 +253,8 @@ export default class App extends React.Component<AppProps, AppState> {
 
   join = async (roomId: string) => {
     console.log("join");
-    let password = "";
-    try {
-      const savedPasswordsString = window.localStorage.getItem(
-        "watchparty-passwords",
-      );
-      const savedPasswords = JSON.parse(savedPasswordsString || "{}");
-      this.setState({ savedPasswords });
-      password = savedPasswords[roomId] || "";
-    } catch (e) {
-      console.warn("[ALERT] Could not parse saved passwords");
-    }
+    const password = "";
+
     const response = await axios.get(serverPath + "/resolveShard" + roomId);
     const shard = Number(response.data) || "";
 
@@ -274,6 +265,7 @@ export default class App extends React.Component<AppProps, AppState> {
         password,
         shard,
       },
+      withCredentials: true,
     });
     this.socket = socket;
     socket.on("connect", async () => {
@@ -358,9 +350,6 @@ export default class App extends React.Component<AppProps, AppState> {
       if (this.playingFileShare() && !isFileShare(currentMedia)) {
         this.stopPublishingLocalStream();
       }
-      if (this.playingVBrowser() && !isVBrowser(currentMedia)) {
-        this.stopVBrowser();
-      }
       if (this.playingScreenShare() && isScreenShare(currentMedia)) {
         // Ignore, it's probably a reconnection
         return;
@@ -369,14 +358,7 @@ export default class App extends React.Component<AppProps, AppState> {
         // Ignore, it's probably a reconnection
         return;
       }
-      if (
-        this.playingVBrowser() &&
-        this.getVBrowserHost() &&
-        isVBrowser(currentMedia)
-      ) {
-        // Ignore, it's probably a reconnection
-        return;
-      }
+
       this.setState(
         {
           roomMedia: currentMedia,
@@ -780,62 +762,6 @@ export default class App extends React.Component<AppProps, AppState> {
     // }
   };
 
-  loadYouTube = () => {
-    // This code loads the IFrame Player API code asynchronously.
-    const tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.body.append(tag);
-    window.onYouTubeIframeAPIReady = () => {
-      // Note: this fails silently if the element is not available
-      const ytPlayer = new window.YT.Player("leftYt", {
-        events: {
-          onReady: () => {
-            console.log("yt onReady");
-            this.YouTubeInterface = new YouTube(ytPlayer);
-            this.setState({ loading: false });
-            // We might have failed to play YT originally, ask for the current video again
-            if (this.usingYoutube()) {
-              console.log("requesting host data again after ytReady");
-              this.socket.emit("CMD:askHost");
-            }
-          },
-          onStateChange: (e) => {
-            if (
-              this.usingYoutube() &&
-              e.data === window.YT?.PlayerState?.CUED
-            ) {
-              this.setState({ loading: false });
-            }
-            if (
-              this.usingYoutube() &&
-              e.data === window.YT?.PlayerState?.ENDED
-            ) {
-              console.log(e.data, e.target.getVideoUrl());
-              this.onVideoEnded(null, e.target.getVideoUrl());
-            }
-            if (
-              this.ytDebounce &&
-              ((e.data === window.YT?.PlayerState?.PLAYING &&
-                this.state.roomPaused) ||
-                (e.data === window.YT?.PlayerState?.PAUSED &&
-                  !this.state.roomPaused))
-            ) {
-              this.ytDebounce = false;
-              if (e.data === window.YT?.PlayerState?.PLAYING) {
-                this.socket.emit("CMD:play");
-                this.localPlay();
-              } else {
-                this.socket.emit("CMD:pause");
-                this.localPause();
-              }
-              window.setTimeout(() => (this.ytDebounce = true), 500);
-            }
-          },
-        },
-      });
-    };
-  };
-
   // Functions for managing room settings
   getInviteLink = (vanity: string) => {
     if (vanity) {
@@ -1040,26 +966,6 @@ export default class App extends React.Component<AppProps, AppState> {
         },
       );
 
-      // producerTransport.on('connectionstatechange', (state: string) => {
-      //   switch (state) {
-      //     case 'connecting':
-      //       console.log('PUBLISH: connecting');
-      //       break;
-
-      //     case 'connected':
-      //       console.log('PUBLISH: connected');
-      //       break;
-
-      //     case 'failed':
-      //       console.log('PUBLISH: failed');
-      //       producerTransport.close();
-      //       break;
-
-      //     default:
-      //       break;
-      //   }
-      // });
-
       const videoTrack = localStream?.getVideoTracks()[0];
       if (videoTrack) {
         const trackParams = { track: videoTrack };
@@ -1119,24 +1025,6 @@ export default class App extends React.Component<AppProps, AppState> {
             }
           }
         });
-
-        // socket?.on('producerClosed', function (message) {
-        //   console.log('socket.io producerClosed:', message);
-        //   const localId = message.localId;
-        //   const remoteId = message.remoteId;
-        //   const kind = message.kind;
-        //   if (kind === 'video') {
-        //     if (videoConsumer) {
-        //       videoConsumer.close();
-        //       videoConsumer = null;
-        //     }
-        //   } else if (kind === 'audio') {
-        //     if (audioConsumer) {
-        //       audioConsumer.close();
-        //       audioConsumer = null;
-        //     }
-        //   }
-        // });
       });
     };
 
@@ -1265,26 +1153,6 @@ export default class App extends React.Component<AppProps, AppState> {
             .catch(errback);
         },
       );
-
-      // consumerTransport.on('connectionstatechange', (state: string) => {
-      //   switch (state) {
-      //     case 'connecting':
-      //       console.log('SUBSCRIBE: connecting');
-      //       break;
-
-      //     case 'connected':
-      //       console.log('SUBSCRIBE: connected');
-      //       break;
-
-      //     case 'failed':
-      //       console.log('SUBSCRIBE: failed');
-      //       consumerTransport.close();
-      //       break;
-
-      //     default:
-      //       break;
-      //   }
-      // });
 
       await consumeAndResume("video");
       await consumeAndResume("audio");
@@ -1427,19 +1295,6 @@ export default class App extends React.Component<AppProps, AppState> {
     }
   };
 
-  startVBrowser = async (rcToken: string, options: { size: string }) => {
-    // user.uid is the public user identifier
-    // user.getIdToken() is the secret access token we can send to the server to prove identity
-    const user = this.context.user;
-    const uid = user?.uid;
-    const token = await user?.getIdToken();
-    this.socket.emit("CMD:startVBrowser", { options, uid, token, rcToken });
-  };
-
-  stopVBrowser = async () => {
-    this.socket.emit("CMD:stopVBrowser");
-  };
-
   changeController = async (_e: any, data: DropdownProps) => {
     // console.log(data);
     this.socket.emit("CMD:changeController", data.value);
@@ -1470,18 +1325,6 @@ export default class App extends React.Component<AppProps, AppState> {
 
   playingFileShare = () => {
     return isFileShare(this.state.roomMedia);
-  };
-
-  playingVBrowser = () => {
-    return isVBrowser(this.state.roomMedia);
-  };
-
-  getVBrowserPass = () => {
-    return this.state.roomMedia.replace("vbrowser://", "").split("@")[0];
-  };
-
-  getVBrowserHost = () => {
-    return this.state.roomMedia.replace("vbrowser://", "").split("@")[1];
   };
 
   isPauseDisabled = () => {
@@ -1603,59 +1446,6 @@ export default class App extends React.Component<AppProps, AppState> {
     const hlsTarget =
       Math.floor(Date.now() / 1000) - this.HTMLInterface.getDuration() + target;
     this.socket.emit("CMD:seek", this.state.isLiveHls ? hlsTarget : target);
-  };
-
-  onFullScreenChange = () => {
-    this.setState({ fullScreen: Boolean(document.fullscreenElement) });
-  };
-
-  onKeydown = (e: any) => {
-    if (!document.activeElement || document.activeElement.tagName === "BODY") {
-      if (e.key === " ") {
-        e.preventDefault();
-        this.roomTogglePlay();
-      } else if (e.key === "ArrowRight") {
-        this.roomSeek(null, this.Player().getCurrentTime() + 10);
-      } else if (e.key === "ArrowLeft") {
-        this.roomSeek(null, this.Player().getCurrentTime() - 10);
-      } else if (e.key === "t") {
-        this.localFullScreen(false);
-      } else if (e.key === "f") {
-        this.localFullScreen(true);
-      } else if (e.key === "m") {
-        this.localToggleMute();
-      }
-    }
-  };
-
-  localFullScreen = async (bVideoOnly: boolean) => {
-    let container = document.getElementById("theaterContainer") as HTMLElement;
-    if (bVideoOnly || isMobile()) {
-      if (this.playingVBrowser() && !isMobile()) {
-        // Can't really control the VBrowser on mobile anyway, so just fullscreen the video
-        // https://github.com/howardchung/watchparty/issues/208
-        container = document.getElementById("leftVideoParent") as HTMLElement;
-      } else {
-        container = this.Player().getVideoEl();
-      }
-    }
-    if (
-      !container.requestFullscreen &&
-      (container as any).webkitEnterFullScreen
-    ) {
-      // e.g. iPhone doesn't allow requestFullscreen
-      (container as any).webkitEnterFullscreen();
-      return;
-    }
-    if (!document.fullscreenElement) {
-      await container.requestFullscreen();
-      return;
-    }
-    const bChangeElements = document.fullscreenElement !== container;
-    await document.exitFullscreen();
-    if (bChangeElements) {
-      await container.requestFullscreen();
-    }
   };
 
   localToggleMute = () => {

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { type ReactNode } from "react";
 import { InstanceDataProvider } from "~/app/_providers/InstanceDataProivder";
 import { RoomDataProvider } from "~/app/_providers/RoomDataProvider";
@@ -24,16 +25,21 @@ async function Layout({
   const { roomId, instanceId } = params;
   const roomData = await api.room.get({ roomId });
   const instanceData = await api.instance.get({ instanceId });
+  const isOwner = session.user.id === instanceData?.ownerId;
   let sourceData = await api.source.get({
     instanceId,
     userId: session.user.id,
   });
 
-  //TODO: It must not happen so throw error
   if (!sourceData)
     sourceData = await api.source.create({
       instanceId,
       userId: session.user.id,
+    });
+
+  if (instanceData?.online && isOwner)
+    await axios.post("http://localhost:8080/createRoom", {
+      instanceId,
     });
 
   return (
