@@ -15,26 +15,16 @@ export async function updateStream(inputs: {
   fileIdx?: number;
   infoHash?: string;
 }) {
-  const {
-    name,
-    season,
-    episode,
-    sourceId,
-    fileIdx,
-    infoHash,
-    instanceId,
-    ownerId,
-  } = inputs;
+  const { name, season, episode, sourceId, fileIdx, infoHash, instanceId } =
+    inputs;
   const session = await getServerAuthSession();
-
-  if (session?.user.id === ownerId)
-    await api.instance.update({
-      id: instanceId,
-      episode: Number(episode),
-      season: Number(season),
-      name: name,
-      ownerId: session?.user.id,
-    });
+  await api.instance.update({
+    id: instanceId,
+    episode: Number(episode),
+    season: Number(season),
+    name: name,
+    ownerId: session?.user.id,
+  });
 
   await api.source.update({
     id: sourceId,

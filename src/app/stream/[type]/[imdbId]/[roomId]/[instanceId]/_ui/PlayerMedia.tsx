@@ -34,7 +34,7 @@ function PlayerMedia({
   const { userData } = useUserData();
   const { instanceData: instance } = useInstanceData();
   const isHost = instance.ownerId === userData.id;
-  const { waiting, paused, canPlay } = useMediaStore(playerRef);
+  const { waiting } = useMediaStore(playerRef);
 
   useEffect(function () {
     if (
@@ -44,7 +44,7 @@ function PlayerMedia({
       sourceData?.infoHash !== null
     ) {
       dispatch({ type: "CLEAR_MEDIA_SOURCE" });
-      // mutate({ fileIdx: sourceData.fileIdx, infoHash: sourceData.infoHash });
+      mutate({ fileIdx: sourceData.fileIdx, infoHash: sourceData.infoHash });
     }
     () => {
       dispatch({ type: "CLEAR_MEDIA_SOURCE" });
@@ -58,14 +58,45 @@ function PlayerMedia({
       if (waiting) {
         console.log("waiting");
         socketEmitters.waitingForData();
-      } else if (canPlay) {
-        console.log("not waiting");
+      } else {
+        console.log("playing");
         socketEmitters.receivedData();
       }
     },
-    [waiting, userData, instance, canPlay],
+    [waiting, userData, instance],
   );
 
+  function onPlay(e: MediaPlayEvent) {
+    const videoElement = playerRef.current;
+    if (videoElement) {
+      const playedSeconds = videoElement.currentTime;
+      socketEmitters.playedVideo({
+        instance,
+        playedSeconds,
+        userData,
+        caused: "manual",
+      });
+    }
+  }
+
+  function onPause(e: MediaPauseEvent) {
+    const videoElement = playerRef.current;
+
+    if (videoElement) {
+      // const caused = notReadyGuests?.length === 0 ? "manual" : "auto";
+      const playedSeconds = videoElement.currentTime;
+      socketEmitters.pausedVideo({
+        instance,
+        playedSeconds,
+        userData,
+        caused: "manual",
+      });
+    }
+  }
+
+  async function onSeeked(currentTime: number) {
+    if (isHost) await playerRef.current?.pause();
+  }
   /*
 
   function onProviderChange(
@@ -103,44 +134,20 @@ function PlayerMedia({
     }
   }
 
-  useEffect(() => {
-    setInterval(() => {
-      socketEmitters.sendUserMediaState({
-        payload: {
-          createdAt: Date.now(),
-          downloadSpeed: 500,
-          forceUnsync: false,
-          synced: false,
-          playbackRate: 1,
-          videoTs: 5,
-          waitForData: waiting,
-        },
-      });
-    }, 1000);
-  }, []);
-
   return (
     <MediaPlayer
       ref={playerRef}
-      // src={state.mediaSrc}
-      src={{
-        type: "video/mp4",
-        src: "https://dl.tabar.sbs/English/Series/The.Boys/S01/720p-x265-PSA-SoftSub/The.Boys.S01E002.720p.10bit.WEB-DL.2CH.x265.HEVC.PSA.SoftSub.EBTV.mkv",
-      }}
+      src={state.mediaSrc}
       playsInline
       className="text-white ring-media-focus absolute aspect-video h-dvh w-full overflow-hidden rounded-md bg-blackA11 font-sans data-[focus]:ring-4"
       autoPlay={false}
+      onPlay={onPlay}
+      onPause={onPause}
+      onSeeked={onSeeked}
       keyDisabled
       onProviderChange={onProviderChange}
-      muted
-      // onWaiting={() => {
-      //   console.log("waiting");
-      //   socketEmitters.waitingForData();
-      // }}
-      // onCanPlayThrough={() => {
-      //   console.log("not waiting");
-      //   socketEmitters.receivedData();
-      // }}
+      // onWaiting={onWaiting}
+      // onProgress={onCanPlayThrough}
       // onCanPlay={onCanPlay}
     >
       <MediaProvider>

@@ -4,16 +4,14 @@ import { useRef } from "react";
 import PlayerMedia from "./PlayerMedia";
 import PlayerMediaSocket from "./PlayerMediaSocket";
 import PlayerUsersSocket from "./PlayerUsersSocket";
-import PlayerSocket from "./PlayerSocket";
-import { useParams } from "next/navigation";
+import { useSocketListeners } from "~/app/_hooks/useSocketListeners";
 
 function Player() {
-  const { instanceId } = useParams();
   const player = useRef<MediaPlayerInstance>(null);
+  useSocketListeners();
   return (
     <>
       <PlayerMedia playerRef={player} />
-      <PlayerSocket urlRoomId={instanceId} />
     </>
   );
 }

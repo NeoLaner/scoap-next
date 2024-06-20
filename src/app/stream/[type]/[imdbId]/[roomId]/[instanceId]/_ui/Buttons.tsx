@@ -7,7 +7,6 @@ import {
   PlayButton,
   Tooltip,
   useMediaState,
-  useMediaStore,
   type TooltipPlacement,
 } from "@vidstack/react";
 
@@ -43,29 +42,13 @@ export const buttonClass =
 export const tooltipClass =
   "animate-out fade-out slide-out-to-bottom-2 data-[visible]:animate-in data-[visible]:fade-in data-[visible]:slide-in-from-bottom-4 z-10 rounded-sm bg-black/90 px-2 py-0.5 text-sm font-medium text-white parent-data-[open]:hidden";
 
-export function Play({ tooltipPlacement }: MediaButtonProps) {
+export function Play({
+  tooltipPlacement,
+  disabled = false,
+}: MediaButtonProps & { disabled?: boolean }) {
   const isPaused = useMediaState("paused");
   const { instanceData: instance } = useInstanceData();
   const { userData } = useUserData();
-  const { currentTime } = useMediaStore();
-  let disabled = false;
-  if (instance.ownerId !== userData.id) disabled = true;
-
-  function pauseHandler() {
-    socketEmitters.pausedVideo({
-      instance,
-      playedSeconds: currentTime,
-      userData,
-      caused: "manual",
-    });
-  }
-
-  function playHandler() {
-    socketEmitters.playedVideo({
-      instance,
-      userData,
-    });
-  }
 
   return (
     <Tooltip.Root>
@@ -76,7 +59,13 @@ export function Play({ tooltipPlacement }: MediaButtonProps) {
               <button
                 className={buttonClass}
                 disabled={disabled}
-                onClick={playHandler}
+                onClick={() => {
+                  socketEmitters.playedVideo({
+                    instance,
+                    userData,
+                    playedSeconds: 23,
+                  });
+                }}
               >
                 <PiPlayCircleFill
                   className={`h-6 w-6 ${disabled && "opacity-30"} text-solid-primary-2`}
@@ -84,11 +73,7 @@ export function Play({ tooltipPlacement }: MediaButtonProps) {
               </button>
             ) : (
               // <div>icon</div>
-              <PlayButton
-                onClick={pauseHandler}
-                className={buttonClass}
-                disabled={disabled}
-              >
+              <PlayButton className={buttonClass} disabled={disabled}>
                 <PiPauseCircleFill size={26} className="text-solid-primary-2" />
               </PlayButton>
             )}
@@ -189,10 +174,6 @@ export function PIP({ tooltipPlacement }: MediaButtonProps) {
 export function Episodes({ tooltipPlacement }: MediaButtonProps) {
   const { instanceData } = useInstanceData();
   const pathname = usePathname();
-  const { userData } = useUserData();
-
-  if (instanceData.ownerId !== userData.id) return null;
-
   return (
     <Tooltip.Root>
       <Link
@@ -211,9 +192,6 @@ export function Episodes({ tooltipPlacement }: MediaButtonProps) {
 
 export function Together({ tooltipPlacement }: MediaButtonProps) {
   const { instanceData: instance } = useInstanceData();
-  const { userData } = useUserData();
-
-  if (instance.ownerId !== userData.id) return null;
   async function handleOnClick(online: boolean) {
     await changeInstanceStatus(instance, online);
   }

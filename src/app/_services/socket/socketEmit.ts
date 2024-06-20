@@ -1,15 +1,32 @@
-import { chatSocket, mediaSocket } from "~/lib/socket/socket";
+import { chatSocket, mediaSocket, userSocket } from "~/lib/socket/socket";
 import type {
   InstanceRes,
-  MediaEvents,
-  MediaSocket,
+  MediaCaused,
+  MediaWsDataClientToServer,
   MessageDataApi,
   UserDataRes,
-  WsDataCtS,
 } from "@socket/@types";
 import type { Socket } from "socket.io-client";
-import { MediaUserState } from "@socket/@types/mediaTypes";
-import { EVENT_NAMES } from "~/lib/socket/EVENT_NAMES";
+
+const EVENT_NAMES = {
+  JOIN_ROOM: "join_room",
+  SET_ID: "set_id",
+  KICK: "kick",
+  UNSYNC: "unsync",
+  INITIAL_DATA: "initial_data",
+  USER_READY: "user_ready",
+  USER_CHANGE_SOURCE: "user_changeSource",
+  USER_NOT_READY: "user_notReady",
+  USER_WAITING_FOR_DATA: "user_waitingForData",
+  USER_DISCONNECTED: "user_disconnected",
+  MEDIA_PAUSED: "media_paused",
+  MEDIA_PLAYED: "media_played",
+  MEDIA_SEEKED: "media_seeked",
+  MEDIA_WAITING_FOR_DATA: "media_waitingForData",
+  MEDIA_RECEIVED_DATA: "media_receivedData",
+  CHAT_MSG_SUB: "chat_msgSubmitted",
+  GET_USER: "GET_USER",
+} as const;
 
 function sendMessage(data: MessageDataApi) {
   chatSocket.emit(EVENT_NAMES.CHAT_MSG_SUB, data);
@@ -25,11 +42,6 @@ type EmitMediaFnProps = EmitFnProps & {
   playedSeconds: number;
   caused?: MediaCaused;
 };
-
-function sendUserMediaState(userState: WsDataCtS<"updateUserMediaState">) {
-  mediaSocket.emit(EVENT_NAMES.UpdateUserMediaState, userState);
-}
-
 function pausedVideo({
   userData,
   instance,
@@ -66,26 +78,25 @@ function playedVideo({ userData, instance, playedSeconds }: EmitMediaFnProps) {
 //User
 
 function readyToPlay() {
-  console.log("ready to play emitted");
-  // userSocket.emit(EVENT_NAMES.USER_READY);
+  userSocket.emit(EVENT_NAMES.USER_READY);
 }
 
 function waitingForData() {
-  // userSocket.emit(EVENT_NAMES.USER_WAITING_FOR_DATA);
+  userSocket.emit(EVENT_NAMES.USER_WAITING_FOR_DATA);
   mediaSocket.emit(EVENT_NAMES.MEDIA_WAITING_FOR_DATA);
 }
 
 function receivedData() {
-  // userSocket.emit(EVENT_NAMES.USER_READY);
+  userSocket.emit(EVENT_NAMES.USER_READY);
   mediaSocket.emit(EVENT_NAMES.MEDIA_RECEIVED_DATA);
 }
 
 function sourceChanged() {
-  // userSocket.emit(EVENT_NAMES.USER_CHANGE_SOURCE);
+  userSocket.emit(EVENT_NAMES.USER_CHANGE_SOURCE);
 }
 
 function joinRoom(socket: Socket) {
-  socket.emit("joinRoom");
+  socket.emit(EVENT_NAMES.JOIN_ROOM);
 }
 
 function unsync({
@@ -104,7 +115,7 @@ function unsync({
     },
   };
   if (!isHost) return; // only host can emit media event.
-  // userSocket.emit(EVENT_NAMES.UNSYNC, wsData);
+  userSocket.emit(EVENT_NAMES.UNSYNC, wsData);
 }
 
 function kick({
@@ -143,7 +154,6 @@ function seeked({
 }
 
 const socketEmitters = {
-  sendUserMediaState,
   sendMessage,
   pausedVideo,
   playedVideo,

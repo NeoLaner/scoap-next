@@ -78,8 +78,9 @@ export const instanceRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      if (input.ownerId !== ctx.session.user.id) return; // TODO: return error
       return await ctx.db.instance.update({
-        where: { id: input.id, ownerId: ctx.session.user.id },
+        where: { id: input.id },
         data: {
           name: input.name,
           ownerId: input.ownerId,

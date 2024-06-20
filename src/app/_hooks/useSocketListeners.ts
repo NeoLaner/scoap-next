@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { chatSocket, mediaSocket } from "~/lib/socket/socket";
+import { chatSocket, mediaSocket, userSocket } from "~/lib/socket/socket";
 import type {
   ChatWsDataServerToClient,
   InstanceRes,
@@ -55,9 +55,11 @@ function updateChatInstance({
 export function useSocketListeners() {
   const queryClient = useQueryClient();
   const instanceId = useParams().instanceId!;
-  console.log("instanceId", instanceId);
 
   useEffect(function () {
+    userSocket.auth = {
+      instanceId,
+    };
     mediaSocket.auth = {
       instanceId,
     };
@@ -66,6 +68,7 @@ export function useSocketListeners() {
     };
 
     // socket.connect();
+    userSocket.connect();
     mediaSocket.connect();
     chatSocket.connect();
     //User
@@ -76,6 +79,7 @@ export function useSocketListeners() {
     });
 
     () => {
+      userSocket.disconnect();
       mediaSocket.disconnect();
       chatSocket.disconnect();
     };

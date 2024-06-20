@@ -1,7 +1,5 @@
 "use client";
 import { TimeSlider, VolumeSlider } from "@vidstack/react";
-import { useInstanceData } from "~/app/_hooks/useInstanceData";
-import { useUserData } from "~/app/_hooks/useUserData";
 
 export function Volume() {
   return (
@@ -29,15 +27,12 @@ export interface TimeSliderProps {
   thumbnails?: string;
 }
 
-export function Time({ thumbnails }: TimeSliderProps) {
-  const { instanceData } = useInstanceData();
-  const { userData } = useUserData();
-  const disabled = false;
+export function Time({
+  thumbnails,
+  disabled = false,
+}: TimeSliderProps & { disabled?: boolean }) {
   return (
-    <TimeSlider.Root
-      disabled={disabled}
-      className="time-slider group relative mx-[7.5px] inline-flex h-10 w-full cursor-pointer touch-none select-none items-center outline-none"
-    >
+    <TimeSlider.Root className="time-slider group relative mx-[7.5px] inline-flex h-10 w-full cursor-pointer touch-none select-none items-center outline-none">
       <TimeSlider.Chapters className="relative flex h-full w-full items-center rounded-[1px]">
         {(cues, forwardRef) =>
           cues.map((cue) => (
