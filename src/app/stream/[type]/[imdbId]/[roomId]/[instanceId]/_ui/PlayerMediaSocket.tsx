@@ -4,7 +4,6 @@ import { type RefObject, useEffect } from "react";
 import { useSocketListeners } from "~/app/_hooks/useSocketListeners";
 import socketEmitters from "~/app/_services/socket/socketEmit";
 import { mediaSocket, userSocket } from "~/lib/socket/socket";
-import type { MediaWsDataServerToClient } from "@socket/@types";
 import { useIsUserConnected } from "~/app/_hooks/useIsUserConnected";
 import { useIsMediaConnected } from "~/app/_hooks/useIsMediaConnected";
 

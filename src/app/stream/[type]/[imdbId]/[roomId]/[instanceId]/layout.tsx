@@ -29,7 +29,6 @@ async function Layout({
     userId: session.user.id,
   });
 
-  //TODO: It must not happen so throw error
   if (!sourceData)
     sourceData = await api.source.create({
       instanceId,

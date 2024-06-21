@@ -2,16 +2,17 @@
 import { type MediaPlayerInstance } from "@vidstack/react";
 import { useRef } from "react";
 import PlayerMedia from "./PlayerMedia";
-import PlayerMediaSocket from "./PlayerMediaSocket";
-import PlayerUsersSocket from "./PlayerUsersSocket";
-import { useSocketListeners } from "~/app/_hooks/useSocketListeners";
+import PlayerTogetherAddon from "./PlayerTogetherAddon";
+import { useInstanceData } from "~/app/_hooks/useInstanceData";
 
 function Player() {
   const player = useRef<MediaPlayerInstance>(null);
-  useSocketListeners();
+  const { instanceData } = useInstanceData();
+
   return (
     <>
       <PlayerMedia playerRef={player} />
+      {instanceData.online && <PlayerTogetherAddon playerRef={player} />}
     </>
   );
 }
