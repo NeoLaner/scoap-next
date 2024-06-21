@@ -1,5 +1,9 @@
-import { io } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 import config from "./config";
+import {
+  MediaClientToServerEvents,
+  MediaServerToClientEvents,
+} from "@socket/@types";
 const backendUrlDev = config.backendUrlDev;
 const backendUrl = config.backendUrl;
 // "undefined" means the URL will be computed from the `window.location` object
@@ -17,7 +21,10 @@ export const userSocket = io(USER_URL, {
   autoConnect: false,
   withCredentials: true,
 });
-export const mediaSocket = io(MEDIA_URL, {
+export const mediaSocket: Socket<
+  MediaServerToClientEvents,
+  MediaClientToServerEvents
+> = io(MEDIA_URL, {
   autoConnect: false,
   withCredentials: true,
 });

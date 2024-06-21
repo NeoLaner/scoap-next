@@ -137,7 +137,10 @@ function PlayerMedia({
   return (
     <MediaPlayer
       ref={playerRef}
-      src={state.mediaSrc}
+      src={{
+        src: "https://dl.tabar.sbs/English/Series/The.Boys/S01/720p-x265-PSA-SoftSub/The.Boys.S01E002.720p.10bit.WEB-DL.2CH.x265.HEVC.PSA.SoftSub.EBTV.mkv",
+        type: "video/mp4",
+      }}
       playsInline
       className="text-white ring-media-focus absolute aspect-video h-dvh w-full overflow-hidden rounded-md bg-blackA11 font-sans data-[focus]:ring-4"
       autoPlay={false}

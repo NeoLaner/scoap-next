@@ -28,9 +28,9 @@ import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import ButtonFullscreen from "~/app/_ui/ButtonFullscreen";
 import { useInstanceData } from "~/app/_hooks/useInstanceData";
-import socketEmitters from "~/app/_services/socket/socketEmit";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { changeInstanceStatus } from "~/app/_actions/changeInstanceStatus";
+import { mediaSocket } from "~/lib/socket/socket";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -56,24 +56,26 @@ export function Play({
         {instance.online ? (
           <>
             {isPaused ? (
-              <button
+              <PlayButton
                 className={buttonClass}
                 disabled={disabled}
                 onClick={() => {
-                  socketEmitters.playedVideo({
-                    instance,
-                    userData,
-                    playedSeconds: 23,
-                  });
+                  mediaSocket.emit("play");
                 }}
               >
                 <PiPlayCircleFill
                   className={`h-6 w-6 ${disabled && "opacity-30"} text-solid-primary-2`}
                 />
-              </button>
+              </PlayButton>
             ) : (
               // <div>icon</div>
-              <PlayButton className={buttonClass} disabled={disabled}>
+              <PlayButton
+                className={buttonClass}
+                disabled={disabled}
+                onClick={() => {
+                  mediaSocket.emit("pause");
+                }}
+              >
                 <PiPauseCircleFill size={26} className="text-solid-primary-2" />
               </PlayButton>
             )}

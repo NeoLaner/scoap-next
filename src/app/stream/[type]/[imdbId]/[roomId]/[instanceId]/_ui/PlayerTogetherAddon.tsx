@@ -10,7 +10,11 @@ function PlayerTogetherAddon({
 }) {
   useSocketListeners();
 
-  return <PlayerRemote playerRef={playerRef} />;
+  return (
+    <>
+      <PlayerRemote playerRef={playerRef} />;
+    </>
+  );
 }
 
 export default PlayerTogetherAddon;
