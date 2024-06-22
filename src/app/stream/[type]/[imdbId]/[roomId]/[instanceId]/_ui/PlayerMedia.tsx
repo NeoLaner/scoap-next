@@ -66,37 +66,6 @@ function PlayerMedia({
     [waiting, userData, instance],
   );
 
-  function onPlay(e: MediaPlayEvent) {
-    const videoElement = playerRef.current;
-    if (videoElement) {
-      const playedSeconds = videoElement.currentTime;
-      socketEmitters.playedVideo({
-        instance,
-        playedSeconds,
-        userData,
-        caused: "manual",
-      });
-    }
-  }
-
-  function onPause(e: MediaPauseEvent) {
-    const videoElement = playerRef.current;
-
-    if (videoElement) {
-      // const caused = notReadyGuests?.length === 0 ? "manual" : "auto";
-      const playedSeconds = videoElement.currentTime;
-      socketEmitters.pausedVideo({
-        instance,
-        playedSeconds,
-        userData,
-        caused: "manual",
-      });
-    }
-  }
-
-  async function onSeeked(currentTime: number) {
-    if (isHost) await playerRef.current?.pause();
-  }
   /*
 
   function onProviderChange(
@@ -144,11 +113,9 @@ function PlayerMedia({
       playsInline
       className="text-white ring-media-focus absolute aspect-video h-dvh w-full overflow-hidden rounded-md bg-blackA11 font-sans data-[focus]:ring-4"
       autoPlay={false}
-      onPlay={onPlay}
-      onPause={onPause}
-      onSeeked={onSeeked}
       keyDisabled
       onProviderChange={onProviderChange}
+      muted
       // onWaiting={onWaiting}
       // onProgress={onCanPlayThrough}
       // onCanPlay={onCanPlay}

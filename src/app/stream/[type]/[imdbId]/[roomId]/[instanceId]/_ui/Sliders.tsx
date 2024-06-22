@@ -1,5 +1,6 @@
 "use client";
 import { TimeSlider, VolumeSlider } from "@vidstack/react";
+import { mediaSocket } from "~/lib/socket/socket";
 
 export function Volume() {
   return (
@@ -31,8 +32,15 @@ export function Time({
   thumbnails,
   disabled = false,
 }: TimeSliderProps & { disabled?: boolean }) {
+  function handleOnSeek(videoTs: number) {
+    mediaSocket.emit("seek", { payload: { videoTs } });
+    console.log(1);
+  }
   return (
-    <TimeSlider.Root className="time-slider group relative mx-[7.5px] inline-flex h-10 w-full cursor-pointer touch-none select-none items-center outline-none">
+    <TimeSlider.Root
+      onMediaSeekRequest={handleOnSeek}
+      className="time-slider group relative mx-[7.5px] inline-flex h-10 w-full cursor-pointer touch-none select-none items-center outline-none"
+    >
       <TimeSlider.Chapters className="relative flex h-full w-full items-center rounded-[1px]">
         {(cues, forwardRef) =>
           cues.map((cue) => (
@@ -74,3 +82,111 @@ export function Time({
     </TimeSlider.Root>
   );
 }
+
+// export function Time({
+//   thumbnails,
+//   disabled = false,
+// }: TimeSliderProps & { disabled?: boolean }) {
+//   const { duration, currentTime } = useMediaStore();
+//   const [showTimestamp, setShowTimestamp] = useState(false);
+//   const { seek } = useMediaRemote();
+
+//   function handleOnSeek(e: any, time: number) {
+//     let target = time;
+//     // Read the time from the click event if it exists
+//     console.log(e.target, time);
+
+//     if (e) {
+//       const rect = e.target.getBoundingClientRect();
+//       const x = e.clientX - rect.left;
+//       const max = rect.width;
+//       target = (x / max) * this.Player().getDuration();
+//     }
+//     target = Math.max(target, 0);
+//     seek(target);
+//     const hlsTarget =
+//       Math.floor(Date.now() / 1000) - this.HTMLInterface.getDuration() + target;
+//     // this.socket.emit("CMD:seek", this.state.isLiveHls ? hlsTarget : target);
+//     mediaSocket.emit("seek", { payload: { videoTs: target } });
+//   }
+
+//   const onMouseOver = () => {
+//     // console.log('mouseover');
+//     setShowTimestamp(true);
+//   };
+
+//   const onMouseOut = () => {
+//     // console.log('mouseout');
+//     setShowTimestamp(true);
+//   };
+
+//   const onMouseMove = (e: any) => {
+//     const rect = e.target.getBoundingClientRect();
+//     const x = e.clientX - rect.left;
+//     const max = rect.width;
+//     const pct = x / max;
+//     // console.log(x, max);
+//     const target = pct * this.props.duration;
+//     // console.log(pct);
+//     if (pct >= 0) {
+//       this.setState({ hoverTimestamp: target, hoverPos: pct });
+//     }
+//   };
+
+//   return (
+//     <progress
+//       size="tiny"
+//       color="blue"
+//       onClick={duration < +Infinity ? handleOnSeek : undefined}
+//       onMouseOver={onMouseOver}
+//       onMouseOut={onMouseOut}
+//       onMouseMove={onMouseMove}
+//       className={``}
+//       inverted
+//       style={{
+//         flexGrow: 1,
+//         marginTop: 0,
+//         marginBottom: 0,
+//         position: "relative",
+//         minWidth: "50px",
+//       }}
+//       value={currentTime}
+//       total={duration}
+//     >
+//       {/* {buffers} */}
+//       {
+//         <div
+//           style={{
+//             position: "absolute",
+//             bottom: "0px",
+//             left: `calc(${(currentTime / duration) * 100 + "% - 6px"})`,
+//             pointerEvents: "none",
+//             width: "12px",
+//             height: "12px",
+//             transform:
+//               duration < Infinity && showTimestamp
+//                 ? "scale(1, 1)"
+//                 : "scale(0, 0)",
+//             transition: "0.25s all",
+//             borderRadius: "50%",
+//             backgroundColor: "#54c8ff",
+//           }}
+//         ></div>
+//       }
+//       {/* {duration < Infinity && showTimestamp && (
+//         <div
+//           style={{
+//             position: "absolute",
+//             bottom: "0px",
+//             left: `calc(${this.state.hoverPos * 100 + "% - 27px"})`,
+//             pointerEvents: "none",
+//           }}
+//         >
+//           <Label basic color="blue" pointing="below">
+//             <div>{formatTimestamp(this.state.hoverTimestamp)}</div>
+//           </Label>
+//         </div>
+//       )} */}
+//     </progress>
+//   );
+// }
