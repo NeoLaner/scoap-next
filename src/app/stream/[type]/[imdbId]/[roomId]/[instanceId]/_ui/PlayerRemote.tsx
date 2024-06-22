@@ -25,7 +25,7 @@ function PlayerRemote({
           forceUnsync: false,
           playbackRate: playbackRate,
           synced: true,
-          videoTs,
+          videoTs: currentTime,
           waitForData: waiting,
         },
       });
@@ -63,12 +63,13 @@ function PlayerRemote({
       const curUser = wsData.payload.filter(
         (user) => user.id === userData.id,
       )[0];
-      let pbr = 1;
+      let pbr = 1.01;
       const delta = leader.videoTs - curUser?.videoTs;
       console.log("delta", leader.videoTs, curUser?.videoTs);
 
       pbr += Number((delta / 10).toFixed(2));
       pbr = Math.min(pbr, 1.1);
+
       remote.changePlaybackRate(pbr);
     });
     return () => {
