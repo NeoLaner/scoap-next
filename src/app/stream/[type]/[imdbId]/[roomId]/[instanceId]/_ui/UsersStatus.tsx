@@ -5,6 +5,14 @@ import { PiArrowRightBold } from "react-icons/pi";
 import { useInstanceData } from "~/app/_hooks/useInstanceData";
 import { mediaSocket } from "~/lib/socket/socket";
 
+function formatTime(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  const paddedMinutes = String(minutes).padStart(2, "0");
+  const paddedSeconds = String(remainingSeconds).padStart(2, "0");
+  return `${paddedMinutes}:${paddedSeconds}`;
+}
+
 function UsersStatus() {
   const { instanceData } = useInstanceData();
   const [usersState, setUsersState] = useState<MediaUserState[]>([]);
@@ -37,7 +45,7 @@ function UsersStatus() {
         className={`flex flex-col items-center justify-center gap-2 rounded-xl bg-app-color-primary-1 px-[0.35rem] py-[0.4rem] transition-all`}
       >
         {usersState?.map((userData) => (
-          <div className="flex flex-col" key={userData.id}>
+          <div className="flex items-center gap-1" key={userData.id}>
             {userData.image && (
               <Image
                 src={userData.image}
@@ -48,6 +56,8 @@ function UsersStatus() {
                 quality="100"
               />
             )}
+
+            <p className="text-sm">{formatTime(userData.videoTs)}</p>
           </div>
         ))}
       </div>

@@ -27,7 +27,6 @@ async function PlayerLayout({
           className="absolute right-0 top-[0] z-30 h-full w-full bg-app-color-gray-1 md:w-[420px]"
         />
       </div>
-      {/* Socket */}
     </div>
   );
 }

@@ -12,7 +12,7 @@ function PlayerTogetherAddon({
 
   return (
     <>
-      <PlayerRemote playerRef={playerRef} />;
+      <PlayerRemote playerRef={playerRef} />
     </>
   );
 }

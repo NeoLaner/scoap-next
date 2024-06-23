@@ -24,26 +24,26 @@ export const sourceRouter = createTRPCRouter({
     .input(
       z.object({
         instanceId: z.string(),
-        userId: z.string(),
         videoLink: z.string().optional(),
         infoHash: z.string().optional(),
         fileIdx: z.number().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const existingInstance = await ctx.db.source.findFirst({
+      const session = ctx.session;
+      const existingSource = await ctx.db.source.findFirst({
         where: {
           instanceId: input.instanceId,
-          userId: input.userId,
+          userId: session.user.id,
         },
       });
 
-      if (existingInstance) return existingInstance;
+      if (existingSource) return existingSource;
 
       return await ctx.db.source.create({
         data: {
           instanceId: input.instanceId,
-          userId: input.userId,
+          userId: session.user.id,
           videoLink: input.videoLink,
           infoHash: input.infoHash,
           fileIdx: input.fileIdx,

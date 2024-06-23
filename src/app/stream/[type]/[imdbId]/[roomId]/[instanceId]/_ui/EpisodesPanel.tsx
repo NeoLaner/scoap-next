@@ -15,7 +15,7 @@ function EpisodesPanel() {
       {/* Episodes */}
       <div
         className={`${season ? "md:w-[420px]" : "md:w-[0]"} transition-all`}
-      ></div>
+      />
       <Episodes
         videos={metaData.videos}
         className="absolute right-0 md:w-[420px]"
