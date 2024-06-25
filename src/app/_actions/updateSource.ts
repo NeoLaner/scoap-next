@@ -1,9 +1,8 @@
 "use server";
 import { api } from "~/trpc/server";
 import { revalidatePath } from "next/cache";
-import { getServerAuthSession } from "~/server/auth";
 
-export async function updateStream(inputs: {
+export async function updateEpisode(inputs: {
   name: string;
   imdbId: string;
   ownerId: string;
@@ -15,22 +14,12 @@ export async function updateStream(inputs: {
   fileIdx?: number;
   infoHash?: string;
 }) {
-  const { name, season, episode, sourceId, fileIdx, infoHash, instanceId } =
-    inputs;
-  const session = await getServerAuthSession();
-  await api.instance.update({
-    id: instanceId,
-    episode: Number(episode),
-    season: Number(season),
-    name: name,
-    ownerId: session?.user.id,
-  });
+  const { sourceId, fileIdx, infoHash, instanceId } = inputs;
 
   await api.source.update({
     id: sourceId,
     fileIdx: fileIdx,
     infoHash: infoHash,
   });
-
   revalidatePath(`/stream//[imdbId]/[roomId]/${instanceId}`, "layout");
 }

@@ -29,7 +29,7 @@ import Link from "next/link";
 import ButtonFullscreen from "~/app/_ui/ButtonFullscreen";
 import { useInstanceData } from "~/app/_hooks/useInstanceData";
 import { useUserData } from "~/app/_hooks/useUserData";
-import { changeInstanceStatus } from "~/app/_actions/changeInstanceStatus";
+import { changeInstanceOnline } from "~/app/_actions/changeInstanceOnline";
 import { mediaSocket } from "~/lib/socket/socket";
 
 export interface MediaButtonProps {
@@ -195,7 +195,7 @@ export function Episodes({ tooltipPlacement }: MediaButtonProps) {
 export function Together({ tooltipPlacement }: MediaButtonProps) {
   const { instanceData: instance } = useInstanceData();
   async function handleOnClick(online: boolean) {
-    await changeInstanceStatus(instance, online);
+    await changeInstanceOnline(instance, online);
   }
 
   return (

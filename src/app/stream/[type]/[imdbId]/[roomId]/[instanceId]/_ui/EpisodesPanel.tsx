@@ -2,8 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useMetaData } from "~/app/_hooks/useMetaData";
-import { type MetaInfo } from "~/app/_services/stremIo/types";
-import Episodes from "~/app/stream/[type]/[imdbId]/_ui/Episodes";
+import Episodes from "./Episodes";
 
 function EpisodesPanel() {
   const { metaData } = useMetaData();

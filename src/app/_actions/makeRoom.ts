@@ -20,7 +20,7 @@ export async function makeRoom(inputs: {
     season: inputs.season,
     episode: inputs.episode,
   });
-  await api.source.create({ instanceId: instanceData.id, userId: ownerId });
+  await api.source.create({ instanceId: instanceData.id });
   permanentRedirect(
     `/stream/${roomData.type}/${roomData.imdbId}/${roomData.id}/${instanceData.id}`,
   );

@@ -2,7 +2,7 @@
 import * as Form from "@radix-ui/react-form";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { directLink } from "~/app/_actions/directLink";
+import { addDirectLink } from "~/app/_actions/addDirectLink";
 import { useInstanceData } from "~/app/_hooks/useInstanceData";
 
 function StreamsHeading() {
@@ -17,7 +17,7 @@ function StreamsHeading() {
       <Form.Root
         autoComplete="off"
         className="w-[260px]"
-        action={(data) => directLink(data, instanceData.id)}
+        action={(data) => addDirectLink(data, instanceData.id)}
       >
         <Form.Field className="mb-[10px] grid" name="name">
           <div className="flex items-baseline justify-between">

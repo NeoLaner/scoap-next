@@ -10,7 +10,7 @@ function Streams({
   torrentIoStreamsSorted,
   className,
 }: {
-  torrentIoStreamsSorted: GetStreamsFromTorrentIo;
+  torrentIoStreamsSorted: GetStreamsFromTorrentIo | [];
   className?: string;
 }) {
   const showStreams = useSearchParams().get("showStreams");

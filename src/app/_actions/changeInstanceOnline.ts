@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { api } from "~/trpc/server";
 
-export async function changeInstanceStatus(
+export async function changeInstanceOnline(
   instance: Parameters<typeof api.instance.update>[0],
   online: boolean,
 ) {

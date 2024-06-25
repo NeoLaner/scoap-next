@@ -68,7 +68,6 @@ export const instanceRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         name: z.string().optional(),
-        ownerId: z.string().optional(),
         roomId: z.string().optional(),
         online: z.boolean().optional(),
         timeWatched: z.date().optional().nullable(),
@@ -78,18 +77,19 @@ export const instanceRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      if (input.ownerId !== ctx.session.user.id) return; // TODO: return error
+      console.log("🍜🍜", input);
+
       return await ctx.db.instance.update({
-        where: { id: input.id },
+        where: { id: input.id, ownerId: ctx.session.user.id },
         data: {
           name: input.name,
-          ownerId: input.ownerId,
+          ownerId: ctx.session.user.id,
           roomId: input.roomId,
-          online: input.online,
+          online: input.online ?? false,
           timeWatched: input.timeWatched,
           season: input.season,
           episode: input.episode,
-          guests: input.guests,
+          guests: input.guests ?? [],
         },
       });
     }),

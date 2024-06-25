@@ -4,8 +4,10 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { type Video } from "~/app/_services/stremIo/types";
 import ScrollAreaY from "~/app/_ui/ScrollAreaY";
-import EpisodesHeading from "./EpisodesHeading";
-import Link from "next/link";
+import EpisodesHeading from "../../../_ui/EpisodesHeading";
+import { updateEpisode } from "~/app/_actions/updateEpisode";
+import { useInstanceData } from "~/app/_hooks/useInstanceData";
+import invalidateInstanceData from "~/app/_actions/invalidateInstanceData";
 
 const formatDate = (isoString: string) => {
   const date = new Date(isoString);
@@ -22,13 +24,14 @@ function Episodes({
 }) {
   const searchParams = useSearchParams();
   const season = searchParams.get("season");
+  const { instanceData } = useInstanceData();
 
   if (!season) return null;
 
   const episodesOfSeason = videos.filter(
     (video) => video.season === Number(season),
   );
-
+  // `?season=${season}&episode=${episode.episode}&showStreams="true"`
   return (
     <div
       className={`${className}  h-full w-full rounded-lg bg-app-color-gray-1 pl-6 `}
@@ -40,10 +43,24 @@ function Episodes({
         <ScrollAreaY>
           <div className="flex h-full flex-col gap-6 ">
             {episodesOfSeason.map((episode) => (
-              <Link
-                href={`?season=${season}&episode=${episode.episode}&showStreams="true"`}
+              <button
+                onClick={async () => {
+                  await updateEpisode({
+                    instanceId: instanceData.id,
+                    name: instanceData.name,
+                    type: "series",
+                    episode: episode.episode,
+                    season: episode.season,
+                  });
+                  await invalidateInstanceData(instanceData.id);
+                  //emit invalidate event 
+                }}
                 key={episode.episode}
-                className="flex items-center gap-4"
+                className="flex items-center justify-start gap-4 text-start"
+                disabled={
+                  instanceData.episode === episode.episode &&
+                  instanceData.season === episode.season
+                }
               >
                 <div className="h-[70px] overflow-hidden rounded-md">
                   {/* <Image
@@ -60,7 +77,7 @@ function Episodes({
                     {formatDate(episode.firstAired)}{" "}
                   </div>
                 </div>
-              </Link>
+              </button>
             ))}
           </div>
         </ScrollAreaY>

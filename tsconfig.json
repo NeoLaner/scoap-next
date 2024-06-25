@@ -38,7 +38,8 @@
     "**/*.cjs",
     "**/*.js",
     ".next/types/**/*.ts",
-    "next.config.mjs"
+    "next.config.mjs",
+    "src/app/_actions/updateEpisodets"
   ],
   "exclude": ["node_modules"]
 }

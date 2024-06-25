@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
-export async function directLink(formData: FormData, instanceId: string) {
+export async function addDirectLink(formData: FormData, instanceId: string) {
   const session = await getServerAuthSession();
   const userId = session?.user.id;
   const link = formData.get("link") as string;

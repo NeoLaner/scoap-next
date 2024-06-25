@@ -16,23 +16,18 @@ async function StreamsServer({
   const episode = searchParams?.episode;
 
   if (type === "series" && !episode) return null;
-  const torrentIoStreams = await getStreamsFromTorrentIo(
-    type,
-    imdbId,
-    season,
-    episode,
-  );
+  // const torrentIoStreams = await getStreamsFromTorrentIo(
+  //   type,
+  //   imdbId,
+  //   season,
+  //   episode,
+  // );
 
-  const torrentIoStreamsSorted = torrentIoStreams.sort(
-    (streamA, streamB) => streamB.seeds! - streamA.seeds!,
-  );
+  // const torrentIoStreamsSorted = torrentIoStreams.sort(
+  //   (streamA, streamB) => streamB.seeds! - streamA.seeds!,
+  // );
 
-  return (
-    <Streams
-      torrentIoStreamsSorted={torrentIoStreamsSorted}
-      className={className}
-    />
-  );
+  return <Streams torrentIoStreamsSorted={[]} className={className} />;
 }
 
 export default StreamsServer;

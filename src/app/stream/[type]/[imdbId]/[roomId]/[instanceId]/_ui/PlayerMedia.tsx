@@ -1,95 +1,29 @@
 "use client";
 import Image from "next/image";
-import { type RefObject, useEffect } from "react";
+import { type RefObject } from "react";
+import HLS from "hls.js";
 import {
-  type MediaPauseEvent,
-  type MediaPlayEvent,
   type MediaPlayerInstance,
   MediaPlayer,
   MediaProvider,
-  useMediaStore,
   type MediaProviderAdapter,
   type MediaProviderChangeEvent,
   isHLSProvider,
 } from "@vidstack/react";
-import { usePlayerContext } from "~/app/_hooks/usePlayerProvider";
-import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
+
 import VideoLayout from "./VideoLayout";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
-import socketEmitters from "~/app/_services/socket/socketEmit";
-import { useUserData } from "~/app/_hooks/useUserData";
-import { useInstanceData } from "~/app/_hooks/useInstanceData";
-import HLS from "hls.js";
 
 function PlayerMedia({
   playerRef,
 }: {
   playerRef: RefObject<MediaPlayerInstance>;
 }) {
-  const { dispatch, state } = usePlayerContext();
-  const { mutate, isPending } = useCreateTorrentStream();
   const { metaData } = useMetaData();
   const { sourceData } = useSourceData();
-  const { userData } = useUserData();
-  const { instanceData: instance } = useInstanceData();
-  const isHost = instance.ownerId === userData.id;
-  const { waiting } = useMediaStore(playerRef);
 
-  useEffect(function () {
-    if (
-      sourceData?.fileIdx !== undefined &&
-      sourceData?.fileIdx !== null &&
-      sourceData?.infoHash !== undefined &&
-      sourceData?.infoHash !== null
-    ) {
-      dispatch({ type: "CLEAR_MEDIA_SOURCE" });
-      mutate({ fileIdx: sourceData.fileIdx, infoHash: sourceData.infoHash });
-    }
-    () => {
-      dispatch({ type: "CLEAR_MEDIA_SOURCE" });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  console.log(state.mediaSrc);
-
-  useEffect(
-    function () {
-      if (waiting) {
-        console.log("waiting");
-        socketEmitters.waitingForData();
-      } else {
-        console.log("playing");
-        socketEmitters.receivedData();
-      }
-    },
-    [waiting, userData, instance],
-  );
-
-  /*
-
-  function onProviderChange(
-    provider: MediaProviderAdapter | null,
-    nativeEvent: MediaProviderChangeEvent,
-  ) {
-    // We can configure provider's here.
-    // if (isHLSProvider(provider)) {
-    //   provider.config = {};
-    // }
-    // if (isYouTubeProvider(provider)) {
-    //   provider.cookies = true;
-    // }
-  }
-
-  // We can listen for the `can-play` event to be notified when the playerRef is ready.
-  function onCanPlay(
-    detail: MediaCanPlayDetail,
-    nativeEvent: MediaCanPlayEvent,
-  ) {
-    // ...
-    dispatch({ type: "mediaLoaded" });
-  }
- */
+  console.log(sourceData.videoLink);
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
@@ -107,7 +41,7 @@ function PlayerMedia({
     <MediaPlayer
       ref={playerRef}
       src={{
-        src: sourceData.videoLink,
+        src: sourceData.videoLink ?? "",
         type: "video/mp4",
       }}
       playsInline
@@ -116,16 +50,13 @@ function PlayerMedia({
       keyDisabled
       onProviderChange={onProviderChange}
       muted
-      // onWaiting={onWaiting}
-      // onProgress={onCanPlayThrough}
-      // onCanPlay={onCanPlay}
     >
       <MediaProvider>
         <Image
           src={metaData.background}
           alt={metaData.name}
           fill
-          className={`h-full object-cover object-top  ${isPending ? "opacity-70" : "opacity-0"} transition-all`}
+          className={`h-full object-cover object-top  ${!sourceData.videoLink ? "opacity-70" : "opacity-0"} transition-all`}
           quality="90"
         />
         {/* {textTracks.map((track) => (
