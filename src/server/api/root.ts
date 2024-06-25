@@ -1,10 +1,9 @@
-import { postRouter } from "~/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
-import { roomRouter } from "./routers/room";
-import { instanceRouter } from "./routers/instance";
+
 import { addonRouter } from "./routers/addon";
 import { userRouter } from "./routers/user";
 import { sourceRouter } from "./routers/source";
+import { roomRouter } from "./routers/room";
 
 /**
  * This is the primary router for your server.
@@ -13,9 +12,7 @@ import { sourceRouter } from "./routers/source";
  */
 export const appRouter = createTRPCRouter({
   addon: addonRouter,
-  post: postRouter,
   room: roomRouter,
-  instance: instanceRouter,
   user: userRouter,
   source: sourceRouter,
 });

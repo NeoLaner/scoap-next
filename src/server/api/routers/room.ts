@@ -1,68 +1,102 @@
-import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const roomRouter = createTRPCRouter({
-  // Get a room
-  get: protectedProcedure
+  // Get an room
+  getMe: protectedProcedure
     .input(z.object({ roomId: z.string() }))
     .query(async ({ ctx, input }) => {
       return await ctx.db.room.findFirst({
         where: { id: input.roomId },
         select: {
           id: true,
+          name: true,
           ownerId: true,
+          roomId: true,
+          online: true,
+          timeWatched: true,
+          season: true,
+          episode: true,
+          allowedGuestsId: true,
+          bannedGuestsId: true,
           imdbId: true,
-          videoLinks: true,
-          instances: true, // This will include related instances
+          isPublic: true,
+          type: true,
+          Sources: true,
+          // Exclude password from the result
+          password: false,
         },
       });
     }),
 
-  // Create a room
-  create: protectedProcedure
+  // Create an room
+  createMe: protectedProcedure
     .input(
       z.object({
-        ownerId: z.string(),
+        name: z.string(),
+        roomId: z.string(),
         imdbId: z.string(),
         type: z.string(),
-        videoLinks: z.array(z.string()).optional(),
+        online: z.boolean(),
+        timeWatched: z.date().optional(),
+        season: z.number().optional(),
+        episode: z.number().optional(),
+        guests: z.array(z.string()).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // Check if a room with the same ownerId and imdbId already exists
-      const existingRoom = await ctx.db.room.findFirst({
+      //user can just make one room per imdbId
+      const existingInstance = await ctx.db.room.findFirst({
         where: {
-          ownerId: input.ownerId,
           imdbId: input.imdbId,
+          ownerId: ctx.session.user.id,
         },
       });
 
-      if (existingRoom) {
-        // If the room exists, return it
-        return existingRoom;
-      }
+      if (existingInstance) return existingInstance;
 
-      // If the room does not exist, create a new one
-      try {
-        return await ctx.db.room.create({
-          data: {
-            ownerId: input.ownerId,
-            imdbId: input.imdbId,
-            type: input.type,
-            videoLinks: input.videoLinks ?? [],
-          },
-        });
-      } catch (error) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === "P2002"
-        ) {
-          throw new Error(
-            "A room with this IMDb ID already exists for this user.",
-          );
-        }
-        throw error;
-      }
+      return await ctx.db.room.create({
+        data: {
+          name: input.name,
+          ownerId: ctx.session.user.id,
+          roomId: input.roomId,
+          online: input.online,
+          timeWatched: input.timeWatched,
+          season: input.season,
+          episode: input.episode,
+          allowedGuestsId: [],
+          bannedGuestsId: [],
+          imdbId: input.imdbId,
+          type: input.type,
+        },
+      });
+    }),
+
+  // Update an room
+  updateMe: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().optional(),
+        roomId: z.string().optional(),
+        online: z.boolean().optional(),
+        timeWatched: z.date().optional().nullable(),
+        season: z.number().optional().nullable(),
+        episode: z.number().optional().nullable(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.room.update({
+        where: { id: input.id, ownerId: ctx.session.user.id },
+        data: {
+          name: input.name,
+          ownerId: ctx.session.user.id,
+          roomId: input.roomId,
+          online: input.online ?? false,
+          timeWatched: input.timeWatched,
+          season: input.season,
+          episode: input.episode,
+        },
+      });
     }),
 });

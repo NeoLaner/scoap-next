@@ -4,13 +4,14 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 export const sourceRouter = createTRPCRouter({
   // Get a source
   get: protectedProcedure
-    .input(z.object({ instanceId: z.string(), userId: z.string() }))
+    .input(z.object({ roomId: z.string(), userId: z.string() }))
     .query(async ({ ctx, input }) => {
       return await ctx.db.source.findFirst({
-        where: { instanceId: input.instanceId, userId: input.userId },
+        where: { roomId: input.roomId, userId: input.userId },
         select: {
           id: true,
-          instanceId: true,
+          roomId: true,
+          mediaLinkId: true,
           userId: true,
           videoLink: true,
           infoHash: true,
@@ -23,17 +24,18 @@ export const sourceRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        instanceId: z.string(),
+        roomId: z.string(),
         videoLink: z.string().optional(),
         infoHash: z.string().optional(),
         fileIdx: z.number().optional(),
+        mediaLinkId: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const session = ctx.session;
       const existingSource = await ctx.db.source.findFirst({
         where: {
-          instanceId: input.instanceId,
+          roomId: input.roomId,
           userId: session.user.id,
         },
       });
@@ -42,11 +44,12 @@ export const sourceRouter = createTRPCRouter({
 
       return await ctx.db.source.create({
         data: {
-          instanceId: input.instanceId,
+          roomId: input.roomId,
           userId: session.user.id,
           videoLink: input.videoLink,
           infoHash: input.infoHash,
           fileIdx: input.fileIdx,
+          mediaLinkId: input.mediaLinkId,
         },
       });
     }),
@@ -59,6 +62,7 @@ export const sourceRouter = createTRPCRouter({
         videoLink: z.string().optional(),
         infoHash: z.string().optional(),
         fileIdx: z.number().optional(),
+        mediaLinkId: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -68,6 +72,7 @@ export const sourceRouter = createTRPCRouter({
           videoLink: input.videoLink,
           infoHash: input.infoHash,
           fileIdx: input.fileIdx,
+          mediaLinkId: input.mediaLinkId,
         },
       });
     }),

@@ -10,18 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  createdBy   User   @relation(fields: [createdById], references: [id])
-  createdById String @db.ObjectId
-
-  @@index([name])
-}
-
 // Necessary for Next auth
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -50,18 +38,17 @@ model Session {
 }
 
 model User {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?    @unique
-  emailVerified DateTime?
-  image         String?
-  addons        String[]   @default([])
-  accounts      Account[]
-  sessions      Session[]
-  posts         Post[]
-  rooms         Room[]
-  instances     Instance[]
-  Sources       Source[]
+  id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String?
+  email                String?                @unique
+  emailVerified        DateTime?
+  image                String?
+  addons               String[]               @default([])
+  accounts             Account[]
+  sessions             Session[]
+  rooms                Room[]
+  Sources              Source[]
+  MediaLinkInteraction MediaLinkInteraction[]
 }
 
 model VerificationToken {
@@ -74,43 +61,68 @@ model VerificationToken {
 }
 
 model Room {
-  id         String     @id @default(auto()) @map("_id") @db.ObjectId
-  ownerId    String     @db.ObjectId
-  imdbId     String
-  type       String
-  videoLinks String[]
-  instances  Instance[]
-
-  owner User @relation(fields: [ownerId], references: [id])
-
-  @@unique(name:"userImdbId" , [ownerId, imdbId])
-}
-
-model Instance {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  type        String
+  imdbId      String
   password    String?   @default("")
   name        String
   ownerId     String    @db.ObjectId
   roomId      String    @db.ObjectId
-  online      Boolean
+  online      Boolean   @default(false)
   timeWatched DateTime?
   season      Int?
   episode     Int?
-  room        Room      @relation(fields: [roomId], references: [id])
-  owner       User      @relation(fields: [ownerId], references: [id])
+  isPublic    Boolean   @default(false)
 
-  guests  String[] @db.ObjectId
-  Sources Source[]
+  owner           User     @relation(fields: [ownerId], references: [id])
+  allowedGuestsId String[] @db.ObjectId
+  bannedGuestsId  String[] @db.ObjectId
+  Sources         Source[]
 }
 
 model Source {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  instanceId String  @unique @db.ObjectId
-  userId     String  @unique @db.ObjectId
-  videoLink  String?
-  infoHash   String?
-  fileIdx    Int?
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  roomId      String  @unique @db.ObjectId
+  userId      String  @unique @db.ObjectId
+  videoLink   String?
+  infoHash    String?
+  fileIdx     Int?
+  mediaLinkId String? @db.ObjectId
 
-  instance Instance @relation(fields: [instanceId], references: [id])
-  user     User     @relation(fields: [userId], references: [id])
+  room      Room       @relation(fields: [roomId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+  MediaLink MediaLink? @relation(fields: [mediaLinkId], references: [id])
+}
+
+model MediaLink {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId        String   @db.ObjectId
+  imdbId         String
+  videoLink      String
+  isDynamic      Boolean
+  qualities      Int[] // if link type is dynamic for movies and series
+  seasonBoundary Int[] // if link type is dynamic for series
+  description    String? // if there is no description provided, the videoLink shows instead
+  roomId         String   @db.ObjectId
+  isPublic       Boolean  @default(false)
+  disabled       Boolean // change by owner and admins
+  canBePublic    Boolean // change by admins
+  usersLikesId   String[] @db.ObjectId // if the link is private, this should never change
+  name           String   @default("")
+
+  sources      Source[]
+  interactions MediaLinkInteraction[]
+}
+
+model MediaLinkInteraction {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  userId      String   @db.ObjectId
+  mediaLinkId String   @db.ObjectId
+  isLike      Boolean
+
+  mediaLink MediaLink @relation(fields: [mediaLinkId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@unique([userId, mediaLinkId])
 }
