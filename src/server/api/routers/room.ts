@@ -94,4 +94,26 @@ export const roomRouter = createTRPCRouter({
         },
       });
     }),
+
+  getRoomSources: protectedProcedure
+    .input(z.object({ roomId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.room.findFirst({
+        where: { id: input.roomId },
+        select: {
+          Sources: {
+            select: {
+              fileIdx: true,
+              id: true,
+              infoHash: true,
+              mediaLinkId: true,
+              roomId: true,
+              user: true,
+              userId: true,
+              videoLink: true,
+            },
+          },
+        },
+      });
+    }),
 });

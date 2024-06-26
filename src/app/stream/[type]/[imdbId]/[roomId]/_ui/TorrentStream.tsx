@@ -7,7 +7,11 @@ import {
 
 import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
 
-function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
+function TorrentStream({
+  stream,
+}: {
+  stream: GetStreamsFromTorrentIo[number];
+}) {
   const { mutate } = useCreateTorrentStream();
   async function handleOnClick() {
     //
@@ -38,4 +42,4 @@ function Stream({ stream }: { stream: GetStreamsFromTorrentIo[number] }) {
   );
 }
 
-export default Stream;
+export default TorrentStream;

@@ -1,30 +1,39 @@
 "use client";
 import { type GetStreamsFromTorrentIo } from "~/lib/streams/getStreams";
-import Stream from "./Stream";
+import TorrentStream from "./TorrentStream";
 import ScrollAreaY from "~/app/_ui/ScrollAreaY";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import StreamsHeading from "./StreamsHeading";
+import StreamForm from "./StreamForm";
+import { type api } from "~/trpc/server";
+import StreamSources from "./StreamSources";
 
 // http://127.0.0.1:11470/6ee1a751d67aae51dfd067b0a11e2f06d1098461/create
 function Streams({
   torrentIoStreamsSorted,
+  roomSources,
   className,
 }: {
   torrentIoStreamsSorted: GetStreamsFromTorrentIo | [];
+  roomSources: Awaited<ReturnType<typeof api.room.getRoomSources>>;
   className?: string;
 }) {
   const showStreams = useSearchParams().get("showStreams");
 
   if (!showStreams) return null;
   return (
-    <div className={`${className} `}>
+    <div className={`${className} px-6`}>
       <StreamsHeading />
-      <div className="z-40 h-full ">
+      <div className="z-40 ml-2 h-full">
         <ScrollAreaY>
-          <div className="flex flex-col gap-2 rounded-md bg-app-color-gray-1">
+          <div className="flex w-full flex-col items-center justify-center gap-2 rounded-md bg-app-color-gray-1">
+            <StreamForm />
             {torrentIoStreamsSorted.map((stream) => (
-              <Stream key={stream.title} stream={stream} />
+              <TorrentStream key={stream.title} stream={stream} />
             ))}
+            <div className="flex flex-col gap-4">
+              <StreamSources roomSources={roomSources} />
+            </div>
           </div>
         </ScrollAreaY>
       </div>

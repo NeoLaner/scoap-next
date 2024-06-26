@@ -2,24 +2,20 @@
 import { api } from "~/trpc/server";
 import { revalidatePath } from "next/cache";
 
-export async function updateEpisode(inputs: {
-  name: string;
-  imdbId: string;
-  ownerId: string;
-  instanceId: string;
-  type: string;
-  season?: number | string | null;
-  episode?: number | string | null;
+export async function updateSource(inputs: {
   sourceId: string;
+  roomId: string;
+  videoLink?: string;
   fileIdx?: number;
   infoHash?: string;
 }) {
-  const { sourceId, fileIdx, infoHash, instanceId } = inputs;
+  const { sourceId, fileIdx, infoHash, videoLink, roomId } = inputs;
 
   await api.source.update({
     id: sourceId,
     fileIdx: fileIdx,
     infoHash: infoHash,
+    videoLink,
   });
-  revalidatePath(`/stream//[imdbId]/[roomId]/${instanceId}`, "layout");
+  revalidatePath(`/stream//[imdbId]/[roomId]/${roomId}`, "layout");
 }

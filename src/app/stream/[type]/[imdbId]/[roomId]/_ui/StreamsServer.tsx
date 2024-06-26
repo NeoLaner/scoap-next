@@ -1,5 +1,6 @@
 import { getStreamsFromTorrentIo } from "~/lib/streams/getStreams";
 import Streams from "./Streams";
+import { api } from "~/trpc/server";
 
 // http://127.0.0.1:11470/6ee1a751d67aae51dfd067b0a11e2f06d1098461/create
 async function StreamsServer({
@@ -7,11 +8,11 @@ async function StreamsServer({
   searchParams,
   className,
 }: {
-  params: { imdbId: string; type: string };
+  params: { imdbId: string; type: string; roomId: string };
   searchParams?: { season?: string; episode?: string };
   className?: string;
 }) {
-  const { type, imdbId } = params;
+  const { type, imdbId, roomId } = params;
   const season = searchParams?.season;
   const episode = searchParams?.episode;
 
@@ -26,8 +27,14 @@ async function StreamsServer({
   // const torrentIoStreamsSorted = torrentIoStreams.sort(
   //   (streamA, streamB) => streamB.seeds! - streamA.seeds!,
   // );
-
-  return <Streams torrentIoStreamsSorted={[]} className={className} />;
+  const roomSources = await api.room.getRoomSources({ roomId });
+  return (
+    <Streams
+      roomSources={roomSources}
+      torrentIoStreamsSorted={[]}
+      className={className}
+    />
+  );
 }
 
 export default StreamsServer;
