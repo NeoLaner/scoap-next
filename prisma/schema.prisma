@@ -67,7 +67,6 @@ model Room {
   password    String?   @default("")
   name        String
   ownerId     String    @db.ObjectId
-  roomId      String    @db.ObjectId
   online      Boolean   @default(false)
   timeWatched DateTime?
   season      Int?

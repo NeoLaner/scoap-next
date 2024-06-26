@@ -3,17 +3,17 @@ import { api } from "~/trpc/server";
 
 export async function updateEpisode(inputs: {
   name: string;
-  instanceId: string;
+  roomId: string;
   type: string;
   season: number | string | null;
   episode: number | string | null;
 }) {
-  const { name, season, episode, instanceId, type } = inputs;
+  const { name, season, episode, roomId, type } = inputs;
   console.log("🍕🍕🍕", inputs);
 
   if (type !== "series") return; //TODO: Error;
-  await api.instance.update({
-    id: instanceId,
+  await api.room.updateMe({
+    id: roomId,
     name,
     episode: Number(episode),
     season: Number(season),

@@ -3,9 +3,9 @@ import { revalidatePath } from "next/cache";
 import { api } from "~/trpc/server";
 
 export async function changeInstanceOnline(
-  instance: Parameters<typeof api.instance.update>[0],
+  room: Parameters<typeof api.room.updateMe>[0],
   online: boolean,
 ) {
-  await api.instance.update({ ...instance, online });
-  revalidatePath(`/stream//[imdbId]/[roomId]/${instance.id}`, "layout");
+  await api.room.updateMe({ ...room, online });
+  revalidatePath(`/stream//[imdbId]/[roomId]/${room.id}`, "layout");
 }

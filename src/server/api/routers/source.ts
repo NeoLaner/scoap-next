@@ -21,7 +21,7 @@ export const sourceRouter = createTRPCRouter({
     }),
 
   // Create a source
-  create: protectedProcedure
+  createMe: protectedProcedure
     .input(
       z.object({
         roomId: z.string(),

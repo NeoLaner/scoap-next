@@ -3,11 +3,11 @@ import * as Form from "@radix-ui/react-form";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { addDirectLink } from "~/app/_actions/addDirectLink";
-import { useInstanceData } from "~/app/_hooks/useInstanceData";
+import { useRoomData } from "~/app/_hooks/useRoomData";
 
 function StreamsHeading() {
   const pathname = usePathname();
-  const { instanceData } = useInstanceData();
+  const { roomData } = useRoomData();
   return (
     <div className="flex w-full items-center justify-between px-2 py-5">
       <Link href={pathname} className="p-4">
@@ -17,7 +17,7 @@ function StreamsHeading() {
       <Form.Root
         autoComplete="off"
         className="w-[260px]"
-        action={(data) => addDirectLink(data, instanceData.id)}
+        action={(data) => addDirectLink(data, roomData.id)}
       >
         <Form.Field className="mb-[10px] grid" name="name">
           <div className="flex items-baseline justify-between">

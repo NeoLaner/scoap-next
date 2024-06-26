@@ -3,7 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const roomRouter = createTRPCRouter({
   // Get an room
-  getMe: protectedProcedure
+  get: protectedProcedure
     .input(z.object({ roomId: z.string() }))
     .query(async ({ ctx, input }) => {
       return await ctx.db.room.findFirst({
@@ -12,7 +12,6 @@ export const roomRouter = createTRPCRouter({
           id: true,
           name: true,
           ownerId: true,
-          roomId: true,
           online: true,
           timeWatched: true,
           season: true,
@@ -22,7 +21,6 @@ export const roomRouter = createTRPCRouter({
           imdbId: true,
           isPublic: true,
           type: true,
-          Sources: true,
           // Exclude password from the result
           password: false,
         },
@@ -34,7 +32,6 @@ export const roomRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-        roomId: z.string(),
         imdbId: z.string(),
         type: z.string(),
         online: z.boolean(),
@@ -59,7 +56,6 @@ export const roomRouter = createTRPCRouter({
         data: {
           name: input.name,
           ownerId: ctx.session.user.id,
-          roomId: input.roomId,
           online: input.online,
           timeWatched: input.timeWatched,
           season: input.season,
@@ -91,7 +87,6 @@ export const roomRouter = createTRPCRouter({
         data: {
           name: input.name,
           ownerId: ctx.session.user.id,
-          roomId: input.roomId,
           online: input.online ?? false,
           timeWatched: input.timeWatched,
           season: input.season,

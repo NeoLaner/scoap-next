@@ -15,7 +15,7 @@ import {
   RadioButtonIcon,
   RadioButtonSelectedIcon,
 } from "@vidstack/react/icons";
-import { useInstanceData } from "~/app/_hooks/useInstanceData";
+import { useRoomData } from "~/app/_hooks/useRoomData";
 
 export interface SettingsProps {
   placement: MenuPlacement;
@@ -59,7 +59,7 @@ export function Settings({ placement, tooltipPlacement }: SettingsProps) {
 }
 
 function SpeedSubmenu() {
-  const { instanceData } = useInstanceData();
+  const { roomData } = useRoomData();
   const { playbackRate } = useMediaStore();
   const options = usePlaybackRateOptions(),
     hint = options.selectedValue === "1" ? "Normal" : playbackRate + "x";
@@ -71,7 +71,7 @@ function SpeedSubmenu() {
         disabled={options.disabled}
         icon={OdometerIcon}
       />
-      {!instanceData.online && (
+      {!roomData.online && (
         <Menu.Content className={submenuClassName}>
           <Menu.RadioGroup
             className="flex w-full flex-col"

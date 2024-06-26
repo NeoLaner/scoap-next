@@ -3,7 +3,7 @@
 import React, { createContext, type ReactNode } from "react";
 import { type api } from "~/trpc/server";
 
-type RoomData = Awaited<ReturnType<typeof api.room.get>>;
+type RoomData = NonNullable<Awaited<ReturnType<typeof api.room.get>>>;
 
 interface RoomDataContextType {
   roomData: RoomData; // Define your roomData type here

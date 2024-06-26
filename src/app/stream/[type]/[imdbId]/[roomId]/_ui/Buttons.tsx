@@ -27,10 +27,10 @@ import {
 import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import ButtonFullscreen from "~/app/_ui/ButtonFullscreen";
-import { useInstanceData } from "~/app/_hooks/useInstanceData";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { changeInstanceOnline } from "~/app/_actions/changeInstanceOnline";
 import { mediaSocket } from "~/lib/socket/socket";
+import { useRoomData } from "~/app/_hooks/useRoomData";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -47,13 +47,13 @@ export function Play({
   disabled = false,
 }: MediaButtonProps & { disabled?: boolean }) {
   const isPaused = useMediaState("paused");
-  const { instanceData: instance } = useInstanceData();
+  const { roomData: room } = useRoomData();
   const { userData } = useUserData();
 
   return (
     <Tooltip.Root>
       <Tooltip.Trigger asChild>
-        {instance.online ? (
+        {room.online ? (
           <>
             {isPaused ? (
               <PlayButton
@@ -174,12 +174,12 @@ export function PIP({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Episodes({ tooltipPlacement }: MediaButtonProps) {
-  const { instanceData } = useInstanceData();
+  const { roomData } = useRoomData();
   const pathname = usePathname();
   return (
     <Tooltip.Root>
       <Link
-        href={pathname + `?season=${instanceData?.season ?? "1"}`}
+        href={pathname + `?season=${roomData?.season ?? "1"}`}
         className={buttonClass}
       >
         <PiCardsThreeFill size={26} className="text-solid-primary-2" />
@@ -193,14 +193,14 @@ export function Episodes({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Together({ tooltipPlacement }: MediaButtonProps) {
-  const { instanceData: instance } = useInstanceData();
+  const { roomData: room } = useRoomData();
   async function handleOnClick(online: boolean) {
-    await changeInstanceOnline(instance, online);
+    await changeInstanceOnline(room, online);
   }
 
   return (
     <Tooltip.Root>
-      {instance.online ? (
+      {room.online ? (
         <button className={buttonClass} onClick={() => handleOnClick(false)}>
           <PiUser size={26} className="text-solid-primary-2" />
         </button>
@@ -212,7 +212,7 @@ export function Together({ tooltipPlacement }: MediaButtonProps) {
       )}
 
       <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
-        {instance.online ? "Watch Alone" : "Watch Together"}
+        {room.online ? "Watch Alone" : "Watch Together"}
       </Tooltip.Content>
     </Tooltip.Root>
   );
@@ -244,15 +244,15 @@ function StreamsForMovie() {
 
 function StreamsForSeries() {
   const pathname = usePathname();
-  const { instanceData } = useInstanceData();
+  const { roomData } = useRoomData();
 
   return (
     <Link
       className={buttonClass}
       href={
         pathname +
-        `?season=${instanceData?.season}` +
-        `&episode=${instanceData?.episode}` +
+        `?season=${roomData?.season}` +
+        `&episode=${roomData?.episode}` +
         "&showStreams=true"
       }
     >

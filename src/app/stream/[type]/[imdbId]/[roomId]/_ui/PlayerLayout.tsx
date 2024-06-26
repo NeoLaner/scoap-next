@@ -1,8 +1,8 @@
 import "@vidstack/react/player/styles/base.css";
 import EpisodesPanel from "./EpisodesPanel";
-import StreamsServer from "~/app/stream/[type]/[imdbId]/[roomId]/[instanceId]/_ui/StreamsServer";
 import { getServerAuthSession } from "~/server/auth";
 import Player from "./Player";
+import StreamsServer from "./StreamsServer";
 
 async function PlayerLayout({
   params,

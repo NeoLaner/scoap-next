@@ -4,10 +4,10 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { type Video } from "~/app/_services/stremIo/types";
 import ScrollAreaY from "~/app/_ui/ScrollAreaY";
-import EpisodesHeading from "../../../_ui/EpisodesHeading";
+import EpisodesHeading from "./EpisodesHeading";
 import { updateEpisode } from "~/app/_actions/updateEpisode";
-import { useInstanceData } from "~/app/_hooks/useInstanceData";
 import invalidateInstanceData from "~/app/_actions/invalidateInstanceData";
+import { useRoomData } from "~/app/_hooks/useRoomData";
 
 const formatDate = (isoString: string) => {
   const date = new Date(isoString);
@@ -24,7 +24,7 @@ function Episodes({
 }) {
   const searchParams = useSearchParams();
   const season = searchParams.get("season");
-  const { instanceData } = useInstanceData();
+  const { roomData } = useRoomData();
 
   if (!season) return null;
 
@@ -46,20 +46,20 @@ function Episodes({
               <button
                 onClick={async () => {
                   await updateEpisode({
-                    instanceId: instanceData.id,
-                    name: instanceData.name,
+                    roomId: roomData.id,
+                    name: roomData.name,
                     type: "series",
                     episode: episode.episode,
                     season: episode.season,
                   });
-                  await invalidateInstanceData(instanceData.id);
-                  //emit invalidate event 
+                  await invalidateInstanceData(roomData.id);
+                  //emit invalidate event
                 }}
                 key={episode.episode}
                 className="flex items-center justify-start gap-4 text-start"
                 disabled={
-                  instanceData.episode === episode.episode &&
-                  instanceData.season === episode.season
+                  roomData.episode === episode.episode &&
+                  roomData.season === episode.season
                 }
               >
                 <div className="h-[70px] overflow-hidden rounded-md">

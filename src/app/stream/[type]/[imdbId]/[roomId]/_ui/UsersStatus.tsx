@@ -2,7 +2,7 @@ import { type MediaUserState } from "@socket/@types/mediaTypes";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { PiArrowRightBold } from "react-icons/pi";
-import { useInstanceData } from "~/app/_hooks/useInstanceData";
+import { useRoomData } from "~/app/_hooks/useRoomData";
 import { mediaSocket } from "~/lib/socket/socket";
 
 function formatTime(seconds: number) {
@@ -14,7 +14,7 @@ function formatTime(seconds: number) {
 }
 
 function UsersStatus() {
-  const { instanceData } = useInstanceData();
+  const { roomData } = useRoomData();
   const [usersState, setUsersState] = useState<MediaUserState[]>([]);
   const [hover, setHover] = useState(false);
 
@@ -30,14 +30,10 @@ function UsersStatus() {
 
   const waitingForDataUsers = usersState.filter((user) => user.waitForData);
 
-  const notReadyDataUsers = usersState.filter(
-    (user) => user.status === "notReady",
-  );
-
   if (usersState.length === 0) return null;
   return (
     <div
-      className={`${hover || waitingForDataUsers.length || notReadyDataUsers.length ? "" : "ml-6  -translate-x-full"} my-auto flex h-fit items-center justify-center  transition-all`}
+      className={`${hover || waitingForDataUsers.length ? "" : "ml-6  -translate-x-full"} my-auto flex h-fit items-center justify-center  transition-all`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -52,7 +48,7 @@ function UsersStatus() {
                 alt={`${userData.userName} image profile`}
                 width={30}
                 height={30}
-                className={`w-9 rounded-full border-[2.8px] ${userData.status === "waitingForData" || userData.status === "notReady" ? "!border-border-color-stronger-focus" : "border-solid-green-1"} ${userData.userId === instanceData.ownerId ? "border-[blue]" : ""}`}
+                className={`w-9 rounded-full border-[2.8px] ${userData.waitForData ? "!border-border-color-stronger-focus" : "border-solid-green-1"} ${userData.id === roomData.ownerId ? "border-[blue]" : ""}`}
                 quality="100"
               />
             )}

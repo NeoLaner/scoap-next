@@ -5,14 +5,14 @@ import { useParams } from "next/navigation";
 
 //get real-time updates from server
 export function useSocketListeners() {
-  const instanceId = useParams().instanceId!;
+  const roomId = useParams().roomId!;
 
   useEffect(function () {
     mediaSocket.auth = {
-      instanceId,
+      roomId,
     };
     chatSocket.auth = {
-      instanceId,
+      roomId,
     };
 
     // socket.connect();

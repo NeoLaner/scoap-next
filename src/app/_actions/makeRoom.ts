@@ -10,18 +10,17 @@ export async function makeRoom(inputs: {
   season?: number;
   episode?: number;
 }) {
-  const { imdbId, ownerId, type, name } = inputs;
-  const roomData = await api.room.create({ imdbId, ownerId, type });
-  const instanceData = await api.instance.create({
+  const { imdbId, type, name } = inputs;
+  const roomData = await api.room.createMe({
     name,
     online: false,
-    ownerId: ownerId,
-    roomId: roomData.id,
     season: inputs.season,
     episode: inputs.episode,
+    imdbId,
+    type,
   });
-  await api.source.create({ instanceId: instanceData.id });
+  await api.source.createMe({ roomId: roomData.id });
   permanentRedirect(
-    `/stream/${roomData.type}/${roomData.imdbId}/${roomData.id}/${instanceData.id}`,
+    `/stream/${roomData.type}/${roomData.imdbId}/${roomData.id}`,
   );
 }
