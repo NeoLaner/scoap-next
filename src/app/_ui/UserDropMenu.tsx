@@ -24,12 +24,7 @@ const UserDropMenu = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          className="rounded-full"
-          aria-label="Update dimensions"
-        >
+        <Button variant={"ghost"} size={"icon"} className="rounded-full">
           <Avatar>
             <AvatarImage
               src={user?.image ?? ""}
