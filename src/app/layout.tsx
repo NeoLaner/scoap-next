@@ -38,7 +38,7 @@ export default function RootLayout({
         >
           <TRPCReactProvider>
             <PlayerProvider>
-              <main className="from-background flex h-full flex-col items-center justify-center bg-gradient-to-r to-primary  text-gray-12">
+              <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-background to-background-secondary  text-foreground">
                 {children}
               </main>
             </PlayerProvider>
