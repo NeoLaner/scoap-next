@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { type ReactNode, useCallback, type LegacyRef } from "react";
 import { type Video } from "~/app/_services/stremIo/types";
 import classnames from "classnames";
+import { Button } from "~/app/_components/ui/Button";
 
 const extractUniqueSeasons = (videos: Video[]) => {
   const seasons = new Set(videos.map((video) => video.season));
@@ -35,7 +36,7 @@ function EpisodesHeading({ videos }: { videos: Video[] }) {
 
   return (
     <div className="flex w-full items-center justify-between px-2 py-5">
-      <button onClick={handleOnClick}>X</button>
+      <Button onClick={handleOnClick}>X</Button>
       <Select.Root
         value={season}
         onValueChange={(value) =>
@@ -43,7 +44,7 @@ function EpisodesHeading({ videos }: { videos: Video[] }) {
         }
       >
         <Select.Trigger
-          className="bg-white text-violet11 shadow-black/10 hover:bg-mauve3 focus:shadow-black data-[placeholder]:text-violet9 inline-flex h-[35px] items-center justify-center gap-[5px] rounded px-[15px] text-[13px] leading-none shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px]"
+          className="text-violet11 hover:bg-mauve3 data-[placeholder]:text-violet9 inline-flex h-[35px] items-center justify-center gap-[5px] rounded bg-white px-[15px] text-[13px] leading-none shadow-[0_2px_10px] shadow-black/10 outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
           aria-label="Food"
         >
           <Select.Value placeholder="Select a fruit…" />
@@ -52,8 +53,8 @@ function EpisodesHeading({ videos }: { videos: Video[] }) {
           </Select.Icon>
         </Select.Trigger>
         <Select.Portal>
-          <Select.Content className="overflow-hidden rounded-md bg-gray-12 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
-            <Select.ScrollUpButton className="bg-white text-violet11 flex h-[25px] cursor-default items-center justify-center">
+          <Select.Content className="bg-gray-12 overflow-hidden rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+            <Select.ScrollUpButton className="text-violet11 flex h-[25px] cursor-default items-center justify-center bg-white">
               {/* <ChevronUpIcon /> */}
             </Select.ScrollUpButton>
             <Select.Viewport className="p-[5px]">
@@ -65,7 +66,7 @@ function EpisodesHeading({ videos }: { videos: Video[] }) {
                 ))}
               </Select.Group>
             </Select.Viewport>
-            <Select.ScrollDownButton className="bg-white text-violet11 flex h-[25px] cursor-default items-center justify-center">
+            <Select.ScrollDownButton className="text-violet11 flex h-[25px] cursor-default items-center justify-center bg-white">
               {/* <ChevronDownIcon /> */}
             </Select.ScrollDownButton>
           </Select.Content>

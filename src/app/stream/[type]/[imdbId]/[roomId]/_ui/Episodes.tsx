@@ -34,7 +34,7 @@ function Episodes({
   // `?season=${season}&episode=${episode.episode}&showStreams="true"`
   return (
     <div
-      className={`${className}  bg-background h-full w-full rounded-lg pl-6 `}
+      className={`${className}  h-full w-full rounded-lg bg-background pl-6 `}
     >
       {/* heading */}
       <EpisodesHeading videos={videos} />
@@ -43,7 +43,7 @@ function Episodes({
         <ScrollAreaY>
           <div className="flex h-full flex-col gap-6 ">
             {episodesOfSeason.map((episode) => (
-              <button
+              <Button
                 onClick={async () => {
                   await updateEpisode({
                     roomId: roomData.id,
@@ -77,7 +77,7 @@ function Episodes({
                     {formatDate(episode.firstAired)}{" "}
                   </div>
                 </div>
-              </button>
+              </Button>
             ))}
           </div>
         </ScrollAreaY>

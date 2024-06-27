@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "~/trpc/react";
+import { Button } from "../_components/ui/Button";
 
 export function CreatePost() {
   const router = useRouter();
@@ -31,13 +32,13 @@ export function CreatePost() {
         onChange={(e) => setName(e.target.value)}
         className="w-full rounded-full px-4 py-2 text-black"
       />
-      <button
+      <Button
         type="submit"
         className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
         disabled={createPost.isPending}
       >
         {createPost.isPending ? "Submitting..." : "Submit"}
-      </button>
+      </Button>
     </form>
   );
 }

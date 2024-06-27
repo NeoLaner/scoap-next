@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PiCornersInBold, PiCornersOutBold } from "react-icons/pi";
+import { Button } from "../_components/ui/Button";
 
 export default function ButtonFullscreen({ className }: { className: string }) {
   // const isActive = useMediaState("fullscreen");
@@ -36,7 +37,7 @@ export default function ButtonFullscreen({ className }: { className: string }) {
     }
   };
   return (
-    <button
+    <Button
       onClick={toggleFullscreen}
       className={`${className} text-solid-primary-2`}
     >
@@ -49,6 +50,6 @@ export default function ButtonFullscreen({ className }: { className: string }) {
           <PiCornersOutBold size={26} />
         </div>
       )}
-    </button>
+    </Button>
   );
 }

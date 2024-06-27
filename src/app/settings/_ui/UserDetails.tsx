@@ -1,23 +1,24 @@
 "use client";
 import React from "react";
 import * as Form from "@radix-ui/react-form";
+import { Button } from "~/app/_components/ui/Button";
 
 function UserDetails() {
   return (
     <Form.Root className="w-[260px]">
       <Form.Field className="mb-[10px] grid" name="name">
         <div className="flex items-baseline justify-between">
-          <Form.Label className="text-[15px] font-medium leading-[35px] text-solid-gray-2">
+          <Form.Label className="text-solid-gray-2 text-[15px] font-medium leading-[35px]">
             Name
           </Form.Label>
           <Form.Message
-            className="text-[13px] text-solid-gray-2 opacity-[0.8]"
+            className="text-solid-gray-2 text-[13px] opacity-[0.8]"
             match="valueMissing"
           >
             Please enter your name
           </Form.Message>
           <Form.Message
-            className="text-[13px] text-solid-gray-2 opacity-[0.8]"
+            className="text-solid-gray-2 text-[13px] opacity-[0.8]"
             match="typeMismatch"
           >
             Please provide a valid name
@@ -25,7 +26,7 @@ function UserDetails() {
         </div>
         <Form.Control asChild>
           <input
-            className="selection:color-white  box-border inline-flex h-[35px] w-full appearance-none items-center justify-center rounded-[4px] bg-app-color-gray-2 px-[10px] text-[15px] leading-none text-solid-gray-2   shadow-[0_0_0_1px] shadow-blackA6 outline-none selection:bg-blackA6 hover:shadow-[0_0_0_1px_black] hover:outline hover:outline-border-color-stronger-focus focus:shadow-[0_0_0_2px_black] focus:outline focus:outline-border-color-stronger-focus"
+            className="selection:color-white  bg-app-color-gray-2 text-solid-gray-2 shadow-blackA6 selection:bg-blackA6 hover:outline-border-color-stronger-focus focus:outline-border-color-stronger-focus box-border inline-flex h-[35px] w-full appearance-none items-center justify-center   rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none hover:shadow-[0_0_0_1px_black] hover:outline focus:shadow-[0_0_0_2px_black] focus:outline"
             type="name"
             required
             placeholder="example: Yasin"
@@ -34,11 +35,11 @@ function UserDetails() {
       </Form.Field>
       <Form.Field className="mb-[10px] grid" name="userId">
         <div className="flex items-baseline justify-between">
-          <Form.Label className="text-[15px] font-medium leading-[35px] text-solid-gray-2">
+          <Form.Label className="text-solid-gray-2 text-[15px] font-medium leading-[35px]">
             User ID
           </Form.Label>
           <Form.Message
-            className="text-[13px] text-solid-gray-2 opacity-[0.8]"
+            className="text-solid-gray-2 text-[13px] opacity-[0.8]"
             match="valueMissing"
           >
             Please enter a user id
@@ -46,16 +47,16 @@ function UserDetails() {
         </div>
         <Form.Control asChild>
           <input
-            className="selection:color-white box-border inline-flex w-full resize-none appearance-none items-center justify-center rounded-[4px] bg-app-color-gray-2 p-[10px] text-[15px] leading-none text-solid-gray-2 shadow-[0_0_0_1px] shadow-blackA6 outline-none selection:bg-blackA6 hover:shadow-[0_0_0_1px_black] hover:outline hover:outline-border-color-stronger-focus focus:shadow-[0_0_0_2px_black] focus:outline focus:outline-border-color-stronger-focus"
+            className="selection:color-white bg-app-color-gray-2 text-solid-gray-2 shadow-blackA6 selection:bg-blackA6 hover:outline-border-color-stronger-focus focus:outline-border-color-stronger-focus box-border inline-flex w-full resize-none appearance-none items-center justify-center rounded-[4px] p-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none hover:shadow-[0_0_0_1px_black] hover:outline focus:shadow-[0_0_0_2px_black] focus:outline"
             required
             placeholder="example: ylaner"
           />
         </Form.Control>
       </Form.Field>
       <Form.Submit asChild>
-        <button className="focus:shadow-black mt-[10px] box-border inline-flex h-[35px] w-full items-center justify-center rounded-[4px] bg-solid-primary-1 px-[15px] font-medium leading-none text-solid-gray-2 shadow-[0_2px_10px] shadow-blackA4 transition-all hover:bg-solid-primary-2 focus:shadow-[0_0_0_2px] focus:outline-none">
+        <Button className="bg-solid-primary-1 text-solid-gray-2 shadow-blackA4 hover:bg-solid-primary-2 mt-[10px] box-border inline-flex h-[35px] w-full items-center justify-center rounded-[4px] px-[15px] font-medium leading-none shadow-[0_2px_10px] transition-all focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
           Update profile
-        </button>
+        </Button>
       </Form.Submit>
     </Form.Root>
   );

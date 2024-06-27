@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Button } from "~/app/_components/ui/Button";
 import AddonService from "~/app/_services/addon/addonService";
 import { type Addon } from "~/lib/@types/Addons";
 
@@ -8,7 +9,7 @@ async function InstalledAddon({ transportUrl }: { transportUrl: string }) {
 
   return (
     <div
-      className="relative bg-app-color-gray-2"
+      className="bg-app-color-gray-2 relative"
       title={addon.manifest.description}
     >
       <div className="flex items-center gap-2">
@@ -27,9 +28,9 @@ async function InstalledAddon({ transportUrl }: { transportUrl: string }) {
         </div>
       </div>
 
-      <button className="absolute right-0 top-1/2 flex h-full -translate-y-1/2 items-center bg-app-color-gray-2 px-4">
+      <Button className="bg-app-color-gray-2 absolute right-0 top-1/2 flex h-full -translate-y-1/2 items-center px-4">
         Uninstall
-      </button>
+      </Button>
     </div>
   );
 }

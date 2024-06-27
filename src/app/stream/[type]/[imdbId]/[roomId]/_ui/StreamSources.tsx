@@ -1,5 +1,6 @@
 import * as Avatar from "@radix-ui/react-avatar";
 import { updateSource } from "~/app/_actions/updateSource";
+import { Button } from "~/app/_components/ui/Button";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
 import { type api } from "~/trpc/server";
@@ -38,8 +39,8 @@ function StreamSources({
     <>
       {Array.from(uniqueSourcesMap.values()).map(
         ({ videoLink, userImages }) => (
-          <button
-            className="flex w-full flex-col gap-2 break-all rounded-md border border-border-color-stronger-focus p-2 text-center text-sm"
+          <Button
+            className="border-border-color-stronger-focus flex w-full flex-col gap-2 break-all rounded-md border p-2 text-center text-sm"
             key={videoLink}
             onClick={() =>
               updateSource({
@@ -57,8 +58,8 @@ function StreamSources({
                 </Avatar.Root>
               ))}
             </div>
-            <div className="text-sm text-solid-gray-2">{videoLink}</div>
-          </button>
+            <div className="text-solid-gray-2 text-sm">{videoLink}</div>
+          </Button>
         ),
       )}
     </>

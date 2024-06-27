@@ -31,6 +31,7 @@ import { useUserData } from "~/app/_hooks/useUserData";
 import { changeInstanceOnline } from "~/app/_actions/changeInstanceOnline";
 import { mediaSocket } from "~/lib/socket/socket";
 import { useRoomData } from "~/app/_hooks/useRoomData";
+import { Button } from "~/app/_components/ui/Button";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -108,11 +109,11 @@ export function Mute({ tooltipPlacement }: MediaButtonProps) {
       <Tooltip.Trigger asChild>
         <MuteButton className={buttonClass}>
           {isMuted || volume == 0 ? (
-            <PiSpeakerXFill className="h-6 w-6 text-solid-primary-2" />
+            <PiSpeakerXFill className="text-solid-primary-2 h-6 w-6" />
           ) : volume < 0.5 ? (
-            <PiSpeakerLowFill className="h-6 w-6 text-solid-primary-2" />
+            <PiSpeakerLowFill className="text-solid-primary-2 h-6 w-6" />
           ) : (
-            <PiSpeakerHighFill className="h-6 w-6 text-solid-primary-2" />
+            <PiSpeakerHighFill className="text-solid-primary-2 h-6 w-6" />
           )}
         </MuteButton>
       </Tooltip.Trigger>
@@ -201,14 +202,14 @@ export function Together({ tooltipPlacement }: MediaButtonProps) {
   return (
     <Tooltip.Root>
       {room.online ? (
-        <button className={buttonClass} onClick={() => handleOnClick(false)}>
+        <Button className={buttonClass} onClick={() => handleOnClick(false)}>
           <PiUser size={26} className="text-solid-primary-2" />
-        </button>
+        </Button>
       ) : (
         // <PictureInPictureIcon className="h-6 w-6" />
-        <button className={buttonClass} onClick={() => handleOnClick(true)}>
+        <Button className={buttonClass} onClick={() => handleOnClick(true)}>
           <PiUsersThreeDuotone size={26} className="text-solid-primary-2" />
-        </button>
+        </Button>
       )}
 
       <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>

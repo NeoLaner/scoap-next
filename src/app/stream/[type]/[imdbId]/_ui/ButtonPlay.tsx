@@ -13,8 +13,8 @@ function ButtonPlay() {
   const { userData } = useUserData();
 
   return (
-    <button
-      className="bg-background rounded-md"
+    <Button
+      className="rounded-md bg-background"
       onClick={async () =>
         await makeRoom({
           imdbId,
@@ -25,7 +25,7 @@ function ButtonPlay() {
       }
     >
       <BsFillPlayCircleFill size={30} />
-    </button>
+    </Button>
   );
 }
 
