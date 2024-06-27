@@ -4,7 +4,7 @@ import { PiGearFine, PiGearFineBold, PiGearFineFill } from "react-icons/pi";
 
 function MainNav() {
   return (
-    <nav className="fixed bottom-0 z-10 h-[72px] w-full bg-app-color-gray-1 md:h-full  md:w-[72px]  md:pt-[72px]">
+    <nav className="bg-background fixed bottom-0 z-10 h-[72px] w-full md:h-full  md:w-[72px]  md:pt-[72px]">
       <div className="flex h-full w-full items-center justify-around gap-2 px-3 py-1 md:mt-8 md:flex-col md:justify-start md:px-0 md:py-0">
         <ButtonLinkNav
           name="Home"

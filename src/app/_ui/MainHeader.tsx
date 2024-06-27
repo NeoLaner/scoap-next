@@ -7,7 +7,7 @@ async function MainHeader() {
   const session = await getServerAuthSession();
 
   return (
-    <header className="fixed z-20 h-[72px] w-full  bg-gradient-to-r from-app-color-gray-1 to-app-color-primary-2">
+    <header className="from-background fixed z-20 h-[72px]  w-full bg-gradient-to-r to-app-color-primary-2">
       <div className="flex h-full w-full items-center justify-between px-4">
         {/* LOGO */}
         <LogoSVG fill="var(--red-dark-10)" />

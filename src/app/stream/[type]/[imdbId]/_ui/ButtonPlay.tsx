@@ -14,7 +14,7 @@ function ButtonPlay() {
 
   return (
     <button
-      className="rounded-md bg-app-color-gray-1"
+      className="bg-background rounded-md"
       onClick={async () =>
         await makeRoom({
           imdbId,

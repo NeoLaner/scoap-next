@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { PlayerProvider } from "./_providers/PlayerProvider";
+import { ThemeProvider } from "./_ui/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,14 +30,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`h-dvh  ${inter.className}`}>
-        <TRPCReactProvider>
-          <PlayerProvider>
-            <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-app-color-gray-1 to-app-color-primary-2  text-gray-12">
-              {children}
-            </main>
-          </PlayerProvider>
-          {/* <ReactQueryDevtools /> */}
-        </TRPCReactProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TRPCReactProvider>
+            <PlayerProvider>
+              <main className="from-background flex h-full flex-col items-center justify-center bg-gradient-to-r to-primary  text-gray-12">
+                {children}
+              </main>
+            </PlayerProvider>
+            {/* <ReactQueryDevtools /> */}
+          </TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

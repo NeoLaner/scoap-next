@@ -26,7 +26,7 @@ function Streams({
       <StreamsHeading />
       <div className="z-40 ml-2 h-full">
         <ScrollAreaY>
-          <div className="flex w-full flex-col items-center justify-center gap-2 rounded-md bg-app-color-gray-1">
+          <div className="bg-background flex w-full flex-col items-center justify-center gap-2 rounded-md">
             <StreamForm />
             {torrentIoStreamsSorted.map((stream) => (
               <TorrentStream key={stream.title} stream={stream} />

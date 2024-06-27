@@ -24,7 +24,7 @@ async function PlayerLayout({
         <StreamsServer
           params={params}
           searchParams={searchParams}
-          className="absolute right-0 top-[0] z-30 h-full w-full bg-app-color-gray-1 md:w-[420px]"
+          className="bg-background absolute right-0 top-[0] z-30 h-full w-full md:w-[420px]"
         />
       </div>
     </div>

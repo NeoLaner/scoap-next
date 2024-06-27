@@ -34,7 +34,7 @@ function Episodes({
   // `?season=${season}&episode=${episode.episode}&showStreams="true"`
   return (
     <div
-      className={`${className}  h-full w-full rounded-lg bg-app-color-gray-1 pl-6 `}
+      className={`${className}  bg-background h-full w-full rounded-lg pl-6 `}
     >
       {/* heading */}
       <EpisodesHeading videos={videos} />
