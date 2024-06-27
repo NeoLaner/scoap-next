@@ -1,5 +1,4 @@
-import { Skeleton } from "../_components/ui/skeleton";
-import ScrollAreaX from "./ScrollAreaX";
+import { Skeleton } from "../_components/ui/Skeleton";
 
 function PopularMediasSkeleton() {
   return (

@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { addDirectLink } from "~/app/_actions/addDirectLink";
+import { Textarea } from "~/app/_components/ui/textarea";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 
 function StreamForm() {
@@ -50,8 +51,8 @@ function StreamForm() {
             </Form.Message>
           </div>
           <Form.Control asChild className="flex items-center justify-center">
-            <textarea
-              className={`selection:color-white bg-app-color-gray-2 text-solid-gray-2 shadow-blackA6  selection:bg-blackA6 hover:outline-border-color-stronger-focus focus:outline-border-color-stronger-focus box-border inline-flex w-[96%] appearance-none items-center justify-center rounded-[4px] px-[10px]   py-1 text-[15px] leading-none shadow-[0_0_0_1px] outline-none transition-all hover:shadow-[0_0_0_1px_black] hover:outline focus:shadow-[0_0_0_2px_black] focus:outline ${isFocused ? "h-20" : "h-8"}`}
+            <Textarea
+              className={`${isFocused ? "h-20" : "h-8"}`}
               required
               placeholder="Add mp4/mkv/... link"
               id="link"
