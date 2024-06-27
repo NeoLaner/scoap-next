@@ -37,7 +37,12 @@ export default function ButtonFullscreen({ className }: { className: string }) {
     }
   };
   return (
-    <Button onClick={toggleFullscreen} className={`${className}`} size={"icon"}>
+    <Button
+      onClick={toggleFullscreen}
+      className={`${className}`}
+      size={"icon"}
+      variant={"ghost"}
+    >
       {isActive ? (
         <div>
           <PiCornersInBold size={26} />
