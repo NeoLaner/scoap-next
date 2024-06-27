@@ -10,7 +10,7 @@ async function MainHeader() {
     <header className="fixed z-20 h-[72px] w-full  bg-gradient-to-r from-background to-background-secondary">
       <div className="flex h-full w-full items-center justify-between px-4">
         {/* LOGO */}
-        <LogoSVG fill="var(--red-dark-10)" />
+        <LogoSVG fill="red" />
         {/* SEARCH */}
         <SearchHeader />
         {/* USER PROFILE */}

@@ -2,6 +2,7 @@
 import { BsShare } from "react-icons/bs";
 import ButtonPlay from "./ButtonPlay";
 import { useSearchParams } from "next/navigation";
+import { Button } from "~/app/_components/ui/Button";
 function StreamMenuFooter() {
   const searchParams = useSearchParams();
   const showStreams = searchParams.get("showStreams");
@@ -9,9 +10,9 @@ function StreamMenuFooter() {
 
   return (
     <div
-      className={`${showStreams ?? season ? "-bottom-16" : "bottom-10 "} border-gray-10 bg-primary-2 absolute left-1/2 flex -translate-x-1/2 justify-center gap-3 overflow-hidden rounded-full border p-2 px-4 transition-all`}
+      className={`${showStreams ?? season ? "-bottom-16" : "bottom-10 "} border-gray-10 absolute right-9 flex flex-col  justify-center gap-1 overflow-hidden rounded-full border bg-background p-2 px-1 transition-all`}
     >
-      <Button className="rounded-md ">
+      <Button size={"icon"} className="rounded-full " variant={"ghost"}>
         <BsShare size={18} />
       </Button>
 

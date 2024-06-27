@@ -30,18 +30,12 @@ const UserDropMenu = ({
           className="rounded-full"
           aria-label="Update dimensions"
         >
-          <Avatar className="bg-blackA1 inline-flex h-[35px] w-[35px] select-none items-center justify-center overflow-hidden rounded-full align-middle">
+          <Avatar>
             <AvatarImage
-              className="h-full w-full rounded-[inherit] object-cover"
               src={user?.image ?? ""}
               alt={user?.name ?? "Anonymous"}
             />
-            <AvatarFallback
-              className="leading-1 text-primary-11 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium"
-              delayMs={600}
-            >
-              JD
-            </AvatarFallback>
+            <AvatarFallback delayMs={600}>JD</AvatarFallback>
           </Avatar>
         </Button>
       </PopoverTrigger>
