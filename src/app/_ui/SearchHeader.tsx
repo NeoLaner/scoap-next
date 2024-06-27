@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
+import { Input } from "../_components/ui/input";
 
 function SearchHeader() {
   const params = useParams();
@@ -19,8 +20,8 @@ function SearchHeader() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        className="hover:outline-border-color-stronger-focus focus:outline-border-color-stronger-focus w-48 rounded-full  !border-none bg-gray-4 px-4 py-1 outline-none transition-all hover:outline focus:outline md:w-96"
+      <Input
+        className="rounded-full md:w-96"
         placeholder="Searching..."
         id="search"
         value={searchInput}
