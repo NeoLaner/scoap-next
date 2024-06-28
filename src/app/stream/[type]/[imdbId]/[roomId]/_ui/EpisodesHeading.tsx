@@ -1,10 +1,17 @@
-import * as Select from "@radix-ui/react-select";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { type ReactNode, useCallback, type LegacyRef } from "react";
 import { type Video } from "~/app/_services/stremIo/types";
 import classnames from "classnames";
 import { Button } from "~/app/_components/ui/Button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/app/_components/ui/select";
 
 const extractUniqueSeasons = (videos: Video[]) => {
   const seasons = new Set(videos.map((video) => video.season));
@@ -37,74 +44,25 @@ function EpisodesHeading({ videos }: { videos: Video[] }) {
   return (
     <div className="flex w-full items-center justify-between px-2 py-5">
       <Button onClick={handleOnClick}>X</Button>
-      <Select.Root
+      <Select
         value={season}
         onValueChange={(value) =>
           router.push(pathname + "?" + createQueryString("season", value))
         }
       >
-        <Select.Trigger
-          className="text-violet11 hover:bg-mauve3 data-[placeholder]:text-violet9 inline-flex h-[35px] items-center justify-center gap-[5px] rounded bg-white px-[15px] text-[13px] leading-none shadow-[0_2px_10px] shadow-black/10 outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
-          aria-label="Food"
-        >
-          <Select.Value placeholder="Select a fruit…" />
-          <Select.Icon className="text-violet11">
-            {/* <ChevronDownIcon /> */}
-          </Select.Icon>
-        </Select.Trigger>
-        <Select.Portal>
-          <Select.Content className="bg-gray-12 overflow-hidden rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
-            <Select.ScrollUpButton className="text-violet11 flex h-[25px] cursor-default items-center justify-center bg-white">
-              {/* <ChevronUpIcon /> */}
-            </Select.ScrollUpButton>
-            <Select.Viewport className="p-[5px]">
-              <Select.Group>
-                {uniqueSeasons.map((season) => (
-                  <SelectItem key={season} value={String(season)}>
-                    season {season}
-                  </SelectItem>
-                ))}
-              </Select.Group>
-            </Select.Viewport>
-            <Select.ScrollDownButton className="text-violet11 flex h-[25px] cursor-default items-center justify-center bg-white">
-              {/* <ChevronDownIcon /> */}
-            </Select.ScrollDownButton>
-          </Select.Content>
-        </Select.Portal>
-      </Select.Root>
+        <SelectTrigger aria-label="Season" className="w-fit">
+          <SelectValue placeholder="Select a season" />
+        </SelectTrigger>
+        <SelectContent>
+          {uniqueSeasons.map((season) => (
+            <SelectItem key={season} value={String(season)}>
+              season {season}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }
-
-const SelectItem = React.forwardRef(
-  (
-    {
-      children,
-      className,
-      value,
-      ...props
-    }: { children: ReactNode; className?: string; value: string },
-    forwardedRef: LegacyRef<HTMLDivElement>,
-  ) => {
-    return (
-      <Select.Item
-        className={classnames(
-          "text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none data-[disabled]:pointer-events-none data-[highlighted]:outline-none",
-          className,
-        )}
-        {...props}
-        value={value}
-        ref={forwardedRef}
-      >
-        <Select.ItemText>{children}</Select.ItemText>
-        <Select.ItemIndicator className="absolute left-0 inline-flex w-[25px] items-center justify-center">
-          {/* <CheckIcon /> */}
-        </Select.ItemIndicator>
-      </Select.Item>
-    );
-  },
-);
-
-SelectItem.displayName = "SelectItem";
 
 export default EpisodesHeading;
