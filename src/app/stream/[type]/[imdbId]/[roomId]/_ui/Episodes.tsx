@@ -8,6 +8,7 @@ import EpisodesHeading from "./EpisodesHeading";
 import { updateEpisode } from "~/app/_actions/updateEpisode";
 import invalidateInstanceData from "~/app/_actions/invalidateInstanceData";
 import { useRoomData } from "~/app/_hooks/useRoomData";
+import { Button } from "~/app/_components/ui/Button";
 
 const formatDate = (isoString: string) => {
   const date = new Date(isoString);
@@ -41,10 +42,15 @@ function Episodes({
       {/* Episodes */}
       <div className="h-full">
         <ScrollAreaY>
-          <div className="flex h-full flex-col gap-6 ">
+          <div className="flex h-full flex-col gap-2 ">
             {episodesOfSeason.map((episode) => (
-              <Button
+              <div
                 onClick={async () => {
+                  if (
+                    roomData.episode === episode.episode &&
+                    roomData.season === episode.season
+                  )
+                    return null;
                   await updateEpisode({
                     roomId: roomData.id,
                     name: roomData.name,
@@ -55,14 +61,16 @@ function Episodes({
                   await invalidateInstanceData(roomData.id);
                   //emit invalidate event
                 }}
+                // variant={"outline"}
                 key={episode.episode}
-                className="flex items-center justify-start gap-4 text-start"
-                disabled={
+                className={`${
                   roomData.episode === episode.episode &&
                   roomData.season === episode.season
-                }
+                    ? "border-green-400"
+                    : ""
+                } flex items-center justify-start gap-4 border text-start hover:cursor-pointer`}
               >
-                <div className="h-[70px] overflow-hidden rounded-md">
+                <div className="h-[70px] overflow-hidden rounded-md ">
                   {/* <Image
                     src={episode.thumbnail}
                     alt={episode.name}
@@ -77,7 +85,7 @@ function Episodes({
                     {formatDate(episode.firstAired)}{" "}
                   </div>
                 </div>
-              </Button>
+              </div>
             ))}
           </div>
         </ScrollAreaY>
