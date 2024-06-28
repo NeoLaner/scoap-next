@@ -202,7 +202,12 @@ export function Together({ tooltipPlacement }: MediaButtonProps) {
   return (
     <Tooltip.Root>
       {room.online ? (
-        <Button className={buttonClass} onClick={() => handleOnClick(false)}>
+        <Button
+          className={buttonClass}
+          onClick={() => handleOnClick(false)}
+          size={"icon"}
+          variant={"ghost"}
+        >
           <PiUser size={26} className="text-solid-primary-2" />
         </Button>
       ) : (
