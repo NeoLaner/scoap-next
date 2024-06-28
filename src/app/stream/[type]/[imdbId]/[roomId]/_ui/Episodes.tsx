@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { type Video } from "~/app/_services/stremIo/types";
-import ScrollAreaY from "~/app/_ui/ScrollAreaY";
 import EpisodesHeading from "./EpisodesHeading";
 import { updateEpisode } from "~/app/_actions/updateEpisode";
 import invalidateInstanceData from "~/app/_actions/invalidateInstanceData";
 import { useRoomData } from "~/app/_hooks/useRoomData";
-import { Button } from "~/app/_components/ui/Button";
+import { ScrollArea } from "~/app/_components/ui/scroll-area";
+import { useMetaData } from "~/app/_hooks/useMetaData";
 
 const formatDate = (isoString: string) => {
   const date = new Date(isoString);
@@ -16,34 +15,27 @@ const formatDate = (isoString: string) => {
   return date.toLocaleDateString("en-US", options);
 };
 
-function Episodes({
-  videos,
-  className,
-}: {
-  videos: Video[];
-  className: string;
-}) {
+function Episodes({ className = "" }: { className?: string }) {
   const searchParams = useSearchParams();
   const season = searchParams.get("season");
   const { roomData } = useRoomData();
+  const { metaData } = useMetaData();
 
-  if (!season) return null;
-
-  const episodesOfSeason = videos.filter(
+  const episodesOfSeason = metaData.videos.filter(
     (video) => video.season === Number(season),
   );
   // `?season=${season}&episode=${episode.episode}&showStreams="true"`
   return (
     <div
-      className={`${className}  h-full w-full rounded-lg bg-background pl-6 `}
+      className={`${className} relative h-full w-full rounded-lg bg-background py-4`}
     >
       {/* heading */}
-      <EpisodesHeading videos={videos} />
+      <EpisodesHeading videos={metaData.videos} />
       {/* Episodes */}
-      <div className="h-full">
-        <ScrollAreaY>
-          <div className="flex h-full flex-col gap-2 ">
-            {episodesOfSeason.map((episode) => (
+      <div className="h-full pt-16">
+        <ScrollArea className="h-full">
+          <div className="mx-4 flex h-fit flex-col gap-2">
+            {episodesOfSeason?.map((episode) => (
               <div
                 onClick={async () => {
                   if (
@@ -88,7 +80,7 @@ function Episodes({
               </div>
             ))}
           </div>
-        </ScrollAreaY>
+        </ScrollArea>
       </div>
     </div>
   );

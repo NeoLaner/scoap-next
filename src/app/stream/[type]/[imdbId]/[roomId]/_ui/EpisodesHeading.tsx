@@ -42,7 +42,7 @@ function EpisodesHeading({ videos }: { videos: Video[] }) {
   }
 
   return (
-    <div className="flex w-full items-center justify-between px-2 py-5">
+    <div className="absolute top-0 flex w-full items-center justify-between px-2 py-5">
       <Button onClick={handleOnClick}>X</Button>
       <Select
         value={season}

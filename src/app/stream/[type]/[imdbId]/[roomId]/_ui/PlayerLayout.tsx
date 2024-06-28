@@ -1,31 +1,31 @@
 import "@vidstack/react/player/styles/base.css";
-import EpisodesPanel from "./EpisodesPanel";
-import { getServerAuthSession } from "~/server/auth";
 import Player from "./Player";
 import StreamsServer from "./StreamsServer";
+import Episodes from "./Episodes";
+import { useMetaData } from "~/app/_hooks/useMetaData";
 
-async function PlayerLayout({
+function PlayerLayout({
   params,
   searchParams,
 }: {
   params: { roomId: string; imdbId: string; type: string; instanceId: string };
   searchParams: { season?: string; episode?: string };
 }) {
-  const session = await getServerAuthSession();
-  if (!session) return null;
+  const { season } = searchParams;
+  console.log("🍕🍕", season);
+
   return (
-    <div className="flex">
+    <div className="flex h-full">
       <Player />
       {/* Right Panel */}
-      <div>
+      <div className="h-full">
         {/* just for series */}
-        <EpisodesPanel />
-
-        <StreamsServer
+        {season && <Episodes />}
+        {/* <StreamsServer
           params={params}
           searchParams={searchParams}
-          className="bg-background absolute right-0 top-[0] z-30 h-full w-full md:w-[420px]"
-        />
+          className="absolute right-0 top-[0] z-30 h-full w-full bg-background md:w-[420px]"
+        /> */}
       </div>
     </div>
   );

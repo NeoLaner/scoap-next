@@ -6,6 +6,7 @@ import {
 } from "~/lib/streams/getStreams";
 
 import { useCreateTorrentStream } from "~/app/_hooks/useCreateTorrentStream";
+import { Button } from "~/app/_components/ui/Button";
 
 function TorrentStream({
   stream,
