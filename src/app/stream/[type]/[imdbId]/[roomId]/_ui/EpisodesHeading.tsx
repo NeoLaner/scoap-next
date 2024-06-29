@@ -7,7 +7,6 @@ import { Button } from "~/app/_components/ui/Button";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -37,13 +36,9 @@ function EpisodesHeading({ videos }: { videos: Video[] }) {
   const uniqueSeasons = extractUniqueSeasons(videos);
   if (!season) return null;
 
-  function handleOnClick() {
-    router.push(pathname);
-  }
-
   return (
     <div className="absolute top-0 flex w-full items-center justify-between px-2 py-5">
-      <Button onClick={handleOnClick}>X</Button>
+      <div />
       <Select
         value={season}
         onValueChange={(value) =>

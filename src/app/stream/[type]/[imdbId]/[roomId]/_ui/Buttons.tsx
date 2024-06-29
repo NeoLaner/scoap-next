@@ -212,7 +212,12 @@ export function Together({ tooltipPlacement }: MediaButtonProps) {
         </Button>
       ) : (
         // <PictureInPictureIcon className="h-6 w-6" />
-        <Button className={buttonClass} onClick={() => handleOnClick(true)}>
+        <Button
+          className={buttonClass}
+          onClick={() => handleOnClick(true)}
+          size={"icon"}
+          variant={"ghost"}
+        >
           <PiUsersThreeDuotone size={26} className="text-solid-primary-2" />
         </Button>
       )}

@@ -27,7 +27,7 @@ function Episodes({ className = "" }: { className?: string }) {
   // `?season=${season}&episode=${episode.episode}&showStreams="true"`
   return (
     <div
-      className={`${className} relative h-full w-full rounded-lg bg-background py-4`}
+      className={`${className} relative h-full  rounded-lg bg-background py-4`}
     >
       {/* heading */}
       <EpisodesHeading videos={metaData.videos} />
