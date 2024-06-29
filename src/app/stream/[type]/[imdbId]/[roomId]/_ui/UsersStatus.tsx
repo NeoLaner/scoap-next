@@ -2,8 +2,14 @@ import { type MediaUserState } from "@socket/@types/mediaTypes";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { PiArrowRightBold } from "react-icons/pi";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "~/app/_components/ui/avatar";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { mediaSocket } from "~/lib/socket/socket";
+import { getFirstTwoLetters } from "~/lib/utils";
 
 function formatTime(seconds: number) {
   const minutes = Math.floor(seconds / 60);
@@ -38,11 +44,11 @@ function UsersStatus() {
       onMouseLeave={() => setHover(false)}
     >
       <div
-        className={`flex flex-col items-center justify-center gap-2 rounded-xl bg-app-color-primary-1 px-[0.35rem] py-[0.4rem] transition-all`}
+        className={`bg-app-color-primary-1 flex flex-col items-center justify-center gap-2 rounded-xl px-[0.35rem] py-[0.4rem] transition-all`}
       >
         {usersState?.map((userData) => (
           <div className="flex items-center gap-1" key={userData.id}>
-            {userData.image && (
+            {/* {userData.image && (
               <Image
                 src={userData.image}
                 alt={`${userData.userName} image profile`}
@@ -51,13 +57,19 @@ function UsersStatus() {
                 className={`w-9 rounded-full border-[2.8px] ${userData.waitForData ? "!border-border-color-stronger-focus" : "border-solid-green-1"} ${userData.id === roomData.ownerId ? "border-[blue]" : ""}`}
                 quality="100"
               />
-            )}
+            )} */}
+            <Avatar>
+              <AvatarImage src={userData.image ?? ""} />
+              <AvatarFallback>
+                {getFirstTwoLetters(userData.userName ?? "Guest")}
+              </AvatarFallback>
+            </Avatar>
 
             <p className="text-sm">{formatTime(userData.videoTs)}</p>
           </div>
         ))}
       </div>
-      <div className={`rounded-r-xl bg-app-color-primary-1 px-1 py-3`}>
+      <div className={`bg-app-color-primary-1 rounded-r-xl px-1 py-3`}>
         <PiArrowRightBold size={20} className="" />
       </div>
     </div>

@@ -12,6 +12,8 @@ import Episodes from "./Episodes";
 import { useState } from "react";
 import { Button } from "~/app/_components/ui/Button";
 import { usePathname, useRouter } from "next/navigation";
+import { PiChatsLight, PiDiceSixFill } from "react-icons/pi";
+import * as Buttons from "./Buttons";
 
 function PlayerLayout({
   params,
@@ -30,24 +32,24 @@ function PlayerLayout({
   if (width > 1080) size = 33;
   else if (width > 900) size = 38;
   else if (width > 640) size = 46;
-  else size = 0;
+  else size = 100;
 
   console.log("🍕🍕", season);
 
   return (
     <ResizablePanelGroup direction="horizontal" className="flex h-full">
-      <ResizablePanel minSize={33}>
+      <ResizablePanel minSize={width > 640 ? 33 : 0}>
         <Player />
       </ResizablePanel>
 
       {!isRightPanelOpen && (
         <Button
-          className="absolute right-0 top-1/2 -translate-y-[100%]"
+          className="absolute -right-4 top-1/2 -translate-y-[100%]"
           variant={"ghost"}
           size={"icon"}
           onClick={() => setIsRightPanelOpen((val) => !val)}
         >
-          open{" "}
+          <PiDiceSixFill size={26} />
         </Button>
       )}
       {width > 640 && isRightPanelOpen && <ResizableHandle withHandle />}
@@ -62,7 +64,15 @@ function PlayerLayout({
           >
             X
           </Button>
-          {season && <Episodes />}
+          <div className="h-full pb-16">{season && <Episodes />}</div>
+          <div className="absolute bottom-0 w-full border-t bg-background px-4 py-4">
+            <div className="flex justify-between">
+              <Buttons.Chat />
+              <Buttons.Episodes tooltipPlacement="top" />
+
+              <Buttons.Streams tooltipPlacement="top" />
+            </div>
+          </div>
         </RightSidePanel>
       )}
     </ResizablePanelGroup>

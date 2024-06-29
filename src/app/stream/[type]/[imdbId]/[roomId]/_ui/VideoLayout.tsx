@@ -32,7 +32,7 @@ export default function VideoLayout({
       />
 
       <Controls.Root
-        className={`${styles.controls} from-black/10 to-transparent absolute inset-0 flex h-full w-full flex-col  opacity-0 transition-opacity media-buffering:opacity-100 media-controls:opacity-100`}
+        className={`${styles.controls} absolute inset-0 flex h-full w-full flex-col from-black/10 to-transparent  opacity-0 transition-opacity media-buffering:opacity-100 media-controls:opacity-100`}
       >
         <Controls.Group className="flex w-full justify-center">
           <div className="mt-4 h-10">
@@ -61,8 +61,6 @@ export default function VideoLayout({
           <Buttons.Together tooltipPlacement="top" />
           <Menus.Settings placement="top end" tooltipPlacement="top" />
           <Buttons.PIP tooltipPlacement="top" />
-          <Buttons.Episodes tooltipPlacement="top" />
-          <Buttons.Streams tooltipPlacement="top" />
           <Buttons.FullScreen tooltipPlacement="top" />
         </Controls.Group>
       </Controls.Root>

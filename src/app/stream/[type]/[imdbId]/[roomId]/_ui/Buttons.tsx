@@ -11,10 +11,13 @@ import {
 } from "@vidstack/react";
 
 import {
+  PiCardsThree,
   PiCardsThreeFill,
+  PiChatsLight,
   PiPauseCircleFill,
   PiPlayCircleFill,
   PiQueueBold,
+  PiQueueDuotone,
   PiSelectionBackgroundDuotone,
   PiSelectionForegroundDuotone,
   PiSpeakerHighFill,
@@ -183,7 +186,8 @@ export function Episodes({ tooltipPlacement }: MediaButtonProps) {
         href={pathname + `?season=${roomData?.season ?? "1"}`}
         className={buttonClass}
       >
-        <PiCardsThreeFill size={26} className="text-solid-primary-2" />
+        <PiCardsThree size={26} className="text-solid-primary-2" />
+        {/* <PiCardsThreeFill size={26} className="text-solid-primary-2" /> */}
       </Link>
 
       <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
@@ -267,7 +271,8 @@ function StreamsForSeries() {
         "&showStreams=true"
       }
     >
-      <PiQueueBold size={26} className="text-solid-primary-2" />
+      {/* <PiQueueBold size={26} className="text-solid-primary-2" /> */}
+      <PiQueueDuotone size={26} className="text-solid-primary-2" />
     </Link>
   );
 }
@@ -281,5 +286,13 @@ export function FullScreen({ tooltipPlacement }: MediaButtonProps) {
         Streams
       </Tooltip.Content>
     </Tooltip.Root>
+  );
+}
+
+export function Chat() {
+  return (
+    <Button size={"icon"} variant={"ghost"} className={buttonClass}>
+      <PiChatsLight size={26} />
+    </Button>
   );
 }

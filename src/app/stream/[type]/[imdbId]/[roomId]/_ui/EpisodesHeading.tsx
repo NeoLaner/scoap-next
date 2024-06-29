@@ -37,7 +37,7 @@ function EpisodesHeading({ videos }: { videos: Video[] }) {
   if (!season) return null;
 
   return (
-    <div className="absolute top-0 flex w-full items-center justify-between px-2 py-5">
+    <div className="absolute top-0 flex w-full items-center justify-between px-4 py-5">
       <div />
       <Select
         value={season}
