@@ -16,6 +16,8 @@ function RightSidePanel({
       className={className}
       defaultSize={defaultSize}
       minSize={defaultSize}
+      id="RightPanel"
+      order={2}
     >
       <div className="h-full">{children}</div>
     </ResizablePanel>

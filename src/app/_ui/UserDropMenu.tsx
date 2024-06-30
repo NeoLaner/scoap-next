@@ -5,7 +5,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/app/_components/ui/popover";
-import ButtonFullscreen from "./ButtonFullscreen";
+import { ButtonFullscreen } from "./ButtonFullscreen";
 import * as Separator from "@radix-ui/react-separator";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";

@@ -5,7 +5,6 @@ import {
   MuteButton,
   PIPButton,
   PlayButton,
-  Tooltip,
   useMediaState,
   type TooltipPlacement,
 } from "@vidstack/react";
@@ -29,12 +28,18 @@ import {
 
 import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
-import ButtonFullscreen from "~/app/_ui/ButtonFullscreen";
+import { ButtonFullscreen } from "~/app/_ui/ButtonFullscreen";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { changeInstanceOnline } from "~/app/_actions/changeInstanceOnline";
 import { mediaSocket } from "~/lib/socket/socket";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { Button } from "~/app/_components/ui/Button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/app/_components/ui/tooltip";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -55,37 +60,17 @@ export function Play({
   const { userData } = useUserData();
 
   return (
-    <Tooltip.Root>
-      <Tooltip.Trigger asChild>
-        {room.online ? (
-          <>
-            {isPaused ? (
-              <PlayButton
-                className={buttonClass}
-                disabled={disabled}
-                onClick={() => {
-                  mediaSocket.emit("play");
-                }}
-              >
-                <PiPlayCircleFill
-                  className={`h-6 w-6 ${disabled && "opacity-30"} text-solid-primary-2`}
-                />
-              </PlayButton>
-            ) : (
-              // <div>icon</div>
-              <PlayButton
-                className={buttonClass}
-                disabled={disabled}
-                onClick={() => {
-                  mediaSocket.emit("pause");
-                }}
-              >
-                <PiPauseCircleFill size={26} className="text-solid-primary-2" />
-              </PlayButton>
-            )}
-          </>
-        ) : (
-          <PlayButton className={buttonClass} disabled={disabled}>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <PlayButton
+            className={buttonClass}
+            disabled={disabled}
+            onClick={() => {
+              if (isPaused) mediaSocket.emit("play");
+              else mediaSocket.emit("pause");
+            }}
+          >
             {isPaused ? (
               <PiPlayCircleFill
                 className={`h-6 w-6 ${disabled && "opacity-30"} text-solid-primary-2`}
@@ -95,12 +80,12 @@ export function Play({
               <PiPauseCircleFill size={26} className="text-solid-primary-2" />
             )}
           </PlayButton>
-        )}
-      </Tooltip.Trigger>
-      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
-        {isPaused ? "Play" : "Pause"}
-      </Tooltip.Content>
-    </Tooltip.Root>
+        </TooltipTrigger>
+        <TooltipContent sideOffset={30}>
+          {isPaused ? "Play" : "Pause"}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -108,22 +93,24 @@ export function Mute({ tooltipPlacement }: MediaButtonProps) {
   const volume = useMediaState("volume"),
     isMuted = useMediaState("muted");
   return (
-    <Tooltip.Root>
-      <Tooltip.Trigger asChild>
-        <MuteButton className={buttonClass}>
-          {isMuted || volume == 0 ? (
-            <PiSpeakerXFill className="text-solid-primary-2 h-6 w-6" />
-          ) : volume < 0.5 ? (
-            <PiSpeakerLowFill className="text-solid-primary-2 h-6 w-6" />
-          ) : (
-            <PiSpeakerHighFill className="text-solid-primary-2 h-6 w-6" />
-          )}
-        </MuteButton>
-      </Tooltip.Trigger>
-      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
-        {isMuted ? "Unmute" : "Mute"}
-      </Tooltip.Content>
-    </Tooltip.Root>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <MuteButton className={buttonClass}>
+            {isMuted || volume == 0 ? (
+              <PiSpeakerXFill className="text-solid-primary-2 h-6 w-6" />
+            ) : volume < 0.5 ? (
+              <PiSpeakerLowFill className="text-solid-primary-2 h-6 w-6" />
+            ) : (
+              <PiSpeakerHighFill className="text-solid-primary-2 h-6 w-6" />
+            )}
+          </MuteButton>
+        </TooltipTrigger>
+        <TooltipContent sideOffset={30}>
+          {isMuted ? "Unmute" : "Mute"}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -131,8 +118,8 @@ export function Caption({ tooltipPlacement }: MediaButtonProps) {
   const track = useMediaState("textTrack"),
     isOn = track && isTrackCaptionKind(track);
   return (
-    <Tooltip.Root>
-      <Tooltip.Trigger asChild>
+    <Tooltip>
+      <TooltipTrigger asChild>
         <CaptionButton className={buttonClass}>
           {isOn ? (
             // <ClosedCaptionsOnIcon className="h-6 w-6" />
@@ -142,38 +129,40 @@ export function Caption({ tooltipPlacement }: MediaButtonProps) {
             <div>icon</div>
           )}
         </CaptionButton>
-      </Tooltip.Trigger>
-      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
+      </TooltipTrigger>
+      <TooltipContent sideOffset={30}>
         {isOn ? "Closed-Captions Off" : "Closed-Captions On"}
-      </Tooltip.Content>
-    </Tooltip.Root>
+      </TooltipContent>
+    </Tooltip>
   );
 }
 
 export function PIP({ tooltipPlacement }: MediaButtonProps) {
   const isActive = useMediaState("pictureInPicture");
   return (
-    <Tooltip.Root>
-      <Tooltip.Trigger asChild>
-        <PIPButton className={buttonClass}>
-          {isActive ? (
-            <PiSelectionBackgroundDuotone
-              size={26}
-              className="text-solid-primary-2"
-            />
-          ) : (
-            // <PictureInPictureIcon className="h-6 w-6" />
-            <PiSelectionForegroundDuotone
-              size={26}
-              className="text-solid-primary-2"
-            />
-          )}
-        </PIPButton>
-      </Tooltip.Trigger>
-      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
-        {isActive ? "Exit PIP" : "Enter PIP"}
-      </Tooltip.Content>
-    </Tooltip.Root>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <PIPButton className={buttonClass}>
+            {isActive ? (
+              <PiSelectionBackgroundDuotone
+                size={26}
+                className="text-solid-primary-2"
+              />
+            ) : (
+              // <PictureInPictureIcon className="h-6 w-6" />
+              <PiSelectionForegroundDuotone
+                size={26}
+                className="text-solid-primary-2"
+              />
+            )}
+          </PIPButton>
+        </TooltipTrigger>
+        <TooltipContent sideOffset={30}>
+          {isActive ? "Exit PIP" : "Enter PIP"}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -181,19 +170,19 @@ export function Episodes({ tooltipPlacement }: MediaButtonProps) {
   const { roomData } = useRoomData();
   const pathname = usePathname();
   return (
-    <Tooltip.Root>
-      <Link
-        href={pathname + `?season=${roomData?.season ?? "1"}`}
-        className={buttonClass}
-      >
-        <PiCardsThree size={26} className="text-solid-primary-2" />
-        {/* <PiCardsThreeFill size={26} className="text-solid-primary-2" /> */}
-      </Link>
+    <TooltipProvider>
+      <Tooltip>
+        <Link
+          href={pathname + `?season=${roomData?.season ?? "1"}`}
+          className={buttonClass}
+        >
+          <PiCardsThree size={26} className="text-solid-primary-2" />
+          {/* <PiCardsThreeFill size={26} className="text-solid-primary-2" /> */}
+        </Link>
 
-      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
-        Episodes
-      </Tooltip.Content>
-    </Tooltip.Root>
+        <TooltipContent sideOffset={30}>Episodes</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -204,32 +193,36 @@ export function Together({ tooltipPlacement }: MediaButtonProps) {
   }
 
   return (
-    <Tooltip.Root>
-      {room.online ? (
-        <Button
-          className={buttonClass}
-          onClick={() => handleOnClick(false)}
-          size={"icon"}
-          variant={"ghost"}
-        >
-          <PiUser size={26} className="text-solid-primary-2" />
-        </Button>
-      ) : (
-        // <PictureInPictureIcon className="h-6 w-6" />
-        <Button
-          className={buttonClass}
-          onClick={() => handleOnClick(true)}
-          size={"icon"}
-          variant={"ghost"}
-        >
-          <PiUsersThreeDuotone size={26} className="text-solid-primary-2" />
-        </Button>
-      )}
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          {room.online ? (
+            <Button
+              className={buttonClass}
+              onClick={() => handleOnClick(false)}
+              size={"icon"}
+              variant={"ghost"}
+            >
+              <PiUser size={26} className="text-solid-primary-2" />
+            </Button>
+          ) : (
+            // <PictureInPictureIcon className="h-6 w-6" />
+            <Button
+              className={buttonClass}
+              onClick={() => handleOnClick(true)}
+              size={"icon"}
+              variant={"ghost"}
+            >
+              <PiUsersThreeDuotone size={26} className="text-solid-primary-2" />
+            </Button>
+          )}
+        </TooltipTrigger>
 
-      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
-        {room.online ? "Watch Alone" : "Watch Together"}
-      </Tooltip.Content>
-    </Tooltip.Root>
+        <TooltipContent sideOffset={30}>
+          {room.online ? "Watch Alone" : "Watch Together"}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -237,13 +230,13 @@ export function Streams({ tooltipPlacement }: MediaButtonProps) {
   const params = useParams<{ type: "movie " | "series"; roomId: string }>();
 
   return (
-    <Tooltip.Root>
-      {params.type === "series" ? <StreamsForSeries /> : <StreamsForMovie />}
+    <TooltipProvider>
+      <Tooltip>
+        {params.type === "series" ? <StreamsForSeries /> : <StreamsForMovie />}
 
-      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
-        Streams
-      </Tooltip.Content>
-    </Tooltip.Root>
+        <TooltipContent sideOffset={30}>Streams</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -278,15 +271,7 @@ function StreamsForSeries() {
 }
 
 export function FullScreen({ tooltipPlacement }: MediaButtonProps) {
-  return (
-    <Tooltip.Root>
-      <ButtonFullscreen className={buttonClass} />
-
-      <Tooltip.Content className={tooltipClass} placement={tooltipPlacement}>
-        Streams
-      </Tooltip.Content>
-    </Tooltip.Root>
-  );
+  return <ButtonFullscreen className={buttonClass} />;
 }
 
 export function Chat() {

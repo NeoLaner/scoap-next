@@ -41,7 +41,7 @@ function PlayerLayout({
 
   return (
     <ResizablePanelGroup direction="horizontal" className="flex h-full">
-      <ResizablePanel minSize={width > 640 ? 33 : 0}>
+      <ResizablePanel id="player" minSize={width > 640 ? 33 : 0} order={1}>
         <Player />
       </ResizablePanel>
 
@@ -79,7 +79,6 @@ function PlayerLayout({
             <div className="flex justify-between">
               <Buttons.Chat />
               <Buttons.Episodes tooltipPlacement="top" />
-
               <Buttons.Streams tooltipPlacement="top" />
             </div>
           </div>

@@ -16,6 +16,12 @@ import {
   RadioButtonSelectedIcon,
 } from "@vidstack/react/icons";
 import { useRoomData } from "~/app/_hooks/useRoomData";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "~/app/_components/ui/tooltip";
 
 export interface SettingsProps {
   placement: MenuPlacement;
@@ -37,23 +43,30 @@ const submenuClassName =
 export function Settings({ placement, tooltipPlacement }: SettingsProps) {
   return (
     <Menu.Root>
-      <Menu.Button
-        className="hover:bg-white/20 group relative inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md text-solid-primary-2 outline-none ring-inset data-[focus]:ring-4"
-        aria-label="Settings"
-      >
-        <PiGearFill
-          size={25}
-          className="transform transition-transform duration-200 ease-out group-data-[open]:rotate-90"
-        />
-      </Menu.Button>
-      <Menu.Items
-        className="animate-out fade-out slide-out-to-bottom-2 data-[open]:animate-in data-[open]:fade-in data-[open]:slide-in-from-bottom-4 border-white/10 bg-black/95 flex h-[var(--menu-height)] max-h-[400px] min-w-[260px] flex-col overflow-y-auto overscroll-y-contain rounded-md border p-2.5 font-sans text-[15px] font-medium outline-none backdrop-blur-sm transition-[height] duration-300 will-change-[height] data-[resizing]:overflow-hidden"
-        placement="top"
-        offset={0}
-      >
-        {/* Menu Items + Submenus */}
-        <SpeedSubmenu />
-      </Menu.Items>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Menu.Button
+              className="text-solid-primary-2 group relative inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md outline-none ring-inset hover:bg-white/20 data-[focus]:ring-4"
+              aria-label="Settings"
+            >
+              <PiGearFill
+                size={25}
+                className="transform transition-transform duration-200 ease-out group-data-[open]:rotate-90"
+              />
+            </Menu.Button>
+          </TooltipTrigger>
+          <TooltipContent sideOffset={30}>Settings</TooltipContent>
+          <Menu.Items
+            className="flex h-[var(--menu-height)] max-h-[400px] min-w-[260px] flex-col overflow-y-auto overscroll-y-contain rounded-md border border-white/10 bg-black/95 p-2.5 font-sans text-[15px] font-medium outline-none backdrop-blur-sm transition-[height] duration-300 will-change-[height] animate-out fade-out slide-out-to-bottom-2 data-[resizing]:overflow-hidden data-[open]:animate-in data-[open]:fade-in data-[open]:slide-in-from-bottom-4"
+            placement="top"
+            offset={0}
+          >
+            {/* Menu Items + Submenus */}
+            <SpeedSubmenu />
+          </Menu.Items>
+        </Tooltip>
+      </TooltipProvider>
     </Menu.Root>
   );
 }
@@ -113,14 +126,14 @@ function SubmenuButton({
 }: SubmenuButtonProps) {
   return (
     <Menu.Button
-      className="ring-sky-400 parent bg-black/60 data-[hocus]:bg-white/10 left-0 z-10 flex w-full cursor-pointer select-none items-center justify-start rounded-sm p-2.5 outline-none ring-inset aria-disabled:hidden data-[open]:sticky data-[open]:-top-2.5 data-[focus]:ring-[3px]"
+      className="parent left-0 z-10 flex w-full cursor-pointer select-none items-center justify-start rounded-sm bg-black/60 p-2.5 outline-none ring-inset ring-sky-400 aria-disabled:hidden data-[open]:sticky data-[open]:-top-2.5 data-[hocus]:bg-white/10 data-[focus]:ring-[3px]"
       disabled={disabled}
     >
       <ChevronLeftIcon className="parent-data-[open]:block -ml-0.5 mr-1.5 hidden h-[18px] w-[18px]" />
       <Icon className="parent-data-[open]:hidden h-5 w-5" />
       <span className="parent-data-[open]:ml-0 ml-1.5">{label}</span>
-      <span className="text-white/50 ml-auto text-sm">{hint}</span>
-      <ChevronRightIcon className="parent-data-[open]:hidden text-white/50 ml-0.5 h-[18px] w-[18px] text-sm" />
+      <span className="ml-auto text-sm text-white/50">{hint}</span>
+      <ChevronRightIcon className="parent-data-[open]:hidden ml-0.5 h-[18px] w-[18px] text-sm text-white/50" />
     </Menu.Button>
   );
 }
