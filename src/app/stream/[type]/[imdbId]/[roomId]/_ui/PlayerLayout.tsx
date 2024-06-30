@@ -11,12 +11,16 @@ import RightSidePanel from "./RightSidePanel";
 import Episodes from "./Episodes";
 import { useState } from "react";
 import { Button } from "~/app/_components/ui/Button";
-import { usePathname, useRouter } from "next/navigation";
-import { PiChatsLight, PiDiceSixFill } from "react-icons/pi";
+import { PiDiceSixFill } from "react-icons/pi";
 import * as Buttons from "./Buttons";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/app/_components/ui/tooltip";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 function PlayerLayout({
-  params,
   searchParams,
 }: {
   params: { roomId: string; imdbId: string; type: string; instanceId: string };
@@ -24,7 +28,6 @@ function PlayerLayout({
 }) {
   const { season } = searchParams;
   const { width } = useWindowSize();
-  const router = useRouter();
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
 
   if (!width) return null;
@@ -43,14 +46,21 @@ function PlayerLayout({
       </ResizablePanel>
 
       {!isRightPanelOpen && (
-        <Button
-          className="absolute -right-4 top-1/2 -translate-y-[100%]"
-          variant={"ghost"}
-          size={"icon"}
-          onClick={() => setIsRightPanelOpen((val) => !val)}
-        >
-          <PiDiceSixFill size={26} />
-        </Button>
+        <TooltipProvider>
+          <Tooltip delayDuration={200}>
+            <TooltipTrigger asChild>
+              <Button
+                className="absolute -right-4 top-1/2 -translate-y-[100%]"
+                variant={"ghost"}
+                size={"icon"}
+                onClick={() => setIsRightPanelOpen((val) => !val)}
+              >
+                <PiDiceSixFill size={26} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="left">Open Sidebar</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
       {width > 640 && isRightPanelOpen && <ResizableHandle withHandle />}
 

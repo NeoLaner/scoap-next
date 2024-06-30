@@ -1,5 +1,4 @@
 import { type MediaUserState } from "@socket/@types/mediaTypes";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { PiArrowRightBold } from "react-icons/pi";
 import {
@@ -7,16 +6,25 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "~/app/_components/ui/avatar";
+
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { mediaSocket } from "~/lib/socket/socket";
 import { getFirstTwoLetters } from "~/lib/utils";
 
-function formatTime(seconds: number) {
-  const minutes = Math.floor(seconds / 60);
+function formatTime(seconds: number): string {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = Math.floor(seconds % 60);
+
+  const formattedHours = hours > 0 ? hours.toString() : null;
   const paddedMinutes = String(minutes).padStart(2, "0");
   const paddedSeconds = String(remainingSeconds).padStart(2, "0");
-  return `${paddedMinutes}:${paddedSeconds}`;
+
+  if (formattedHours !== null) {
+    return `${formattedHours}:${paddedMinutes}:${paddedSeconds}`;
+  } else {
+    return `${paddedMinutes}:${paddedSeconds}`;
+  }
 }
 
 function UsersStatus() {
@@ -44,32 +52,21 @@ function UsersStatus() {
       onMouseLeave={() => setHover(false)}
     >
       <div
-        className={`bg-app-color-primary-1 flex flex-col items-center justify-center gap-2 rounded-xl px-[0.35rem] py-[0.4rem] transition-all`}
+        className={`flex flex-col items-center justify-center gap-2 bg-background px-[0.35rem] py-[0.4rem] transition-all`}
       >
         {usersState?.map((userData) => (
-          <div className="flex items-center gap-1" key={userData.id}>
-            {/* {userData.image && (
-              <Image
-                src={userData.image}
-                alt={`${userData.userName} image profile`}
-                width={30}
-                height={30}
-                className={`w-9 rounded-full border-[2.8px] ${userData.waitForData ? "!border-border-color-stronger-focus" : "border-solid-green-1"} ${userData.id === roomData.ownerId ? "border-[blue]" : ""}`}
-                quality="100"
-              />
-            )} */}
-            <Avatar>
+          <div className="flex items-center gap-2" key={userData.id}>
+            <Avatar className="h-8 w-8">
               <AvatarImage src={userData.image ?? ""} />
               <AvatarFallback>
-                {getFirstTwoLetters(userData.userName ?? "Guest")}
+                {getFirstTwoLetters(userData.userName ?? ":(")}
               </AvatarFallback>
             </Avatar>
-
             <p className="text-sm">{formatTime(userData.videoTs)}</p>
           </div>
         ))}
       </div>
-      <div className={`bg-app-color-primary-1 rounded-r-xl px-1 py-3`}>
+      <div className={`rounded-r-xl bg-background px-1 py-3`}>
         <PiArrowRightBold size={20} className="" />
       </div>
     </div>
