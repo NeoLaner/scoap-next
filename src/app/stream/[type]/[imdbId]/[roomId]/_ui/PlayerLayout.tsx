@@ -19,6 +19,7 @@ import {
   TooltipTrigger,
 } from "~/app/_components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import Chat from "./Chat";
 
 function PlayerLayout({
   searchParams,
@@ -58,7 +59,7 @@ function PlayerLayout({
                 <PiDiceSixFill size={26} />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="left">Open Sidebar</TooltipContent>
+            <TooltipContent side="left">Open Submenu</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       )}
@@ -74,7 +75,10 @@ function PlayerLayout({
           >
             X
           </Button>
-          <div className="h-full pb-16">{season && <Episodes />}</div>
+
+          {/* <div className="h-full pb-16">{season && <Episodes />}</div> */}
+          <div className="h-full pb-16">{<Chat />}</div>
+
           <div className="absolute bottom-0 w-full border-t bg-background px-4 py-4">
             <div className="flex justify-between">
               <Buttons.Chat />

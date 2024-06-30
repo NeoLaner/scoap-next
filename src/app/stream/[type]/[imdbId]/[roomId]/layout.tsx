@@ -36,9 +36,9 @@ async function Layout({
   return (
     <RoomDataProvider roomData={roomData}>
       <SourceDataProvider sourceData={sourceData}>
-        <UsersSocketProvider>
-          <div className="relative h-full w-full">{children}</div>
-        </UsersSocketProvider>
+        {/* <UsersSocketProvider>
+        </UsersSocketProvider> */}
+        <div className="relative h-full w-full">{children}</div>
       </SourceDataProvider>
     </RoomDataProvider>
   );
