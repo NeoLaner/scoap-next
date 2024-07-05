@@ -4,6 +4,7 @@ import {
   type MediaPlayerInstance,
 } from "@vidstack/react";
 import { useEffect, type RefObject } from "react";
+import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { mediaSocket } from "~/lib/socket/socket";
 
@@ -16,6 +17,15 @@ function PlayerRemote({
   const { currentTime, waiting, playbackRate } = useMediaStore(playerRef);
   const videoTs = Math.floor(currentTime);
   const { userData } = useUserData();
+  const { setRoomData } = useRoomData();
+
+  useEffect(function () {
+    // mediaSocket.on("roomDataChanged", (wsData) => {
+    //   setRoomData(wsData);
+    // });
+    // return () => {};
+  }, []);
+
   useEffect(
     function () {
       mediaSocket.emit("updateUserMediaState", {
@@ -64,7 +74,7 @@ function PlayerRemote({
         (user) => user.id === userData.id,
       )[0];
       let pbr = 1.01;
-      const delta = leader.videoTs - curUser?.videoTs;
+      const delta = leader.videoTs - (curUser?.videoTs ?? 0);
       console.log("delta", leader.videoTs, curUser?.videoTs);
 
       pbr += Number((delta / 10).toFixed(2));

@@ -27,9 +27,14 @@ function PlayerLayout({
   params: { roomId: string; imdbId: string; type: string; instanceId: string };
   searchParams: { season?: string; episode?: string };
 }) {
-  const { season } = searchParams;
+  const { season, episode } = searchParams;
   const { width } = useWindowSize();
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const currentTab = () => {
+    if (season && episode) return "streams";
+    if (season) return "episode";
+    return "chat";
+  };
 
   if (!width) return null;
   let size;
@@ -76,8 +81,12 @@ function PlayerLayout({
             X
           </Button>
 
-          {/* <div className="h-full pb-16">{season && <Episodes />}</div> */}
-          <div className="h-full pb-16">{<Chat />}</div>
+          {currentTab() === "episode" && (
+            <div className="h-full pb-16">{season && <Episodes />}</div>
+          )}
+          {currentTab() === "chat" && (
+            <div className="h-full pb-16">{<Chat />}</div>
+          )}
 
           <div className="absolute bottom-0 w-full border-t bg-background px-4 py-4">
             <div className="flex justify-between">

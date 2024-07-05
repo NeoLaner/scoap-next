@@ -275,9 +275,10 @@ export function FullScreen({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Chat() {
+  const pathname = usePathname();
   return (
-    <Button size={"icon"} variant={"ghost"} className={buttonClass}>
+    <Link className={buttonClass} href={pathname}>
       <PiChatsLight size={26} />
-    </Button>
+    </Link>
   );
 }

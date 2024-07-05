@@ -85,10 +85,10 @@ function Chat({
               className="flex items-start space-x-2 pr-2"
             >
               <Avatar className="h-8 w-8 rounded-md">
-                <AvatarImage
+                {/* <AvatarImage
                   className="rounded-md"
                   src="/placeholder.svg?height=50&width=50"
-                />
+                /> */}
                 <AvatarFallback className="rounded-md">
                   {message.userName[0].toUpperCase()}
                 </AvatarFallback>

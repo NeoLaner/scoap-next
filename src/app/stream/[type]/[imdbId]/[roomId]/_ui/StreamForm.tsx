@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { addDirectLink } from "~/app/_actions/addDirectLink";
-import { Textarea } from "~/app/_components/ui/textarea";
+import { Textarea } from "~/app/_components/ui/Textarea";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 
 function StreamForm() {

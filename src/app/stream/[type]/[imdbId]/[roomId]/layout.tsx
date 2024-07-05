@@ -34,7 +34,7 @@ async function Layout({
     });
 
   return (
-    <RoomDataProvider roomData={roomData}>
+    <RoomDataProvider initialRoomData={roomData}>
       <SourceDataProvider sourceData={sourceData}>
         {/* <UsersSocketProvider>
         </UsersSocketProvider> */}

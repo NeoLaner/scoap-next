@@ -1,12 +1,18 @@
 "use client";
 // context/RoomDataContext.tsx
-import React, { createContext, type ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  type ReactNode,
+} from "react";
 import { type api } from "~/trpc/server";
 
 type RoomData = NonNullable<Awaited<ReturnType<typeof api.room.get>>>;
 
 interface RoomDataContextType {
-  roomData: RoomData; // Define your roomData type here
+  roomData: RoomData;
+  setRoomData: React.Dispatch<React.SetStateAction<RoomData>>;
 }
 
 export const RoomDataContext = createContext<RoomDataContextType | undefined>(
@@ -15,13 +21,15 @@ export const RoomDataContext = createContext<RoomDataContextType | undefined>(
 
 export const RoomDataProvider = ({
   children,
-  roomData,
+  initialRoomData,
 }: {
   children: ReactNode;
-  roomData: RoomData;
+  initialRoomData: RoomData;
 }) => {
+  const [roomData, setRoomData] = useState<RoomData>(initialRoomData);
+
   return (
-    <RoomDataContext.Provider value={{ roomData }}>
+    <RoomDataContext.Provider value={{ roomData, setRoomData }}>
       {children}
     </RoomDataContext.Provider>
   );
