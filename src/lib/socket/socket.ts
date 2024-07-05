@@ -1,8 +1,8 @@
 import { Socket, io } from "socket.io-client";
 import config from "./config";
 import {
-  MediaClientToServerEvents,
-  MediaServerToClientEvents,
+  type MediaClientToServerEvents,
+  type MediaServerToClientEvents,
 } from "@socket/@types";
 const backendUrlDev = config.backendUrlDev;
 const backendUrl = config.backendUrl;

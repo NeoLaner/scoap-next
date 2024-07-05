@@ -87,7 +87,7 @@ export const roomRouter = createTRPCRouter({
         data: {
           name: input.name,
           ownerId: ctx.session.user.id,
-          online: input.online ?? false,
+          online: input.online,
           timeWatched: input.timeWatched,
           season: input.season,
           episode: input.episode,

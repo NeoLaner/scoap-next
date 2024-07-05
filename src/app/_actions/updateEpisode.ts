@@ -12,7 +12,7 @@ export async function updateEpisode(inputs: {
   console.log("🍕🍕🍕", inputs);
 
   if (type !== "series") return; //TODO: Error;
-  await api.room.updateMe({
+  return await api.room.updateMe({
     id: roomId,
     name,
     episode: Number(episode),

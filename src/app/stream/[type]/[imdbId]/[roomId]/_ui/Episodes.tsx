@@ -4,10 +4,10 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import EpisodesHeading from "./EpisodesHeading";
 import { updateEpisode } from "~/app/_actions/updateEpisode";
-import invalidateInstanceData from "~/app/_actions/invalidateInstanceData";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { ScrollArea } from "~/app/_components/ui/scroll-area";
 import { useMetaData } from "~/app/_hooks/useMetaData";
+import { mediaSocket } from "~/lib/socket/socket";
 
 const formatDate = (isoString: string) => {
   const date = new Date(isoString);
@@ -18,7 +18,7 @@ const formatDate = (isoString: string) => {
 function Episodes({ className = "" }: { className?: string }) {
   const searchParams = useSearchParams();
   const season = searchParams.get("season");
-  const { roomData } = useRoomData();
+  const { roomData, setRoomData } = useRoomData();
   const { metaData } = useMetaData();
 
   const episodesOfSeason = metaData.videos.filter(
@@ -43,22 +43,27 @@ function Episodes({ className = "" }: { className?: string }) {
                     roomData.season === episode.season
                   )
                     return null;
-                  await updateEpisode({
+                  const updatedRoomData = await updateEpisode({
                     roomId: roomData.id,
                     name: roomData.name,
                     type: "series",
                     episode: episode.episode,
                     season: episode.season,
                   });
-                  await invalidateInstanceData(roomData.id);
-                  //emit invalidate event
+                  if (updatedRoomData) {
+                    setRoomData(updatedRoomData);
+                    //send the updated data to other users
+                    mediaSocket.emit("roomDataChanged", {
+                      payload: updatedRoomData,
+                    });
+                  }
                 }}
                 // variant={"outline"}
                 key={episode.episode}
                 className={`${
                   roomData.episode === episode.episode &&
                   roomData.season === episode.season
-                    ? "border-green-400"
+                    ? "border-green-400  hover:cursor-not-allowed"
                     : ""
                 } flex items-center justify-start gap-4 border text-start hover:cursor-pointer`}
               >

@@ -20,10 +20,12 @@ function PlayerRemote({
   const { setRoomData } = useRoomData();
 
   useEffect(function () {
-    // mediaSocket.on("roomDataChanged", (wsData) => {
-    //   setRoomData(wsData);
-    // });
-    // return () => {};
+    mediaSocket.on("roomDataChanged", (wsData) => {
+      setRoomData(wsData.payload);
+    });
+    return () => {
+      mediaSocket.off("roomDataChanged");
+    };
   }, []);
 
   useEffect(
