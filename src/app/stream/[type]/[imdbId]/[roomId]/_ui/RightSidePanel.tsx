@@ -1,6 +1,5 @@
 import { ResizablePanel } from "~/app/_components/ui/resizable";
-import Episodes from "./Episodes";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 function RightSidePanel({
   defaultSize,
