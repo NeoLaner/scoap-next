@@ -11,7 +11,7 @@ import {
   type ReactNode,
   type Dispatch,
   useState,
-  SetStateAction,
+  type SetStateAction,
   useContext,
 } from "react";
 import { Button } from "~/app/_components/ui/Button";
@@ -23,8 +23,6 @@ import {
   TooltipTrigger,
 } from "~/app/_components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { boolean, number } from "zod";
-import { useSearchParams } from "next/navigation";
 
 const PanelContext = createContext<{
   isRightPanelOpen: boolean;
@@ -32,7 +30,7 @@ const PanelContext = createContext<{
   size: number;
   width: number;
 }>({
-  isRightPanelOpen: false,
+  isRightPanelOpen: true,
   setIsRightPanelOpen: () => {
     return;
   },
@@ -40,9 +38,9 @@ const PanelContext = createContext<{
   width: 0,
 });
 
-function PlayerPanel({ children }: { children: ReactNode }) {
+export function PlayerPanel({ children }: { children: ReactNode }) {
   const { width } = useWindowSize();
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
 
   if (!width) return null;
   let size;
@@ -67,7 +65,7 @@ function PlayerPanel({ children }: { children: ReactNode }) {
   );
 }
 
-function LeftPanel({ children }: { children: ReactNode }) {
+export function LeftPanel({ children }: { children: ReactNode }) {
   const { width } = useContext(PanelContext);
   return (
     <ResizablePanel id="player" minSize={width > 640 ? 33 : 0} order={1}>
@@ -76,30 +74,45 @@ function LeftPanel({ children }: { children: ReactNode }) {
   );
 }
 
-function ResizableHandlePanel() {
+export function ResizableHandlePanel() {
   const { width, isRightPanelOpen } = useContext(PanelContext);
+  console.log(isRightPanelOpen);
+
   return (
     <>{width > 640 && isRightPanelOpen && <ResizableHandle withHandle />}</>
   );
 }
 
-function RightPanel({ children }: { children: ReactNode }) {
-  const { size } = useContext(PanelContext);
+export function RightPanel({ children }: { children: ReactNode }) {
+  const { size, setIsRightPanelOpen, isRightPanelOpen } =
+    useContext(PanelContext);
 
   return (
-    <ResizablePanel
-      className="relative"
-      defaultSize={size}
-      minSize={size}
-      id="RightPanel"
-      order={2}
-    >
-      {children}
-    </ResizablePanel>
+    <>
+      {isRightPanelOpen && (
+        <ResizablePanel
+          className="relative"
+          defaultSize={size}
+          minSize={size}
+          id="RightPanel"
+          order={2}
+        >
+          <Button
+            variant={"outline"}
+            onClick={() => setIsRightPanelOpen((val) => !val)}
+            className="absolute left-4 top-4 z-20"
+            size={"icon"}
+          >
+            X
+          </Button>
+          {children}
+        </ResizablePanel>
+      )}
+    </>
   );
 }
 
-function OpenRightPanelOpen() {
+export function OpenRightPanelOpen() {
   const { setIsRightPanelOpen, isRightPanelOpen } = useContext(PanelContext);
   return (
     <>
@@ -123,10 +136,3 @@ function OpenRightPanelOpen() {
     </>
   );
 }
-
-PlayerPanel.LeftPanel = LeftPanel;
-PlayerPanel.ResizableHandlePanel = ResizableHandlePanel;
-PlayerPanel.RightPanel = RightPanel;
-PlayerPanel.OpenRightPanelOpen = OpenRightPanelOpen;
-
-export default PlayerPanel;

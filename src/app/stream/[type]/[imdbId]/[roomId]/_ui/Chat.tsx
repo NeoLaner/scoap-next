@@ -1,3 +1,4 @@
+"use client";
 import { useState, type FormEvent, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import socketEmitters from "~/app/_services/socket/socketEmit";
