@@ -11,6 +11,9 @@ import {
 } from "./PlayerPanels";
 import Episodes from "./Episodes";
 import StreamsServer from "./StreamsServer";
+import { Suspense } from "react";
+import Loader from "~/app/_ui/Loader";
+import { Skeleton } from "~/app/_components/ui/Skeleton";
 
 function PlayerLayout({
   searchParams,
@@ -39,7 +42,9 @@ function PlayerLayout({
         {currentTab() === "chat" && <Chat />}
         {currentTab() === "episode" && <Episodes />}
         {currentTab() === "streams" && (
-          <StreamsServer params={params} searchParams={searchParams} />
+          <Suspense fallback={<Loader />}>
+            <StreamsServer params={params} searchParams={searchParams} />
+          </Suspense>
         )}
       </RightPanel>
     </PlayerPanel>

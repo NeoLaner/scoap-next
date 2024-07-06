@@ -24,13 +24,17 @@ function StreamForm() {
     }
   };
 
+  async function handleAction(data: FormData) {
+    const sourceData = await addDirectLink(data, roomData.id);
+  }
+
   return (
     <div className="flex w-full items-center justify-center">
       <Form.Root
         ref={ref}
         autoComplete="off"
         className="w-full"
-        action={(data) => addDirectLink(data, roomData.id)}
+        action={handleAction}
       >
         <Form.Field className="flex flex-col items-center" name="name">
           <div className="flex items-baseline justify-between">
