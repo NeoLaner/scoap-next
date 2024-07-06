@@ -16,13 +16,13 @@ import {
 } from "react";
 import { Button } from "~/app/_components/ui/Button";
 import { PiDiceSixFill } from "react-icons/pi";
-import * as Buttons from "./Buttons";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "~/app/_components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import * as Buttons from "./Buttons";
 
 const PanelContext = createContext<{
   isRightPanelOpen: boolean;
@@ -106,13 +106,21 @@ export function RightPanel({ children }: { children: ReactNode }) {
             X
           </Button>
           {children}
+
+          <div className="absolute bottom-0 w-full border-t bg-background px-4 py-4">
+            <div className="flex justify-between">
+              <Buttons.Chat />
+              <Buttons.Episodes tooltipPlacement="top" />
+              <Buttons.Streams tooltipPlacement="top" />
+            </div>
+          </div>
         </ResizablePanel>
       )}
     </>
   );
 }
 
-export function OpenRightPanelOpen() {
+export function OpenRightPanelButton() {
   const { setIsRightPanelOpen, isRightPanelOpen } = useContext(PanelContext);
   return (
     <>

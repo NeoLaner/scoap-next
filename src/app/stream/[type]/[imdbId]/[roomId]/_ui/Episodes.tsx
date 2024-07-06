@@ -32,7 +32,7 @@ function Episodes({ className = "" }: { className?: string }) {
       {/* heading */}
       <EpisodesHeading videos={metaData.videos} />
       {/* Episodes */}
-      <div className="h-full pt-16">
+      <div className="h-full py-16">
         <ScrollArea className="h-full">
           <div className="mx-4 flex h-fit flex-col gap-2">
             {episodesOfSeason?.map((episode) => (

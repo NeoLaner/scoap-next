@@ -1,18 +1,20 @@
 import "@vidstack/react/player/styles/base.css";
 import Player from "./Player";
-import * as Buttons from "./Buttons";
+
 import Chat from "./Chat";
 import {
   LeftPanel,
-  OpenRightPanelOpen,
+  OpenRightPanelButton,
   PlayerPanel,
   ResizableHandlePanel,
   RightPanel,
 } from "./PlayerPanels";
 import Episodes from "./Episodes";
+import StreamsServer from "./StreamsServer";
 
 function PlayerLayout({
   searchParams,
+  params,
 }: {
   params: { roomId: string; imdbId: string; type: string; instanceId: string };
   searchParams: { season?: string; episode?: string };
@@ -31,26 +33,16 @@ function PlayerLayout({
       <LeftPanel>
         <Player />
       </LeftPanel>
-      <OpenRightPanelOpen />
+      <OpenRightPanelButton />
       <ResizableHandlePanel />
       <RightPanel>
         {currentTab() === "chat" && <Chat />}
         {currentTab() === "episode" && <Episodes />}
-        <RightPanelMenu />
+        {currentTab() === "streams" && (
+          <StreamsServer params={params} searchParams={searchParams} />
+        )}
       </RightPanel>
     </PlayerPanel>
-  );
-}
-
-function RightPanelMenu() {
-  return (
-    <div className="absolute bottom-0 w-full border-t bg-background px-4 py-4">
-      <div className="flex justify-between">
-        <Buttons.Chat />
-        <Buttons.Episodes tooltipPlacement="top" />
-        <Buttons.Streams tooltipPlacement="top" />
-      </div>
-    </div>
   );
 }
 
