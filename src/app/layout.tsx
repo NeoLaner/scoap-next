@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import { PlayerProvider } from "./_providers/PlayerProvider";
 import { ThemeProvider } from "./_ui/theme-provider";
+import { Toaster } from "./_components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,6 +42,11 @@ export default function RootLayout({
               <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-background to-background-secondary  text-foreground">
                 {children}
               </main>
+              <Toaster
+                closeButton
+                className="left-5 top-5"
+                position="top-left"
+              />
             </PlayerProvider>
             {/* <ReactQueryDevtools /> */}
           </TRPCReactProvider>

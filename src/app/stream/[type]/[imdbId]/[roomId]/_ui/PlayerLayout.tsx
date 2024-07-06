@@ -20,6 +20,7 @@ import {
 } from "~/app/_components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import Chat from "./Chat";
+import { Toaster } from "~/app/_components/ui/sonner";
 
 function PlayerLayout({
   searchParams,
@@ -29,7 +30,7 @@ function PlayerLayout({
 }) {
   const { season, episode } = searchParams;
   const { width } = useWindowSize();
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
   const currentTab = () => {
     if (season && episode) return "streams";
     if (season) return "episode";
@@ -64,7 +65,7 @@ function PlayerLayout({
                 <PiDiceSixFill size={26} />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="left">Open Submenu</TooltipContent>
+            <TooltipContent side="left">Open SidePanel</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       )}

@@ -1,4 +1,4 @@
-import { Socket, io } from "socket.io-client";
+import { type Socket, io } from "socket.io-client";
 import config from "./config";
 import {
   type MediaClientToServerEvents,

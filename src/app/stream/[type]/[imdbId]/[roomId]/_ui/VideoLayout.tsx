@@ -11,6 +11,7 @@ import { TimeGroup } from "./Time-group";
 import { Title } from "./Title";
 import TitleLayout from "./TitleLayout";
 import UsersStatus from "./UsersStatus";
+import { Toaster } from "~/app/_components/ui/sonner";
 
 export interface VideoLayoutProps {
   thumbnails?: string;

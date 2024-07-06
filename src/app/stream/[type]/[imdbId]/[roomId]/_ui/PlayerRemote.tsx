@@ -4,6 +4,8 @@ import {
   type MediaPlayerInstance,
 } from "@vidstack/react";
 import { useEffect, type RefObject } from "react";
+import { toast } from "sonner";
+import { useIsMediaConnected } from "~/app/_hooks/useIsMediaConnected";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { mediaSocket } from "~/lib/socket/socket";
@@ -18,6 +20,25 @@ function PlayerRemote({
   const videoTs = Math.floor(currentTime);
   const { userData } = useUserData();
   const { setRoomData } = useRoomData();
+  const { isMediaConnected } = useIsMediaConnected();
+
+  useEffect(
+    function () {
+      if (mediaSocket.disconnected)
+        toast.promise(
+          new Promise((resolve) => {
+            mediaSocket.on("connect", () => resolve({}));
+          }),
+          {
+            loading: "Reconnecting",
+            success: "Connected",
+            duration: 2000,
+            className: "",
+          },
+        );
+    },
+    [isMediaConnected],
+  );
 
   useEffect(function () {
     mediaSocket.on("roomDataChanged", (wsData) => {
