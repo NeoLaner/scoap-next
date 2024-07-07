@@ -4,15 +4,13 @@ import { updateSource } from "~/app/_actions/updateSource";
 import { Button } from "~/app/_components/ui/Button";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
+import { useSourcesData } from "~/app/_hooks/useSourcesData";
 import { type api } from "~/trpc/server";
 
-function StreamSources({
-  roomSources,
-}: {
-  roomSources: Awaited<ReturnType<typeof api.room.getRoomSources>>;
-}) {
+function StreamSources() {
   const { roomData } = useRoomData();
   const { sourceData } = useSourceData();
+  const { sourcesData } = useSourcesData();
   const [isHover, setIsHover] = useState(false);
 
   const handleMouseEnter = () => {
@@ -29,7 +27,7 @@ function StreamSources({
     { videoLink: string; userImages: string[] }
   >();
 
-  roomSources?.Sources.forEach((source) => {
+  sourcesData?.forEach((source) => {
     const videoLink = source.videoLink;
     if (!videoLink) return;
 

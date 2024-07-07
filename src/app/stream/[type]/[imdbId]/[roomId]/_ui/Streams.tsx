@@ -5,20 +5,32 @@ import ScrollAreaY from "~/app/_ui/ScrollAreaY";
 import { useSearchParams } from "next/navigation";
 import StreamsHeading from "./StreamsHeading";
 import StreamForm from "./StreamForm";
-import { type api } from "~/trpc/server";
 import StreamSources from "./StreamSources";
+import { useEffect } from "react";
+import { mediaSocket } from "~/lib/socket/socket";
+import { useSourcesData } from "~/app/_hooks/useSourcesData";
 
 // http://127.0.0.1:11470/6ee1a751d67aae51dfd067b0a11e2f06d1098461/create
 function Streams({
   torrentIoStreamsSorted,
-  roomSources,
   className,
 }: {
   torrentIoStreamsSorted: GetStreamsFromTorrentIo | [];
-  roomSources: Awaited<ReturnType<typeof api.room.getRoomSources>>;
   className?: string;
 }) {
   const showStreams = useSearchParams().get("showStreams");
+  const { setSourcesData } = useSourcesData();
+  useEffect(function () {
+    mediaSocket.on("sourceDataChanged", (wsData) => {
+      setSourcesData((sources) => {
+        if (sources) return [wsData.payload, ...sources];
+        else [wsData.payload];
+      });
+    });
+    return () => {
+      mediaSocket.off("sourceDataChanged");
+    };
+  }, []);
 
   if (!showStreams) return null;
   return (
@@ -26,13 +38,13 @@ function Streams({
       <StreamsHeading />
       <div className="z-40 ml-2 h-full">
         <ScrollAreaY>
-          <div className="bg-background flex w-full flex-col items-center justify-center gap-2 rounded-md">
+          <div className="flex w-full flex-col items-center justify-center gap-2 rounded-md bg-background">
             <StreamForm />
             {torrentIoStreamsSorted.map((stream) => (
               <TorrentStream key={stream.title} stream={stream} />
             ))}
             <div className="flex flex-col gap-4">
-              <StreamSources roomSources={roomSources} />
+              <StreamSources />
             </div>
           </div>
         </ScrollAreaY>
