@@ -10,6 +10,8 @@ import { addDirectLink } from "~/app/_actions/addDirectLink";
 import { Textarea } from "~/app/_components/ui/Textarea";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
+import { useSourcesData } from "~/app/_hooks/useSourcesData";
+import { useUserData } from "~/app/_hooks/useUserData";
 import { mediaSocket } from "~/lib/socket/socket";
 
 function StreamForm() {
@@ -17,6 +19,8 @@ function StreamForm() {
   const [isFocused, setIsFocused] = useState(false);
   const [source, setSource] = useState("");
   const { setSourceData } = useSourceData();
+  const { setSourcesData } = useSourcesData();
+  const { userData } = useUserData();
   const ref = useRef<HTMLFormElement>();
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -31,7 +35,12 @@ function StreamForm() {
     const sourceData = await addDirectLink(data, roomData.id);
     if (!sourceData) return;
     setSourceData(sourceData);
-    mediaSocket.emit("sourceDataChanged", { payload: sourceData });
+    const newSource = { user: userData, ...sourceData };
+    setSourcesData((sources) => {
+      if (sources) return [...sources, newSource];
+      return [newSource];
+    });
+    mediaSocket.emit("sourceDataChanged", { payload: newSource });
   }
 
   return (

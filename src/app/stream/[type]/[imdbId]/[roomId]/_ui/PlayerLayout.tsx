@@ -39,8 +39,16 @@ function PlayerLayout({
       <OpenRightPanelButton />
       <ResizableHandlePanel />
       <RightPanel>
-        {currentTab() === "chat" && <Chat />}
-        {currentTab() === "episode" && <Episodes />}
+        {currentTab() === "chat" && (
+          <Suspense fallback={<Loader />}>
+            <Chat />
+          </Suspense>
+        )}
+        {currentTab() === "episode" && (
+          <Suspense fallback={<Loader />}>
+            <Episodes />
+          </Suspense>
+        )}
         {currentTab() === "streams" && (
           <Suspense fallback={<Loader />}>
             <StreamsServer params={params} searchParams={searchParams} />

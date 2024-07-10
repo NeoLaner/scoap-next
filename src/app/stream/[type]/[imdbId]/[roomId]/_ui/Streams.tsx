@@ -43,7 +43,7 @@ function Streams({
             {torrentIoStreamsSorted.map((stream) => (
               <TorrentStream key={stream.title} stream={stream} />
             ))}
-            <div className="flex flex-col gap-4">
+            <div className="flex w-full flex-col gap-4">
               <StreamSources />
             </div>
           </div>

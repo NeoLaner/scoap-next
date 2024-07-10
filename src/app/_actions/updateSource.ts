@@ -11,11 +11,10 @@ export async function updateSource(inputs: {
 }) {
   const { sourceId, fileIdx, infoHash, videoLink, roomId } = inputs;
 
-  await api.source.update({
+  return await api.source.update({
     id: sourceId,
     fileIdx: fileIdx,
     infoHash: infoHash,
     videoLink,
   });
-  revalidatePath(`/stream//[imdbId]/[roomId]/${roomId}`, "layout");
 }

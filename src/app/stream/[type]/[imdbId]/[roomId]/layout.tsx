@@ -16,11 +16,12 @@ async function Layout({
     type: "string";
     instanceId: "string";
   };
-  searchParams: { season?: string; episode?: string };
 }) {
   const session = await getServerAuthSession();
   if (!session) return null;
   const { roomId } = params;
+  console.log("🍢🍢 ROOM ID", params);
+
   const roomData = await api.room.get({ roomId });
   if (!roomData) return; //TODO: Error not found
   let sourceData = await api.source.get({
