@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/app/_components/ui/select";
+import { useRoomData } from "~/app/_hooks/useRoomData";
 
 const extractUniqueSeasons = (videos: Video[]) => {
   const seasons = new Set(videos.map((video) => video.season));
@@ -18,8 +19,9 @@ const extractUniqueSeasons = (videos: Video[]) => {
 };
 
 function EpisodesHeading({ videos }: { videos: Video[] }) {
+  const { roomData } = useRoomData();
   const searchParams = useSearchParams();
-  const season = searchParams.get("season");
+  const season = searchParams.get("season") ?? String(roomData.season) ?? "1";
   const router = useRouter();
   const pathname = usePathname();
   // Get a new searchParams string by merging the current

@@ -8,6 +8,7 @@ import { useRoomData } from "~/app/_hooks/useRoomData";
 import { ScrollArea } from "~/app/_components/ui/scroll-area";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { mediaSocket } from "~/lib/socket/socket";
+import { Video } from "~/app/_services/stremIo/types";
 
 const formatDate = (isoString: string) => {
   const date = new Date(isoString);
@@ -17,14 +18,35 @@ const formatDate = (isoString: string) => {
 
 function Episodes({ className = "" }: { className?: string }) {
   const searchParams = useSearchParams();
-  const season = searchParams.get("season");
   const { roomData, setRoomData } = useRoomData();
+  const season = searchParams.get("season") ?? roomData.season;
   const { metaData } = useMetaData();
 
   const episodesOfSeason = metaData.videos.filter(
     (video) => video.season === Number(season),
   );
-  // `?season=${season}&episode=${episode.episode}&showStreams="true"`
+
+  async function handleOnClick(episode: Video) {
+    if (
+      roomData.episode === episode.episode &&
+      roomData.season === episode.season
+    )
+      return null;
+    const updatedRoomData = await updateEpisode({
+      roomId: roomData.id,
+      name: roomData.name,
+      type: "series",
+      episode: episode.episode,
+      season: episode.season,
+    });
+    if (updatedRoomData) {
+      setRoomData(updatedRoomData);
+      //send the updated data to other users
+      mediaSocket.emit("roomDataChanged", {
+        payload: updatedRoomData,
+      });
+    }
+  }
   return (
     <div
       className={`${className} relative h-full  rounded-lg bg-background py-4`}
@@ -37,27 +59,7 @@ function Episodes({ className = "" }: { className?: string }) {
           <div className="mx-4 flex h-fit flex-col gap-2">
             {episodesOfSeason?.map((episode) => (
               <div
-                onClick={async () => {
-                  if (
-                    roomData.episode === episode.episode &&
-                    roomData.season === episode.season
-                  )
-                    return null;
-                  const updatedRoomData = await updateEpisode({
-                    roomId: roomData.id,
-                    name: roomData.name,
-                    type: "series",
-                    episode: episode.episode,
-                    season: episode.season,
-                  });
-                  if (updatedRoomData) {
-                    setRoomData(updatedRoomData);
-                    //send the updated data to other users
-                    mediaSocket.emit("roomDataChanged", {
-                      payload: updatedRoomData,
-                    });
-                  }
-                }}
+                onClick={() => handleOnClick(episode)}
                 // variant={"outline"}
                 key={episode.episode}
                 className={`${

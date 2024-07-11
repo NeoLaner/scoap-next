@@ -20,16 +20,9 @@ function PlayerLayout({
   params,
 }: {
   params: { roomId: string; imdbId: string; type: string; instanceId: string };
-  searchParams: { season?: string; episode?: string };
+  searchParams: { currentTab: "chat" | "episodes" | "streams" };
 }) {
-  const { season, episode } = searchParams;
-
-  const currentTab = () => {
-    if (season && episode) return "streams";
-    if (season) return "episode";
-    return "chat";
-  };
-  console.log("🍕🍕", season);
+  const { currentTab } = searchParams;
 
   return (
     <PlayerPanel>
@@ -39,19 +32,19 @@ function PlayerLayout({
       <OpenRightPanelButton />
       <ResizableHandlePanel />
       <RightPanel>
-        {currentTab() === "chat" && (
+        {currentTab === "chat" && (
           <Suspense fallback={<Loader />}>
             <Chat />
           </Suspense>
         )}
-        {currentTab() === "episode" && (
+        {currentTab === "episodes" && (
           <Suspense fallback={<Loader />}>
             <Episodes />
           </Suspense>
         )}
-        {currentTab() === "streams" && (
+        {currentTab === "streams" && (
           <Suspense fallback={<Loader />}>
-            <StreamsServer params={params} searchParams={searchParams} />
+            <StreamsServer roomId={params.roomId} />
           </Suspense>
         )}
       </RightPanel>

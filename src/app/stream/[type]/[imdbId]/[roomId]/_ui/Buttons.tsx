@@ -166,16 +166,13 @@ export function PIP({ tooltipPlacement }: MediaButtonProps) {
   );
 }
 
-export function Episodes({ tooltipPlacement }: MediaButtonProps) {
+export function Episodes() {
   const { roomData } = useRoomData();
   const pathname = usePathname();
   return (
     <TooltipProvider>
       <Tooltip>
-        <Link
-          href={pathname + `?season=${roomData?.season ?? "1"}`}
-          className={buttonClass}
-        >
+        <Link href={pathname + `?currentTab=episodes`} className={buttonClass}>
           <PiCardsThree size={26} className="text-solid-primary-2" />
           {/* <PiCardsThreeFill size={26} className="text-solid-primary-2" /> */}
         </Link>
@@ -187,9 +184,10 @@ export function Episodes({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Together({ tooltipPlacement }: MediaButtonProps) {
-  const { roomData: room } = useRoomData();
+  const { roomData: room, setRoomData } = useRoomData();
   async function handleOnClick(online: boolean) {
-    await changeInstanceOnline(room, online);
+    const updatedRoom = await changeInstanceOnline(room, online);
+    setRoomData(updatedRoom);
   }
 
   return (
@@ -227,46 +225,18 @@ export function Together({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Streams({ tooltipPlacement }: MediaButtonProps) {
-  const params = useParams<{ type: "movie " | "series"; roomId: string }>();
+  const pathname = usePathname();
 
   return (
     <TooltipProvider>
       <Tooltip>
-        {params.type === "series" ? <StreamsForSeries /> : <StreamsForMovie />}
+        <Link className={buttonClass} href={pathname + "?currentTab=streams"}>
+          <PiQueueBold size={26} className="text-solid-primary-2" />
+        </Link>
 
         <TooltipContent sideOffset={30}>Streams</TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  );
-}
-
-function StreamsForMovie() {
-  const pathname = usePathname();
-
-  return (
-    <Link className={buttonClass} href={pathname + "?showStreams=true"}>
-      <PiQueueBold size={26} className="text-solid-primary-2" />
-    </Link>
-  );
-}
-
-function StreamsForSeries() {
-  const pathname = usePathname();
-  const { roomData } = useRoomData();
-
-  return (
-    <Link
-      className={buttonClass}
-      href={
-        pathname +
-        `?season=${roomData?.season}` +
-        `&episode=${roomData?.episode}` +
-        "&showStreams=true"
-      }
-    >
-      {/* <PiQueueBold size={26} className="text-solid-primary-2" /> */}
-      <PiQueueDuotone size={26} className="text-solid-primary-2" />
-    </Link>
   );
 }
 
@@ -277,7 +247,7 @@ export function FullScreen({ tooltipPlacement }: MediaButtonProps) {
 export function Chat() {
   const pathname = usePathname();
   return (
-    <Link className={buttonClass} href={pathname}>
+    <Link className={buttonClass} href={pathname + "?currentTab=chat"}>
       <PiChatsLight size={26} />
     </Link>
   );

@@ -6,6 +6,5 @@ export async function changeInstanceOnline(
   room: Parameters<typeof api.room.updateMe>[0],
   online: boolean,
 ) {
-  await api.room.updateMe({ ...room, online });
-  revalidatePath(`/stream//[imdbId]/[roomId]/${room.id}`, "layout");
+  return await api.room.updateMe({ ...room, online });
 }

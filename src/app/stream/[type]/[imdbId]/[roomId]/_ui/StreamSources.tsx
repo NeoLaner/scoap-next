@@ -5,6 +5,7 @@ import { useSourceData } from "~/app/_hooks/useSourceData";
 import { useSourcesData } from "~/app/_hooks/useSourcesData";
 import StreamSourcesProfile from "./StreamSourcesProfile";
 import { useUserData } from "~/app/_hooks/useUserData";
+import { mediaSocket } from "~/lib/socket/socket";
 
 function StreamSources() {
   const { roomData } = useRoomData();
@@ -38,7 +39,7 @@ function StreamSources() {
     }
   });
 
-  async function handleOnClick(videoLink: string) {
+  async function handleSelectSource(videoLink: string) {
     const updatedSource = await updateSource({
       roomId: roomData.id,
       sourceId: sourceData.id,
@@ -53,6 +54,7 @@ function StreamSources() {
       if (updatedPrv) return [...updatedPrv, updatedSourceWithUser];
       else updatedSourceWithUser;
     });
+    // mediaSocket.emit("sourceDataChanged", { payload: updatedSource });
   }
 
   return (
@@ -65,7 +67,7 @@ function StreamSources() {
           <div className="flex w-full justify-between gap-2">
             <StreamSourcesProfile users={users} />
             <Button
-              onClick={() => handleOnClick(videoLink)}
+              onClick={() => handleSelectSource(videoLink)}
               disabled={sourceData.videoLink === videoLink}
               size={"sm"}
               variant={"destructive"}

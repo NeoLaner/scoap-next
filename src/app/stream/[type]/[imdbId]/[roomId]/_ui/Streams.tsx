@@ -18,7 +18,6 @@ function Streams({
   torrentIoStreamsSorted: GetStreamsFromTorrentIo | [];
   className?: string;
 }) {
-  const showStreams = useSearchParams().get("showStreams");
   const { setSourcesData } = useSourcesData();
   useEffect(function () {
     mediaSocket.on("sourceDataChanged", (wsData) => {
@@ -32,7 +31,6 @@ function Streams({
     };
   }, []);
 
-  if (!showStreams) return null;
   return (
     <div className={`${className} px-6`}>
       <StreamsHeading />
