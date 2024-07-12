@@ -40,6 +40,7 @@ import {
   TooltipTrigger,
 } from "~/app/_components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -168,14 +169,24 @@ export function PIP({ tooltipPlacement }: MediaButtonProps) {
 
 export function Episodes() {
   const { roomData } = useRoomData();
-  const pathname = usePathname();
+  const { setRoomSettings } = useRoomSettings();
   return (
     <TooltipProvider>
       <Tooltip>
-        <Link href={pathname + `?currentTab=episodes`} className={buttonClass}>
+        <Button
+          disabled={roomData.type !== "series"}
+          onClick={() =>
+            setRoomSettings((prv) => {
+              return { ...prv, currentTab: "streams" };
+            })
+          }
+          variant={"ghost"}
+          size={"icon"}
+          className={buttonClass}
+        >
           <PiCardsThree size={26} className="text-solid-primary-2" />
           {/* <PiCardsThreeFill size={26} className="text-solid-primary-2" /> */}
-        </Link>
+        </Button>
 
         <TooltipContent sideOffset={30}>Episodes</TooltipContent>
       </Tooltip>
@@ -225,14 +236,23 @@ export function Together({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Streams({ tooltipPlacement }: MediaButtonProps) {
-  const pathname = usePathname();
+  const { setRoomSettings } = useRoomSettings();
 
   return (
     <TooltipProvider>
       <Tooltip>
-        <Link className={buttonClass} href={pathname + "?currentTab=streams"}>
+        <Button
+          onClick={() =>
+            setRoomSettings((prv) => {
+              return { ...prv, currentTab: "streams" };
+            })
+          }
+          className={buttonClass}
+          variant={"ghost"}
+          size={"icon"}
+        >
           <PiQueueBold size={26} className="text-solid-primary-2" />
-        </Link>
+        </Button>
 
         <TooltipContent sideOffset={30}>Streams</TooltipContent>
       </Tooltip>
@@ -245,10 +265,19 @@ export function FullScreen({ tooltipPlacement }: MediaButtonProps) {
 }
 
 export function Chat() {
-  const pathname = usePathname();
+  const { setRoomSettings } = useRoomSettings();
   return (
-    <Link className={buttonClass} href={pathname + "?currentTab=chat"}>
+    <Button
+      onClick={() =>
+        setRoomSettings((prv) => {
+          return { ...prv, currentTab: "chat" };
+        })
+      }
+      className={buttonClass}
+      variant={"ghost"}
+      size={"icon"}
+    >
       <PiChatsLight size={26} />
-    </Link>
+    </Button>
   );
 }

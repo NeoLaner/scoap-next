@@ -1,6 +1,8 @@
 import { type ReactNode } from "react";
 import { RoomDataProvider } from "~/app/_providers/RoomDataProvider";
+import { RoomSettingsProvider } from "~/app/_providers/RoomSettingsProvider";
 import { SourceDataProvider } from "~/app/_providers/SourceDataProvider";
+import { SourcesDataProvider } from "~/app/_providers/SourcesDataProvider";
 import UsersSocketProvider from "~/app/_providers/UsersSocketProvider";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
@@ -34,12 +36,18 @@ async function Layout({
       roomId: roomData.id,
     });
 
+  const roomSources = await api.room.getRoomSources({ roomId });
+
   return (
     <RoomDataProvider initialRoomData={roomData}>
       <SourceDataProvider initialSourceData={sourceData}>
-        {/* <UsersSocketProvider>
+        <SourcesDataProvider initialSourcesData={roomSources?.Sources}>
+          <RoomSettingsProvider>
+            {/* <UsersSocketProvider>
         </UsersSocketProvider> */}
-        <div className="relative h-full w-full">{children}</div>
+            <div className="relative h-full w-full">{children}</div>
+          </RoomSettingsProvider>
+        </SourcesDataProvider>
       </SourceDataProvider>
     </RoomDataProvider>
   );

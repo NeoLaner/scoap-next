@@ -15,7 +15,7 @@ export const RoomSettingsContext = createContext<
 
 export const RoomSettingsProvider = ({
   children,
-  initialRoomSettings = { currentTab: "streams" },
+  initialRoomSettings = { currentTab: "chat" },
 }: {
   children: ReactNode;
   initialRoomSettings?: RoomSettings;

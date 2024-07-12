@@ -22,12 +22,11 @@ async function StreamsServer({
   // const torrentIoStreamsSorted = torrentIoStreams.sort(
   //   (streamA, streamB) => streamB.seeds! - streamA.seeds!,
   // );
-  const roomSources = await api.room.getRoomSources({ roomId });
+  
 
   return (
-    <SourcesDataProvider initialSourcesData={roomSources?.Sources}>
+    
       <Streams torrentIoStreamsSorted={[]} className={className} />
-    </SourcesDataProvider>
   );
 }
 

@@ -31,23 +31,47 @@ function PlayerLayout({
       </LeftPanel>
       <OpenRightPanelButton />
       <ResizableHandlePanel />
-      <RightPanel>
-        {currentTab === "chat" && (
+      <RightPanel
+        Elements={[
+          {
+            key: "chat",
+            JSX: (
+              <Suspense fallback={<Loader />}>
+                <Chat />
+              </Suspense>
+            ),
+          },
+          {
+            key: "episodes",
+            JSX: (
+              <Suspense fallback={<Loader />}>
+                <Episodes />
+              </Suspense>
+            ),
+          },
+          {
+            key: "streams",
+            JSX: (
+              <Suspense fallback={<Loader />}>
+                <StreamsServer roomId={params.roomId} />
+              </Suspense>
+            ),
+          },
+        ]}
+      />
+      {/* {currentTab === "chat" && (
           <Suspense fallback={<Loader />}>
             <Chat />
           </Suspense>
         )}
         {currentTab === "episodes" && (
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<Loader />}>  
             <Episodes />
           </Suspense>
-        )}
-        {currentTab === "streams" && (
-          <Suspense fallback={<Loader />}>
-            <StreamsServer roomId={params.roomId} />
-          </Suspense>
-        )}
-      </RightPanel>
+        )} */}
+      {/* {currentTab === "streams" && (
+        
+        )} */}
     </PlayerPanel>
   );
 }

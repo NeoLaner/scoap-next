@@ -24,6 +24,7 @@ import {
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import * as Buttons from "./Buttons";
 import { useRoomData } from "~/app/_hooks/useRoomData";
+import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
 
 const PanelContext = createContext<{
   isRightPanelOpen: boolean;
@@ -84,10 +85,19 @@ export function ResizableHandlePanel() {
   );
 }
 
-export function RightPanel({ children }: { children: ReactNode }) {
+export function RightPanel({
+  Elements,
+}: {
+  Elements: { JSX: ReactNode; key: string }[];
+}) {
   const { size, setIsRightPanelOpen, isRightPanelOpen } =
     useContext(PanelContext);
   const { roomData } = useRoomData();
+  const { roomSettings } = useRoomSettings();
+  const currentTab = Elements.filter(
+    (element) => element.key === roomSettings.currentTab,
+  )[0];
+
   return (
     <>
       {isRightPanelOpen && (
@@ -106,12 +116,12 @@ export function RightPanel({ children }: { children: ReactNode }) {
           >
             X
           </Button>
-          {children}
+          {currentTab?.JSX}
 
           <div className="absolute bottom-0 w-full border-t bg-background px-4 py-4">
             <div className="flex justify-between">
               <Buttons.Chat />
-              {roomData.type === "series" && <Buttons.Episodes />}
+              {<Buttons.Episodes />}
               <Buttons.Streams tooltipPlacement="top" />
             </div>
           </div>

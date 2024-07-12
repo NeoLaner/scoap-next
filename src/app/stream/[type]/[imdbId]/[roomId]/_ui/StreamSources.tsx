@@ -54,7 +54,10 @@ function StreamSources() {
       if (updatedPrv) return [...updatedPrv, updatedSourceWithUser];
       else updatedSourceWithUser;
     });
-    // mediaSocket.emit("sourceDataChanged", { payload: updatedSource });
+
+    mediaSocket.emit("sourceDataChanged", {
+      payload: { user: userData, ...updatedSource },
+    });
   }
 
   return (

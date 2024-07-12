@@ -37,7 +37,10 @@ function StreamForm() {
     setSourceData(sourceData);
     const newSource = { user: userData, ...sourceData };
     setSourcesData((sources) => {
-      if (sources) return [...sources, newSource];
+      const prvSourceWithoutUser = sources?.filter(
+        (source) => source.userId !== userData.id,
+      );
+      if (prvSourceWithoutUser) return [...prvSourceWithoutUser, newSource];
       return [newSource];
     });
     mediaSocket.emit("sourceDataChanged", { payload: newSource });
