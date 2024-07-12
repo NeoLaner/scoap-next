@@ -177,7 +177,7 @@ export function Episodes() {
           disabled={roomData.type !== "series"}
           onClick={() =>
             setRoomSettings((prv) => {
-              return { ...prv, currentTab: "streams" };
+              return { ...prv, currentTab: "episodes" };
             })
           }
           variant={"ghost"}

@@ -2,24 +2,21 @@
 import { type GetStreamsFromTorrentIo } from "~/lib/streams/getStreams";
 import TorrentStream from "./TorrentStream";
 import ScrollAreaY from "~/app/_ui/ScrollAreaY";
-import { useSearchParams } from "next/navigation";
+
 import StreamsHeading from "./StreamsHeading";
 import StreamForm from "./StreamForm";
 import StreamSources from "./StreamSources";
-import { useEffect } from "react";
-import { mediaSocket } from "~/lib/socket/socket";
-import { useSourcesData } from "~/app/_hooks/useSourcesData";
 
 // http://127.0.0.1:11470/6ee1a751d67aae51dfd067b0a11e2f06d1098461/create
 function Streams({
   torrentIoStreamsSorted,
-  className,
+  className = "",
 }: {
   torrentIoStreamsSorted: GetStreamsFromTorrentIo | [];
   className?: string;
 }) {
   return (
-    <div className={`${className} px-6`}>
+    <div className={`${className} relative h-full px-6 pb-16`}>
       <StreamsHeading />
       <div className="z-40 ml-2 h-full">
         <ScrollAreaY>
