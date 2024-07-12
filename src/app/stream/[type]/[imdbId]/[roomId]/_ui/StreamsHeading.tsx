@@ -1,7 +1,7 @@
 "use client";
 
 function StreamsHeading() {
-  return <div className="py-5">Room Sources</div>;
+  return <div>Room Sources</div>;
 }
 
 export default StreamsHeading;

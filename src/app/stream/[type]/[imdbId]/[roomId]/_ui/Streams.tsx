@@ -16,20 +16,13 @@ function Streams({
   className?: string;
 }) {
   return (
-    <div className={`${className} relative h-full px-6 pb-16`}>
-      <StreamsHeading />
-      <div className="z-40 ml-2 h-full">
-        <ScrollAreaY>
-          <div className="flex w-full flex-col items-center justify-center gap-2 rounded-md bg-background">
-            <StreamForm />
-            {torrentIoStreamsSorted.map((stream) => (
-              <TorrentStream key={stream.title} stream={stream} />
-            ))}
-            <div className="flex w-full flex-col gap-4">
-              <StreamSources />
-            </div>
-          </div>
-        </ScrollAreaY>
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-md bg-background">
+      <StreamForm />
+      {torrentIoStreamsSorted.map((stream) => (
+        <TorrentStream key={stream.title} stream={stream} />
+      ))}
+      <div className="flex w-full flex-col gap-4">
+        <StreamSources />
       </div>
     </div>
   );

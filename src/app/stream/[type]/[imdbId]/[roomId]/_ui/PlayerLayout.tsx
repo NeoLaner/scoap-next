@@ -14,6 +14,9 @@ import StreamsServer from "./StreamsServer";
 import { Suspense } from "react";
 import Loader from "~/app/_ui/Loader";
 import { Skeleton } from "~/app/_components/ui/Skeleton";
+import EpisodesHeading from "./EpisodesHeading";
+import StreamsHeading from "./StreamsHeading";
+import Streams from "./Streams";
 
 function PlayerLayout({
   searchParams,
@@ -35,27 +38,30 @@ function PlayerLayout({
         Elements={[
           {
             key: "chat",
-            JSX: (
+            JSXMain: (
               <Suspense fallback={<Loader />}>
                 <Chat />
               </Suspense>
             ),
+            JSXHeader: <div>Chat</div>,
           },
           {
             key: "episodes",
-            JSX: (
+            JSXMain: (
               <Suspense fallback={<Loader />}>
                 <Episodes />
               </Suspense>
             ),
+            JSXHeader: <EpisodesHeading />,
           },
           {
             key: "streams",
-            JSX: (
+            JSXMain: (
               <Suspense fallback={<Loader />}>
-                <StreamsServer roomId={params.roomId} />
+                <Streams torrentIoStreamsSorted={[]} />
               </Suspense>
             ),
+            JSXHeader: <StreamsHeading />,
           },
         ]}
       />

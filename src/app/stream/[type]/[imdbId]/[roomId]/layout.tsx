@@ -42,7 +42,7 @@ async function Layout({
     <RoomDataProvider initialRoomData={roomData}>
       <SourceDataProvider initialSourceData={sourceData}>
         <SourcesDataProvider initialSourcesData={roomSources?.Sources}>
-          <RoomSettingsProvider>
+          <RoomSettingsProvider initialRoomSettings={{ currentTab: "chat" }}>
             {/* <UsersSocketProvider>
         </UsersSocketProvider> */}
             <div className="relative h-full w-full">{children}</div>

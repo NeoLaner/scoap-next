@@ -49,46 +49,36 @@ function Episodes({ className = "" }: { className?: string }) {
   }
   return (
     <div
-      className={`${className} relative h-full  rounded-lg bg-background py-4`}
+      className={`${className} relative flex flex-col gap-2  rounded-lg bg-background `}
     >
-      {/* heading */}
-      <EpisodesHeading videos={metaData.videos} />
       {/* Episodes */}
-      <div className="h-full py-16">
-        <ScrollArea className="h-full">
-          <div className="mx-4 flex h-fit flex-col gap-2">
-            {episodesOfSeason?.map((episode) => (
-              <div
-                onClick={() => handleOnClick(episode)}
-                // variant={"outline"}
-                key={episode.episode}
-                className={`${
-                  roomData.episode === episode.episode &&
-                  roomData.season === episode.season
-                    ? "border-green-400  hover:cursor-not-allowed"
-                    : ""
-                } flex items-center justify-start gap-4 border text-start hover:cursor-pointer`}
-              >
-                <div className="h-[70px] overflow-hidden rounded-md ">
-                  {/* <Image
+      {episodesOfSeason?.map((episode) => (
+        <div
+          onClick={() => handleOnClick(episode)}
+          // variant={"outline"}
+          key={episode.episode}
+          className={`${
+            roomData.episode === episode.episode &&
+            roomData.season === episode.season
+              ? "border-green-400  hover:cursor-not-allowed"
+              : ""
+          } flex items-center justify-start gap-4 border text-start hover:cursor-pointer`}
+        >
+          <div className="h-[70px] overflow-hidden rounded-md ">
+            {/* <Image
                     src={episode.thumbnail}
                     alt={episode.name}
                     width={112}
                     height={70}
                     className="h-[70px] w-28"
                   /> */}
-                </div>
-                <div className="flex flex-1 flex-col justify-between gap-2">
-                  {episode.episode}.{episode.name}
-                  <div className="text-xs">
-                    {formatDate(episode.firstAired)}{" "}
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
-        </ScrollArea>
-      </div>
+          <div className="flex flex-1 flex-col justify-between gap-2">
+            {episode.episode}.{episode.name}
+            <div className="text-xs">{formatDate(episode.firstAired)} </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

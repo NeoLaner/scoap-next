@@ -1,6 +1,8 @@
 "use client";
 // context/RoomSettingsContext.tsx
 import React, { createContext, useState, type ReactNode } from "react";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { useRoomData } from "../_hooks/useRoomData";
 
 type RoomSettings = { currentTab: "chat" | "episodes" | "streams" };
 
@@ -20,8 +22,14 @@ export const RoomSettingsProvider = ({
   children: ReactNode;
   initialRoomSettings?: RoomSettings;
 }) => {
-  const [roomSettings, setRoomSettings] =
-    useState<RoomSettings>(initialRoomSettings);
+  // const [roomSettings, setRoomSettings] =
+  //  useState<RoomSettings>(initialRoomSettings);
+  const { roomData } = useRoomData();
+  const localStorageDataId = `room_settings:${roomData.id}`;
+  const [roomSettings, setRoomSettings] = useLocalStorage(
+    localStorageDataId,
+    initialRoomSettings,
+  );
 
   return (
     <RoomSettingsContext.Provider value={{ roomSettings, setRoomSettings }}>

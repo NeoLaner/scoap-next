@@ -25,6 +25,7 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 import * as Buttons from "./Buttons";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
+import { ScrollArea } from "~/app/_components/ui/scroll-area";
 
 const PanelContext = createContext<{
   isRightPanelOpen: boolean;
@@ -88,11 +89,10 @@ export function ResizableHandlePanel() {
 export function RightPanel({
   Elements,
 }: {
-  Elements: { JSX: ReactNode; key: string }[];
+  Elements: { JSXMain: ReactNode; JSXHeader: ReactNode; key: string }[];
 }) {
   const { size, setIsRightPanelOpen, isRightPanelOpen } =
     useContext(PanelContext);
-  const { roomData } = useRoomData();
   const { roomSettings } = useRoomSettings();
   const currentTab = Elements.filter(
     (element) => element.key === roomSettings.currentTab,
@@ -108,17 +108,28 @@ export function RightPanel({
           id="RightPanel"
           order={2}
         >
-          <Button
-            variant={"outline"}
-            onClick={() => setIsRightPanelOpen((val) => !val)}
-            className="absolute left-4 top-4 z-20"
-            size={"icon"}
-          >
-            X
-          </Button>
-          {currentTab?.JSX}
+          {/* Panel Header */}
+          <div className="flex h-[72px] w-full items-center justify-between p-4">
+            <Button
+              variant={"outline"}
+              onClick={() => setIsRightPanelOpen((val) => !val)}
+              className="left-4 top-4 z-20"
+              size={"icon"}
+            >
+              X
+            </Button>
+            {currentTab?.JSXHeader}
+          </div>
 
-          <div className="absolute bottom-0 w-full border-t bg-background px-4 py-4">
+          {/* Panel Main */}
+          <div className="h-full pb-[150px]">
+            <ScrollArea className="h-full">
+              <div className="mx-4 h-full">{currentTab?.JSXMain}</div>
+            </ScrollArea>
+          </div>
+
+          {/* Panel Footer */}
+          <div className="absolute bottom-0 h-[72px] w-full border-t bg-background p-4">
             <div className="flex justify-between">
               <Buttons.Chat />
               {<Buttons.Episodes />}

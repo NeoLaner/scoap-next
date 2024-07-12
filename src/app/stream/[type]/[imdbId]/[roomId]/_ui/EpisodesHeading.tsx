@@ -1,9 +1,8 @@
+"use client";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import React, { type ReactNode, useCallback, type LegacyRef } from "react";
+import React, { useCallback } from "react";
 import { type Video } from "~/app/_services/stremIo/types";
-import classnames from "classnames";
-import { Button } from "~/app/_components/ui/Button";
 import {
   Select,
   SelectContent,
@@ -12,20 +11,24 @@ import {
   SelectValue,
 } from "~/app/_components/ui/select";
 import { useRoomData } from "~/app/_hooks/useRoomData";
+import { useMetaData } from "~/app/_hooks/useMetaData";
 
 const extractUniqueSeasons = (videos: Video[]) => {
   const seasons = new Set(videos.map((video) => video.season));
   return Array.from(seasons);
 };
 
-function EpisodesHeading({ videos }: { videos: Video[] }) {
+function EpisodesHeading() {
   const { roomData } = useRoomData();
   const searchParams = useSearchParams();
-  const season = searchParams.get("season") ?? String(roomData.season) ?? "1";
+  const season = searchParams.get("season") ?? roomData.season ?? 1;
+  console.log("season", season);
+
   const router = useRouter();
   const pathname = usePathname();
-  // Get a new searchParams string by merging the current
-  // searchParams with a provided key/value pair
+  const { metaData } = useMetaData();
+  const { videos } = metaData;
+
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -39,10 +42,9 @@ function EpisodesHeading({ videos }: { videos: Video[] }) {
   if (!season) return null;
 
   return (
-    <div className="absolute right-0 top-0 flex w-full items-center justify-between px-4 py-5">
-      <div />
+    <div>
       <Select
-        value={season}
+        value={String(season)}
         onValueChange={(value) =>
           router.push(pathname + "?" + createQueryString("season", value))
         }
