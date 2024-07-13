@@ -6,14 +6,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "~/app/_components/ui/resizable";
-import {
-  createContext,
-  type ReactNode,
-  type Dispatch,
-  useState,
-  type SetStateAction,
-  useContext,
-} from "react";
+import { createContext, type ReactNode, useContext } from "react";
 import { Button } from "~/app/_components/ui/Button";
 import { PiDiceSixFill } from "react-icons/pi";
 import {
@@ -23,20 +16,33 @@ import {
 } from "~/app/_components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import * as Buttons from "./Buttons";
-import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
 import { ScrollArea } from "~/app/_components/ui/scroll-area";
 
 const PanelContext = createContext<{
+  isRightPanelOpen: boolean;
+  setIsRightPanelOpen: (val: boolean) => void;
   size: number;
   width: number;
 }>({
+  isRightPanelOpen: true,
+  setIsRightPanelOpen: () => {
+    return;
+  },
   size: 0,
   width: 0,
 });
 
 export function PlayerPanel({ children }: { children: ReactNode }) {
   const { width } = useWindowSize();
+  const {
+    setRoomSettings,
+    roomSettings: { isRightPanelOpen },
+  } = useRoomSettings();
+  const setIsRightPanelOpen = (val: boolean) =>
+    setRoomSettings((prv) => {
+      return { ...prv, isRightPanelOpen: val };
+    });
 
   if (!width) return null;
   let size;
@@ -49,6 +55,8 @@ export function PlayerPanel({ children }: { children: ReactNode }) {
     <ResizablePanelGroup direction="horizontal" className="flex h-full">
       <PanelContext.Provider
         value={{
+          isRightPanelOpen,
+          setIsRightPanelOpen,
           size,
           width,
         }}
@@ -69,10 +77,7 @@ export function LeftPanel({ children }: { children: ReactNode }) {
 }
 
 export function ResizableHandlePanel() {
-  const { width } = useContext(PanelContext);
-  const {
-    roomSettings: { isRightPanelOpen },
-  } = useRoomSettings();
+  const { width, isRightPanelOpen } = useContext(PanelContext);
 
   return (
     <>{width > 640 && isRightPanelOpen && <ResizableHandle withHandle />}</>
@@ -84,11 +89,8 @@ export function RightPanel({
 }: {
   Elements: { JSXMain: ReactNode; JSXHeader: ReactNode; key: string }[];
 }) {
-  const { size } = useContext(PanelContext);
-  const {
-    roomSettings: { isRightPanelOpen },
-    setRoomSettings,
-  } = useRoomSettings();
+  const { size, setIsRightPanelOpen, isRightPanelOpen } =
+    useContext(PanelContext);
   const { roomSettings } = useRoomSettings();
   const currentTab = Elements.filter(
     (element) => element.key === roomSettings.currentTab,
@@ -108,11 +110,7 @@ export function RightPanel({
           <div className="flex h-[72px] w-full items-center justify-between p-4">
             <Button
               variant={"outline"}
-              onClick={() =>
-                setRoomSettings((val) => {
-                  return { ...val, isRightPanelOpen: !val.isRightPanelOpen };
-                })
-              }
+              onClick={() => setIsRightPanelOpen(false)}
               className="left-4 top-4 z-20"
               size={"icon"}
             >
@@ -143,10 +141,7 @@ export function RightPanel({
 }
 
 export function OpenRightPanelButton() {
-  const {
-    roomSettings: { isRightPanelOpen },
-    setRoomSettings,
-  } = useRoomSettings();
+  const { setIsRightPanelOpen, isRightPanelOpen } = useContext(PanelContext);
   return (
     <>
       {!isRightPanelOpen && (
@@ -157,11 +152,7 @@ export function OpenRightPanelButton() {
                 className="absolute -right-4 top-1/2 -translate-y-[100%]"
                 variant={"ghost"}
                 size={"icon"}
-                onClick={() =>
-                  setRoomSettings((val) => {
-                    return { ...val, isRightPanelOpen: !val.isRightPanelOpen };
-                  })
-                }
+                onClick={() => setIsRightPanelOpen(true)}
               >
                 <PiDiceSixFill size={26} />
               </Button>
