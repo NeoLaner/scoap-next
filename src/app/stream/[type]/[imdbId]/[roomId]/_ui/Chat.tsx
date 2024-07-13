@@ -62,6 +62,7 @@ function Chat({ className = "" }: { className?: string | undefined }) {
         ))}
       </div>
 
+      <div className="h-[72px]" />
       <form
         className="absolute bottom-0 w-full p-4 pl-2 pr-5"
         onSubmit={messageSubmitHandler}

@@ -1,7 +1,13 @@
 "use client";
 // context/SourceDataContext.tsx
-import React, { createContext, useState, type ReactNode } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import { type api } from "~/trpc/server";
+import { useChatData } from "../_hooks/useChatData";
 
 type SourceData = NonNullable<Awaited<ReturnType<typeof api.source.get>>>;
 
@@ -22,6 +28,22 @@ export const SourceDataProvider = ({
   initialSourceData: SourceData;
 }) => {
   const [sourceData, setSourceData] = useState(initialSourceData);
+  const { pushMessage } = useChatData();
+  console.log("sourceData.videoLink", sourceData.videoLink);
+
+  useEffect(
+    function () {
+      if (!sourceData.videoLink)
+        pushMessage({
+          userName: "Scoap",
+          created_at: Date.now(),
+          textContent: "No source found",
+          type: "suggestion",
+        });
+    },
+    [pushMessage],
+  );
+
   return (
     <SourceDataContext.Provider value={{ sourceData, setSourceData }}>
       {children}
