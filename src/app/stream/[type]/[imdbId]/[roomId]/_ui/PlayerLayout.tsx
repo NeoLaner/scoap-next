@@ -14,6 +14,7 @@ import Loader from "~/app/_ui/Loader";
 import EpisodesHeading from "./EpisodesHeading";
 import StreamsHeading from "./StreamsHeading";
 import Streams from "./Streams";
+import ChatFooter from "./ChatFooter";
 
 function PlayerLayout() {
   return (
@@ -33,6 +34,7 @@ function PlayerLayout() {
               </Suspense>
             ),
             JSXHeader: <div>Chat</div>,
+            JSXFooter: <ChatFooter />,
           },
           {
             key: "episodes",

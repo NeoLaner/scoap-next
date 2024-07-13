@@ -16,7 +16,6 @@ function Chat({ className = "" }: { className?: string | undefined }) {
   const { chatData } = useChatData();
   console.log("chatData", chatData);
 
-  const [message, setMessage] = useState("");
   const scrollArea = useRef<HTMLDivElement>(null);
   const scrollAreaOverlay = useRef<HTMLDivElement>(null);
 
@@ -27,13 +26,6 @@ function Chat({ className = "" }: { className?: string | undefined }) {
     },
     [scrollArea.current, chatData],
   );
-
-  function messageSubmitHandler(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!message) return;
-    socketEmitters.sendMessage({ textContent: message });
-    setMessage("");
-  }
 
   return (
     <>
@@ -61,26 +53,6 @@ function Chat({ className = "" }: { className?: string | undefined }) {
           </div>
         ))}
       </div>
-
-      <div className="h-[72px]" />
-      <form
-        className="absolute bottom-0 w-full p-4 pl-2 pr-5"
-        onSubmit={messageSubmitHandler}
-      >
-        <div className="flex items-center gap-2">
-          <Input
-            className="w-full"
-            placeholder="Start typing..."
-            maxLength={128}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-
-          <Button variant="ghost" size="icon">
-            <PiPaperPlaneBold size={20} />
-          </Button>
-        </div>
-      </form>
       {/* <p className="absolute bottom-2 right-16">{message.length}/128</p> */}
     </>
   );

@@ -87,7 +87,12 @@ export function ResizableHandlePanel() {
 export function RightPanel({
   Elements,
 }: {
-  Elements: { JSXMain: ReactNode; JSXHeader: ReactNode; key: string }[];
+  Elements: {
+    JSXMain: ReactNode;
+    JSXHeader?: ReactNode;
+    JSXFooter?: ReactNode;
+    key: string;
+  }[];
 }) {
   const { size, setIsRightPanelOpen, isRightPanelOpen } =
     useContext(PanelContext);
@@ -120,18 +125,23 @@ export function RightPanel({
           </div>
 
           {/* Panel Main */}
-          <div className="h-full pb-[150px]">
+          <div
+            className={`h-full  ${currentTab?.JSXFooter ? "pb-[222px]" : "pb-[150px]"} `}
+          >
             <ScrollArea className="h-full">
               <div className="mx-4 h-full">{currentTab?.JSXMain}</div>
             </ScrollArea>
           </div>
 
           {/* Panel Footer */}
-          <div className="absolute bottom-0 h-[72px] w-full border-t bg-background p-4">
-            <div className="flex justify-between">
-              <Buttons.Chat />
-              {<Buttons.Episodes />}
-              <Buttons.Streams tooltipPlacement="top" />
+          <div className="absolute bottom-0 w-full">
+            <div className="h-[72px]">{currentTab?.JSXFooter}</div>
+            <div className=" h-[72px] w-full border-t bg-background p-4">
+              <div className="flex justify-between">
+                <Buttons.Chat />
+                {<Buttons.Episodes />}
+                <Buttons.Streams tooltipPlacement="top" />
+              </div>
             </div>
           </div>
         </ResizablePanel>
