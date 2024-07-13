@@ -1,10 +1,13 @@
 "use client";
 // context/RoomSettingsContext.tsx
-import React, { createContext, useState, type ReactNode } from "react";
+import React, { createContext, type ReactNode } from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useRoomData } from "../_hooks/useRoomData";
 
-type RoomSettings = { currentTab: "chat" | "episodes" | "streams" };
+type RoomSettings = {
+  currentTab: "chat" | "episodes" | "streams";
+  isRightPanelOpen: boolean;
+};
 
 interface RoomSettingsContextType {
   roomSettings: RoomSettings;
@@ -17,7 +20,7 @@ export const RoomSettingsContext = createContext<
 
 export const RoomSettingsProvider = ({
   children,
-  initialRoomSettings = { currentTab: "chat" },
+  initialRoomSettings = { currentTab: "chat", isRightPanelOpen: false },
 }: {
   children: ReactNode;
   initialRoomSettings?: RoomSettings;

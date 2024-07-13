@@ -28,22 +28,15 @@ import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
 import { ScrollArea } from "~/app/_components/ui/scroll-area";
 
 const PanelContext = createContext<{
-  isRightPanelOpen: boolean;
-  setIsRightPanelOpen: Dispatch<SetStateAction<boolean>>;
   size: number;
   width: number;
 }>({
-  isRightPanelOpen: true,
-  setIsRightPanelOpen: () => {
-    return;
-  },
   size: 0,
   width: 0,
 });
 
 export function PlayerPanel({ children }: { children: ReactNode }) {
   const { width } = useWindowSize();
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
 
   if (!width) return null;
   let size;
@@ -56,8 +49,6 @@ export function PlayerPanel({ children }: { children: ReactNode }) {
     <ResizablePanelGroup direction="horizontal" className="flex h-full">
       <PanelContext.Provider
         value={{
-          isRightPanelOpen,
-          setIsRightPanelOpen,
           size,
           width,
         }}
@@ -78,8 +69,10 @@ export function LeftPanel({ children }: { children: ReactNode }) {
 }
 
 export function ResizableHandlePanel() {
-  const { width, isRightPanelOpen } = useContext(PanelContext);
-  console.log(isRightPanelOpen);
+  const { width } = useContext(PanelContext);
+  const {
+    roomSettings: { isRightPanelOpen },
+  } = useRoomSettings();
 
   return (
     <>{width > 640 && isRightPanelOpen && <ResizableHandle withHandle />}</>
@@ -91,8 +84,11 @@ export function RightPanel({
 }: {
   Elements: { JSXMain: ReactNode; JSXHeader: ReactNode; key: string }[];
 }) {
-  const { size, setIsRightPanelOpen, isRightPanelOpen } =
-    useContext(PanelContext);
+  const { size } = useContext(PanelContext);
+  const {
+    roomSettings: { isRightPanelOpen },
+    setRoomSettings,
+  } = useRoomSettings();
   const { roomSettings } = useRoomSettings();
   const currentTab = Elements.filter(
     (element) => element.key === roomSettings.currentTab,
@@ -112,7 +108,11 @@ export function RightPanel({
           <div className="flex h-[72px] w-full items-center justify-between p-4">
             <Button
               variant={"outline"}
-              onClick={() => setIsRightPanelOpen((val) => !val)}
+              onClick={() =>
+                setRoomSettings((val) => {
+                  return { ...val, isRightPanelOpen: !val.isRightPanelOpen };
+                })
+              }
               className="left-4 top-4 z-20"
               size={"icon"}
             >
@@ -143,7 +143,10 @@ export function RightPanel({
 }
 
 export function OpenRightPanelButton() {
-  const { setIsRightPanelOpen, isRightPanelOpen } = useContext(PanelContext);
+  const {
+    roomSettings: { isRightPanelOpen },
+    setRoomSettings,
+  } = useRoomSettings();
   return (
     <>
       {!isRightPanelOpen && (
@@ -154,7 +157,11 @@ export function OpenRightPanelButton() {
                 className="absolute -right-4 top-1/2 -translate-y-[100%]"
                 variant={"ghost"}
                 size={"icon"}
-                onClick={() => setIsRightPanelOpen((val) => !val)}
+                onClick={() =>
+                  setRoomSettings((val) => {
+                    return { ...val, isRightPanelOpen: !val.isRightPanelOpen };
+                  })
+                }
               >
                 <PiDiceSixFill size={26} />
               </Button>
