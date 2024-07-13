@@ -38,7 +38,7 @@ export const SourceDataProvider = ({
           userName: "Scoap",
           created_at: Date.now(),
           textContent: "No source found",
-          type: "suggestion",
+          type: "warning",
         });
     },
     [pushMessage],

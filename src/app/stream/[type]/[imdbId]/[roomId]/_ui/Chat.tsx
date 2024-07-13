@@ -36,7 +36,7 @@ function Chat({ className = "" }: { className?: string | undefined }) {
         {chatData?.map((message) => (
           <div
             key={message.created_at}
-            className="flex items-start space-x-2 pr-2"
+            className={`flex items-start space-x-2 pr-2 ${message.className} rounded-lg`}
           >
             <Avatar className="h-8 w-8 rounded-md">
               {/* <AvatarImage

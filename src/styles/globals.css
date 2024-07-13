@@ -52,6 +52,15 @@
     --secondary: 0 78% 17.5%;
     --secondary-foreground: 222.2 40% 98%;
 
+    --success: 100, 78%, 32%;
+    --success-foreground: 100, 78%, 98%;
+
+    --warning: 61, 99%, 45%;
+    --warning-foreground: 61, 99%, 1%;
+
+    --danger: 0, 99%, 34%;
+    --danger-foreground: 0, 99%, 98%;
+
     --muted: 313 20% 10%;
     --muted-foreground: 313 20.2% 85%;
 
