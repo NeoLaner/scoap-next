@@ -8,11 +8,14 @@ import { Button } from "~/app/_components/ui/Button";
 import { PiPaperPlaneBold } from "react-icons/pi";
 import { Avatar, AvatarFallback } from "~/app/_components/ui/avatar";
 import { Input } from "~/app/_components/ui/input";
+import { useChatData } from "~/app/_hooks/useChatData";
 
 function Chat({ className = "" }: { className?: string | undefined }) {
   // const { chatData } = useGetChat();
   // const { isChatConnected } = useIsChatConnected();
-  const chatData = [{ created_at: 0, userName: "yasin", textContent: "Hello" }];
+  const { chatData } = useChatData();
+  console.log("chatData", chatData);
+
   const [message, setMessage] = useState("");
   const scrollArea = useRef<HTMLDivElement>(null);
   const scrollAreaOverlay = useRef<HTMLDivElement>(null);

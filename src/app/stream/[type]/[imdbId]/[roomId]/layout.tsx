@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { ChatDataProvider } from "~/app/_providers/ChatDataProvider";
 import { RoomDataProvider } from "~/app/_providers/RoomDataProvider";
 import { RoomSettingsProvider } from "~/app/_providers/RoomSettingsProvider";
 import { SourceDataProvider } from "~/app/_providers/SourceDataProvider";
@@ -43,9 +44,11 @@ async function Layout({
       <SourceDataProvider initialSourceData={sourceData}>
         <SourcesDataProvider initialSourcesData={roomSources?.Sources}>
           <RoomSettingsProvider>
-            {/* <UsersSocketProvider>
+            <ChatDataProvider>
+              {/* <UsersSocketProvider>
         </UsersSocketProvider> */}
-            <div className="relative h-full w-full">{children}</div>
+              <div className="relative h-full w-full">{children}</div>
+            </ChatDataProvider>
           </RoomSettingsProvider>
         </SourcesDataProvider>
       </SourceDataProvider>
