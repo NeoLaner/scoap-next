@@ -135,7 +135,9 @@ export function RightPanel({
 
           {/* Panel Footer */}
           <div className="absolute bottom-0 w-full">
-            <div className="h-[72px]">{currentTab?.JSXFooter}</div>
+            {currentTab?.JSXFooter && (
+              <div className="h-[72px]">{currentTab.JSXFooter}</div>
+            )}
             <div className=" h-[72px] w-full border-t bg-background p-4">
               <div className="flex justify-between">
                 <Buttons.Chat />
