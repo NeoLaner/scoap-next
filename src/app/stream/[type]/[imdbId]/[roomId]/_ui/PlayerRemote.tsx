@@ -5,6 +5,7 @@ import {
 } from "@vidstack/react";
 import { useEffect, type RefObject } from "react";
 import { toast } from "sonner";
+import { useChatData } from "~/app/_hooks/useChatData";
 import { useIsMediaConnected } from "~/app/_hooks/useIsMediaConnected";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useSourcesData } from "~/app/_hooks/useSourcesData";
@@ -23,6 +24,20 @@ function PlayerRemote({
   const { setRoomData } = useRoomData();
   const { isMediaConnected } = useIsMediaConnected();
   const { setSourcesData } = useSourcesData();
+  const { pushMessage } = useChatData();
+  useEffect(
+    function () {
+      mediaSocket.off("chat:userMessaged");
+      mediaSocket.on("chat:userMessaged", (wsData) => {
+        pushMessage(wsData.payload);
+      });
+
+      return () => {
+        mediaSocket.off("chat:userMessaged");
+      };
+    },
+    [pushMessage],
+  );
 
   useEffect(function () {
     mediaSocket.on("sourceDataChanged", (wsData) => {

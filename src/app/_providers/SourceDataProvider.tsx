@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { type api } from "~/trpc/server";
 import { useChatData } from "../_hooks/useChatData";
+import serverMessages from "~/lib/messages/serverMessages";
 
 type SourceData = NonNullable<Awaited<ReturnType<typeof api.source.get>>>;
 
@@ -29,20 +30,12 @@ export const SourceDataProvider = ({
 }) => {
   const [sourceData, setSourceData] = useState(initialSourceData);
   const { pushMessage } = useChatData();
-  console.log("sourceData.videoLink", sourceData.videoLink);
 
-  useEffect(
-    function () {
-      if (!sourceData.videoLink)
-        pushMessage({
-          userName: "Scoap",
-          created_at: Date.now(),
-          textContent: "No source found",
-          type: "warning",
-        });
-    },
-    [pushMessage],
-  );
+  useEffect(function () {
+    console.log(sourceData);
+
+    if (!sourceData.videoLink) pushMessage(serverMessages("NO_SOURCE"));
+  }, []);
 
   return (
     <SourceDataContext.Provider value={{ sourceData, setSourceData }}>

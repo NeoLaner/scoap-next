@@ -47,19 +47,19 @@ function UsersStatus() {
   if (usersState.length === 0) return null;
   return (
     <div
-      className={`${hover || waitingForDataUsers.length ? "" : "ml-6  -translate-x-full"} my-auto flex h-fit items-center justify-center  transition-all`}
+      className={` ${hover || waitingForDataUsers.length ? "" : "ml-6  -translate-x-full"} my-auto flex h-fit items-center justify-center  transition-all`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
       <div
-        className={`flex flex-col items-center justify-center gap-2 bg-background px-[0.35rem] py-[0.4rem] transition-all`}
+        className={`${usersState.length > 1 ? "rounded-r-md" : ""} flex flex-col items-center justify-center gap-2 bg-background px-[0.35rem] py-[0.4rem] transition-all`}
       >
         {usersState?.map((userData) => (
           <div className="flex items-center gap-2" key={userData.id}>
-            <Avatar className="h-8 w-8">
+            <Avatar className="h-8 w-8 rounded-md">
               <AvatarImage src={userData.image ?? ""} />
               <AvatarFallback>
-                {getFirstTwoLetters(userData.userName ?? ":(")}
+                {getFirstTwoLetters(userData.userName)}
               </AvatarFallback>
             </Avatar>
             <p className="text-sm">{formatTime(userData.videoTs)}</p>

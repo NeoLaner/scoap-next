@@ -5,7 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const getFirstTwoLetters = (word: string): string => {
+export const getFirstTwoLetters = (word?: string | null): string => {
+  if (!word) return ":(";
   if (word.length === 0) {
     return word; // Return the word itself if it's empty
   }

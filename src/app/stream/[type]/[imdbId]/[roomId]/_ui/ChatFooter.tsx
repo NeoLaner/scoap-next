@@ -3,14 +3,16 @@ import { type FormEvent, useState } from "react";
 import { PiPaperPlaneBold } from "react-icons/pi";
 import { Button } from "~/app/_components/ui/Button";
 import { Input } from "~/app/_components/ui/input";
-import socketEmitters from "~/app/_services/socket/socketEmit";
+import { mediaSocket } from "~/lib/socket/socket";
 
 function ChatFooter() {
   const [message, setMessage] = useState("");
   function messageSubmitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!message) return;
-    socketEmitters.sendMessage({ textContent: message });
+    mediaSocket.emit("chat:userMessaged", {
+      payload: { textContent: message },
+    });
     setMessage("");
   }
 

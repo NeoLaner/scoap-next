@@ -2,11 +2,15 @@
 import { useState, type FormEvent, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import socketEmitters from "~/app/_services/socket/socketEmit";
-import { cn } from "~/lib/utils";
+import { cn, getFirstTwoLetters } from "~/lib/utils";
 import { ScrollArea } from "~/app/_components/ui/scroll-area";
 import { Button } from "~/app/_components/ui/Button";
 import { PiPaperPlaneBold } from "react-icons/pi";
-import { Avatar, AvatarFallback } from "~/app/_components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "~/app/_components/ui/avatar";
 import { Input } from "~/app/_components/ui/input";
 import { useChatData } from "~/app/_hooks/useChatData";
 
@@ -39,16 +43,16 @@ function Chat({ className = "" }: { className?: string | undefined }) {
             className={`flex items-start space-x-2 pr-2 ${message.className} rounded-lg`}
           >
             <Avatar className="h-8 w-8 rounded-md">
-              {/* <AvatarImage
-                  className="rounded-md"
-                  src="/placeholder.svg?height=50&width=50"
-                /> */}
+              <AvatarImage
+                className="rounded-md"
+                src={message.user.image ?? ""}
+              />
               <AvatarFallback className="rounded-md">
-                {message.userName[0].toUpperCase()}
+                {getFirstTwoLetters(message.user.name)}
               </AvatarFallback>
             </Avatar>
             <p className="!mt-[0.1rem] break-all text-sm">
-              {message.userName}: {message.textContent}
+              {message.user.name}: {message.textContent}
             </p>
           </div>
         ))}

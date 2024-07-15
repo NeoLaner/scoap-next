@@ -41,17 +41,17 @@ async function Layout({
 
   return (
     <RoomDataProvider initialRoomData={roomData}>
-      <ChatDataProvider>
-        <SourceDataProvider initialSourceData={sourceData}>
-          <SourcesDataProvider initialSourcesData={roomSources?.Sources}>
-            <RoomSettingsProvider>
+      <RoomSettingsProvider>
+        <ChatDataProvider>
+          <SourceDataProvider initialSourceData={sourceData}>
+            <SourcesDataProvider initialSourcesData={roomSources?.Sources}>
               {/* <UsersSocketProvider>
         </UsersSocketProvider> */}
               <div className="relative h-full w-full">{children}</div>
-            </RoomSettingsProvider>
-          </SourcesDataProvider>
-        </SourceDataProvider>
-      </ChatDataProvider>
+            </SourcesDataProvider>
+          </SourceDataProvider>
+        </ChatDataProvider>
+      </RoomSettingsProvider>
     </RoomDataProvider>
   );
 }

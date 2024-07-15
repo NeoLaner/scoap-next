@@ -3,16 +3,18 @@
 import React, { createContext, useMemo, type ReactNode } from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useRoomData } from "../_hooks/useRoomData";
+import { useRoomSettings } from "../_hooks/useRoomSettings";
+import { toast } from "sonner";
 
 type MessageProp = {
   textContent: string;
   type: "normal" | "normal:server" | "success" | "warning" | "danger";
   created_at: number;
-  userName: string;
+  user: { name: string | null; image: string | null; id: string };
 };
 
 function createNewMessage({ message }: { message: MessageProp }) {
-  const { created_at, textContent, type, userName } = message;
+  const { created_at, textContent, type, user } = message;
   let className = "";
   switch (type) {
     case "normal":
@@ -37,7 +39,7 @@ function createNewMessage({ message }: { message: MessageProp }) {
   const bakedMessage = {
     created_at,
     textContent,
-    userName,
+    user,
     className,
   };
   return bakedMessage;
@@ -56,6 +58,7 @@ export const ChatDataContext = createContext<ChatDataContextType | undefined>(
 
 export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
   const { roomData } = useRoomData();
+  const { roomSettings } = useRoomSettings();
   const localStorageDataId = `room_chat:${roomData.id}`;
   const [chatData, setChatData] = useLocalStorage<Message[]>(
     localStorageDataId,
@@ -65,17 +68,25 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
   const pushMessage = useMemo(
     () => (message: MessageProp) => {
       setChatData((prev) => {
-        const newChatData = [...prev, createNewMessage({ message })];
+        let newChatData;
+        if (prev) newChatData = [...prev, createNewMessage({ message })];
+        else newChatData = [createNewMessage({ message })];
 
         // Limit to the first 200 messages
         if (newChatData.length > 200) {
           newChatData.splice(0, newChatData.length - 200);
         }
 
+        if (
+          !roomSettings.isRightPanelOpen ||
+          (roomSettings.isRightPanelOpen && roomSettings.currentTab !== "chat")
+        )
+          toast(message.textContent);
+
         return newChatData;
       });
     },
-    [],
+    [setChatData, roomSettings.currentTab, roomSettings.isRightPanelOpen],
   );
 
   return (
