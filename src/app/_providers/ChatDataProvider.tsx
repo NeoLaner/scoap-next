@@ -1,10 +1,16 @@
 "use client";
 // context/ChatDataContext.tsx
-import React, { createContext, useMemo, type ReactNode } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useMemo,
+  type ReactNode,
+} from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useRoomData } from "../_hooks/useRoomData";
 import { useRoomSettings } from "../_hooks/useRoomSettings";
 import { toast } from "sonner";
+import eventEmitter from "~/lib/eventEmitter";
 
 type MessageProp = {
   textContent: string;
@@ -49,7 +55,6 @@ type Message = ReturnType<typeof createNewMessage>;
 
 interface ChatDataContextType {
   chatData: Message[];
-  pushMessage: (message: MessageProp) => void;
 }
 
 export const ChatDataContext = createContext<ChatDataContextType | undefined>(
@@ -65,26 +70,33 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
     [],
   );
 
-  const pushMessage = useMemo(
-    () => (message: MessageProp) => {
-      setChatData((prev) => {
-        let newChatData;
-        if (prev) newChatData = [...prev, createNewMessage({ message })];
-        else newChatData = [createNewMessage({ message })];
+  useEffect(
+    function () {
+      eventEmitter.on("message", (message: MessageProp) => {
+        setChatData((prev) => {
+          let newChatData;
+          if (prev) newChatData = [...prev, createNewMessage({ message })];
+          else newChatData = [createNewMessage({ message })];
 
-        // Limit to the first 200 messages
-        if (newChatData.length > 200) {
-          newChatData.splice(0, newChatData.length - 200);
-        }
+          // Limit to the first 200 messages
+          if (newChatData.length > 200) {
+            newChatData.splice(0, newChatData.length - 200);
+          }
 
-        if (
-          !roomSettings.isRightPanelOpen ||
-          (roomSettings.isRightPanelOpen && roomSettings.currentTab !== "chat")
-        )
-          toast(message.textContent);
+          if (
+            !roomSettings.isRightPanelOpen ||
+            (roomSettings.isRightPanelOpen &&
+              roomSettings.currentTab !== "chat")
+          )
+            toast(message.textContent);
 
-        return newChatData;
+          return newChatData;
+        });
       });
+
+      return () => {
+        eventEmitter.off("message");
+      };
     },
     [setChatData, roomSettings.currentTab, roomSettings.isRightPanelOpen],
   );
@@ -93,7 +105,6 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
     <ChatDataContext.Provider
       value={{
         chatData,
-        pushMessage,
       }}
     >
       {children}

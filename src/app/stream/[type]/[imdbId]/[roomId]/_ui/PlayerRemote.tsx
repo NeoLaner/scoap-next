@@ -10,6 +10,7 @@ import { useIsMediaConnected } from "~/app/_hooks/useIsMediaConnected";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useSourcesData } from "~/app/_hooks/useSourcesData";
 import { useUserData } from "~/app/_hooks/useUserData";
+import eventEmitter from "~/lib/eventEmitter";
 import { mediaSocket } from "~/lib/socket/socket";
 
 function PlayerRemote({
@@ -24,20 +25,16 @@ function PlayerRemote({
   const { setRoomData } = useRoomData();
   const { isMediaConnected } = useIsMediaConnected();
   const { setSourcesData } = useSourcesData();
-  const { pushMessage } = useChatData();
-  useEffect(
-    function () {
-      mediaSocket.off("chat:userMessaged");
-      mediaSocket.on("chat:userMessaged", (wsData) => {
-        pushMessage(wsData.payload);
-      });
 
-      return () => {
-        mediaSocket.off("chat:userMessaged");
-      };
-    },
-    [pushMessage],
-  );
+  useEffect(function () {
+    mediaSocket.on("chat:userMessaged", (wsData) => {
+      eventEmitter.emit("message", wsData.payload);
+    });
+
+    return () => {
+      mediaSocket.off("chat:userMessaged");
+    };
+  }, []);
 
   useEffect(function () {
     mediaSocket.on("sourceDataChanged", (wsData) => {
