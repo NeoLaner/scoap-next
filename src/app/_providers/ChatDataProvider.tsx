@@ -10,7 +10,9 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import { useRoomData } from "../_hooks/useRoomData";
 import { useRoomSettings } from "../_hooks/useRoomSettings";
 import { toast } from "sonner";
-import eventEmitter from "~/lib/eventEmitter";
+import eventEmitter from "~/lib/eventEmitter/eventEmitter";
+import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
+import { getFirstTwoLetters } from "~/lib/utils";
 
 type MessageProp = {
   textContent: string;
@@ -33,7 +35,7 @@ function createNewMessage({ message }: { message: MessageProp }) {
       className = "text-success";
       break;
     case "warning":
-      className = "text-warning";
+      className = "text-warning-foreground bg-warning";
       break;
     case "danger":
       className = "text-danger";
@@ -88,7 +90,17 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
             (roomSettings.isRightPanelOpen &&
               roomSettings.currentTab !== "chat")
           )
-            toast(message.textContent);
+            toast(
+              <div className="flex gap-2">
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={message.user.image ?? ""} />
+                  <AvatarFallback>
+                    {getFirstTwoLetters(message.user.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <p>{message.textContent}</p>
+              </div>,
+            );
 
           return newChatData;
         });

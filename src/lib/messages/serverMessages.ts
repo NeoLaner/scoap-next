@@ -1,4 +1,4 @@
-const user = { name: "Scoap", id: "0", image: "/scoap.png" };
+const user = { name: "Scoap", id: "0", image: "/scoap.jpg" };
 
 const messageTemplates = {
   NO_SOURCE: { textContent: "No source found", type: "warning" },

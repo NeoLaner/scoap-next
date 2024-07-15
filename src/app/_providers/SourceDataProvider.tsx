@@ -9,7 +9,7 @@ import React, {
 import { type api } from "~/trpc/server";
 import { useChatData } from "../_hooks/useChatData";
 import serverMessages from "~/lib/messages/serverMessages";
-import eventEmitter from "~/lib/eventEmitter";
+import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 
 type SourceData = NonNullable<Awaited<ReturnType<typeof api.source.get>>>;
 

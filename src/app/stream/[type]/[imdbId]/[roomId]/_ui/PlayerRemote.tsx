@@ -5,12 +5,11 @@ import {
 } from "@vidstack/react";
 import { useEffect, type RefObject } from "react";
 import { toast } from "sonner";
-import { useChatData } from "~/app/_hooks/useChatData";
 import { useIsMediaConnected } from "~/app/_hooks/useIsMediaConnected";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useSourcesData } from "~/app/_hooks/useSourcesData";
 import { useUserData } from "~/app/_hooks/useUserData";
-import eventEmitter from "~/lib/eventEmitter";
+import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 import { mediaSocket } from "~/lib/socket/socket";
 
 function PlayerRemote({
