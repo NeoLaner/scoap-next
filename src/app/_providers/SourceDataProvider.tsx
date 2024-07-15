@@ -33,7 +33,7 @@ export const SourceDataProvider = ({
 
   useEffect(function () {
     setTimeout(() => {
-      eventEmitter.emit("message", serverMessages("NO_SOURCE"));
+      eventEmitter.emit("user:message", serverMessages("NO_SOURCE"));
     }, 3000);
   }, []);
 

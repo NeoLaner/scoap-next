@@ -27,7 +27,7 @@ function PlayerRemote({
 
   useEffect(function () {
     mediaSocket.on("chat:userMessaged", (wsData) => {
-      eventEmitter.emit("message", wsData.payload);
+      eventEmitter.emit("user:message", wsData.payload);
     });
 
     return () => {

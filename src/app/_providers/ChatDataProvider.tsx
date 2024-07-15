@@ -13,13 +13,7 @@ import { toast } from "sonner";
 import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
 import { getFirstTwoLetters } from "~/lib/utils";
-
-type MessageProp = {
-  textContent: string;
-  type: "normal" | "normal:server" | "success" | "warning" | "danger";
-  created_at: number;
-  user: { name: string | null; image: string | null; id: string };
-};
+import { MessageProp } from "~/lib/@types/Message";
 
 function createNewMessage({ message }: { message: MessageProp }) {
   const { created_at, textContent, type, user } = message;
@@ -74,7 +68,7 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(
     function () {
-      eventEmitter.on("message", (message: MessageProp) => {
+      const unbind = eventEmitter.on("user:message", (message: MessageProp) => {
         setChatData((prev) => {
           let newChatData;
           if (prev) newChatData = [...prev, createNewMessage({ message })];
@@ -107,7 +101,7 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
       });
 
       return () => {
-        eventEmitter.off("message");
+        unbind();
       };
     },
     [setChatData, roomSettings.currentTab, roomSettings.isRightPanelOpen],
