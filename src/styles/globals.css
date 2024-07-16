@@ -55,8 +55,8 @@
     --success: 100, 78%, 32%;
     --success-foreground: 100, 78%, 98%;
 
-    --warning: 61, 99%, 45%;
-    --warning-foreground: 61, 99%, 1%;
+    --warning: 55, 99%, 30%;
+    --warning-foreground: 61, 99%, 100%;
 
     --danger: 0, 99%, 34%;
     --danger-foreground: 0, 99%, 98%;

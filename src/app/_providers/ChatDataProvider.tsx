@@ -1,11 +1,6 @@
 "use client";
 // context/ChatDataContext.tsx
-import React, {
-  createContext,
-  useEffect,
-  useMemo,
-  type ReactNode,
-} from "react";
+import React, { createContext, useEffect, type ReactNode } from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useRoomData } from "../_hooks/useRoomData";
 import { useRoomSettings } from "../_hooks/useRoomSettings";
@@ -13,7 +8,7 @@ import { toast } from "sonner";
 import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
 import { getFirstTwoLetters } from "~/lib/utils";
-import { MessageProp } from "~/lib/@types/Message";
+import { type MessageProp } from "~/lib/@types/Message";
 
 function createNewMessage({ message }: { message: MessageProp }) {
   const { created_at, textContent, type, user } = message;
@@ -68,7 +63,7 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(
     function () {
-      const unbind = eventEmitter.on("user:message", (message: MessageProp) => {
+      const unbind = eventEmitter.on("user:message", (message) => {
         setChatData((prev) => {
           let newChatData;
           if (prev) newChatData = [...prev, createNewMessage({ message })];
@@ -86,7 +81,7 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
           )
             toast(
               <div className="flex gap-2">
-                <Avatar className="h-6 w-6">
+                <Avatar className="h-6 w-6 rounded-md">
                   <AvatarImage src={message.user.image ?? ""} />
                   <AvatarFallback>
                     {getFirstTwoLetters(message.user.name)}
