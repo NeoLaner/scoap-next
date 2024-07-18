@@ -30,13 +30,10 @@ function StreamSourcesProfile({
       {users.map((user, index) => (
         <Avatar
           key={index}
-          className={`${isHover ? "mr-0" : "-mr-4"} flex h-9 w-9 items-center justify-center rounded-full shadow-2xl transition-all`}
+          className={`${isHover ? "mr-0" : "-mr-4"} flex h-8 w-8 items-center justify-center rounded-md border-2 shadow-2xl transition-all`}
         >
-          <AvatarImage
-            src={user.image}
-            className="h-9 w-9 rounded-full border-2"
-          />
-          <AvatarFallback>
+          <AvatarImage src={user.image} className="" />
+          <AvatarFallback className="rounded-md">
             {getFirstTwoLetters(user.name ?? ":(")}
           </AvatarFallback>
         </Avatar>

@@ -235,7 +235,7 @@ export function Together({ tooltipPlacement }: MediaButtonProps) {
   );
 }
 
-export function Streams({ tooltipPlacement }: MediaButtonProps) {
+export function Streams() {
   const { setRoomSettings } = useRoomSettings();
 
   return (

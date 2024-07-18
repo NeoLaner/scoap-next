@@ -1,26 +1,36 @@
 import { Button } from "~/app/_components/ui/Button";
+import * as Buttons from "./Buttons";
+import { useChatData } from "~/app/_hooks/useChatData";
+import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 
-const user = { name: "Scoap", id: "0", image: "/scoap.png" };
+export type ServerMessagesId = "NO_SOURCE";
 
-const messageTemplates = {
-  NO_SOURCE: {
-    jsxContent: (
-      <div>
-        No source found, Please Go to the
-        <Button variant={"link"}>Streams</Button> And select a link.
+export default function ServerMessages({ id }: { id: ServerMessagesId }) {
+  switch (id) {
+    case "NO_SOURCE":
+      return <NoSource />;
+
+    default:
+      return <></>;
+  }
+}
+
+function NoSource() {
+  function dismissHandler() {
+    eventEmitter.emit("server:message_dismissed", "NO_SOURCE");
+  }
+  return (
+    <div className="flex flex-col gap-2 rounded-lg border bg-warning p-3 text-warning-foreground">
+      <p>
+        No source found, Please go to the streams tab and select a video link.
+      </p>
+
+      <div className="flex items-center gap-2 self-end">
+        <Button onClick={dismissHandler} variant={"ghost"}>
+          Dismiss
+        </Button>
+        <Buttons.Streams />
       </div>
-    ),
-    type: "warning",
-  },
-} as const;
-
-export default function ServerMessages(key: keyof typeof messageTemplates) {
-  const message = messageTemplates[key];
-  const serverMessage = {
-    user,
-    created_at: Date.now(),
-    jsxContent: message.jsxContent,
-    type: message.type,
-  };
-  return serverMessage;
+    </div>
+  );
 }

@@ -10,6 +10,7 @@ import * as Separator from "@radix-ui/react-separator";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
 import { Button } from "../_components/ui/Button";
+import { getFirstTwoLetters } from "~/lib/utils";
 
 const UserDropMenu = ({
   user,
@@ -25,12 +26,14 @@ const UserDropMenu = ({
     <Popover>
       <PopoverTrigger asChild>
         <Button variant={"ghost"} size={"icon"} className="rounded-full">
-          <Avatar>
+          <Avatar className="h-8 w-8 rounded-md">
             <AvatarImage
               src={user?.image ?? ""}
               alt={user?.name ?? "Anonymous"}
             />
-            <AvatarFallback delayMs={600}>JD</AvatarFallback>
+            <AvatarFallback className="h-8 w-8 rounded-md" delayMs={600}>
+              JD
+            </AvatarFallback>
           </Avatar>
         </Button>
       </PopoverTrigger>
@@ -38,14 +41,13 @@ const UserDropMenu = ({
       <PopoverContent sideOffset={8} className="mr-2">
         <div>
           <div className="flex gap-2">
-            <Avatar>
+            <Avatar className="h-8 w-8 rounded-md">
               <AvatarImage
-                className=""
                 src={user?.image ?? ""}
                 alt={user?.name ?? "Anonymous Image"}
               />
-              <AvatarFallback className="" delayMs={600}>
-                JD
+              <AvatarFallback className="h-8 w-8 rounded-md" delayMs={600}>
+                {getFirstTwoLetters(user?.name ?? "gu")}
               </AvatarFallback>
             </Avatar>
 

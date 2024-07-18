@@ -1,6 +1,11 @@
 "use client";
 // context/ChatDataContext.tsx
-import React, { createContext, useEffect, type ReactNode } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useRoomData } from "../_hooks/useRoomData";
 import { useRoomSettings } from "../_hooks/useRoomSettings";
@@ -9,6 +14,7 @@ import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
 import { getFirstTwoLetters } from "~/lib/utils";
 import { type MessageProp } from "~/lib/@types/Message";
+import { type ServerMessagesId } from "../stream/[type]/[imdbId]/[roomId]/_ui/ServerMessages";
 
 function createNewMessage({ message }: { message: MessageProp }) {
   const { created_at, textContent, type, user } = message;
@@ -34,6 +40,7 @@ function createNewMessage({ message }: { message: MessageProp }) {
   }
 
   const bakedMessage = {
+    type: "user:message" as const,
     created_at,
     textContent,
     user,
@@ -44,8 +51,18 @@ function createNewMessage({ message }: { message: MessageProp }) {
 
 type Message = ReturnType<typeof createNewMessage>;
 
+function createServerMessage(serverMessageId: ServerMessagesId) {
+  return {
+    type: "server:message" as const,
+    messageId: serverMessageId,
+    created_at: Date.now(),
+  };
+}
+
+type ServerMessage = ReturnType<typeof createServerMessage>;
 interface ChatDataContextType {
   chatData: Message[];
+  serverMessages: ServerMessage[];
 }
 
 export const ChatDataContext = createContext<ChatDataContextType | undefined>(
@@ -59,6 +76,43 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
   const [chatData, setChatData] = useLocalStorage<Message[]>(
     localStorageDataId,
     [],
+  );
+  const [serverMessages, setServerMessages] = useState<ServerMessage[]>([]);
+
+  useEffect(
+    function () {
+      const unbind = eventEmitter.on("server:message", (serverMessageId) => {
+        setServerMessages((prv) => {
+          const serverMessage = createServerMessage(serverMessageId);
+          if (prv) return [...prv, serverMessage];
+          else return [serverMessage];
+        });
+      });
+
+      return () => {
+        unbind();
+      };
+    },
+    [setServerMessages, roomSettings.currentTab, roomSettings.isRightPanelOpen],
+  );
+
+  useEffect(
+    function () {
+      const unbind = eventEmitter.on(
+        "server:message_dismissed",
+        (serverMessageId) => {
+          setServerMessages((prv) => {
+            if (!prv) return [];
+            else return prv.filter((el) => el.messageId !== serverMessageId);
+          });
+        },
+      );
+
+      return () => {
+        unbind();
+      };
+    },
+    [setServerMessages, roomSettings.currentTab, roomSettings.isRightPanelOpen],
   );
 
   useEffect(
@@ -87,7 +141,9 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
                     {getFirstTwoLetters(message.user.name)}
                   </AvatarFallback>
                 </Avatar>
-                <p>{message.textContent}</p>
+                <p>
+                  {message.user.name}: {message.textContent}
+                </p>
               </div>,
             );
 
@@ -106,6 +162,7 @@ export const ChatDataProvider = ({ children }: { children: ReactNode }) => {
     <ChatDataContext.Provider
       value={{
         chatData,
+        serverMessages,
       }}
     >
       {children}

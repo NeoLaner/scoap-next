@@ -28,7 +28,6 @@ function formatTime(seconds: number): string {
 }
 
 function UsersStatus() {
-  const { roomData } = useRoomData();
   const [usersState, setUsersState] = useState<MediaUserState[]>([]);
   const [hover, setHover] = useState(false);
 
@@ -58,7 +57,7 @@ function UsersStatus() {
           <div className="flex items-center gap-2" key={userData.id}>
             <Avatar className="h-8 w-8 rounded-md">
               <AvatarImage src={userData.image ?? ""} />
-              <AvatarFallback>
+              <AvatarFallback className="h-8 w-8 rounded-md">
                 {getFirstTwoLetters(userData.userName)}
               </AvatarFallback>
             </Avatar>

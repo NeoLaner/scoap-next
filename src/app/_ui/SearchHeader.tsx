@@ -21,7 +21,7 @@ function SearchHeader() {
   return (
     <form onSubmit={handleSubmit}>
       <Input
-        className="rounded-full md:w-96"
+        className="rounded-lg md:w-96"
         placeholder="Searching..."
         id="search"
         value={searchInput}

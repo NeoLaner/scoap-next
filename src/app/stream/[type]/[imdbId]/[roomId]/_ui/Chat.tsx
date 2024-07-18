@@ -1,11 +1,7 @@
 "use client";
 import { useState, type FormEvent, useEffect, useRef } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import socketEmitters from "~/app/_services/socket/socketEmit";
-import { cn, getFirstTwoLetters } from "~/lib/utils";
-import { ScrollArea } from "~/app/_components/ui/scroll-area";
-import { Button } from "~/app/_components/ui/Button";
-import { PiPaperPlaneBold } from "react-icons/pi";
+import { getFirstTwoLetters } from "~/lib/utils";
 import {
   Avatar,
   AvatarFallback,
@@ -13,12 +9,14 @@ import {
 } from "~/app/_components/ui/avatar";
 import { Input } from "~/app/_components/ui/input";
 import { useChatData } from "~/app/_hooks/useChatData";
+import ServerMessages from "./ServerMessages";
 
-function Chat({ className = "" }: { className?: string | undefined }) {
-  // const { chatData } = useGetChat();
+function Chat() {
   // const { isChatConnected } = useIsChatConnected();
-  const { chatData } = useChatData();
-  console.log("chatData", chatData);
+  const { chatData, serverMessages } = useChatData();
+  const messages = [...chatData, ...serverMessages].sort(
+    (a, b) => a.created_at - b.created_at,
+  );
 
   const scrollArea = useRef<HTMLDivElement>(null);
   const scrollAreaOverlay = useRef<HTMLDivElement>(null);
@@ -28,7 +26,7 @@ function Chat({ className = "" }: { className?: string | undefined }) {
       scrollArea.current?.scrollIntoView(false);
       scrollAreaOverlay.current?.scrollIntoView(false);
     },
-    [scrollArea.current, chatData],
+    [chatData],
   );
 
   return (
@@ -37,25 +35,35 @@ function Chat({ className = "" }: { className?: string | undefined }) {
         ref={scrollArea}
         className="flex h-full w-full flex-1 flex-col space-y-2 overflow-y-auto"
       >
-        {chatData?.map((message) => (
-          <div
-            key={message.created_at}
-            className={`flex items-start space-x-2 pr-2 ${message.className} rounded-lg`}
-          >
-            <Avatar className="h-8 w-8 rounded-md">
-              <AvatarImage
-                className="rounded-md"
-                src={message.user.image ?? ""}
-              />
-              <AvatarFallback className="rounded-md">
-                {getFirstTwoLetters(message.user.name)}
-              </AvatarFallback>
-            </Avatar>
-            <p className="!mt-[0.1rem] break-all text-sm">
-              {message.user.name}: {message.textContent}
-            </p>
-          </div>
-        ))}
+        {messages?.map((message) => {
+          if (message.type === "user:message")
+            return (
+              <div
+                key={message.created_at}
+                className={`flex items-start space-x-2 pr-2 ${message.className} rounded-lg`}
+              >
+                <Avatar className="h-8 w-8 rounded-md">
+                  <AvatarImage
+                    className="rounded-md"
+                    src={message.user.image ?? ""}
+                  />
+                  <AvatarFallback className="h-8 w-8 rounded-md">
+                    {getFirstTwoLetters(message.user.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <p className="!mt-[0.1rem] break-all text-sm">
+                  {message.user.name}: {message.textContent}
+                </p>
+              </div>
+            );
+
+          if (message.type === "server:message")
+            return (
+              <div className="rounded-lg text-sm" key={message.created_at}>
+                <ServerMessages id={message.messageId} />
+              </div>
+            );
+        })}
       </div>
       {/* <p className="absolute bottom-2 right-16">{message.length}/128</p> */}
     </>
