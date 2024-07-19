@@ -7,8 +7,6 @@ import React, {
   type ReactNode,
 } from "react";
 import { type api } from "~/trpc/server";
-import { useChatData } from "../_hooks/useChatData";
-import serverMessages from "~/lib/messages/serverMessages";
 import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 
 type SourceData = NonNullable<Awaited<ReturnType<typeof api.source.get>>>;
@@ -32,9 +30,10 @@ export const SourceDataProvider = ({
   const [sourceData, setSourceData] = useState(initialSourceData);
 
   useEffect(function () {
-    setTimeout(() => {
-      eventEmitter.emit("server:message", "NO_SOURCE");
-    }, 3000);
+    if (!sourceData.videoLink && !sourceData.fileIdx && !sourceData.mediaLinkId)
+      setTimeout(() => {
+        eventEmitter.emit("server:message", "NO_SOURCE");
+      }, 3000);
   }, []);
 
   return (
