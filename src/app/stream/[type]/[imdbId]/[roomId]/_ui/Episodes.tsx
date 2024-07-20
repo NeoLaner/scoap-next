@@ -9,6 +9,8 @@ import { ScrollArea } from "~/app/_components/ui/scroll-area";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { mediaSocket } from "~/lib/socket/socket";
 import { Video } from "~/app/_services/stremIo/types";
+import { useUserData } from "~/app/_hooks/useUserData";
+import { toast } from "sonner";
 
 const formatDate = (isoString: string) => {
   const date = new Date(isoString);
@@ -19,7 +21,8 @@ const formatDate = (isoString: string) => {
 function Episodes({ className = "" }: { className?: string }) {
   const searchParams = useSearchParams();
   const { roomData, setRoomData } = useRoomData();
-  const season = searchParams.get("season") ?? roomData.season;
+  const { userData } = useUserData();
+  const season = searchParams.get("season") ?? roomData.season ?? 1;
   const { metaData } = useMetaData();
 
   const episodesOfSeason = metaData.videos.filter(
@@ -32,6 +35,8 @@ function Episodes({ className = "" }: { className?: string }) {
       roomData.season === episode.season
     )
       return null;
+    if (roomData.ownerId !== userData.id)
+      return toast.error("Only the host can change the episode");
     const updatedRoomData = await updateEpisode({
       roomId: roomData.id,
       name: roomData.name,

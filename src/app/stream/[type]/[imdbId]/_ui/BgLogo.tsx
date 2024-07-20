@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 
-function BgLogo() {
+function BgLogo({ className = "" }: { className?: string }) {
   const searchParams = useSearchParams();
   const showStreams = searchParams.get("showStreams");
   const season = searchParams.get("season");
@@ -20,7 +20,7 @@ function BgLogo() {
             alt={metaData.name}
             width={800}
             height={310}
-            className="z-10 w-96"
+            className={`z-10 w-96 ${className}`}
             quality="100"
           />
         </div>

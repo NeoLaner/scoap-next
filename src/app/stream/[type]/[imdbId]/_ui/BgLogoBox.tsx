@@ -1,9 +1,9 @@
 import BgLogo from "./BgLogo";
 
-async function BgLogoBox() {
+async function BgLogoBox({ className }: { className?: string }) {
   return (
     <div className="relative h-full">
-      <BgLogo />
+      <BgLogo className={className} />
     </div>
   );
 }

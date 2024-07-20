@@ -39,7 +39,7 @@ function EpisodesHeading() {
     [searchParams],
   );
   const uniqueSeasons = extractUniqueSeasons(videos);
-  if (!season) return null;
+  if (season === null || season === undefined) return null;
 
   return (
     <div>

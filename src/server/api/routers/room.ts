@@ -120,4 +120,28 @@ export const roomRouter = createTRPCRouter({
         },
       });
     }),
+
+  joinRoom: protectedProcedure
+    .input(
+      z.object({
+        roomId: z.string(),
+        userId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const room = await ctx.db.room.findUnique({
+        where: { id: input.roomId },
+        select: { allowedGuestsId: true },
+      });
+
+      if (!room) {
+        throw new Error("Room not found");
+      }
+      return await ctx.db.room.update({
+        where: { id: input.roomId },
+        data: {
+          allowedGuestsId: [...room.allowedGuestsId, input.userId],
+        },
+      });
+    }),
 });
