@@ -6,13 +6,13 @@ import {
   PopoverTrigger,
 } from "~/app/_components/ui/popover";
 import { ButtonFullscreen } from "./ButtonFullscreen";
-import * as Separator from "@radix-ui/react-separator";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
 import { Button } from "../_components/ui/Button";
 import { getFirstTwoLetters } from "~/lib/utils";
 import { useRouter } from "next/navigation";
 import { PiTelegramLogo, PiTelegramLogoFill } from "react-icons/pi";
+import { Separator } from "../_components/ui/separator";
 
 const UserDropMenu = ({
   user,
@@ -39,13 +39,13 @@ const UserDropMenu = ({
               alt={user?.name ?? "Anonymous"}
             />
             <AvatarFallback className="h-8 w-8 rounded-md" delayMs={600}>
-              JD
+              {getFirstTwoLetters(user?.name ?? "Anonymous")}
             </AvatarFallback>
           </Avatar>
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent sideOffset={8} className="relative mr-2">
+      <PopoverContent sideOffset={8} className="relative mr-2 pb-8">
         <div>
           <div className="flex gap-2">
             <Avatar className="h-8 w-8 rounded-md">
@@ -54,7 +54,7 @@ const UserDropMenu = ({
                 alt={user?.name ?? "Anonymous Image"}
               />
               <AvatarFallback className="h-8 w-8 rounded-md" delayMs={600}>
-                {getFirstTwoLetters(user?.name ?? "gu")}
+                {getFirstTwoLetters(user?.name ?? "Anonymous")}
               </AvatarFallback>
             </Avatar>
 
@@ -78,7 +78,31 @@ const UserDropMenu = ({
             </div>
             <ButtonFullscreen className="" />
           </div>
-          <Separator.Root className="bg-primary-7 my-[15px] data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px" />
+          <Separator className="my-2" />
+
+          <div className="grid grid-cols-2 ">
+            <Button
+              size={"sm"}
+              variant={"link"}
+              className="w-fit text-xs text-primary-foreground"
+            >
+              Home
+            </Button>
+            <Button
+              size={"sm"}
+              variant={"link"}
+              className="w-fit text-xs text-primary-foreground"
+            >
+              User settings
+            </Button>
+            <Button
+              size={"sm"}
+              variant={"link"}
+              className="w-fit text-xs text-primary-foreground"
+            >
+              Privacy & Policy
+            </Button>
+          </div>
         </div>
 
         <div className="absolute bottom-1 left-0 flex w-full justify-between px-2 text-xs text-primary-foreground">
