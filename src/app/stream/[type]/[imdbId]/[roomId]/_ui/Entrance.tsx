@@ -2,6 +2,7 @@
 import { Button } from "~/app/_components/ui/Button";
 import { joinRoom } from "~/app/_actions/joinRoom";
 import { useRoomData } from "~/app/_hooks/useRoomData";
+import { useParams, useRouter } from "next/navigation";
 
 function Entrance({ roomId, userId }: { roomId: string; userId: string }) {
   const { roomData } = useRoomData();
@@ -32,6 +33,8 @@ function RoomIsOnline({ roomId, userId }: { roomId: string; userId: string }) {
 }
 
 function RoomIsOffline() {
+  const router = useRouter();
+  const { type, imdbId } = useParams<{ type: string; imdbId: string }>();
   return (
     <>
       <p>
@@ -39,7 +42,9 @@ function RoomIsOffline() {
         video alone.
       </p>
       <div className="mt-2 flex justify-end gap-1">
-        <Button>Watch alone</Button>
+        <Button onClick={() => router.push(`/stream/${type}/${imdbId}`)}>
+          Watch alone
+        </Button>
       </div>
     </>
   );

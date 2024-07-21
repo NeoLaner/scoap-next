@@ -66,7 +66,7 @@ const UserDropMenu = ({
                   <Button
                     variant={"link"}
                     size={"sm"}
-                    className="h-fit p-0 text-xs"
+                    className="h-fit self-start p-0 text-xs"
                     onClick={() => router.push("/api/auth/signout")}
                   >
                     Logout

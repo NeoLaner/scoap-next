@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { PiCornersInBold, PiCornersOutBold } from "react-icons/pi";
 import { Button } from "../_components/ui/Button";

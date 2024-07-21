@@ -34,10 +34,10 @@ function PopularMedias({
             <Link
               href={`/stream/${item.type}/${item.imdb_id}`}
               key={item.id}
-              className="flex flex-col items-center gap-4"
+              className="flex flex-col items-center gap-4 transition-all hover:scale-105"
               title={item.name}
             >
-              <div className="relative h-40 w-28 overflow-hidden rounded-lg bg-gray-4 md:h-52 md:w-36">
+              <div className="bg-gray-4 relative h-40 w-28 overflow-hidden rounded-lg md:h-52 md:w-36">
                 {item.poster && (
                   <Image
                     src={item.poster}
@@ -49,7 +49,7 @@ function PopularMedias({
                 )}
 
                 {!item.poster && (
-                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary-8">
+                  <div className="text-primary-8 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                     <BsImage size={30} />
                   </div>
                 )}

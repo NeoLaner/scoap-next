@@ -1,3 +1,4 @@
+import { ButtonFullscreen } from "./ButtonFullscreen";
 import LogoSVG from "./LogoSVG";
 import SearchHeader from "./SearchHeader";
 import UserDropMenu from "./UserDropMenu";
