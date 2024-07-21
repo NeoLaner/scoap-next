@@ -38,10 +38,7 @@ async function Layout({
     return (
       <RoomDataProvider initialRoomData={roomData}>
         <MinimalLayout>
-          <Entrance
-            roomId={params.roomId}
-            userId={session.user.id}
-          />
+          <Entrance roomId={params.roomId} userId={session.user.id} />
         </MinimalLayout>
       </RoomDataProvider>
     );

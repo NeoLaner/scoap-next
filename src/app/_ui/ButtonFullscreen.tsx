@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PiCornersInBold, PiCornersOutBold } from "react-icons/pi";
 import { Button } from "../_components/ui/Button";
 
@@ -8,6 +8,7 @@ export const ButtonFullscreen = React.forwardRef<
 >(({ className, variant, size, asChild = false, ...props }, ref) => {
   // const isActive = useMediaState("fullscreen");
   const [isActive, setIsActive] = useState(false);
+  useEffect(() => setIsActive(document.fullscreenElement !== null), []);
   const toggleFullscreen = async () => {
     const elem = document.body; // This targets the root element of the document
     setIsActive((value) => !value);

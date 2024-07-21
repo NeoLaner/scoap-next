@@ -67,7 +67,7 @@ function Episodes({ className = "" }: { className?: string }) {
             roomData.season === episode.season
               ? "border-green-400  hover:cursor-not-allowed"
               : ""
-          } flex items-center justify-start gap-4 border text-start hover:cursor-pointer`}
+          } z-10 flex items-center justify-start gap-4 border text-start hover:cursor-pointer`}
         >
           <div className="h-[70px] overflow-hidden rounded-md ">
             {/* <Image

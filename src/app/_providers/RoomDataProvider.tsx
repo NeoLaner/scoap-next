@@ -5,7 +5,9 @@ import React, {
   useState,
   useContext,
   type ReactNode,
+  useEffect,
 } from "react";
+import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 import { type api } from "~/trpc/server";
 
 type RoomData = NonNullable<Awaited<ReturnType<typeof api.room.get>>>;
@@ -27,6 +29,18 @@ export const RoomDataProvider = ({
   initialRoomData: RoomData;
 }) => {
   const [roomData, setRoomData] = useState<RoomData>(initialRoomData);
+
+  useEffect(
+    function () {
+      setTimeout(() => {
+        eventEmitter.emit(
+          "server:message",
+          roomData.online ? "ONLINE" : "OFFLINE",
+        );
+      }, 5000);
+    },
+    [roomData.online],
+  );
 
   return (
     <RoomDataContext.Provider value={{ roomData, setRoomData }}>

@@ -11,6 +11,8 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
 import { Button } from "../_components/ui/Button";
 import { getFirstTwoLetters } from "~/lib/utils";
+import { useRouter } from "next/navigation";
+import { PiTelegramLogo, PiTelegramLogoFill } from "react-icons/pi";
 
 const UserDropMenu = ({
   user,
@@ -22,6 +24,11 @@ const UserDropMenu = ({
       }
     | undefined;
 }) => {
+  const router = useRouter();
+  const openTelegramChannel = () => {
+    window.open("https://t.me/scoapofficial", "_blank");
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -38,7 +45,7 @@ const UserDropMenu = ({
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent sideOffset={8} className="mr-2">
+      <PopoverContent sideOffset={8} className="relative mr-2">
         <div>
           <div className="flex gap-2">
             <Avatar className="h-8 w-8 rounded-md">
@@ -54,22 +61,39 @@ const UserDropMenu = ({
             <div className="flex w-full items-center justify-between">
               <div className="flex flex-col">
                 <p className="text-sm">{user?.name ?? "Anonymous"}</p>
-                <p className="text-xs">Guest</p>
-              </div>
 
-              {user ? (
-                <div>
-                  <Link href="/api/auth/signout">Logout</Link>
-                </div>
-              ) : (
-                <div>
+                {user ? (
+                  <Button
+                    variant={"link"}
+                    size={"sm"}
+                    className="h-fit p-0 text-xs"
+                    onClick={() => router.push("/api/auth/signout")}
+                  >
+                    Logout
+                  </Button>
+                ) : (
                   <Link href="/api/auth/signin">Login</Link>
-                </div>
-              )}
+                )}
+              </div>
             </div>
+            <ButtonFullscreen className="" />
           </div>
           <Separator.Root className="bg-primary-7 my-[15px] data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px" />
-          <ButtonFullscreen className="" />
+        </div>
+
+        <div className="absolute bottom-1 left-0 flex w-full justify-between px-2 text-xs text-primary-foreground">
+          <div className="flex items-center gap-1">
+            <p className="text-[10px]">FOLLOW US:</p>
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              className="h-4 w-4 text-primary"
+              onClick={openTelegramChannel}
+            >
+              <PiTelegramLogoFill color="" />
+            </Button>
+          </div>
+          <p>v0.11-beta</p>
         </div>
       </PopoverContent>
     </Popover>

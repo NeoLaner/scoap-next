@@ -52,7 +52,7 @@ function EpisodesHeading() {
         <SelectTrigger aria-label="Season" className="w-fit">
           <SelectValue placeholder="Select a season" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="z-50">
           {uniqueSeasons.map((season) => (
             <SelectItem key={season} value={String(season)}>
               season {season}

@@ -8,10 +8,9 @@ import * as Buttons from "./Buttons";
 import * as Menus from "./Menus";
 import * as Sliders from "./Sliders";
 import { TimeGroup } from "./Time-group";
-import { Title } from "./Title";
+
 import TitleLayout from "./TitleLayout";
 import UsersStatus from "./UsersStatus";
-import { Toaster } from "~/app/_components/ui/sonner";
 
 export interface VideoLayoutProps {
   thumbnails?: string;
@@ -59,7 +58,7 @@ export default function VideoLayout({
           <Sliders.Volume />
           {/* <Title /> */}
           <div className="flex-1" />
-          <Buttons.Together tooltipPlacement="top" />
+          <Buttons.Together />
           <Menus.Settings placement="top end" tooltipPlacement="top" />
           <Buttons.PIP tooltipPlacement="top" />
           <Buttons.FullScreen tooltipPlacement="top" />

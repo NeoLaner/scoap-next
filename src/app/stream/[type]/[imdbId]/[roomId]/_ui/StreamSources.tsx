@@ -81,6 +81,12 @@ function StreamSources() {
           <div className="text-solid-gray-2 text-sm">{videoLink}</div>
         </div>
       ))}
+
+      {Array.from(uniqueSourcesMap.values()).length === 0 && (
+        <div className="absolute top-1/2 w-full -translate-y-1/2 text-center text-foreground/80">
+          Not any sources found.
+        </div>
+      )}
     </>
   );
 }

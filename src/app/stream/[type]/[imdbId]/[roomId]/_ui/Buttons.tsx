@@ -1,4 +1,5 @@
 "use client";
+import { useCopyToClipboard } from "@uidotdev/usehooks";
 import {
   CaptionButton,
   isTrackCaptionKind,
@@ -19,6 +20,7 @@ import {
   PiQueueDuotone,
   PiSelectionBackgroundDuotone,
   PiSelectionForegroundDuotone,
+  PiShareBold,
   PiSpeakerHighFill,
   PiSpeakerLowFill,
   PiSpeakerXFill,
@@ -41,6 +43,9 @@ import {
 } from "~/app/_components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
+import { BsShare, BsShareFill } from "react-icons/bs";
+import { toast } from "sonner";
+import { cn } from "~/lib/utils";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -194,7 +199,7 @@ export function Episodes() {
   );
 }
 
-export function Together({ tooltipPlacement }: MediaButtonProps) {
+export function Together({ showTooltip = true }: { showTooltip?: boolean }) {
   const { roomData: room, setRoomData } = useRoomData();
   async function handleOnClick(online: boolean) {
     const updatedRoom = await changeInstanceOnline(room, online);
@@ -227,9 +232,11 @@ export function Together({ tooltipPlacement }: MediaButtonProps) {
           )}
         </TooltipTrigger>
 
-        <TooltipContent sideOffset={30}>
-          {room.online ? "Watch Alone" : "Watch Together"}
-        </TooltipContent>
+        {showTooltip && (
+          <TooltipContent sideOffset={30}>
+            {room.online ? "Watch Alone" : "Watch Together"}
+          </TooltipContent>
+        )}
       </Tooltip>
     </TooltipProvider>
   );
@@ -278,6 +285,24 @@ export function Chat() {
       size={"icon"}
     >
       <PiChatsLight size={26} />
+    </Button>
+  );
+}
+
+export function Share({ showTooltip = true }: { showTooltip?: boolean }) {
+  const [_, copyToClipboard] = useCopyToClipboard();
+  const pathname = usePathname();
+  return (
+    <Button
+      onClick={async () => {
+        await copyToClipboard("scoap.ir" + pathname);
+        toast.success("Link copied to your clipboard successfully.");
+      }}
+      className={cn(buttonClass, "h-8 w-8 rounded-lg")}
+      variant={"ghost"}
+      size={"icon"}
+    >
+      <BsShareFill size={18} />
     </Button>
   );
 }
