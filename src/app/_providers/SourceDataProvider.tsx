@@ -33,7 +33,7 @@ export const SourceDataProvider = ({
     if (!sourceData.videoLink && !sourceData.fileIdx && !sourceData.mediaLinkId)
       setTimeout(() => {
         eventEmitter.emit("server:message", "NO_SOURCE");
-      }, 3000);
+      }, 900);
   }, []);
 
   return (

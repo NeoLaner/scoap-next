@@ -72,7 +72,14 @@ const UserDropMenu = ({
                     Logout
                   </Button>
                 ) : (
-                  <Link href="/api/auth/signin">Login</Link>
+                  <Button
+                    variant={"link"}
+                    size={"sm"}
+                    className="h-fit self-start p-0 text-xs"
+                    onClick={() => router.push("/api/auth/signin")}
+                  >
+                    Login
+                  </Button>
                 )}
               </div>
             </div>
@@ -80,10 +87,11 @@ const UserDropMenu = ({
           </div>
           <Separator className="my-2" />
 
-          <div className="grid grid-cols-2 ">
+          <div className="grid grid-cols-2">
             <Button
               size={"sm"}
               variant={"link"}
+              onClick={() => router.push("/")}
               className="w-fit text-xs text-primary-foreground"
             >
               Home
@@ -91,7 +99,8 @@ const UserDropMenu = ({
             <Button
               size={"sm"}
               variant={"link"}
-              className="w-fit text-xs text-primary-foreground"
+              onClick={() => router.push("/account")}
+              className="w-fit justify-self-end text-xs text-primary-foreground"
             >
               User settings
             </Button>
@@ -99,6 +108,7 @@ const UserDropMenu = ({
               size={"sm"}
               variant={"link"}
               className="w-fit text-xs text-primary-foreground"
+              onClick={() => router.push("/account/privacy&policy")}
             >
               Privacy & Policy
             </Button>

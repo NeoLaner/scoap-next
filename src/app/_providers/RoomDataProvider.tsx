@@ -3,7 +3,6 @@
 import React, {
   createContext,
   useState,
-  useContext,
   type ReactNode,
   useEffect,
 } from "react";
@@ -37,7 +36,12 @@ export const RoomDataProvider = ({
           "server:message",
           roomData.online ? "ONLINE" : "OFFLINE",
         );
-      }, 5000);
+
+        eventEmitter.emit(
+          "server:message_dismissed",
+          roomData.online ? "OFFLINE" : "ONLINE",
+        );
+      }, 1000);
     },
     [roomData.online],
   );

@@ -29,7 +29,7 @@ function PopularMedias({
         <h2 className="text-xl font-semibold">{heading}</h2>
       </div>
       <ScrollAreaX>
-        <div className="flex min-w-0 shrink grow basis-0 gap-4 overflow-x-auto py-6">
+        <div className="flex min-w-0 shrink grow basis-0 gap-4 py-6">
           {items.map((item) => (
             <Link
               href={`/stream/${item.type}/${item.imdb_id}`}

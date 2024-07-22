@@ -42,7 +42,11 @@ export default function RootLayout({
               <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-background to-background-secondary  text-foreground">
                 {children}
               </main>
-              <Toaster className="left-5 top-5" position="top-left" />
+              <Toaster
+                className="left-5 top-5"
+                position="top-left"
+                richColors
+              />
             </PlayerProvider>
             {/* <ReactQueryDevtools /> */}
           </TRPCReactProvider>

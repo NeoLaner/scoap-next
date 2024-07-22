@@ -85,7 +85,7 @@ function StreamForm() {
             className="flex w-full flex-col gap-2"
             action={handleAction}
           >
-            <Form.Field className="flex flex-col items-center" name="name">
+            <Form.Field className="flex flex-col " name="name">
               <div className="flex items-baseline justify-between">
                 <Form.Message
                   className="text-solid-gray-2 text-[13px] opacity-[0.8]"

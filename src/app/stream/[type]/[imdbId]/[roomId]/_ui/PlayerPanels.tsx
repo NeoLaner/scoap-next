@@ -18,6 +18,7 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 import * as Buttons from "./Buttons";
 import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
 import { ScrollArea } from "~/app/_components/ui/scroll-area";
+import useServerMessages from "~/app/_hooks/useServerMessages";
 
 const PanelContext = createContext<{
   isRightPanelOpen: boolean;
@@ -68,6 +69,7 @@ export function PlayerPanel({ children }: { children: ReactNode }) {
 }
 
 export function LeftPanel({ children }: { children: ReactNode }) {
+  useServerMessages();
   const { width } = useContext(PanelContext);
   return (
     <ResizablePanel id="player" minSize={width > 640 ? 33 : 0} order={1}>
@@ -142,7 +144,7 @@ export function RightPanel({
               <div className="flex justify-between">
                 <Buttons.Chat />
                 {<Buttons.Episodes />}
-                <Buttons.Streams tooltipPlacement="top" />
+                <Buttons.Streams />
               </div>
             </div>
           </div>
