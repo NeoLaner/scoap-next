@@ -8,7 +8,7 @@ async function page() {
     <section className="relative h-full w-full overflow-hidden">
       <StreamHeader />
 
-      <div className="absolute left-0 top-0 flex h-full w-full flex-col justify-between gap-4 md:flex-row">
+      <div className="absolute left-0 top-0 z-0 flex h-full w-full flex-col justify-between gap-4 md:flex-row">
         <div className="h-full w-full">
           <div className="relative h-full w-full ">
             <BgMediaBox />

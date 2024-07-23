@@ -18,7 +18,7 @@ function Layout({ children }: { children: ReactNode }) {
                 About us
               </Button>
               <Button variant={"ghost"} className="justify-start text-start">
-                Privacy & Policy
+                Privacy&Policy
               </Button>
             </div>
 
