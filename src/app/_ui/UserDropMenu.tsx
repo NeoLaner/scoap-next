@@ -13,6 +13,7 @@ import { getFirstTwoLetters } from "~/lib/utils";
 import { useRouter } from "next/navigation";
 import { PiTelegramLogo, PiTelegramLogoFill } from "react-icons/pi";
 import { Separator } from "../_components/ui/separator";
+import LoginLogoutBtn from "./LoginLogoutBtn";
 
 const UserDropMenu = ({
   user,
@@ -62,25 +63,7 @@ const UserDropMenu = ({
               <div className="flex flex-col">
                 <p className="text-sm">{user?.name ?? "Anonymous"}</p>
 
-                {user ? (
-                  <Button
-                    variant={"link"}
-                    size={"sm"}
-                    className="h-fit self-start p-0 text-xs"
-                    onClick={() => router.push("/api/auth/signout")}
-                  >
-                    Logout
-                  </Button>
-                ) : (
-                  <Button
-                    variant={"link"}
-                    size={"sm"}
-                    className="h-fit self-start p-0 text-xs"
-                    onClick={() => router.push("/api/auth/signin")}
-                  >
-                    Login
-                  </Button>
-                )}
+                <LoginLogoutBtn user={user} />
               </div>
             </div>
             <ButtonFullscreen className="" />

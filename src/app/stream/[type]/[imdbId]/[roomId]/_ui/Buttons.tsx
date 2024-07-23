@@ -291,12 +291,15 @@ export function Chat() {
 
 export function Share({ showTooltip = true }: { showTooltip?: boolean }) {
   const [_, copyToClipboard] = useCopyToClipboard();
+  const { roomId } = useParams();
   const pathname = usePathname();
   return (
     <Button
       onClick={async () => {
         await copyToClipboard("scoap.ir" + pathname);
-        toast.success("Link copied to your clipboard successfully.");
+        toast.success("Link copied to your clipboard successfully.", {
+          position: roomId ? "top-left" : "bottom-left",
+        });
       }}
       className={cn(buttonClass, "h-8 w-8 rounded-lg")}
       variant={"ghost"}
