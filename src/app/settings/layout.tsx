@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import MainLayout from "../_ui/MainLayout";
 import ProtectedRoute from "../_ui/ProtectedRoute";
 import { Button } from "../_components/ui/Button";
+import { Separator } from "../_components/ui/separator";
 
 function Layout({ children }: { children: ReactNode }) {
   return (
@@ -10,15 +11,26 @@ function Layout({ children }: { children: ReactNode }) {
         <section className="relative m-2 my-10 h-full sm:m-6 md:m-20">
           <h1>Settings</h1>
           <div className="mt-10 grid h-full grid-cols-4 gap-3">
-            <div className="hidden h-full flex-col rounded-lg bg-card p-4 md:flex">
-              <Button variant={"ghost"} className="justify-start text-start">
+            <div className="hidden h-full flex-col rounded-lg bg-card md:flex">
+              <div className="text-md p-4">Account settings</div>
+              <Separator />
+              <Button
+                variant={"ghost"}
+                className="justify-start rounded-none text-start"
+              >
                 User profile
               </Button>
-              <Button variant={"ghost"} className="justify-start text-start">
+              <Button
+                variant={"ghost"}
+                className="justify-start rounded-none text-start"
+              >
                 About us
               </Button>
-              <Button variant={"ghost"} className="justify-start text-start">
-                Privacy&Policy
+              <Button
+                variant={"ghost"}
+                className="justify-start rounded-none text-start"
+              >
+                Privacy & Policy
               </Button>
             </div>
 
