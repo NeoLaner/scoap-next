@@ -7,7 +7,7 @@ function MenuButtons() {
     <>
       <MenuButton text="User profile" pathname="/settings/account" />
       <MenuButton text="َAbout us" pathname="/settings/about-us" />
-      <MenuButton text="Privacy & Policy" pathname="/settings/privacy&policy" />
+      <MenuButton text="Privacy policy" pathname="/settings/privacy-policy" />
     </>
   );
 }
