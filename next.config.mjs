@@ -27,6 +27,11 @@ const config = {
         destination: "/home",
         permanent: true,
       },
+      {
+        source: "/settings",
+        destination: "/settings/account",
+        permanent: true,
+      },
     ];
   },
 

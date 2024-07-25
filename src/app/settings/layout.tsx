@@ -1,8 +1,8 @@
 import { type ReactNode } from "react";
 import MainLayout from "../_ui/MainLayout";
 import ProtectedRoute from "../_ui/ProtectedRoute";
-import { Button } from "../_components/ui/Button";
 import { Separator } from "../_components/ui/separator";
+import MenuButtons from "./_ui/MenuButtons";
 
 function Layout({ children }: { children: ReactNode }) {
   return (
@@ -14,24 +14,7 @@ function Layout({ children }: { children: ReactNode }) {
             <div className="hidden h-full flex-col rounded-lg bg-card md:flex">
               <div className="text-md p-4">Account settings</div>
               <Separator />
-              <Button
-                variant={"ghost"}
-                className="justify-start rounded-none text-start"
-              >
-                User profile
-              </Button>
-              <Button
-                variant={"ghost"}
-                className="justify-start rounded-none text-start"
-              >
-                About us
-              </Button>
-              <Button
-                variant={"ghost"}
-                className="justify-start rounded-none text-start"
-              >
-                Privacy & Policy
-              </Button>
+              <MenuButtons />
             </div>
 
             <div className="col-span-4 col-start-1 rounded-lg bg-card md:col-span-3 md:col-start-2">

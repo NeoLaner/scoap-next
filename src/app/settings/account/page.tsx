@@ -2,7 +2,7 @@ import UserProfile from "./_ui/UserProfile";
 import UserDetails from "./_ui/UserDetails";
 import UserEmail from "./_ui/UserEmail";
 import { getServerAuthSession } from "~/server/auth";
-import LoginLogoutBtn from "../_ui/LoginLogoutBtn";
+import LoginLogoutBtn from "../../_ui/LoginLogoutBtn";
 
 async function Page() {
   const session = await getServerAuthSession();
