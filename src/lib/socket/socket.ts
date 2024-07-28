@@ -7,6 +7,7 @@ import {
 const backendUrlDev = config.backendUrlDev;
 const backendUrl = config.backendUrl;
 // "undefined" means the URL will be computed from the `window.location` object
+// const env = "production";
 const env = "development";
 const USER_URL =
   env === "development" ? `${backendUrlDev}/user` : `${backendUrl}/user`;

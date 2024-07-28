@@ -5,7 +5,8 @@ import { Button } from "~/app/_components/ui/Button";
 function MenuButtons() {
   return (
     <>
-      <MenuButton text="User profile" pathname="/settings/account" />
+      <MenuButton text="َAbout us" pathname="/help/about-us" />
+      <MenuButton text="Privacy policy" pathname="/help/privacy-policy" />
     </>
   );
 }

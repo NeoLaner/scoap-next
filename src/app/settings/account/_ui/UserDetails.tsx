@@ -3,8 +3,10 @@ import React from "react";
 import * as Form from "@radix-ui/react-form";
 import { Button } from "~/app/_components/ui/Button";
 import { Input } from "~/app/_components/ui/input";
+import { useUserData } from "~/app/_hooks/useUserData";
 
 function UserDetails() {
+  const { userData } = useUserData();
   return (
     <Form.Root className="w-[260px]">
       <Form.Field className="mb-[10px] grid" name="name">
@@ -26,7 +28,12 @@ function UserDetails() {
           </Form.Message>
         </div>
         <Form.Control asChild>
-          <Input type="name" required placeholder="example: Yasin" />
+          <Input
+            type="name"
+            required
+            placeholder="example: Yasin"
+            value={userData.name ?? ""}
+          />
         </Form.Control>
       </Form.Field>
       <Form.Field className="mb-[10px] grid" name="userId">
@@ -42,7 +49,11 @@ function UserDetails() {
           </Form.Message>
         </div>
         <Form.Control asChild>
-          <Input required placeholder="example: ylaner" />
+          <Input
+            required
+            placeholder="example: ylaner"
+            value={userData.userId ?? ""}
+          />
         </Form.Control>
       </Form.Field>
       <Form.Submit asChild>

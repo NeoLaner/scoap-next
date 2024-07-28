@@ -13,7 +13,7 @@ function UserProfile() {
   return (
     <Avatar className="h-16 w-16 rounded-md">
       <AvatarImage src={userData.image ?? ""} alt={userData.name ?? ""} />
-      <AvatarFallback className="h-8 w-8 rounded-md" delayMs={600}>
+      <AvatarFallback className="h-16 w-16 rounded-md text-3xl" delayMs={600}>
         {getFirstTwoLetters(userData.name)}
       </AvatarFallback>
     </Avatar>
