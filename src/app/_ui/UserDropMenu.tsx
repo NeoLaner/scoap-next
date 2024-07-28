@@ -82,7 +82,7 @@ const UserDropMenu = ({
             <Button
               size={"sm"}
               variant={"link"}
-              onClick={() => router.push("/account")}
+              onClick={() => router.push("/settings")}
               className="w-fit justify-self-end text-xs text-primary-foreground"
             >
               User settings
@@ -91,7 +91,7 @@ const UserDropMenu = ({
               size={"sm"}
               variant={"link"}
               className="w-fit text-xs text-primary-foreground"
-              onClick={() => router.push("/account/privacy&policy")}
+              onClick={() => router.push("/help")}
             >
               Privacy & Policy
             </Button>

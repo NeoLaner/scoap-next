@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
@@ -9,4 +10,23 @@ export const userRouter = createTRPCRouter({
     });
     return user;
   }),
+
+  updateMeInfo: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().optional(),
+        userId: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.user.findFirst({ where: { id: ctx.session.user.id } });
+      await ctx.db.user.update({
+        where: { id: ctx.session.user.id },
+        data: {
+          name: input.name,
+          userId: input.userId,
+        },
+      });
+    }),
 });

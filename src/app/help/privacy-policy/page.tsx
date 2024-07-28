@@ -210,7 +210,7 @@ function Page() {
         <p>
           We may make changes to this policy at any time. You may be asked to
           review and re-accept the information in this policy if it changes in
-          the future. Last updated: April 22, 2024
+          the future. Last updated: July 28, 2024
         </p>
       </div>
     </div>

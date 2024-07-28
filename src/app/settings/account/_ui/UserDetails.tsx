@@ -4,11 +4,12 @@ import * as Form from "@radix-ui/react-form";
 import { Button } from "~/app/_components/ui/Button";
 import { Input } from "~/app/_components/ui/input";
 import { useUserData } from "~/app/_hooks/useUserData";
+import { updateUserInfo } from "~/app/_actions/updateUserInfo";
 
 function UserDetails() {
   const { userData } = useUserData();
   return (
-    <Form.Root className="w-[260px]">
+    <Form.Root className="w-[260px]" action={updateUserInfo}>
       <Form.Field className="mb-[10px] grid" name="name">
         <div className="flex items-baseline justify-between">
           <Form.Label className="text-solid-gray-2 text-[15px] font-medium leading-[35px]">
@@ -32,7 +33,7 @@ function UserDetails() {
             type="name"
             required
             placeholder="example: Yasin"
-            value={userData.name ?? ""}
+            defaultValue={userData.name ?? ""}
           />
         </Form.Control>
       </Form.Field>
@@ -52,7 +53,7 @@ function UserDetails() {
           <Input
             required
             placeholder="example: ylaner"
-            value={userData.userId ?? ""}
+            defaultValue={userData.userId ?? ""}
           />
         </Form.Control>
       </Form.Field>
