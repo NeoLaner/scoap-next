@@ -4,6 +4,7 @@ import ProtectedRoute from "../_ui/ProtectedRoute";
 import { Separator } from "../_components/ui/separator";
 import MenuButtons from "./_ui/MenuButtons";
 import { ScrollArea } from "../_components/ui/scroll-area";
+import MenuSheet from "./_ui/MenuSheet";
 
 function Layout({ children }: { children: ReactNode }) {
   return (
@@ -16,6 +17,7 @@ function Layout({ children }: { children: ReactNode }) {
               <div className="hidden h-fit flex-col rounded-lg bg-card md:flex">
                 <div className="text-md p-4">Account settings</div>
                 <Separator />
+                {/* <MenuSheet /> */}
                 <MenuButtons />
               </div>
 

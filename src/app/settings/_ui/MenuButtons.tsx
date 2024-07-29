@@ -21,7 +21,7 @@ const MenuButton = ({ text, pathname }: { text: string; pathname: string }) => {
         push(pathname);
       }}
       variant={"ghost"}
-      className={`justify-start rounded-none text-start ${curPathname === pathname ? "border-l-2 border-primary" : ""}`}
+      className={`w-full justify-start rounded-none text-start ${curPathname === pathname ? "border-l-2 border-primary" : ""}`}
     >
       {text}
     </Button>
