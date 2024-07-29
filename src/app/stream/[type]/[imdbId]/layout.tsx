@@ -14,8 +14,6 @@ async function layout({
   children: ReactNode;
 }) {
   const { imdbId, type } = params;
-  const session = await getServerAuthSession();
-  // if (!session) return redirect("/api/auth/signin");
   let metaData = {} as MetaInfo;
   if (type === "movie") metaData = await StremioService.getMetaMovie(imdbId);
   if (type === "series") metaData = await StremioService.getMetaSeries(imdbId);

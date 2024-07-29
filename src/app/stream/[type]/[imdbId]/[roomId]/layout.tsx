@@ -34,7 +34,10 @@ async function Layout({
     (id) => session.user.id === id,
   );
 
-  if (!isOwner && !(isAllowedGuests.length > 0))
+  if (
+    (!isOwner && !(isAllowedGuests.length > 0)) ||
+    (!isOwner && !roomData.online)
+  )
     return (
       <ProtectedRoute>
         <RoomDataProvider initialRoomData={roomData}>
