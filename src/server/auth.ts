@@ -66,17 +66,17 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID!,
       clientSecret: env.DISCORD_CLIENT_SECRET!,
     }),
-    EmailProvider({
-      server: {
-        host: env.EMAIL_SERVER_HOST,
-        port: env.EMAIL_SERVER_PORT,
-        auth: {
-          user: env.EMAIL_SERVER_USER,
-          pass: env.EMAIL_SERVER_PASSWORD,
-        },
-      },
-      from: env.EMAIL_FROM,
-    }),
+    // EmailProvider({
+    //   server: {
+    //     host: env.EMAIL_SERVER_HOST,
+    //     port: env.EMAIL_SERVER_PORT,
+    //     auth: {
+    //       user: env.EMAIL_SERVER_USER,
+    //       pass: env.EMAIL_SERVER_PASSWORD,
+    //     },
+    //   },
+    //   from: env.EMAIL_FROM,
+    // }),
 
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID!,

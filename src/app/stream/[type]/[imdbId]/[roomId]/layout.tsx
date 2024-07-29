@@ -8,6 +8,8 @@ import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import Entrance from "./_ui/Entrance";
 import MinimalLayout from "~/app/_ui/MinimalLayout";
+import ProtectedRoute from "~/app/_ui/ProtectedRoute";
+import { redirect } from "next/navigation";
 
 async function Layout({
   children,
@@ -22,7 +24,7 @@ async function Layout({
   };
 }) {
   const session = await getServerAuthSession();
-  if (!session) return null;
+  if (!session) return redirect("/api/auth/signin");
   const { roomId } = params;
   const roomData = await api.room.get({ roomId });
   const isOwner = roomData?.ownerId === session.user.id;
@@ -34,11 +36,13 @@ async function Layout({
 
   if (!isOwner && !(isAllowedGuests.length > 0))
     return (
-      <RoomDataProvider initialRoomData={roomData}>
-        <MinimalLayout>
-          <Entrance roomId={params.roomId} userId={session.user.id} />
-        </MinimalLayout>
-      </RoomDataProvider>
+      <ProtectedRoute>
+        <RoomDataProvider initialRoomData={roomData}>
+          <MinimalLayout>
+            <Entrance roomId={params.roomId} userId={session.user.id} />
+          </MinimalLayout>
+        </RoomDataProvider>
+      </ProtectedRoute>
     );
 
   let sourceData = await api.source.get({
@@ -54,19 +58,21 @@ async function Layout({
   const roomSources = await api.room.getRoomSources({ roomId });
 
   return (
-    <RoomDataProvider initialRoomData={roomData}>
-      <RoomSettingsProvider>
-        <ChatDataProvider>
-          <SourceDataProvider initialSourceData={sourceData}>
-            <SourcesDataProvider initialSourcesData={roomSources?.Sources}>
-              {/* <UsersSocketProvider>
+    <ProtectedRoute>
+      <RoomDataProvider initialRoomData={roomData}>
+        <RoomSettingsProvider>
+          <ChatDataProvider>
+            <SourceDataProvider initialSourceData={sourceData}>
+              <SourcesDataProvider initialSourcesData={roomSources?.Sources}>
+                {/* <UsersSocketProvider>
         </UsersSocketProvider> */}
-              <div className="relative h-full w-full">{children}</div>
-            </SourcesDataProvider>
-          </SourceDataProvider>
-        </ChatDataProvider>
-      </RoomSettingsProvider>
-    </RoomDataProvider>
+                <div className="relative h-full w-full">{children}</div>
+              </SourcesDataProvider>
+            </SourceDataProvider>
+          </ChatDataProvider>
+        </RoomSettingsProvider>
+      </RoomDataProvider>
+    </ProtectedRoute>
   );
 }
 

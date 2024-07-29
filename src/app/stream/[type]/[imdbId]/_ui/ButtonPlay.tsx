@@ -11,7 +11,6 @@ function ButtonPlay() {
     type: "movie" | "series";
   }>();
   const { metaData } = useMetaData();
-  const { userData } = useUserData();
 
   return (
     <Button
@@ -20,7 +19,6 @@ function ButtonPlay() {
         await makeRoom({
           imdbId,
           type,
-          ownerId: userData.id,
           name: metaData.name,
         })
       }

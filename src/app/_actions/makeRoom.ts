@@ -1,16 +1,18 @@
 "use server";
 import { api } from "~/trpc/server";
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
+import { getServerAuthSession } from "~/server/auth";
 
 export async function makeRoom(inputs: {
   name: string;
   imdbId: string;
-  ownerId: string;
   type: string;
   season?: number;
   episode?: number;
 }) {
   const { imdbId, type, name } = inputs;
+  const session = await getServerAuthSession();
+  if (!session) redirect("/api/auth/signin");
   const roomData = await api.room.createMe({
     name,
     online: false,

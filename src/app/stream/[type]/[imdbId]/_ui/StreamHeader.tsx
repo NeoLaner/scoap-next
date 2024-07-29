@@ -4,7 +4,7 @@ import ButtonGoBack from "./ButtonGoBack";
 
 async function StreamHeader() {
   const session = await getServerAuthSession();
-  if (!session) return null;
+  // if (!session) return null;
   return (
     <header className="absolute top-0 z-10 w-full p-4 pt-8  md:p-8">
       <div className="flex items-center justify-between">
