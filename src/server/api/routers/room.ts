@@ -6,7 +6,7 @@ export const roomRouter = createTRPCRouter({
   get: protectedProcedure
     .input(z.object({ roomId: z.string() }))
     .query(async ({ ctx, input }) => {
-      console.log("From GET", input.roomId);
+      "From GET", input.roomId;
 
       return await ctx.db.room.findFirst({
         where: { id: input.roomId },
@@ -45,7 +45,7 @@ export const roomRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       //user can just make one room per imdbId
-      console.log("From CreateMe", input.imdbId);
+      "From CreateMe", input.imdbId;
       const existingInstance = await ctx.db.room.findFirst({
         where: {
           imdbId: input.imdbId,
@@ -101,7 +101,7 @@ export const roomRouter = createTRPCRouter({
   getRoomSources: protectedProcedure
     .input(z.object({ roomId: z.string() }))
     .query(async ({ ctx, input }) => {
-      console.log("From getRoomSources", input.roomId);
+      "From getRoomSources", input.roomId;
       return await ctx.db.room.findFirst({
         where: { id: input.roomId },
         select: {

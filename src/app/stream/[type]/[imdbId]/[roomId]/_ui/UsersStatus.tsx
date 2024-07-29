@@ -33,7 +33,7 @@ function UsersStatus() {
 
   useEffect(function () {
     mediaSocket.on("updateUserMediaState", (wsData) => {
-      console.log(wsData.payload);
+      wsData.payload;
       setUsersState(wsData.payload);
     });
     return () => {

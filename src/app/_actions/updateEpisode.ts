@@ -9,7 +9,7 @@ export async function updateEpisode(inputs: {
   episode: number | string | null;
 }) {
   const { name, season, episode, roomId, type } = inputs;
-  console.log("🍕🍕🍕", inputs);
+  "🍕🍕🍕", inputs;
 
   if (type !== "series") return; //TODO: Error;
   return await api.room.updateMe({

@@ -26,7 +26,7 @@ export function useSocketListeners() {
     return () => {
       mediaSocket.disconnect();
       chatSocket.disconnect();
-      console.log("unmounting");
+      ("unmounting");
     };
   }, []);
 }

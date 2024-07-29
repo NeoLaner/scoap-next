@@ -127,7 +127,7 @@ function PlayerRemote({
       )[0];
       let pbr = 1.01;
       const delta = leader.videoTs - (curUser?.videoTs ?? 0);
-      console.log("delta", leader.videoTs, curUser?.videoTs);
+      "delta", leader.videoTs, curUser?.videoTs;
 
       pbr += Number((delta / 10).toFixed(2));
       pbr = Math.min(pbr, 1.1);

@@ -62,7 +62,7 @@ function pausedVideo({
 }
 
 function playedVideo({ userData, instance, playedSeconds }: EmitMediaFnProps) {
-  console.log(instance.ownerId, userData.id);
+  instance.ownerId, userData.id;
 
   const isHost = instance.ownerId === userData.id;
   const wsData: MediaWsDataClientToServer = {

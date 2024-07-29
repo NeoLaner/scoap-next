@@ -10,7 +10,7 @@ function useServerMessages() {
 
   useEffect(() => {
     const unbind = eventEmitter.on("server:message", (id) => {
-      console.log("boom");
+      ("boom");
       if (!isRightPanelOpen || (isRightPanelOpen && currentTab !== "chat")) {
         id === "ONLINE" && toast.success(serverMessagesContent.ONLINE);
         id === "OFFLINE" && toast.warning(serverMessagesContent.OFFLINE);

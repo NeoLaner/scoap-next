@@ -34,7 +34,7 @@ export function Time({
 }: TimeSliderProps & { disabled?: boolean }) {
   function handleOnSeek(videoTs: number) {
     mediaSocket.emit("seek", { payload: { videoTs } });
-    console.log(1);
+    1;
   }
   return (
     <TimeSlider.Root
@@ -94,7 +94,7 @@ export function Time({
 //   function handleOnSeek(e: any, time: number) {
 //     let target = time;
 //     // Read the time from the click event if it exists
-//     console.log(e.target, time);
+//     (e.target, time);
 
 //     if (e) {
 //       const rect = e.target.getBoundingClientRect();
@@ -111,12 +111,12 @@ export function Time({
 //   }
 
 //   const onMouseOver = () => {
-//     // console.log('mouseover');
+//     // ('mouseover');
 //     setShowTimestamp(true);
 //   };
 
 //   const onMouseOut = () => {
-//     // console.log('mouseout');
+//     // ('mouseout');
 //     setShowTimestamp(true);
 //   };
 
@@ -125,9 +125,9 @@ export function Time({
 //     const x = e.clientX - rect.left;
 //     const max = rect.width;
 //     const pct = x / max;
-//     // console.log(x, max);
+//     // (x, max);
 //     const target = pct * this.props.duration;
-//     // console.log(pct);
+//     // (pct);
 //     if (pct >= 0) {
 //       this.setState({ hoverTimestamp: target, hoverPos: pct });
 //     }

@@ -17,7 +17,7 @@ function ButtonLinkNav({
   const pathname = usePathname();
   const active =
     pathname.split("/").filter((str) => "/" + str === href).length > 0;
-  console.log(pathname.split("/"));
+  pathname.split("/");
 
   return (
     <Link

@@ -23,7 +23,7 @@ function PlayerMedia({
   const { metaData } = useMetaData();
   const { sourceData } = useSourceData();
 
-  console.log(sourceData.videoLink);
+  sourceData.videoLink;
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
@@ -45,7 +45,7 @@ function PlayerMedia({
         type: "video/mp4",
       }}
       playsInline
-      className="text-white ring-media-focus absolute aspect-video h-dvh w-full overflow-hidden rounded-md bg-blackA11 font-sans data-[focus]:ring-4"
+      className="ring-media-focus bg-blackA11 absolute aspect-video h-dvh w-full overflow-hidden rounded-md font-sans text-white data-[focus]:ring-4"
       autoPlay={false}
       keyDisabled
       onProviderChange={onProviderChange}

@@ -130,7 +130,7 @@ const StremioService = {
     const { data } = (await axios.get(
       `http://127.0.0.1:11470/hlsv2/probe?mediaURL=http://127.0.0.1:11470/${infoHash}/${fileIdx}`,
     )) as { data: ProbeResponse };
-    console.log(data);
+    data;
 
     if (
       data.format.name.split(",").filter((format) => format === "mp4").length >

@@ -22,7 +22,7 @@ function EpisodesHeading() {
   const { roomData } = useRoomData();
   const searchParams = useSearchParams();
   const season = searchParams.get("season") ?? roomData.season ?? 1;
-  console.log("season", season);
+  "season", season;
 
   const router = useRouter();
   const pathname = usePathname();
