@@ -70,7 +70,7 @@ model Room {
   ownerId     String    @db.ObjectId
   online      Boolean   @default(false)
   timeWatched DateTime?
-  season      Int?
+  season      Int?      
   episode     Int?
   isPublic    Boolean   @default(false)
 

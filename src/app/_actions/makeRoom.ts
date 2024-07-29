@@ -13,11 +13,17 @@ export async function makeRoom(inputs: {
   const { imdbId, type, name } = inputs;
   const session = await getServerAuthSession();
   if (!session) redirect("/api/auth/signin");
+
+  const season =
+    type === "series" ? (inputs.season ? inputs.season : 1) : undefined;
+  const episode =
+    type === "series" ? (inputs.episode ? inputs.episode : 1) : undefined;
+
   const roomData = await api.room.createMe({
     name,
     online: false,
-    season: inputs.season,
-    episode: inputs.episode,
+    season,
+    episode,
     imdbId,
     type,
   });
