@@ -18,11 +18,6 @@ import { useSourcesData } from "~/app/_hooks/useSourcesData";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { mediaSocket } from "~/lib/socket/socket";
 import { Button } from "~/app/_components/ui/Button";
-import {
-  PiPlusCircleFill,
-  PiPlusSquare,
-  PiPlusSquareFill,
-} from "react-icons/pi";
 
 function StreamForm() {
   const [openModal, setOpenModal] = useState(false);
