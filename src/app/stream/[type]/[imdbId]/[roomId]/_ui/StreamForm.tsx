@@ -18,12 +18,28 @@ import { useSourcesData } from "~/app/_hooks/useSourcesData";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { mediaSocket } from "~/lib/socket/socket";
 import { Button } from "~/app/_components/ui/Button";
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "~/app/_components/ui/toggle-group";
+import { Switch } from "~/app/_components/ui/switch";
+
+const containsSeason = (source: string): boolean => {
+  return source.includes("{season}");
+};
+
+const containsEpisode = (source: string): boolean => {
+  return source.includes("{episode}");
+};
 
 function StreamForm() {
   const [openModal, setOpenModal] = useState(false);
   const { roomData } = useRoomData();
   const [isFocused, setIsFocused] = useState(false);
   const [source, setSource] = useState("");
+  const isContainsSeason = containsSeason(source);
+  const isContainsEpisode = containsEpisode(source);
+  const isDynamic = isContainsSeason || isContainsEpisode;
   const { setSourceData } = useSourceData();
   const { setSourcesData } = useSourcesData();
   const { userData } = useUserData();
@@ -100,7 +116,7 @@ function StreamForm() {
                 className="flex items-center justify-center"
               >
                 <Textarea
-                  className={`${isFocused ? "h-20" : "h-8"}`}
+                  rows={2}
                   required
                   placeholder="Add mp4/mkv/... link"
                   id="link"
@@ -110,10 +126,36 @@ function StreamForm() {
                   onKeyDown={handleKeyDown}
                   value={source}
                   onChange={(e) => setSource(e.target.value)}
-                  maxLength={500}
+                  maxLength={200}
                 />
               </Form.Control>
             </Form.Field>
+            {isDynamic && (
+              <div className="mt-2 flex gap-4">
+                Be public:
+                <Switch />
+              </div>
+            )}
+
+            {isDynamic && (
+              <ToggleGroup
+                type="multiple"
+                variant={"outline"}
+                className="mt-2 justify-start gap-0"
+                defaultValue={["1", "2"]}
+              >
+                <p className="mr-4">Seasons: </p>
+                <ToggleGroupItem value="0" className="rounded-r-none">
+                  0
+                </ToggleGroupItem>
+                <ToggleGroupItem value="1" className="rounded-none">
+                  1
+                </ToggleGroupItem>
+                <ToggleGroupItem value="2" className="rounded-l-none">
+                  2
+                </ToggleGroupItem>
+              </ToggleGroup>
+            )}
             <Form.Submit className="self-end" asChild>
               <Button className="w-fit">Submit</Button>
             </Form.Submit>
