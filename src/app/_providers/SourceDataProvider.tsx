@@ -8,8 +8,10 @@ import React, {
 } from "react";
 import { type api } from "~/trpc/server";
 import eventEmitter from "~/lib/eventEmitter/eventEmitter";
+import { makeRawSource } from "~/lib/source";
+import { useRoomData } from "../_hooks/useRoomData";
 
-type SourceData = NonNullable<Awaited<ReturnType<typeof api.source.get>>>;
+type SourceData = { videoLink: string };
 
 interface SourceDataContextType {
   sourceData: SourceData; // Define your SourceData type here
@@ -28,16 +30,24 @@ export const SourceDataProvider = ({
   initialSourceData: SourceData;
 }) => {
   const [sourceData, setSourceData] = useState(initialSourceData);
+  const { roomData } = useRoomData();
+  const updatedVideoLink = makeRawSource({
+    source: sourceData.videoLink ?? "",
+    season: roomData.season ?? undefined,
+    episode: roomData.episode ?? undefined,
+  });
 
   useEffect(function () {
-    if (!sourceData.videoLink && !sourceData.fileIdx && !sourceData.mediaLinkId)
+    if (!updatedVideoLink)
       setTimeout(() => {
         eventEmitter.emit("server:message", "NO_SOURCE");
       }, 900);
   }, []);
 
   return (
-    <SourceDataContext.Provider value={{ sourceData, setSourceData }}>
+    <SourceDataContext.Provider
+      value={{ sourceData: { videoLink: updatedVideoLink }, setSourceData }}
+    >
       {children}
     </SourceDataContext.Provider>
   );

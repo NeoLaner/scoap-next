@@ -11,11 +11,9 @@ export const sourceRouter = createTRPCRouter({
         select: {
           id: true,
           roomId: true,
-          mediaLinkId: true,
+          mediaSourceId: true,
           userId: true,
-          videoLink: true,
-          infoHash: true,
-          fileIdx: true,
+          MediaSource: true,
         },
       });
     }),
@@ -25,10 +23,7 @@ export const sourceRouter = createTRPCRouter({
     .input(
       z.object({
         roomId: z.string(),
-        videoLink: z.string().optional(),
-        infoHash: z.string().optional(),
-        fileIdx: z.number().optional(),
-        mediaLinkId: z.string().optional(),
+        mediaSourceId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -46,10 +41,7 @@ export const sourceRouter = createTRPCRouter({
         data: {
           roomId: input.roomId,
           userId: session.user.id,
-          videoLink: input.videoLink,
-          infoHash: input.infoHash,
-          fileIdx: input.fileIdx,
-          mediaLinkId: input.mediaLinkId,
+          mediaSourceId: input.mediaSourceId,
         },
       });
     }),
@@ -59,20 +51,14 @@ export const sourceRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        videoLink: z.string().optional(),
-        infoHash: z.string().optional(),
-        fileIdx: z.number().optional(),
-        mediaLinkId: z.string().optional(),
+        mediaSourceId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.source.update({
         where: { id: input.id },
         data: {
-          videoLink: input.videoLink,
-          infoHash: input.infoHash,
-          fileIdx: input.fileIdx,
-          mediaLinkId: input.mediaLinkId,
+          mediaSourceId: input.mediaSourceId,
         },
       });
     }),

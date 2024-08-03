@@ -23,23 +23,15 @@ import {
   ToggleGroupItem,
 } from "~/app/_components/ui/toggle-group";
 import { Switch } from "~/app/_components/ui/switch";
-
-const containsSeason = (source: string): boolean => {
-  return source.includes("{season}");
-};
-
-const containsEpisode = (source: string): boolean => {
-  return source.includes("{episode}");
-};
+import { checkIsDynamic } from "~/lib/source";
 
 function StreamForm() {
   const [openModal, setOpenModal] = useState(false);
   const { roomData } = useRoomData();
   const [isFocused, setIsFocused] = useState(false);
   const [source, setSource] = useState("");
-  const isContainsSeason = containsSeason(source);
-  const isContainsEpisode = containsEpisode(source);
-  const isDynamic = isContainsSeason || isContainsEpisode;
+
+  const isDynamic = checkIsDynamic(source);
   const { setSourceData } = useSourceData();
   const { setSourcesData } = useSourcesData();
   const { userData } = useUserData();
@@ -53,20 +45,28 @@ function StreamForm() {
     }
   };
 
-  async function handleAction(data: FormData) {
-    const sourceData = await addDirectLink(data, roomData.id);
-
-    if (!sourceData) return;
-    setSourceData(sourceData);
-    const newSource = { user: userData, ...sourceData };
-    setSourcesData((sources) => {
-      const prvSourceWithoutUser = sources?.filter(
-        (source) => source.userId !== userData.id,
-      );
-      if (prvSourceWithoutUser) return [...prvSourceWithoutUser, newSource];
-      return [newSource];
+  async function handleAction() {
+    const sourceData = await addDirectLink({
+      roomId: roomData.id,
+      sourceLink: source,
+      seasonBoundary: [1, 2],
+      isPublic: false,
+      imdbId: roomData.imdbId,
+      season: roomData.season ?? undefined,
+      episode: roomData.episode ?? undefined,
     });
-    mediaSocket.emit("sourceDataChanged", { payload: newSource });
+
+    if (!sourceData?.mediaSourceData.videoLink) return;
+    setSourceData({ videoLink: sourceData.mediaSourceData.videoLink });
+    const newSource = { user: userData, ...sourceData.sourceData };
+    // setSourcesData((sources) => {
+    //   const prvSourceWithoutUser = sources?.filter(
+    //     (source) => source.userId !== userData.id,
+    //   );
+    //   if (prvSourceWithoutUser) return [...prvSourceWithoutUser, newSource];
+    //   return [newSource];
+    // });
+    // mediaSocket.emit("sourceDataChanged", { payload: newSource });
     setOpenModal(false);
   }
 

@@ -4,6 +4,7 @@ import { addonRouter } from "./routers/addon";
 import { userRouter } from "./routers/user";
 import { sourceRouter } from "./routers/source";
 import { roomRouter } from "./routers/room";
+import { mediaSourceRouter } from "./routers/media-source";
 
 /**
  * This is the primary router for your server.
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
   room: roomRouter,
   user: userRouter,
   source: sourceRouter,
+  mediaSource: mediaSourceRouter,
 });
 
 // export type definition of API

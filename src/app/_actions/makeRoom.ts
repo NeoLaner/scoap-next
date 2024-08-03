@@ -27,7 +27,7 @@ export async function makeRoom(inputs: {
     imdbId,
     type,
   });
-  await api.source.createMe({ roomId: roomData.id });
+
   permanentRedirect(
     `/stream/${roomData.type}/${roomData.imdbId}/${roomData.id}`,
   );

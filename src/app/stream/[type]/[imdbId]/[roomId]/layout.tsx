@@ -48,15 +48,10 @@ async function Layout({
       </ProtectedRoute>
     );
 
-  let sourceData = await api.source.get({
+  const sourceData = await api.source.get({
     roomId: roomData?.id,
     userId: session.user.id,
   });
-
-  if (!sourceData)
-    sourceData = await api.source.createMe({
-      roomId: roomData.id,
-    });
 
   const roomSources = await api.room.getRoomSources({ roomId });
 
@@ -65,7 +60,11 @@ async function Layout({
       <RoomDataProvider initialRoomData={roomData}>
         <RoomSettingsProvider>
           <ChatDataProvider>
-            <SourceDataProvider initialSourceData={sourceData}>
+            <SourceDataProvider
+              initialSourceData={{
+                videoLink: sourceData?.MediaSource?.videoLink ?? "",
+              }}
+            >
               <SourcesDataProvider initialSourcesData={roomSources?.Sources}>
                 {/* <UsersSocketProvider>
         </UsersSocketProvider> */}

@@ -23,8 +23,6 @@ function PlayerMedia({
   const { metaData } = useMetaData();
   const { sourceData } = useSourceData();
 
-  sourceData.videoLink;
-
   function onProviderChange(
     provider: MediaProviderAdapter | null,
     nativeEvent: MediaProviderChangeEvent,
@@ -56,7 +54,7 @@ function PlayerMedia({
           src={metaData.background}
           alt={metaData.name}
           fill
-          className={`h-full object-cover object-top  ${!sourceData.videoLink ? "opacity-70" : "opacity-0"} transition-all`}
+          className={`h-full object-cover object-top  ${!sourceData?.videoLink ? "opacity-70" : "opacity-0"} transition-all`}
           quality="90"
         />
         {/* {textTracks.map((track) => (
