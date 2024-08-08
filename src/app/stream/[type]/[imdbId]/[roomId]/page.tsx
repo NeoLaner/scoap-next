@@ -1,9 +1,9 @@
 import PlayerLayout from "./_ui/PlayerLayout";
 
-async function page() {
+async function page({ params }: { params: { roomId: string } }) {
   return (
     <section className="relative h-full w-full overflow-hidden">
-      <PlayerLayout />
+      <PlayerLayout roomId={params.roomId} />
     </section>
   );
 }

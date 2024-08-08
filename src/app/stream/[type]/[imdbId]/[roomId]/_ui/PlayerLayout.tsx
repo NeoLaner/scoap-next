@@ -16,7 +16,7 @@ import StreamsHeading from "./StreamsHeading";
 import Streams from "./Streams";
 import ChatFooter from "./ChatFooter";
 
-function PlayerLayout() {
+function PlayerLayout({ roomId }: { roomId: string }) {
   return (
     <PlayerPanel>
       <LeftPanel>
@@ -49,7 +49,7 @@ function PlayerLayout() {
             key: "streams",
             JSXMain: (
               <Suspense fallback={<Loader />}>
-                <Streams torrentIoStreamsSorted={[]} />
+                <Streams roomId={roomId} />
               </Suspense>
             ),
             JSXHeader: <StreamsHeading />,

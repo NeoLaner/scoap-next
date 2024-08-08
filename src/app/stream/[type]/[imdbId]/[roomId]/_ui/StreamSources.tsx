@@ -1,3 +1,4 @@
+"use client";
 import { updateSource } from "~/app/_actions/updateSource";
 import { Button } from "~/app/_components/ui/Button";
 import { useRoomData } from "~/app/_hooks/useRoomData";
