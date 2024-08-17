@@ -10,6 +10,10 @@ import {
   AvatarImage,
 } from "~/app/_components/ui/avatar";
 import { getFirstTwoLetters } from "~/lib/utils";
+import { checkIsDynamic } from "~/lib/source";
+import { useUserData } from "~/app/_hooks/useUserData";
+import { UniqueSourceWithUsers } from "~/lib/@types/UniqueSource";
+import { StreamSource } from "./StreamSource";
 
 // http://127.0.0.1:11470/6ee1a751d67aae51dfd067b0a11e2f06d1098461/create
 async function Streams({ roomId }: { roomId: string }) {
@@ -26,14 +30,6 @@ async function Streams({ roomId }: { roomId: string }) {
     </div>
   );
 }
-
-type UniqueSource = NonNullable<
-  Awaited<ReturnType<typeof api.room.getRoomSources>>
->["Sources"][number];
-
-type UniqueSourceWithUsers = UniqueSource & {
-  users: UniqueSource["user"][];
-};
 
 export async function UsersSource({ roomId }: { roomId: string }) {
   const usersSource = await api.room.getRoomSources({ roomId });
@@ -53,64 +49,13 @@ export async function UsersSource({ roomId }: { roomId: string }) {
   console.log(uniqueSourceMap);
 
   return (
-    <div>
+    <div className="space-y-2">
       {Array.from(uniqueSourceMap.values()).map((source) => (
         <StreamSource
           key={source.MediaSource.id}
           uniqueSourceWithUsers={source}
         />
       ))}
-    </div>
-  );
-}
-
-export async function StreamSource({
-  uniqueSourceWithUsers,
-}: {
-  uniqueSourceWithUsers: UniqueSourceWithUsers;
-}) {
-  return (
-    <div className="flex flex-col gap-2 rounded-lg border p-2 px-4">
-      <div className="flex items-center justify-between">
-        {/* Users Profile */}
-        <div>Users Profile </div>
-
-        <div className="flex items-center gap-1">
-          <Button
-            variant={"default"}
-            size={"sm"}
-            className="items-center justify-center overflow-hidden rounded-sm bg-green-500 hover:bg-green-600"
-          >
-            Select
-          </Button>
-
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            className="items-center justify-center overflow-hidden rounded-md "
-          >
-            {" "}
-            <BsThreeDotsVertical size={24} />
-          </Button>
-        </div>
-      </div>
-      <div>Description or link</div>
-      <div className="flex items-center justify-between">
-        <div>
-          <Badge>Dynamic</Badge>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="text-sm">by:</div>
-          <Avatar
-            className={`flex h-8 w-8 items-center justify-center rounded-md border-2 shadow-2xl transition-all`}
-          >
-            <AvatarImage src={"user.image"} className="" />
-            <AvatarFallback className="rounded-md">
-              {getFirstTwoLetters("Yasin" ?? ":(")}
-            </AvatarFallback>
-          </Avatar>
-        </div>
-      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TagEnum } from "~/lib/@types/Media";
 import { checkIsDynamic, containsEpisode, containsSeason } from "~/lib/source";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
@@ -40,6 +41,8 @@ export const mediaSourceRouter = createTRPCRouter({
         seasonBoundary: z.array(z.number()),
         season: z.number().optional(),
         episode: z.number().optional(),
+        tags: z.array(TagEnum).optional(),
+        quality: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -73,6 +76,8 @@ export const mediaSourceRouter = createTRPCRouter({
           seasonBoundary: input.seasonBoundary,
           season: input.season,
           episode: input.episode,
+          tags: input.tags,
+          quality: input.quality,
         },
       });
     }),

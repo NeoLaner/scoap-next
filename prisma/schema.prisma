@@ -38,13 +38,13 @@ model Session {
 }
 
 model User {
-  id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
-  userId               String?                @unique
+  id                   String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId               String?                  @unique
   name                 String?
-  email                String?                @unique
+  email                String?                  @unique
   emailVerified        DateTime?
   image                String?
-  addons               String[]               @default([])
+  addons               String[]                 @default([])
   accounts             Account[]
   sessions             Session[]
   rooms                Room[]
@@ -70,7 +70,7 @@ model Room {
   ownerId     String    @db.ObjectId
   online      Boolean   @default(false)
   timeWatched DateTime?
-  season      Int?      
+  season      Int?
   episode     Int?
   isPublic    Boolean   @default(false)
 
@@ -81,37 +81,50 @@ model Room {
 }
 
 model Source {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  roomId      String  @unique @db.ObjectId
-  userId      String  @unique @db.ObjectId
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  roomId        String @unique @db.ObjectId
+  userId        String @unique @db.ObjectId
   // infoHash    String?
   // fileIdx     Int?
   mediaSourceId String @db.ObjectId
 
-  room      Room       @relation(fields: [roomId], references: [id])
-  user      User       @relation(fields: [userId], references: [id])
+  room        Room        @relation(fields: [roomId], references: [id])
+  user        User        @relation(fields: [userId], references: [id])
   MediaSource MediaSource @relation(fields: [mediaSourceId], references: [id])
 }
 
-model MediaSource {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  ownerId        String   @db.ObjectId
-  imdbId         String
-  videoLink      String
-  
-  description    String? // if there is no description provided, the videoLink shows instead
-  roomId         String   @db.ObjectId
-  isPublic       Boolean  @default(false)
-  disabled       Boolean // change by owner and admins
-  canBePublic    Boolean // change by admins
-  usersLikesId   String[] @db.ObjectId // if the link is private, this should never change
-  name           String   @default("")
+// Define the enums
+enum Tag {
+  Hardsub
+  Softsub
+  Dubbed
+  WebDl
+  BluRay
+  CAM
+}
 
-  //if is Dynmaic
+// Update the MediaSource model
+model MediaSource {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId   String @db.ObjectId
+  imdbId    String
+  videoLink String
+
+  description  String? // if there is no description provided, the videoLink shows instead
+  roomId       String   @db.ObjectId
+  isPublic     Boolean  @default(false)
+  disabled     Boolean // change by owner and admins
+  canBePublic  Boolean // change by admins
+  usersLikesId String[] @db.ObjectId // if the link is private, this should never change
+  name         String   @default("")
+  quality      String?
+  tags         Tag[]
+
+  //if is Dynamic
   seasonBoundary Int[] // if link type is dynamic for series
   //if is Static
-  episode Int?
-  season Int?
+  episode        Int?
+  season         Int?
 
   sources      Source[]
   interactions MediaSourceInteraction[]
@@ -125,7 +138,7 @@ model MediaSourceInteraction {
   isLike      Boolean
 
   mediaLink MediaSource @relation(fields: [mediaLinkId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
+  user      User        @relation(fields: [userId], references: [id])
 
   @@unique([userId, mediaLinkId])
 }

@@ -1,20 +1,18 @@
 "use client";
-import * as Form from "@radix-ui/react-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { addDirectLink } from "~/app/_actions/addDirectLink";
 import { Textarea } from "~/app/_components/ui/Textarea";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
 import { useSourcesData } from "~/app/_hooks/useSourcesData";
-import { useUserData } from "~/app/_hooks/useUserData";
 import { Button } from "~/app/_components/ui/Button";
 import {
   ToggleGroup,
   ToggleGroupItem,
 } from "~/app/_components/ui/toggle-group";
-import { Switch } from "~/app/_components/ui/switch";
-import { checkIsDynamic } from "~/lib/source";
+import { checkIsDynamic, makeRawSource } from "~/lib/source";
 import {
   Sheet,
   SheetContent,
@@ -23,37 +21,72 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "~/app/_components/ui/sheet";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/app/_components/ui/form";
 import { ScrollArea } from "~/app/_components/ui/scroll-area";
 import { Checkbox } from "~/app/_components/ui/checkbox";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { Input } from "~/app/_components/ui/input";
+import { TagEnum } from "~/lib/@types/Media";
+import { useMetaData } from "~/app/_hooks/useMetaData";
+import { extractUniqueSeasons } from "~/lib/metadata";
+
+const formSchema = z.object({
+  sourceLink: z.string().url().max(250),
+  description: z.string().max(250).optional(),
+  isPublic: z.boolean().optional(),
+  seasonBoundary: z.array(z.string()),
+  quality: z.string(),
+  tags: z.array(TagEnum),
+});
 
 function StreamForm() {
-  const [openModal, setOpenModal] = useState(false);
+  const [_, setOpenModal] = useState(false);
   const { roomData } = useRoomData();
-  const [isFocused, setIsFocused] = useState(false);
-  const [source, setSource] = useState("");
-  const [isPublic, setIsPublic] = useState(false);
-  const [description, setDescription] = useState("");
+  const { metaData } = useMetaData();
 
-  const isDynamic = checkIsDynamic(source);
   const { setSourceData } = useSourceData();
-  const { setSourcesData } = useSourcesData();
-  const { userData } = useUserData();
-  const ref = useRef<HTMLFormElement>();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(
+      formSchema.superRefine((data, ctx) => {
+        if (checkIsDynamic(data.sourceLink)) {
+          if (data.description && data.description.length < 10) {
+            ctx.addIssue({
+              path: ["description"],
+              message: "description must have at least 10 characters",
+              code: "custom",
+            });
+          }
+        }
+      }),
+    ),
+    defaultValues: {
+      sourceLink: "",
+      description: "",
+      isPublic: false,
+      seasonBoundary: [String(roomData.season) ?? "1"],
+      quality: "",
+      tags: [],
+    },
+  });
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Enter") {
-      event.preventDefault(); // Prevent new line
-      ref.current?.requestSubmit();
-      setSource("");
-    }
-  };
+  const isDynamic = checkIsDynamic(form.getValues("sourceLink"));
+  const seasonBoundary = form.getValues("seasonBoundary");
 
-  async function handleAction() {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+
     const sourceData = await addDirectLink({
       roomId: roomData.id,
-      sourceLink: source,
-      seasonBoundary: [1, 2],
-      isPublic: false,
+      ...values,
       imdbId: roomData.imdbId,
       season: roomData.season ?? undefined,
       episode: roomData.episode ?? undefined,
@@ -61,7 +94,7 @@ function StreamForm() {
 
     if (!sourceData?.mediaSourceData.videoLink) return;
     setSourceData({ videoLink: sourceData.mediaSourceData.videoLink });
-    const newSource = { user: userData, ...sourceData.sourceData };
+    // const newSource = { user: userData, ...sourceData.sourceData };
     // setSourcesData((sources) => {
     //   const prvSourceWithoutUser = sources?.filter(
     //     (source) => source.userId !== userData.id,
@@ -96,118 +129,193 @@ function StreamForm() {
                   same room.
                 </SheetDescription>
               </SheetHeader>
-              <Form.Root
-                ref={ref}
-                autoComplete="off"
-                className="flex w-full flex-col gap-2"
-                action={handleAction}
-              >
-                <Form.Field className="flex flex-col " name="name">
-                  <div className="flex items-baseline justify-between">
-                    <Form.Message
-                      className="text-solid-gray-2 text-[13px] opacity-[0.8]"
-                      match="valueMissing"
-                    >
-                      Please enter your link
-                    </Form.Message>
-                    <Form.Message
-                      className="text-solid-gray-2 text-[13px] opacity-[0.8]"
-                      match="typeMismatch"
-                    >
-                      Please provide a valid link
-                    </Form.Message>
-                  </div>
-                  <Form.Control
-                    asChild
-                    className="flex flex-col  justify-center"
-                    type="url"
+
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4"
+                >
+                  <FormField
+                    control={form.control}
+                    name="sourceLink"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Source link</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Add a media url with mp4/mkv/... formats."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription className="text-wrap break-all text-xs">
+                          {seasonBoundary.length !== 0 && isDynamic && (
+                            <>
+                              <p className="font-bold text-primary">
+                                Preview:{" "}
+                              </p>
+                              <p>
+                                {" "}
+                                {makeRawSource({
+                                  source: form.getValues("sourceLink"),
+                                  season: Math.min(
+                                    ...seasonBoundary.map((s) => Number(s)),
+                                  ),
+                                  episode: 1,
+                                })}
+                              </p>
+                            </>
+                          )}
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  <div>
-                    <div>Source Link</div>
-                    <Textarea
-                      rows={2}
-                      required
-                      placeholder="Add mp4/mkv/... link"
-                      id="link"
-                      name="link"
-                      onFocus={() => setIsFocused(true)}
-                      onBlur={() => setIsFocused(false)}
-                      onKeyDown={handleKeyDown}
-                      value={source}
-                      onChange={(e) => setSource(e.target.value)}
-                      maxLength={200}
+
+                  {isDynamic && (
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem className="">
+                          <FormLabel>Description</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="description for your link"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </div>
-                </Form.Field>
+                  )}
 
-                <Form.Field className="flex flex-col " name="name">
-                  <div className="flex items-baseline justify-between">
-                    <Form.Message
-                      className="text-solid-gray-2 text-[13px] opacity-[0.8]"
-                      match="tooShort"
-                    >
-                      Please provide a valid link
-                    </Form.Message>
-                  </div>
-                  <Form.Control
-                    asChild
-                    className="flex flex-col  justify-center"
-                  >
-                    <div>
-                      <div>Description</div>
-                      <Textarea
-                        rows={2}
-                        required
-                        placeholder="Example: 720p PSAx265 English Softsub"
-                        id="link"
-                        name="link"
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                        onKeyDown={handleKeyDown}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        maxLength={200}
-                        minLength={20}
-                      />
-                    </div>
-                  </Form.Control>
-                </Form.Field>
-                {isDynamic && (
-                  <div className="mt-2 flex gap-4">
-                    Be public:
-                    <Checkbox
-                      value={isPublic ? "on" : "off"}
-                      onCheckedChange={(checked) =>
-                        setIsPublic(Boolean(checked))
-                      }
+                  {isDynamic && (
+                    <FormField
+                      control={form.control}
+                      name="seasonBoundary"
+                      render={({ field }) => (
+                        <FormItem className="flex items-end gap-2">
+                          <ToggleGroup
+                            type="multiple"
+                            className="mt-2 flex flex-wrap justify-start"
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            size={"sm"}
+                          >
+                            <FormLabel>Seasons:</FormLabel>
+                            {extractUniqueSeasons(metaData.videos).map(
+                              (season) => (
+                                <ToggleGroupItem
+                                  key={season}
+                                  value={String(season)}
+                                >
+                                  {season}
+                                </ToggleGroupItem>
+                              ),
+                            )}
+                          </ToggleGroup>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </div>
-                )}
+                  )}
 
-                {isDynamic && (
-                  <ToggleGroup
-                    type="multiple"
-                    variant={"outline"}
-                    className="mt-2 justify-start gap-0"
-                    defaultValue={["1", "2"]}
-                  >
-                    <p className="mr-4">Seasons: </p>
-                    <ToggleGroupItem value="0" className="rounded-r-none">
-                      0
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="1" className="rounded-none">
-                      1
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="2" className="rounded-l-none">
-                      2
-                    </ToggleGroupItem>
-                  </ToggleGroup>
-                )}
+                  {isDynamic && (
+                    <FormField
+                      control={form.control}
+                      name="quality"
+                      render={({ field }) => (
+                        <FormItem className=" gap-2">
+                          <ToggleGroup
+                            type="single"
+                            className="mt-2 flex-wrap justify-start"
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            size={"sm"}
+                          >
+                            <FormLabel>Quality: </FormLabel>
 
-                <Form.Submit className="self-end" asChild>
-                  <Button className="w-fit">Submit</Button>
-                </Form.Submit>
-              </Form.Root>
+                            <ToggleGroupItem value="360">360p</ToggleGroupItem>
+                            <ToggleGroupItem value="480">480p</ToggleGroupItem>
+                            <ToggleGroupItem value="720">720p</ToggleGroupItem>
+                            <ToggleGroupItem value="1080">
+                              1080p
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="1440">
+                              1440p
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="2160">
+                              2160p
+                            </ToggleGroupItem>
+                          </ToggleGroup>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  {isDynamic && (
+                    <FormField
+                      control={form.control}
+                      name="tags"
+                      render={({ field }) => (
+                        <FormItem className=" gap-2">
+                          <ToggleGroup
+                            type="multiple"
+                            className="mt-2 flex-wrap justify-start"
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            size={"sm"}
+                          >
+                            <FormLabel>Tags:</FormLabel>
+
+                            <ToggleGroupItem value="Hardsub">
+                              Hardsub
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="Softsub">
+                              SoftSub
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="Dubbed">
+                              Dubbed
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="WebDl">
+                              Web-dl
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="BluRay">
+                              Blu-ray
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="CAM">CAM</ToggleGroupItem>
+                          </ToggleGroup>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  {isDynamic && (
+                    <FormField
+                      control={form.control}
+                      name="isPublic"
+                      render={({ field }) => (
+                        <FormItem className="flex items-end gap-2">
+                          <FormControl className="flex items-center justify-center">
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormLabel>
+                            Link be publicly available in all rooms?
+                          </FormLabel>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                  <Button type="submit">Submit</Button>
+                </form>
+              </Form>
             </div>
           </ScrollArea>
         </SheetContent>

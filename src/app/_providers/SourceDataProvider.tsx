@@ -6,7 +6,6 @@ import React, {
   useState,
   type ReactNode,
 } from "react";
-import { type api } from "~/trpc/server";
 import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 import { makeRawSource } from "~/lib/source";
 import { useRoomData } from "../_hooks/useRoomData";

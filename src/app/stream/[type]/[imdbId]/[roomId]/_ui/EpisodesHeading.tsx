@@ -12,18 +12,12 @@ import {
 } from "~/app/_components/ui/select";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useMetaData } from "~/app/_hooks/useMetaData";
-
-const extractUniqueSeasons = (videos: Video[]) => {
-  const seasons = new Set(videos.map((video) => video.season));
-  return Array.from(seasons);
-};
+import { extractUniqueSeasons } from "~/lib/metadata";
 
 function EpisodesHeading() {
   const { roomData } = useRoomData();
   const searchParams = useSearchParams();
   const season = searchParams.get("season") ?? roomData.season ?? 1;
-  "season", season;
-
   const router = useRouter();
   const pathname = usePathname();
   const { metaData } = useMetaData();

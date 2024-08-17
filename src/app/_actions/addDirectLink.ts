@@ -2,49 +2,57 @@
 import { checkIsDynamic } from "~/lib/source";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+import { TagEnum } from "~/lib/@types/Media";
+import { z } from "zod";
 
 export async function addDirectLink({
   sourceLink,
   roomId,
   seasonBoundary,
-  isPublic,
-  description,
-  name,
   imdbId,
-  season,
-  episode,
+  isPublic = false,
+  description = "",
+  name = "",
+  season = 1,
+  episode = 1,
+  tags,
+  quality,
 }: {
   sourceLink: string;
   roomId: string;
-  seasonBoundary: number[];
-  isPublic: boolean;
+  seasonBoundary: string[];
+  imdbId: string;
+  isPublic?: boolean;
   description?: string;
   name?: string;
-  imdbId: string;
   season?: number;
   episode?: number;
+  tags?: z.infer<typeof TagEnum>[];
+  quality?: string;
 }) {
   const isDynamic = checkIsDynamic(sourceLink);
   const session = await getServerAuthSession();
   const userId = session?.user.id;
   if (!sourceLink || !roomId || !userId) return;
   const source = await api.source.get({ userId, roomId });
-
+  const seasonBoundaryToNumbers = seasonBoundary?.map((str) => Number(str));
   let mediaSource;
   if (isDynamic) {
     mediaSource = {
       videoLink: sourceLink,
-      seasonBoundary,
+      seasonBoundary: seasonBoundaryToNumbers,
       roomId,
       isPublic,
       description,
       imdbId,
       name,
+      tags,
+      quality,
     };
   } else {
     mediaSource = {
       videoLink: sourceLink,
-      seasonBoundary,
+      seasonBoundary: seasonBoundaryToNumbers,
       roomId,
       isPublic,
       description,
@@ -52,6 +60,8 @@ export async function addDirectLink({
       name,
       season,
       episode,
+      tags,
+      quality,
     };
   }
 

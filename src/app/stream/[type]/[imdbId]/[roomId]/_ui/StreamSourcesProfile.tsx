@@ -9,7 +9,7 @@ import { getFirstTwoLetters } from "~/lib/utils";
 function StreamSourcesProfile({
   users,
 }: {
-  users: { name: string; image: string }[];
+  users: { name: string | null; image: string | null }[];
 }) {
   const [isHover, setIsHover] = useState(false);
 
@@ -32,7 +32,7 @@ function StreamSourcesProfile({
           key={index}
           className={`${isHover ? "mr-0" : "-mr-4"} flex h-8 w-8 items-center justify-center rounded-md border-2 shadow-2xl transition-all`}
         >
-          <AvatarImage src={user.image} className="" />
+          <AvatarImage src={user.image ?? ""} className="" />
           <AvatarFallback className="rounded-md">
             {getFirstTwoLetters(user.name ?? ":(")}
           </AvatarFallback>
