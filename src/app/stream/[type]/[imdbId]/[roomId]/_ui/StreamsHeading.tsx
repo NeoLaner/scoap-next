@@ -1,7 +1,7 @@
 "use client";
 
 function StreamsHeading() {
-  return <div>Room Sources</div>;
+  return <div>Sources</div>;
 }
 
 export default StreamsHeading;
