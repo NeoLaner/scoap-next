@@ -14,10 +14,9 @@ import { useUserData } from "~/app/_hooks/useUserData";
 import { type UniqueSourceWithUsers } from "~/lib/@types/UniqueSource";
 import StreamSourcesProfile from "./StreamSourcesProfile";
 import { useRoomData } from "~/app/_hooks/useRoomData";
-import { ScrollArea } from "~/app/_components/ui/scroll-area";
-import { PiArrowClockwiseBold } from "react-icons/pi";
 import { useState } from "react";
 import { Separator } from "~/app/_components/ui/separator";
+import { ArrowRightCircle, CircleEllipsis } from "lucide-react";
 
 export function StreamSource({
   uniqueSourceWithUsers,
@@ -42,15 +41,7 @@ export function StreamSource({
           <StreamSourcesProfile users={uniqueSourceWithUsers.users} />
         </div>
 
-        <div className="flex items-center gap-1">
-          <Button
-            variant={"default"}
-            size={"sm"}
-            className="items-center justify-center overflow-hidden rounded-sm bg-green-600 hover:bg-green-700"
-          >
-            Select
-          </Button>
-
+        <div className="flex items-center">
           {uniqueSourceWithUsers.userId === userData.id && (
             <Button
               variant={"ghost"}
@@ -58,12 +49,20 @@ export function StreamSource({
               className="items-center justify-center overflow-hidden rounded-md "
             >
               {" "}
-              <BsThreeDotsVertical size={24} />
+              <CircleEllipsis />
             </Button>
           )}
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            className="items-center justify-center overflow-hidden rounded-sm"
+          >
+            <ArrowRightCircle />
+          </Button>
         </div>
       </div>
-      <Separator />
+      {/* <Separator />
+
       <div className="relative h-20 rounded-lg ">
         <Button
           className="absolute bottom-1 right-2 z-50 h-6 w-6 p-1"
@@ -77,8 +76,10 @@ export function StreamSource({
             {desc ? (showDesc ? desc : source) : source}{" "}
           </div>{" "}
         </ScrollArea>
-      </div>
+      </div> */}
+
       <Separator />
+
       <div className="flex items-center justify-between">
         <div className="flex flex-wrap items-center gap-1">
           {checkIsDynamic(uniqueSourceWithUsers.MediaSource.videoLink) && (

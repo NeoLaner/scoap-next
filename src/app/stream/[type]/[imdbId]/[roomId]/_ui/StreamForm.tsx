@@ -1,12 +1,12 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, useWatch } from "react-hook-form";
 
 import { useState } from "react";
 import { addDirectLink } from "~/app/_actions/addDirectLink";
 import { Textarea } from "~/app/_components/ui/Textarea";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
-import { useSourcesData } from "~/app/_hooks/useSourcesData";
 import { Button } from "~/app/_components/ui/Button";
 import {
   ToggleGroup,
@@ -33,7 +33,7 @@ import {
 import { ScrollArea } from "~/app/_components/ui/scroll-area";
 import { Checkbox } from "~/app/_components/ui/checkbox";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+
 import { Input } from "~/app/_components/ui/input";
 import { TagEnum } from "~/lib/@types/Media";
 import { useMetaData } from "~/app/_hooks/useMetaData";
@@ -41,7 +41,7 @@ import { extractUniqueSeasons } from "~/lib/metadata";
 
 const formSchema = z.object({
   sourceLink: z.string().url().max(250),
-  description: z.string().max(250).optional(),
+  name: z.string().min(3).max(20),
   isPublic: z.boolean().optional(),
   seasonBoundary: z.array(z.string()),
   quality: z.string(),
@@ -55,31 +55,19 @@ function StreamForm() {
 
   const { setSourceData } = useSourceData();
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(
-      formSchema.superRefine((data, ctx) => {
-        if (checkIsDynamic(data.sourceLink)) {
-          if (data.description && data.description.length < 10) {
-            ctx.addIssue({
-              path: ["description"],
-              message: "description must have at least 10 characters",
-              code: "custom",
-            });
-          }
-        }
-      }),
-    ),
     defaultValues: {
       sourceLink: "",
-      description: "",
+      name: "",
       isPublic: false,
       seasonBoundary: [String(roomData.season) ?? "1"],
       quality: "",
       tags: [],
     },
   });
+  const watch = useWatch({ control: form.control });
 
-  const isDynamic = checkIsDynamic(form.getValues("sourceLink"));
-  const seasonBoundary = form.getValues("seasonBoundary");
+  const isDynamic = checkIsDynamic(watch.sourceLink ?? "");
+  const seasonBoundary = watch.seasonBoundary;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -143,52 +131,46 @@ function StreamForm() {
                         <FormLabel>Source link</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Add a media url with mp4/mkv/... formats."
+                            placeholder="Add a media url with mp4/mkv/m3u8 formats."
                             {...field}
                           />
                         </FormControl>
-                        <FormDescription className="text-wrap break-all text-xs">
-                          {seasonBoundary.length !== 0 && isDynamic && (
-                            <>
-                              <p className="font-bold text-primary">
-                                Preview:{" "}
-                              </p>
-                              <p>
-                                {" "}
-                                {makeRawSource({
-                                  source: form.getValues("sourceLink"),
-                                  season: Math.min(
-                                    ...seasonBoundary.map((s) => Number(s)),
-                                  ),
-                                  episode: 1,
-                                })}
-                              </p>
-                            </>
-                          )}
-                        </FormDescription>
+                        {seasonBoundary?.length !== 0 && isDynamic && (
+                          <FormDescription className="text-wrap break-all text-xs">
+                            <span className="font-bold text-primary">
+                              Preview:{" "}
+                            </span>
+                            <span>
+                              {" "}
+                              {makeRawSource({
+                                source: form.getValues("sourceLink"),
+                                season: Math.min(
+                                  ...(seasonBoundary?.map((s) => Number(s)) ??
+                                    []),
+                                ),
+                                episode: 1,
+                              })}
+                            </span>
+                          </FormDescription>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  {isDynamic && (
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem className="">
-                          <FormLabel>Description</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="description for your link"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem className="">
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="name for your link" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   {isDynamic && (
                     <FormField
@@ -220,7 +202,6 @@ function StreamForm() {
                       )}
                     />
                   )}
-
                   {isDynamic && (
                     <FormField
                       control={form.control}
@@ -254,7 +235,6 @@ function StreamForm() {
                       )}
                     />
                   )}
-
                   {isDynamic && (
                     <FormField
                       control={form.control}
@@ -292,7 +272,6 @@ function StreamForm() {
                       )}
                     />
                   )}
-
                   {isDynamic && (
                     <FormField
                       control={form.control}
