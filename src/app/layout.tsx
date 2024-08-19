@@ -10,6 +10,7 @@ import { Toaster } from "./_components/ui/sonner";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-inter",
   // variable: "--font-sans",
 });
 
@@ -30,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`h-dvh  ${inter.className}`}>
+      <body className={`h-dvh ${inter.variable}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

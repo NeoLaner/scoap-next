@@ -44,6 +44,7 @@
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
+    "country-flag-emoji-polyfill": "^0.1.8",
     "hls.js": "^1.5.8",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.397.0",

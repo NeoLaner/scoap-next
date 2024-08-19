@@ -1,12 +1,14 @@
 "use client";
 import "@vidstack/react/player/styles/base.css";
 import { useWindowSize } from "@uidotdev/usehooks";
+import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
+
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "~/app/_components/ui/resizable";
-import { createContext, type ReactNode, useContext } from "react";
+import { createContext, type ReactNode, useContext, useEffect } from "react";
 import { Button } from "~/app/_components/ui/Button";
 import { PiDiceSixFill } from "react-icons/pi";
 import {
@@ -44,6 +46,9 @@ export function PlayerPanel({ children }: { children: ReactNode }) {
     setRoomSettings((prv) => {
       return { ...prv, isRightPanelOpen: val };
     });
+  useEffect(function () {
+    polyfillCountryFlagEmojis();
+  }, []);
 
   if (!width) return null;
   let size;
