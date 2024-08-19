@@ -55,11 +55,12 @@ function StreamForm() {
 
   const { setSourceData } = useSourceData();
   const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       sourceLink: "",
       name: "",
       isPublic: false,
-      seasonBoundary: [String(roomData.season) ?? "1"],
+      seasonBoundary: [String(roomData.season)],
       quality: "",
       tags: [],
     },
@@ -131,7 +132,7 @@ function StreamForm() {
                         <FormLabel>Source link</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Add a media url with mp4/mkv/m3u8 formats."
+                            placeholder="add a media url with mp4/mkv/m3u8 formats."
                             {...field}
                           />
                         </FormControl>

@@ -38,7 +38,9 @@ export function StreamSource({
       <div className="flex items-center justify-between">
         {/* Users Profile */}
         <div>
-          <StreamSourcesProfile users={uniqueSourceWithUsers.users} />
+          {/* <StreamSourcesProfile users={uniqueSourceWithUsers.users} /> */}
+          {uniqueSourceWithUsers.MediaSource.name}
+          🇫🇮
         </div>
 
         <div className="flex items-center">
@@ -97,7 +99,6 @@ export function StreamSource({
           ))}
         </div>
         <div className="flex items-center gap-1">
-          <div className="text-sm">by:</div>
           <Avatar
             className={`flex h-8 w-8 items-center justify-center rounded-md border-2 shadow-2xl transition-all`}
           >
