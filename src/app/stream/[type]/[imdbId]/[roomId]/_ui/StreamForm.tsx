@@ -1,8 +1,11 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
+const EmojiPicker = dynamic(() => import("emoji-picker-react"), {
+  loading: () => <Loader />,
+});
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { addDirectLink } from "~/app/_actions/addDirectLink";
 import { Textarea } from "~/app/_components/ui/Textarea";
 import { useRoomData } from "~/app/_hooks/useRoomData";
@@ -38,6 +41,15 @@ import { Input } from "~/app/_components/ui/input";
 import { TagEnum } from "~/lib/@types/Media";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { extractUniqueSeasons } from "~/lib/metadata";
+import Loader from "~/app/_ui/Loader";
+import dynamic from "next/dynamic";
+import { Categories, Theme } from "emoji-picker-react";
+import { GlobeIcon } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/app/_components/ui/popover";
 
 const formSchema = z.object({
   sourceLink: z.string().url().max(250),
@@ -52,6 +64,7 @@ function StreamForm() {
   const [_, setOpenModal] = useState(false);
   const { roomData } = useRoomData();
   const { metaData } = useMetaData();
+  const [showFlags, setShowFlags] = useState(false);
 
   const { setSourceData } = useSourceData();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -65,10 +78,9 @@ function StreamForm() {
       tags: [],
     },
   });
-  const watch = useWatch({ control: form.control });
 
-  const isDynamic = checkIsDynamic(watch.sourceLink ?? "");
-  const seasonBoundary = watch.seasonBoundary;
+  const isDynamic = checkIsDynamic(form.watch("sourceLink") ?? "");
+  const seasonBoundary = form.watch("seasonBoundary");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -154,6 +166,20 @@ function StreamForm() {
                             </span>
                           </FormDescription>
                         )}
+
+                        {
+                          <>
+                            {!isDynamic && (
+                              <FormDescription className="text-wrap break-all text-xs">
+                                <span>It just applied to: </span>
+                                <span className="font-bold text-primary">
+                                  Season {roomData.season} & Episode{" "}
+                                  {roomData.episode}
+                                </span>
+                              </FormDescription>
+                            )}
+                          </>
+                        }
                         <FormMessage />
                       </FormItem>
                     )}
@@ -163,13 +189,56 @@ function StreamForm() {
                     control={form.control}
                     name="name"
                     render={({ field }) => (
-                      <FormItem className="">
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="name for your link" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <Popover>
+                        <FormItem className="relative">
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <div className="flex w-full max-w-sm items-center space-x-2">
+                              <Input
+                                placeholder="name for your link"
+                                {...field}
+                              />
+                              <PopoverTrigger>
+                                <Button
+                                  asChild
+                                  size={"icon"}
+                                  variant={"ghost"}
+                                  className="  right-2 top-9 z-50 w-8 px-1"
+                                  onClick={(e) => {
+                                    setShowFlags(true);
+                                  }}
+                                >
+                                  <GlobeIcon size={30} />
+                                </Button>
+                              </PopoverTrigger>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+
+                          <PopoverContent className=" min-h-28 min-w-36">
+                            <EmojiPicker
+                              width={255}
+                              height={200}
+                              skinTonesDisabled
+                              categories={[
+                                {
+                                  category: Categories.FLAGS,
+                                  name: "Countries",
+                                },
+                              ]}
+                              theme={Theme.DARK}
+                              lazyLoadEmojis
+                              onEmojiClick={(emoji) => {
+                                form.setValue(
+                                  "name",
+                                  `${form.watch("name")} ${emoji.emoji}`,
+                                );
+                                form.setFocus("name");
+                              }}
+                            />
+                          </PopoverContent>
+                        </FormItem>
+                      </Popover>
                     )}
                   />
 
@@ -203,96 +272,88 @@ function StreamForm() {
                       )}
                     />
                   )}
-                  {isDynamic && (
-                    <FormField
-                      control={form.control}
-                      name="quality"
-                      render={({ field }) => (
-                        <FormItem className=" gap-2">
-                          <ToggleGroup
-                            type="single"
-                            className="mt-2 flex-wrap justify-start"
-                            value={field.value}
-                            onValueChange={field.onChange}
-                            size={"sm"}
-                          >
-                            <FormLabel>Quality: </FormLabel>
 
-                            <ToggleGroupItem value="360">360p</ToggleGroupItem>
-                            <ToggleGroupItem value="480">480p</ToggleGroupItem>
-                            <ToggleGroupItem value="720">720p</ToggleGroupItem>
-                            <ToggleGroupItem value="1080">
-                              1080p
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value="1440">
-                              1440p
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value="2160">
-                              2160p
-                            </ToggleGroupItem>
-                          </ToggleGroup>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                  {isDynamic && (
-                    <FormField
-                      control={form.control}
-                      name="tags"
-                      render={({ field }) => (
-                        <FormItem className=" gap-2">
-                          <ToggleGroup
-                            type="multiple"
-                            className="mt-2 flex-wrap justify-start"
-                            value={field.value}
-                            onValueChange={field.onChange}
-                            size={"sm"}
-                          >
-                            <FormLabel>Tags:</FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="quality"
+                    render={({ field }) => (
+                      <FormItem className=" gap-2">
+                        <ToggleGroup
+                          type="single"
+                          className="mt-2 flex-wrap justify-start"
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          size={"sm"}
+                        >
+                          <FormLabel>Quality: </FormLabel>
 
-                            <ToggleGroupItem value="Hardsub">
-                              Hardsub
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value="Softsub">
-                              SoftSub
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value="Dubbed">
-                              Dubbed
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value="WebDl">
-                              Web-dl
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value="BluRay">
-                              Blu-ray
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value="CAM">CAM</ToggleGroupItem>
-                          </ToggleGroup>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                  {isDynamic && (
-                    <FormField
-                      control={form.control}
-                      name="isPublic"
-                      render={({ field }) => (
-                        <FormItem className="flex items-end gap-2">
-                          <FormControl className="flex items-center justify-center">
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <FormLabel>
-                            Link be publicly available in all rooms?
-                          </FormLabel>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
+                          <ToggleGroupItem value="360">360p</ToggleGroupItem>
+                          <ToggleGroupItem value="480">480p</ToggleGroupItem>
+                          <ToggleGroupItem value="720">720p</ToggleGroupItem>
+                          <ToggleGroupItem value="1080">1080p</ToggleGroupItem>
+                          <ToggleGroupItem value="1440">1440p</ToggleGroupItem>
+                          <ToggleGroupItem value="2160">2160p</ToggleGroupItem>
+                        </ToggleGroup>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="tags"
+                    render={({ field }) => (
+                      <FormItem className=" gap-2">
+                        <ToggleGroup
+                          type="multiple"
+                          className="mt-2 flex-wrap justify-start"
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          size={"sm"}
+                        >
+                          <FormLabel>Tags:</FormLabel>
+
+                          <ToggleGroupItem value="Hardsub">
+                            HardSub
+                          </ToggleGroupItem>
+                          <ToggleGroupItem value="Softsub">
+                            SoftSub
+                          </ToggleGroupItem>
+                          <ToggleGroupItem value="Dubbed">
+                            Dubbed
+                          </ToggleGroupItem>
+                          <ToggleGroupItem value="WebDl">
+                            Web-dl
+                          </ToggleGroupItem>
+                          <ToggleGroupItem value="BluRay">
+                            Blu-ray
+                          </ToggleGroupItem>
+                          <ToggleGroupItem value="CAM">CAM</ToggleGroupItem>
+                        </ToggleGroup>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="isPublic"
+                    render={({ field }) => (
+                      <FormItem className="flex items-end gap-2">
+                        <FormControl className="flex items-center justify-center">
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormLabel>
+                          Link be publicly available in all rooms?
+                        </FormLabel>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <Button type="submit">Submit</Button>
                 </form>
               </Form>

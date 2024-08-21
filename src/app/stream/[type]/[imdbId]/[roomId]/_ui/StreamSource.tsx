@@ -37,10 +37,9 @@ export function StreamSource({
     <div className="flex flex-col gap-2 rounded-lg border p-4">
       <div className="flex items-center justify-between">
         {/* Users Profile */}
-        <div>
+        <div className="">
           {/* <StreamSourcesProfile users={uniqueSourceWithUsers.users} /> */}
           {uniqueSourceWithUsers.MediaSource.name}
-          🇫🇮
         </div>
 
         <div className="flex items-center">
