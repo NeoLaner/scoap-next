@@ -26,20 +26,6 @@ async function Streams({ roomId }: { roomId: string }) {
 }
 
 export async function UsersSource({ roomId }: { roomId: string }) {
-  const usersSource = await api.room.getRoomSources({ roomId });
-
-  const uniqueSourceMap = new Map<string, UniqueSourceWithUsers>();
-
-  usersSource?.Sources.forEach((source) => {
-    if (uniqueSourceMap.has(source.MediaSource?.id)) {
-      const uniqueSource = uniqueSourceMap.get(source.MediaSource?.id);
-      uniqueSource?.users.push(uniqueSource.user);
-    } else {
-      const uniqueSource = { ...source, users: [source.user] };
-      uniqueSourceMap.set(source.MediaSource?.id, uniqueSource);
-    }
-  });
-
   return (
     <div className="space-y-2">
       {Array.from(uniqueSourceMap.values()).map((source) => (

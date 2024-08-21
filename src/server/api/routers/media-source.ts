@@ -5,11 +5,34 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const mediaSourceRouter = createTRPCRouter({
   // Get a source
-  getAll: protectedProcedure
+  getAllPublicSources: protectedProcedure
     .input(z.object({ imdbId: z.string() }))
     .query(async ({ ctx, input }) => {
       return await ctx.db.mediaSource.findMany({
-        where: { imdbId: input.imdbId },
+        where: { imdbId: input.imdbId, isPublic: true },
+        select: {
+          id: true,
+          name: true,
+          roomId: true,
+          description: true,
+          imdbId: true,
+          isPublic: true,
+          canBePublic: true,
+          disabled: true,
+          interactions: true,
+          ownerId: true,
+          seasonBoundary: true,
+          usersLikesId: true,
+          videoLink: true,
+        },
+      });
+    }),
+
+  getAllRoomSources: protectedProcedure
+    .input(z.object({ roomId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.mediaSource.findMany({
+        where: { roomId: input.roomId },
         select: {
           id: true,
           name: true,

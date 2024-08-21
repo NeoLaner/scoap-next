@@ -96,7 +96,7 @@ export const roomRouter = createTRPCRouter({
       });
     }),
 
-  getRoomSources: protectedProcedure
+  getUsersSource: protectedProcedure
     .input(z.object({ roomId: z.string() }))
     .query(async ({ ctx, input }) => {
       return await ctx.db.room.findFirst({
