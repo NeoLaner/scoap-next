@@ -1,3 +1,5 @@
+import { type api } from "~/trpc/server";
+
 export const containsSeason = (source: string): boolean => {
   return /\{0*S\}/i.test(source);
 };
@@ -47,4 +49,17 @@ export function makeRawSource({
   }
 
   return updatedSource;
+}
+
+export function getUserIdToSourceData(
+  usersSource: Awaited<ReturnType<typeof api.room.getUsersSource>>,
+) {
+  const UsersSourceId = {} as Record<string, string>;
+  usersSource?.Sources.forEach((source) => {
+    UsersSourceId[source.userId] = source.MediaSource.id;
+  });
+
+  //{ 6525134131232131 : 465364251341231,
+  // 23525134131232131 : 1265364251341231 }
+  return UsersSourceId;
 }

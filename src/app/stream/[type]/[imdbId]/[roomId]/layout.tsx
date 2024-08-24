@@ -3,14 +3,14 @@ import { ChatDataProvider } from "~/app/_providers/ChatDataProvider";
 import { RoomDataProvider } from "~/app/_providers/RoomDataProvider";
 import { RoomSettingsProvider } from "~/app/_providers/RoomSettingsProvider";
 import { SourceDataProvider } from "~/app/_providers/SourceDataProvider";
-import { RoomSourcesDataProvider } from "~/app/_providers/SourcesDataProvider";
+import { RoomSourcesDataProvider } from "~/app/_providers/RoomSourcesDataProvider";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import Entrance from "./_ui/Entrance";
 import MinimalLayout from "~/app/_ui/MinimalLayout";
 import ProtectedRoute from "~/app/_ui/ProtectedRoute";
 import { redirect } from "next/navigation";
-import { UsersSourceIdProvider } from "~/app/_providers/UsersSourceIdProvider";
+import { UsersSourceDataProvider } from "~/app/_providers/UsersSourceDataProvider";
 
 async function Layout({
   children,
@@ -55,11 +55,7 @@ async function Layout({
   });
 
   const usersSource = await api.room.getUsersSource({ roomId });
-
-  const initialUsersSourceId = {} as Record<string, string>;
-  usersSource?.Sources.forEach((source) => {
-    initialUsersSourceId[source.userId] = source.MediaSource.id;
-  });
+  if (!usersSource) return; //TODO: ERROR, IT MUST NEVER HAPPENED
 
   const initialRoomSource = await api.mediaSource.getAllRoomSources({ roomId });
   return (
@@ -75,11 +71,11 @@ async function Layout({
               <RoomSourcesDataProvider
                 initialRoomSourcesData={initialRoomSource}
               >
-                <UsersSourceIdProvider
-                  initialUsersSourceId={initialUsersSourceId}
+                <UsersSourceDataProvider
+                  initialUsersSourceData={usersSource.Sources}
                 >
                   <div className="relative h-full w-full">{children}</div>
-                </UsersSourceIdProvider>
+                </UsersSourceDataProvider>
               </RoomSourcesDataProvider>
             </SourceDataProvider>
           </ChatDataProvider>

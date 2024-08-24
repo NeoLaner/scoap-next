@@ -86,8 +86,8 @@ function StreamForm() {
     console.log(values);
 
     const sourceData = await addDirectLink({
-      roomId: roomData.id,
       ...values,
+      roomId: roomData.id,
       imdbId: roomData.imdbId,
       season: roomData.season ?? undefined,
       episode: roomData.episode ?? undefined,

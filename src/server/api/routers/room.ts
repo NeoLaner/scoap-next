@@ -106,9 +106,9 @@ export const roomRouter = createTRPCRouter({
             select: {
               id: true,
               roomId: true,
-              user: true,
+              // user: true,
               userId: true,
-              MediaSource: true,
+              MediaSource: { include: { user: true } },
             },
           },
         },

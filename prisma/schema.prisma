@@ -50,6 +50,7 @@ model User {
   rooms                Room[]
   Sources              Source[]
   MediaLinkInteraction MediaSourceInteraction[]
+  MediaSource          MediaSource[]
 }
 
 model VerificationToken {
@@ -128,6 +129,7 @@ model MediaSource {
 
   sources      Source[]
   interactions MediaSourceInteraction[]
+  user         User                     @relation(fields: [ownerId], references: [id])
 }
 
 model MediaSourceInteraction {

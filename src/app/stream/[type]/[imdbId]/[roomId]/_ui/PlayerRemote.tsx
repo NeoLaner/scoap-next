@@ -7,7 +7,6 @@ import { useEffect, type RefObject } from "react";
 import { toast } from "sonner";
 import { useIsMediaConnected } from "~/app/_hooks/useIsMediaConnected";
 import { useRoomData } from "~/app/_hooks/useRoomData";
-import { useSourcesData } from "~/app/_hooks/useSourcesData";
 import { useUserData } from "~/app/_hooks/useUserData";
 import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 import { mediaSocket } from "~/lib/socket/socket";
@@ -23,7 +22,6 @@ function PlayerRemote({
   const { userData } = useUserData();
   const { setRoomData } = useRoomData();
   const { isMediaConnected } = useIsMediaConnected();
-  const { setSourcesData } = useSourcesData();
 
   useEffect(function () {
     mediaSocket.on("chat:userMessaged", (wsData) => {
@@ -35,21 +33,21 @@ function PlayerRemote({
     };
   }, []);
 
-  useEffect(function () {
-    mediaSocket.on("sourceDataChanged", (wsData) => {
-      setSourcesData((sources) => {
-        const prvSourceWithoutUser = sources?.filter(
-          (source) => source.userId !== wsData.payload.userId,
-        );
-        if (prvSourceWithoutUser)
-          return [...prvSourceWithoutUser, wsData.payload];
-        else [wsData.payload];
-      });
-    });
-    return () => {
-      mediaSocket.off("sourceDataChanged");
-    };
-  }, []);
+  // useEffect(function () {
+  //   mediaSocket.on("sourceDataChanged", (wsData) => {
+  //     setSourcesData((sources) => {
+  //       const prvSourceWithoutUser = sources?.filter(
+  //         (source) => source.userId !== wsData.payload.userId,
+  //       );
+  //       if (prvSourceWithoutUser)
+  //         return [...prvSourceWithoutUser, wsData.payload];
+  //       else [wsData.payload];
+  //     });
+  //   });
+  //   return () => {
+  //     mediaSocket.off("sourceDataChanged");
+  //   };
+  // }, []);
 
   useEffect(
     function () {
@@ -127,7 +125,6 @@ function PlayerRemote({
       )[0];
       let pbr = 1.01;
       const delta = leader.videoTs - (curUser?.videoTs ?? 0);
-      "delta", leader.videoTs, curUser?.videoTs;
 
       pbr += Number((delta / 10).toFixed(2));
       pbr = Math.min(pbr, 1.1);

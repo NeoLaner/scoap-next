@@ -14,21 +14,29 @@ import { useUserData } from "~/app/_hooks/useUserData";
 import { type UniqueSourceWithUsers } from "~/lib/@types/UniqueSource";
 import StreamSourcesProfile from "./StreamSourcesProfile";
 import { useRoomData } from "~/app/_hooks/useRoomData";
-import { useState } from "react";
 import { Separator } from "~/app/_components/ui/separator";
 import { ArrowRightCircle, CircleEllipsis } from "lucide-react";
+import { type api } from "~/trpc/server";
 
+type MediaSource = Awaited<
+  ReturnType<typeof api.mediaSource.getAllRoomSources>
+>[number];
 export function StreamSource({
-  uniqueSourceWithUsers,
+  source,
 }: {
-  uniqueSourceWithUsers: UniqueSourceWithUsers;
+  source: {
+    name: MediaSource["name"];
+    videoLink: MediaSource["videoLink"];
+    ownerId: MediaSource["ownerId"];
+    user: MediaSource["user"];
+    tags: MediaSource["tags"];
+    quality: MediaSource["quality"];
+  };
 }) {
-  const [showDesc, setShowDesc] = useState(true);
   const { userData } = useUserData();
   const { roomData } = useRoomData();
-  const desc = uniqueSourceWithUsers.MediaSource.description;
-  const source = makeRawSource({
-    source: uniqueSourceWithUsers.MediaSource.videoLink,
+  const rawSource = makeRawSource({
+    source: source.videoLink,
     season: roomData.season,
     episode: roomData.episode,
   });
@@ -39,11 +47,11 @@ export function StreamSource({
         {/* Users Profile */}
         <div className="">
           {/* <StreamSourcesProfile users={uniqueSourceWithUsers.users} /> */}
-          {uniqueSourceWithUsers.MediaSource.name}
+          {source.name}
         </div>
 
         <div className="flex items-center">
-          {uniqueSourceWithUsers.userId === userData.id && (
+          {source.ownerId === userData.id && (
             <Button
               variant={"ghost"}
               size={"icon"}
@@ -83,17 +91,17 @@ export function StreamSource({
 
       <div className="flex items-center justify-between">
         <div className="flex flex-wrap items-center gap-1">
-          {checkIsDynamic(uniqueSourceWithUsers.MediaSource.videoLink) && (
+          {checkIsDynamic(source.videoLink) && (
             <Badge className="bg-purple-700 text-purple-50 hover:bg-purple-800">
               Dynamic
             </Badge>
           )}
-          {uniqueSourceWithUsers.MediaSource.quality && (
+          {source.quality && (
             <Badge className="bg-blue-700 text-blue-50 hover:bg-blue-800">
-              {uniqueSourceWithUsers.MediaSource.quality}p
+              {source.quality}p
             </Badge>
           )}
-          {uniqueSourceWithUsers.MediaSource.tags.map((tag) => (
+          {source.tags.map((tag) => (
             <Badge key={tag}>{tag}</Badge>
           ))}
         </div>
@@ -101,12 +109,9 @@ export function StreamSource({
           <Avatar
             className={`flex h-8 w-8 items-center justify-center rounded-md border-2 shadow-2xl transition-all`}
           >
-            <AvatarImage
-              src={uniqueSourceWithUsers.user.image ?? ""}
-              className=""
-            />
+            <AvatarImage src={source.user.image ?? ""} className="" />
             <AvatarFallback className="rounded-md">
-              {getFirstTwoLetters(uniqueSourceWithUsers.user.name)}
+              {getFirstTwoLetters(source.user.name)}
             </AvatarFallback>
           </Avatar>
         </div>

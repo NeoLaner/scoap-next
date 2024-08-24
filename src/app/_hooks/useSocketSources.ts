@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { mediaSocket } from "~/lib/socket/socket";
-import { useSourcesData } from "./useSourcesData";
+import { useSourcesData } from "./useUsersSourceData";
 
 export function useSocketSources() {
   const { setSourcesData } = useSourcesData();
