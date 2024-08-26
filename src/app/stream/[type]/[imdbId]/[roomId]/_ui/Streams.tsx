@@ -17,7 +17,7 @@ async function Streams({ roomId }: { roomId: string }) {
       {/* {torrentIoStreamsSorted.map((stream) => (
         <TorrentStream key={stream.title} stream={stream} />
       ))} */}
-      <div className="flex w-full flex-col gap-4">
+      <div className="flex w-full flex-col gap-2">
         {/* <StreamSources /> */}
 
         <UsersSource roomId={roomId} />

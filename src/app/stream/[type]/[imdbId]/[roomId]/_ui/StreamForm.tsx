@@ -5,7 +5,7 @@ const EmojiPicker = dynamic(() => import("emoji-picker-react"), {
   loading: () => <Loader />,
 });
 
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { addDirectLink } from "~/app/_actions/addDirectLink";
 import { Textarea } from "~/app/_components/ui/Textarea";
 import { useRoomData } from "~/app/_hooks/useRoomData";
@@ -50,6 +50,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/app/_components/ui/popover";
+import { useUsersSourceData } from "~/app/_hooks/useUsersSourceData";
 
 const formSchema = z.object({
   sourceLink: z.string().url().max(250),
@@ -79,7 +80,9 @@ function StreamForm() {
     },
   });
 
-  const isDynamic = checkIsDynamic(form.watch("sourceLink") ?? "");
+  const isDynamic =
+    checkIsDynamic(form.watch("sourceLink") ?? "") &&
+    roomData.type === "series";
   const seasonBoundary = form.watch("seasonBoundary");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -95,6 +98,7 @@ function StreamForm() {
 
     if (!sourceData?.mediaSourceData.videoLink) return;
     setSourceData({ videoLink: sourceData.mediaSourceData.videoLink });
+
     // const newSource = { user: userData, ...sourceData.sourceData };
     // setSourcesData((sources) => {
     //   const prvSourceWithoutUser = sources?.filter(
@@ -169,7 +173,7 @@ function StreamForm() {
 
                         {
                           <>
-                            {!isDynamic && (
+                            {!isDynamic && roomData.type === "series" && (
                               <FormDescription className="text-wrap break-all text-xs">
                                 <span>It just applied to: </span>
                                 <span className="font-bold text-primary">

@@ -52,7 +52,7 @@ export async function addDirectLink({
   } else {
     mediaSource = {
       videoLink: sourceLink,
-      seasonBoundary: seasonBoundaryToNumbers,
+      seasonBoundary: [],
       roomId,
       isPublic,
       description,

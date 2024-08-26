@@ -117,21 +117,18 @@ export const mediaSourceRouter = createTRPCRouter({
       });
     }),
 
-  // Update a source
-  update: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-
-        mediaSourceId: z.string(),
-      }),
-    )
+  deleteMySource: protectedProcedure
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.source.update({
-        where: { id: input.id },
-        data: {
-          mediaSourceId: input.mediaSourceId,
+      const session = ctx.session;
+      await ctx.db.source.deleteMany({ where: { mediaSourceId: input.id } });
+      await ctx.db.mediaSource.delete({
+        where: {
+          ownerId: session.user.id,
+          id: input.id,
         },
       });
+
+      return; //TODO: Error handling?!;
     }),
 });

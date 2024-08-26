@@ -44,7 +44,7 @@ import {
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
 import { BsShare, BsShareFill } from "react-icons/bs";
-import { toast } from "sonner";
+import { ExternalToast, toast } from "sonner";
 import { cn } from "~/lib/utils";
 
 export interface MediaButtonProps {
@@ -293,13 +293,17 @@ export function Share({ showTooltip = true }: { showTooltip?: boolean }) {
   const [_, copyToClipboard] = useCopyToClipboard();
   const { roomId } = useParams();
   const pathname = usePathname();
+
+  const toastOptions = {} as ExternalToast;
+  if (!roomId) toastOptions.position = "bottom-left";
   return (
     <Button
       onClick={async () => {
         await copyToClipboard("scoap.ir" + pathname);
-        toast.success("Link copied to your clipboard successfully.", {
-          position: roomId ? "top-left" : "bottom-left",
-        });
+        toast.success(
+          "Link copied to your clipboard successfully.",
+          toastOptions,
+        );
       }}
       className={cn(buttonClass, "h-8 w-8 rounded-lg")}
       variant={"ghost"}
