@@ -13,7 +13,12 @@ import { checkIsDynamic, makeRawSource } from "~/lib/source";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { Separator } from "~/app/_components/ui/separator";
-import { ArrowRightCircle, CircleEllipsis, Trash2 } from "lucide-react";
+import {
+  ArrowRightCircle,
+  CheckCircle2,
+  CircleEllipsis,
+  Trash2,
+} from "lucide-react";
 import { type api } from "~/trpc/server";
 
 import {
@@ -42,25 +47,15 @@ import {
 } from "~/app/_components/ui/dialog";
 import { deleteMySource } from "~/app/_actions/deleteMySource";
 import { useRef } from "react";
+import { useSourceData } from "~/app/_hooks/useSourceData";
 
 type MediaSource = Awaited<
   ReturnType<typeof api.mediaSource.getAllRoomSources>
 >[number];
-export function StreamSource({
-  source,
-}: {
-  source: {
-    id: MediaSource["id"];
-    name: MediaSource["name"];
-    videoLink: MediaSource["videoLink"];
-    ownerId: MediaSource["ownerId"];
-    user: MediaSource["user"];
-    tags: MediaSource["tags"];
-    quality: MediaSource["quality"];
-  };
-}) {
+export function StreamSource({ source }: { source: MediaSource }) {
   const { userData } = useUserData();
   const { roomData } = useRoomData();
+  const { sourceData: curUserSource, setSourceData } = useSourceData();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const isOwner = userData.id === source.ownerId;
 
@@ -71,8 +66,12 @@ export function StreamSource({
     episode: roomData.episode,
   });
 
+  const isSelectedSource = curUserSource?.mediaSourceId === source.id;
+
   return (
-    <div className="flex flex-col gap-2 rounded-lg border p-4 py-2">
+    <div
+      className={`flex flex-col gap-2 rounded-lg border p-4 py-2 ${isSelectedSource ? "border-success-foreground  " : ""}`}
+    >
       <Dialog>
         <div className="flex items-center justify-between">
           {/* Users Profile */}
@@ -167,9 +166,23 @@ export function StreamSource({
             <Button
               variant={"ghost"}
               size={"icon"}
-              className="items-center justify-center overflow-hidden rounded-sm"
+              className="items-center justify-center overflow-hidden rounded-sm hover:bg-success"
+              onClick={() => {
+                setSourceData((prvSrc) => {
+                  const newSource = {
+                    ...prvSrc,
+                    MediaSource: source,
+                    mediaSourceId: source.id,
+                  } as typeof prvSrc;
+                  return newSource;
+                });
+              }}
             >
-              <ArrowRightCircle />
+              {isSelectedSource ? (
+                <CheckCircle2 className="text-success-foreground " />
+              ) : (
+                <ArrowRightCircle />
+              )}
             </Button>
           </div>
         </div>

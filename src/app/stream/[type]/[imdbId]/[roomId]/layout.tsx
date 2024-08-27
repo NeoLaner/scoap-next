@@ -11,6 +11,7 @@ import MinimalLayout from "~/app/_ui/MinimalLayout";
 import ProtectedRoute from "~/app/_ui/ProtectedRoute";
 import { redirect } from "next/navigation";
 import { UsersSourceDataProvider } from "~/app/_providers/UsersSourceDataProvider";
+import { PublicSourcesProvider } from "~/app/_providers/PublicSources";
 
 async function Layout({
   children,
@@ -49,34 +50,40 @@ async function Layout({
       </ProtectedRoute>
     );
 
-  const sourceData = await api.source.get({
+  const sourceData = await api.source.getMe({
     roomId: roomData?.id,
-    userId: session.user.id,
   });
 
   const usersSource = await api.room.getUsersSource({ roomId });
   if (!usersSource) return; //TODO: ERROR, IT MUST NEVER HAPPENED
 
-  const initialRoomSource = await api.mediaSource.getAllRoomSources({ roomId });
+  const initialRoomSources = await api.mediaSource.getAllRoomSources({
+    roomId,
+  });
+  const initialPublicSources = await api.mediaSource.getAllPublicSources({
+    imdbId: params.imdbId,
+  });
+
   return (
     <ProtectedRoute>
       <RoomDataProvider initialRoomData={roomData}>
         <RoomSettingsProvider>
           <ChatDataProvider>
-            <SourceDataProvider
-              initialSourceData={{
-                videoLink: sourceData?.MediaSource?.videoLink ?? "",
-              }}
-            >
-              <RoomSourcesDataProvider
-                initialRoomSourcesData={initialRoomSource}
+            {/*NOTE: The source data not must be null!! */}
+            <SourceDataProvider initialSourceData={sourceData}>
+              <PublicSourcesProvider
+                initialPublicSources={initialPublicSources}
               >
-                <UsersSourceDataProvider
-                  initialUsersSourceData={usersSource.Sources}
+                <RoomSourcesDataProvider
+                  initialRoomSourcesData={initialRoomSources}
                 >
-                  <div className="relative h-full w-full">{children}</div>
-                </UsersSourceDataProvider>
-              </RoomSourcesDataProvider>
+                  <UsersSourceDataProvider
+                    initialUsersSourceData={usersSource.Sources}
+                  >
+                    <div className="relative h-full w-full">{children}</div>
+                  </UsersSourceDataProvider>
+                </RoomSourcesDataProvider>
+              </PublicSourcesProvider>
             </SourceDataProvider>
           </ChatDataProvider>
         </RoomSettingsProvider>

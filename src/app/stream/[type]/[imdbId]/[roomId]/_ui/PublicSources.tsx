@@ -1,13 +1,13 @@
 "use client";
 
-import { useRoomSources } from "~/app/_hooks/useRoomSources";
 import { StreamSource } from "./StreamSource";
+import { usePublicSources } from "~/app/_hooks/usePublicSources";
 
-export function RoomSources() {
-  const { roomSourcesData } = useRoomSources();
+export function PublicSources() {
+  const { publicSources } = usePublicSources();
   return (
     <div className="space-y-2">
-      {roomSourcesData?.map((mediaSource) => (
+      {publicSources?.map((mediaSource) => (
         <StreamSource key={mediaSource.id} source={mediaSource} />
       ))}
     </div>

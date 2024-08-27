@@ -96,8 +96,11 @@ function StreamForm() {
       episode: roomData.episode ?? undefined,
     });
 
-    if (!sourceData?.mediaSourceData.videoLink) return;
-    setSourceData({ videoLink: sourceData.mediaSourceData.videoLink });
+    if (!sourceData) return;
+    setSourceData({
+      ...sourceData.sourceData,
+      MediaSource: sourceData.mediaSourceData,
+    });
 
     // const newSource = { user: userData, ...sourceData.sourceData };
     // setSourcesData((sources) => {

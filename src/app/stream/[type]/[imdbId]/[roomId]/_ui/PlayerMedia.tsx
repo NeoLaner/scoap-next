@@ -14,6 +14,8 @@ import {
 import VideoLayout from "./VideoLayout";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
+import { makeRawSource } from "~/lib/source";
+import { useRoomData } from "~/app/_hooks/useRoomData";
 
 function PlayerMedia({
   playerRef,
@@ -22,6 +24,7 @@ function PlayerMedia({
 }) {
   const { metaData } = useMetaData();
   const { sourceData } = useSourceData();
+  const { roomData } = useRoomData();
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
@@ -35,11 +38,19 @@ function PlayerMedia({
     }
   }
 
+  const source = makeRawSource({
+    source: sourceData?.MediaSource.videoLink ?? "",
+    season: roomData.season,
+    episode: roomData.episode,
+  });
+
+  console.log(sourceData);
+
   return (
     <MediaPlayer
       ref={playerRef}
       src={{
-        src: sourceData.videoLink ?? "",
+        src: source ?? "",
         type: "video/mp4",
       }}
       playsInline
@@ -54,7 +65,7 @@ function PlayerMedia({
           src={metaData.background}
           alt={metaData.name}
           fill
-          className={`h-full object-cover object-top  ${!sourceData?.videoLink ? "opacity-70" : "opacity-0"} transition-all`}
+          className={`h-full object-cover object-top  ${!source ? "opacity-70" : "opacity-0"} transition-all`}
           quality="90"
         />
         {/* {textTracks.map((track) => (

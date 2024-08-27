@@ -3,19 +3,20 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const sourceRouter = createTRPCRouter({
   // Get a source
-  get: protectedProcedure
-    .input(z.object({ roomId: z.string(), userId: z.string() }))
+  getMe: protectedProcedure
+    .input(z.object({ roomId: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.source.findFirst({
-        where: { roomId: input.roomId, userId: input.userId },
-        select: {
-          id: true,
-          roomId: true,
-          mediaSourceId: true,
-          userId: true,
+      const session = ctx.session;
+      const source = await ctx.db.source.findFirst({
+        where: { roomId: input.roomId, userId: session.user.id },
+        include: {
           MediaSource: true,
         },
       });
+      if (source) return source;
+      // await ctx.db.source.create({
+      //   data: { roomId: input.roomId, userId: session.user.id },
+      // });
     }),
 
   // Create a source
@@ -33,6 +34,7 @@ export const sourceRouter = createTRPCRouter({
           roomId: input.roomId,
           userId: session.user.id,
         },
+        include: { MediaSource: true },
       });
 
       if (existingSource) return existingSource;
@@ -43,6 +45,7 @@ export const sourceRouter = createTRPCRouter({
           userId: session.user.id,
           mediaSourceId: input.mediaSourceId,
         },
+        include: { MediaSource: true },
       });
     }),
 
@@ -60,6 +63,7 @@ export const sourceRouter = createTRPCRouter({
         data: {
           mediaSourceId: input.mediaSourceId,
         },
+        include: { MediaSource: true },
       });
     }),
 });

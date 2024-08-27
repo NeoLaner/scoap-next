@@ -34,7 +34,7 @@ export async function addDirectLink({
   const session = await getServerAuthSession();
   const userId = session?.user.id;
   if (!sourceLink || !roomId || !userId) return;
-  const source = await api.source.get({ userId, roomId });
+  const source = await api.source.getMe({ roomId });
   const seasonBoundaryToNumbers = seasonBoundary?.map((str) => Number(str));
   let mediaSource;
   if (isDynamic) {
@@ -78,6 +78,7 @@ export async function addDirectLink({
       roomId,
       mediaSourceId: mediaSourceData.id,
     });
+  if (!sourceData) return; //TODO: ERROR
 
   return { sourceData, mediaSourceData };
 }
