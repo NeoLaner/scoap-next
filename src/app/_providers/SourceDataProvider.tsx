@@ -30,13 +30,6 @@ export const SourceDataProvider = ({
 }) => {
   const [sourceData, setSourceData] = useState(initialSourceData);
 
-  useEffect(function () {
-    if (!sourceData?.MediaSource.videoLink)
-      setTimeout(() => {
-        eventEmitter.emit("server:message", "NO_SOURCE");
-      }, 900);
-  }, []);
-
   return (
     <SourceDataContext.Provider value={{ sourceData, setSourceData }}>
       {children}

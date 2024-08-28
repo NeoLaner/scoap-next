@@ -9,9 +9,6 @@ export const sourceRouter = createTRPCRouter({
       const session = ctx.session;
       const source = await ctx.db.source.findFirst({
         where: { roomId: input.roomId, userId: session.user.id },
-        include: {
-          MediaSource: true,
-        },
       });
       if (source) return source;
       // await ctx.db.source.create({

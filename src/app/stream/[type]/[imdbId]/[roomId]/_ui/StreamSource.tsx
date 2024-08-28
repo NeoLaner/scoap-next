@@ -48,6 +48,7 @@ import {
 import { deleteMySource } from "~/app/_actions/deleteMySource";
 import { useRef } from "react";
 import { useSourceData } from "~/app/_hooks/useSourceData";
+import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 
 type MediaSource = Awaited<
   ReturnType<typeof api.mediaSource.getAllRoomSources>
@@ -56,6 +57,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
   const { userData } = useUserData();
   const { roomData } = useRoomData();
   const { sourceData: curUserSource, setSourceData } = useSourceData();
+  const { setCurrentMediaSrc } = useCurMediaSrc();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const isOwner = userData.id === source.ownerId;
 
@@ -169,13 +171,14 @@ export function StreamSource({ source }: { source: MediaSource }) {
               className="items-center justify-center overflow-hidden rounded-sm hover:bg-success"
               onClick={() => {
                 setSourceData((prvSrc) => {
+                  if (!prvSrc) return;
                   const newSource = {
                     ...prvSrc,
-                    MediaSource: source,
                     mediaSourceId: source.id,
-                  } as typeof prvSrc;
+                  };
                   return newSource;
                 });
+                setCurrentMediaSrc(source);
               }}
             >
               {isSelectedSource ? (

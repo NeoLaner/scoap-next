@@ -4,6 +4,11 @@ import { checkIsDynamic, containsEpisode, containsSeason } from "~/lib/source";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const mediaSourceRouter = createTRPCRouter({
+  get: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.mediaSource.findUnique({ where: { id: input.id } });
+    }),
   // Get a source
   getAllPublicSources: protectedProcedure
     .input(z.object({ imdbId: z.string() }))

@@ -16,6 +16,7 @@ import { useMetaData } from "~/app/_hooks/useMetaData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
 import { makeRawSource } from "~/lib/source";
 import { useRoomData } from "~/app/_hooks/useRoomData";
+import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 
 function PlayerMedia({
   playerRef,
@@ -23,8 +24,9 @@ function PlayerMedia({
   playerRef: RefObject<MediaPlayerInstance>;
 }) {
   const { metaData } = useMetaData();
-  const { sourceData } = useSourceData();
+
   const { roomData } = useRoomData();
+  const { currentMediaSrc } = useCurMediaSrc();
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
@@ -39,12 +41,12 @@ function PlayerMedia({
   }
 
   const source = makeRawSource({
-    source: sourceData?.MediaSource.videoLink ?? "",
+    source: currentMediaSrc?.videoLink ?? "",
     season: roomData.season,
     episode: roomData.episode,
   });
 
-  console.log(sourceData);
+  console.log(currentMediaSrc);
 
   return (
     <MediaPlayer

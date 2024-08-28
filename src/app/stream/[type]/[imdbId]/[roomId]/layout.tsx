@@ -12,6 +12,7 @@ import ProtectedRoute from "~/app/_ui/ProtectedRoute";
 import { redirect } from "next/navigation";
 import { UsersSourceDataProvider } from "~/app/_providers/UsersSourceDataProvider";
 import { PublicSourcesProvider } from "~/app/_providers/PublicSources";
+import { CurrentMediaSrcProvider } from "~/app/_providers/CurrentMediaSrcProvider";
 
 async function Layout({
   children,
@@ -54,6 +55,10 @@ async function Layout({
     roomId: roomData?.id,
   });
 
+  const mediaCurSrc = sourceData?.mediaSourceId
+    ? await api.mediaSource.get({ id: sourceData?.mediaSourceId })
+    : undefined;
+
   const usersSource = await api.room.getUsersSource({ roomId });
   if (!usersSource) return; //TODO: ERROR, IT MUST NEVER HAPPENED
 
@@ -71,19 +76,21 @@ async function Layout({
           <ChatDataProvider>
             {/*NOTE: The source data not must be null!! */}
             <SourceDataProvider initialSourceData={sourceData}>
-              <PublicSourcesProvider
-                initialPublicSources={initialPublicSources}
-              >
-                <RoomSourcesDataProvider
-                  initialRoomSourcesData={initialRoomSources}
+              <CurrentMediaSrcProvider initialCurMediaSrc={mediaCurSrc}>
+                <PublicSourcesProvider
+                  initialPublicSources={initialPublicSources}
                 >
-                  <UsersSourceDataProvider
-                    initialUsersSourceData={usersSource.Sources}
+                  <RoomSourcesDataProvider
+                    initialRoomSourcesData={initialRoomSources}
                   >
-                    <div className="relative h-full w-full">{children}</div>
-                  </UsersSourceDataProvider>
-                </RoomSourcesDataProvider>
-              </PublicSourcesProvider>
+                    <UsersSourceDataProvider
+                      initialUsersSourceData={usersSource.Sources}
+                    >
+                      <div className="relative h-full w-full">{children}</div>
+                    </UsersSourceDataProvider>
+                  </RoomSourcesDataProvider>
+                </PublicSourcesProvider>
+              </CurrentMediaSrcProvider>
             </SourceDataProvider>
           </ChatDataProvider>
         </RoomSettingsProvider>

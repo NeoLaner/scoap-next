@@ -51,6 +51,7 @@ import {
   PopoverTrigger,
 } from "~/app/_components/ui/popover";
 import { useUsersSourceData } from "~/app/_hooks/useUsersSourceData";
+import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 
 const formSchema = z.object({
   sourceLink: z.string().url().max(250),
@@ -66,6 +67,7 @@ function StreamForm() {
   const { roomData } = useRoomData();
   const { metaData } = useMetaData();
   const [showFlags, setShowFlags] = useState(false);
+  const { setCurrentMediaSrc } = useCurMediaSrc();
 
   const { setSourceData } = useSourceData();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -97,10 +99,8 @@ function StreamForm() {
     });
 
     if (!sourceData) return;
-    setSourceData({
-      ...sourceData.sourceData,
-      MediaSource: sourceData.mediaSourceData,
-    });
+    setSourceData(sourceData.sourceData);
+    setCurrentMediaSrc(sourceData.mediaSourceData);
 
     // const newSource = { user: userData, ...sourceData.sourceData };
     // setSourcesData((sources) => {
