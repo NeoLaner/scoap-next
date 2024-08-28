@@ -2,8 +2,8 @@
 import { checkIsDynamic } from "~/lib/source";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import { TagEnum } from "~/lib/@types/Media";
-import { z } from "zod";
+import { type TagEnum } from "~/lib/@types/Media";
+import { type z } from "zod";
 
 export async function addDirectLink({
   sourceLink,
@@ -69,7 +69,7 @@ export async function addDirectLink({
   if (!mediaSourceData) return; //TODO: ERROR
   let sourceData;
   if (source)
-    sourceData = await api.source.update({
+    sourceData = await api.source.updateMe({
       id: source?.id,
       mediaSourceId: mediaSourceData.id,
     });

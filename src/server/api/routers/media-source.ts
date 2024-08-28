@@ -7,7 +7,10 @@ export const mediaSourceRouter = createTRPCRouter({
   get: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.mediaSource.findUnique({ where: { id: input.id } });
+      return await ctx.db.mediaSource.findUnique({
+        where: { id: input.id },
+        include: { user: true },
+      });
     }),
   // Get a source
   getAllPublicSources: protectedProcedure
@@ -92,6 +95,7 @@ export const mediaSourceRouter = createTRPCRouter({
           roomId: input.roomId,
           videoLink: input.videoLink,
         },
+        include: { user: true },
       });
 
       if (existingSource) return existingSource; //TODO: THROW ERROR
@@ -119,6 +123,7 @@ export const mediaSourceRouter = createTRPCRouter({
           tags: input.tags,
           quality: input.quality,
         },
+        include: { user: true },
       });
     }),
 

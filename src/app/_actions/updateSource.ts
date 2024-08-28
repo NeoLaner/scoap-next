@@ -1,20 +1,14 @@
 "use server";
 import { api } from "~/trpc/server";
-import { revalidatePath } from "next/cache";
 
 export async function updateSource(inputs: {
   sourceId: string;
-  roomId: string;
-  videoLink?: string;
-  fileIdx?: number;
-  infoHash?: string;
+  mediaSourceId: string;
 }) {
-  const { sourceId, fileIdx, infoHash, videoLink, roomId } = inputs;
+  const { sourceId, mediaSourceId } = inputs;
 
-  return await api.source.update({
+  return await api.source.updateMe({
     id: sourceId,
-    fileIdx: fileIdx,
-    infoHash: infoHash,
-    videoLink,
+    mediaSourceId,
   });
 }

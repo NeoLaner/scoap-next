@@ -47,7 +47,7 @@ export const sourceRouter = createTRPCRouter({
     }),
 
   // Update a source
-  update: protectedProcedure
+  updateMe: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -56,7 +56,7 @@ export const sourceRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.source.update({
-        where: { id: input.id },
+        where: { id: input.id, userId: ctx.session.user.id },
         data: {
           mediaSourceId: input.mediaSourceId,
         },

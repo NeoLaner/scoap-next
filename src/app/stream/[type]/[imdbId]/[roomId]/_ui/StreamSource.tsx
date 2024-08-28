@@ -49,10 +49,10 @@ import { deleteMySource } from "~/app/_actions/deleteMySource";
 import { useRef } from "react";
 import { useSourceData } from "~/app/_hooks/useSourceData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
+import { updateSource } from "~/app/_actions/updateSource";
+import { createSource } from "~/app/_actions/createSource";
 
-type MediaSource = Awaited<
-  ReturnType<typeof api.mediaSource.getAllRoomSources>
->[number];
+type MediaSource = NonNullable<Awaited<ReturnType<typeof api.mediaSource.get>>>;
 export function StreamSource({ source }: { source: MediaSource }) {
   const { userData } = useUserData();
   const { roomData } = useRoomData();
@@ -169,7 +169,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
               variant={"ghost"}
               size={"icon"}
               className="items-center justify-center overflow-hidden rounded-sm hover:bg-success"
-              onClick={() => {
+              onClick={async () => {
                 setSourceData((prvSrc) => {
                   if (!prvSrc) return;
                   const newSource = {
@@ -178,7 +178,16 @@ export function StreamSource({ source }: { source: MediaSource }) {
                   };
                   return newSource;
                 });
-                setCurrentMediaSrc(source);
+                const newSource = curUserSource?.id
+                  ? await updateSource({
+                      sourceId: curUserSource?.id,
+                      mediaSourceId: source.id,
+                    })
+                  : await createSource({
+                      roomId: roomData.id,
+                      mediaSourceId: source.id,
+                    });
+                if (newSource) setCurrentMediaSrc(source);
               }}
             >
               {isSelectedSource ? (
