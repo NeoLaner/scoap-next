@@ -3,7 +3,7 @@
 import { useUsersSourceData } from "~/app/_hooks/useUsersSourceData";
 import { StreamSource } from "./StreamSource";
 
-export function UsersSource({ roomId }: { roomId: string }) {
+export function UsersSource() {
   const { usersSourceData } = useUsersSourceData();
 
   // Create a Set to store unique ids

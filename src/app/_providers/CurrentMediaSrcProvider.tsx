@@ -39,13 +39,6 @@ export const CurrentMediaSrcProvider = ({
       }, 900);
   }, []);
 
-  useEffect(function () {
-    if (!currentMediaSrc?.videoLink)
-      setTimeout(() => {
-        eventEmitter.emit("server:message", "NO_SOURCE");
-      }, 900);
-  }, []);
-
   return (
     <CurrentMediaSrcContext.Provider
       value={{ currentMediaSrc, setCurrentMediaSrc }}
