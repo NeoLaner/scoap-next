@@ -63,4 +63,45 @@ export const sourceRouter = createTRPCRouter({
         include: { MediaSource: true },
       });
     }),
+
+  bestSrcForMe: protectedProcedure
+    .input(z.object({ roomId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { roomId } = input;
+      const userId = ctx.session.user.id;
+
+      const roomData = await ctx.db.room.findUnique({
+        where: { id: input.roomId },
+      });
+      if (!roomData) return;
+
+      // Check the current src is ok or not
+      const curSrc = await ctx.db.source.findUnique({
+        where: { userId, roomId },
+      });
+      if (curSrc?.mediaSourceId) {
+        const curMediaSrc = await ctx.db.mediaSource.findUnique({
+          where: {
+            id: curSrc.mediaSourceId,
+            seasonBoundary: { has: roomData.season },
+          },
+        });
+
+        if (curMediaSrc) return curSrc;
+      }
+
+      // if current src is not ok find best src in the public
+      const pubMediaSrcs = await ctx.db.mediaSource.findMany({
+        where: {
+          imdbId: roomData.imdbId,
+          isPublic: true,
+          seasonBoundary: {
+            has: roomData.season,
+          },
+        },
+      });
+      // if (pubMediaSrcs.length > 0) return await ctx.db.source;
+    }),
 });
+
+function name() {}

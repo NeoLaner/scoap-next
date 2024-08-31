@@ -67,6 +67,7 @@ async function Layout({
   });
   const initialPublicSources = await api.mediaSource.getAllPublicSources({
     imdbId: params.imdbId,
+    roomId,
   });
 
   return (

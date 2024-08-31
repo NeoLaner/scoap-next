@@ -5,6 +5,7 @@ import { StreamSource } from "./StreamSource";
 
 export function RoomSources() {
   const { roomSourcesData } = useRoomSources();
+
   return (
     <div className="space-y-2">
       {roomSourcesData?.map((mediaSource) => (

@@ -14,32 +14,28 @@ export const mediaSourceRouter = createTRPCRouter({
     }),
   // Get a source
   getAllPublicSources: protectedProcedure
-    .input(z.object({ imdbId: z.string() }))
+    .input(z.object({ imdbId: z.string(), roomId: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.mediaSource.findMany({
-        where: { imdbId: input.imdbId, isPublic: true },
-        select: {
-          id: true,
-          name: true,
-          roomId: true,
-          description: true,
-          imdbId: true,
-          isPublic: true,
-          canBePublic: true,
-          disabled: true,
-          interactions: true,
-          ownerId: true,
-          seasonBoundary: true,
-          usersLikesId: true,
-          videoLink: true,
-          quality: true,
-          season: true,
-          episode: true,
-          sources: true,
-          tags: true,
-          user: true,
-        },
+      const roomData = await ctx.db.room.findUnique({
+        where: { id: input.roomId },
       });
+      if (!roomData) return;
+
+      if (roomData.type === "series")
+        //Don't send the link if it's out of season boundary
+        return await ctx.db.mediaSource.findMany({
+          where: {
+            imdbId: input.imdbId,
+            isPublic: true,
+            seasonBoundary: { has: roomData.season },
+          },
+          include: { user: true },
+        });
+      if (roomData.type === "movie")
+        return await ctx.db.mediaSource.findMany({
+          where: { imdbId: input.imdbId, isPublic: true },
+          include: { user: true },
+        });
     }),
 
   getAllRoomSources: protectedProcedure
@@ -47,27 +43,7 @@ export const mediaSourceRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return await ctx.db.mediaSource.findMany({
         where: { roomId: input.roomId },
-        select: {
-          id: true,
-          name: true,
-          roomId: true,
-          description: true,
-          imdbId: true,
-          isPublic: true,
-          canBePublic: true,
-          disabled: true,
-          interactions: true,
-          ownerId: true,
-          seasonBoundary: true,
-          usersLikesId: true,
-          videoLink: true,
-          quality: true,
-          season: true,
-          episode: true,
-          sources: true,
-          tags: true,
-          user: true,
-        },
+        include: { user: true },
       });
     }),
 

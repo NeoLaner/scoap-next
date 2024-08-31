@@ -18,6 +18,7 @@ import {
   CheckCircle2,
   CircleEllipsis,
   Trash2,
+  TriangleAlert,
 } from "lucide-react";
 import { type api } from "~/trpc/server";
 
@@ -51,6 +52,12 @@ import { useSourceData } from "~/app/_hooks/useSourceData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { updateSource } from "~/app/_actions/updateSource";
 import { createSource } from "~/app/_actions/createSource";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/app/_components/ui/tooltip";
 
 type MediaSource = NonNullable<Awaited<ReturnType<typeof api.mediaSource.get>>>;
 export function StreamSource({ source }: { source: MediaSource }) {
@@ -80,6 +87,34 @@ export function StreamSource({ source }: { source: MediaSource }) {
           <div className="">{source.name}</div>
 
           <div className="flex items-center">
+            {roomData.season &&
+              !source.seasonBoundary.includes(roomData.season) && (
+                <TooltipProvider delayDuration={200}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={"ghost"}
+                        size={"icon"}
+                        className="text-warning-foreground hover:text-warning-foreground"
+                      >
+                        <TriangleAlert />
+                      </Button>
+                    </TooltipTrigger>
+
+                    <TooltipContent className="text-sm">
+                      This link just provided
+                      <span className="font-bold text-primary">
+                        {" "}
+                        {source.seasonBoundary.length > 1
+                          ? "seasons"
+                          : "season"}{" "}
+                        {source.seasonBoundary.join(", ")}
+                      </span>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Button
