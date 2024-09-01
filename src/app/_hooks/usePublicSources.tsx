@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { PublicSourcesContext } from "../_providers/PublicSources";
+import { PublicSourcesContext } from "../_providers/PublicSourcesProvider";
 
 export const usePublicSources = () => {
   const context = useContext(PublicSourcesContext);

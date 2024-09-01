@@ -58,6 +58,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/app/_components/ui/tooltip";
+import { usePublicSources } from "~/app/_hooks/usePublicSources";
+import { useUsersSourceData } from "~/app/_hooks/useUsersSourceData";
+import { useRoomSources } from "~/app/_hooks/useRoomSources";
 
 type MediaSource = NonNullable<Awaited<ReturnType<typeof api.mediaSource.get>>>;
 export function StreamSource({ source }: { source: MediaSource }) {
@@ -77,6 +80,23 @@ export function StreamSource({ source }: { source: MediaSource }) {
 
   const isSelectedSource = curUserSource?.mediaSourceId === source.id;
 
+  const { setPublicSources } = usePublicSources();
+  const { setUsersSourceData } = useUsersSourceData();
+  const { setRoomSourcesData } = useRoomSources();
+  const deleteHandler = async () => {
+    await deleteMySource(source.id);
+    closeBtnRef.current?.click();
+
+    //delete sources from source tab
+    setPublicSources((prv) => prv?.filter((src) => src.id !== source.id));
+    setRoomSourcesData((prv) => prv?.filter((src) => src.id !== source.id));
+    setUsersSourceData((prv) =>
+      prv?.filter((src) => src.MediaSource.id !== source.id),
+    );
+
+    toast.success("The source successfully deleted.");
+  };
+
   return (
     <div
       className={`flex flex-col gap-2 rounded-lg border p-4 py-2 ${isSelectedSource ? "border-success-foreground  " : ""}`}
@@ -89,7 +109,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
           <div className="flex items-center">
             {roomData.season &&
               !source.seasonBoundary.includes(roomData.season) && (
-                <TooltipProvider delayDuration={200}>
+                <TooltipProvider delayDuration={50}>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -293,14 +313,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
                 Cancel
               </Button>
             </DialogClose>
-            <Button
-              onClick={async () => {
-                await deleteMySource(source.id);
-                closeBtnRef.current?.click();
-                toast.success("The source successfully deleted.");
-              }}
-              variant={"destructive"}
-            >
+            <Button onClick={deleteHandler} variant={"destructive"}>
               Yes, I&apos;m Sure
             </Button>
           </DialogFooter>

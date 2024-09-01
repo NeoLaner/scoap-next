@@ -11,7 +11,7 @@ import MinimalLayout from "~/app/_ui/MinimalLayout";
 import ProtectedRoute from "~/app/_ui/ProtectedRoute";
 import { redirect } from "next/navigation";
 import { UsersSourceDataProvider } from "~/app/_providers/UsersSourceDataProvider";
-import { PublicSourcesProvider } from "~/app/_providers/PublicSources";
+import { PublicSourcesProvider } from "~/app/_providers/PublicSourcesProvider";
 import { CurrentMediaSrcProvider } from "~/app/_providers/CurrentMediaSrcProvider";
 
 async function Layout({
@@ -52,8 +52,12 @@ async function Layout({
     );
 
   const sourceData = await api.source.getMe({
-    roomId: roomData?.id,
+    roomId: roomData.id,
   });
+
+  let bestSrc;
+  if (!sourceData?.mediaSourceId)
+    bestSrc = await api.source.bestSrcForMe({ roomId: roomData.id });
 
   const mediaCurSrc = sourceData?.mediaSourceId
     ? await api.mediaSource.get({ id: sourceData?.mediaSourceId })
@@ -76,7 +80,7 @@ async function Layout({
         <RoomSettingsProvider>
           <ChatDataProvider>
             {/*NOTE: The source data not must be null!! */}
-            <SourceDataProvider initialSourceData={sourceData}>
+            <SourceDataProvider initialSourceData={bestSrc ?? sourceData}>
               <CurrentMediaSrcProvider initialCurMediaSrc={mediaCurSrc}>
                 <PublicSourcesProvider
                   initialPublicSources={initialPublicSources}

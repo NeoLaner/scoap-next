@@ -22,12 +22,10 @@ export const mediaSourceRouter = createTRPCRouter({
       if (!roomData) return;
 
       if (roomData.type === "series")
-        //Don't send the link if it's out of season boundary
         return await ctx.db.mediaSource.findMany({
           where: {
             imdbId: input.imdbId,
             isPublic: true,
-            seasonBoundary: { has: roomData.season },
           },
           include: { user: true },
         });

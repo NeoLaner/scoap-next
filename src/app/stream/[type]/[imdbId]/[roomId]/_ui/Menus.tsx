@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 
 import {
+  Captions,
   Menu,
   useMediaStore,
   usePlaybackRateOptions,

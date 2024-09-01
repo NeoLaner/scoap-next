@@ -9,6 +9,7 @@ import {
   type MediaProviderAdapter,
   type MediaProviderChangeEvent,
   isHLSProvider,
+  Track,
 } from "@vidstack/react";
 
 import VideoLayout from "./VideoLayout";
@@ -70,10 +71,15 @@ function PlayerMedia({
           className={`h-full object-cover object-top  ${!source ? "opacity-70" : "opacity-0"} transition-all`}
           quality="90"
         />
-        {/* {textTracks.map((track) => (
-//@ts-ignore
-<Track {...track} key={track.src} />
-))} */}
+        {/* <Track
+          src="https://dl10.dl1acemovies.xyz/dl/English/Series/Hannibal/S01/Srt/Hannibal.S01E01.BluRay.FA.srt"
+          label="Farsi"
+          language="FA"
+          kind="subtitles"
+          default
+          key="1"
+          type={"srt"}
+        /> */}
       </MediaProvider>
 
       <div className="absolute hidden h-full w-full animate-pulse items-center justify-center transition-all media-buffering:flex">
@@ -90,5 +96,18 @@ function PlayerMedia({
     </MediaPlayer>
   );
 }
+
+const textTracks = [
+  // Subtitles
+  {},
+
+  // Chapters
+  // {
+  //   src: "https://media-files.vidstack.io/sprite-fight/chapters.vtt",
+  //   kind: "chapters",
+  //   language: "en-US",
+  //   default: true,
+  // },
+];
 
 export default PlayerMedia;

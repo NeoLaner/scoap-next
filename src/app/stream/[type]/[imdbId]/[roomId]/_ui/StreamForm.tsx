@@ -5,7 +5,7 @@ const EmojiPicker = dynamic(() => import("emoji-picker-react"), {
   loading: () => <Loader />,
 });
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { addDirectLink } from "~/app/_actions/addDirectLink";
 import { Textarea } from "~/app/_components/ui/Textarea";
 import { useRoomData } from "~/app/_hooks/useRoomData";
@@ -18,6 +18,7 @@ import {
 import { checkIsDynamic, makeRawSource } from "~/lib/source";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -52,6 +53,8 @@ import {
 } from "~/app/_components/ui/popover";
 import { useUsersSourceData } from "~/app/_hooks/useUsersSourceData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
+import { usePublicSources } from "~/app/_hooks/usePublicSources";
+import { useRoomSources } from "~/app/_hooks/useRoomSources";
 
 const formSchema = z.object({
   sourceLink: z.string().url().max(250),
@@ -63,10 +66,13 @@ const formSchema = z.object({
 });
 
 function StreamForm() {
-  const [_, setOpenModal] = useState(false);
+  const btnClose = useRef<HTMLButtonElement>(null);
   const { roomData } = useRoomData();
   const { metaData } = useMetaData();
   const [showFlags, setShowFlags] = useState(false);
+  const { setPublicSources } = usePublicSources();
+  const { setUsersSourceData } = useUsersSourceData();
+  const { setRoomSourcesData } = useRoomSources();
   const { setCurrentMediaSrc } = useCurMediaSrc();
 
   const { setSourceData } = useSourceData();
@@ -101,22 +107,37 @@ function StreamForm() {
     if (!sourceData) return;
     setSourceData(sourceData.sourceData);
     setCurrentMediaSrc(sourceData.mediaSourceData);
+    if (values.isPublic)
+      setPublicSources((prv) => {
+        if (prv) return [...prv, sourceData.mediaSourceData];
+        return [sourceData.mediaSourceData];
+      });
 
-    // const newSource = { user: userData, ...sourceData.sourceData };
-    // setSourcesData((sources) => {
-    //   const prvSourceWithoutUser = sources?.filter(
-    //     (source) => source.userId !== userData.id,
-    //   );
-    //   if (prvSourceWithoutUser) return [...prvSourceWithoutUser, newSource];
-    //   return [newSource];
-    // });
+    setUsersSourceData((prv) => {
+      if (prv)
+        return [
+          ...prv,
+          { ...sourceData.sourceData, MediaSource: sourceData.mediaSourceData },
+        ];
+      return [
+        { ...sourceData.sourceData, MediaSource: sourceData.mediaSourceData },
+      ];
+    });
+
+    setRoomSourcesData((prv) => {
+      if (prv) return [...prv, sourceData.mediaSourceData];
+      return [sourceData.mediaSourceData];
+    });
+
     // mediaSocket.emit("sourceDataChanged", { payload: newSource });
-    setOpenModal(false);
+
+    btnClose.current?.click();
   }
 
   return (
     <div className="flex w-full items-center justify-center">
       <Sheet>
+        <SheetClose ref={btnClose} />
         <SheetTrigger asChild>
           <Button
             size={"icon"}

@@ -120,26 +120,28 @@ export function Mute({ tooltipPlacement }: MediaButtonProps) {
   );
 }
 
-export function Caption({ tooltipPlacement }: MediaButtonProps) {
+export function Caption() {
   const track = useMediaState("textTrack"),
     isOn = track && isTrackCaptionKind(track);
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <CaptionButton className={buttonClass}>
-          {isOn ? (
-            // <ClosedCaptionsOnIcon className="h-6 w-6" />
-            <div>icon</div>
-          ) : (
-            // <ClosedCaptionsIcon className="h-6 w-6" />
-            <div>icon</div>
-          )}
-        </CaptionButton>
-      </TooltipTrigger>
-      <TooltipContent sideOffset={30}>
-        {isOn ? "Closed-Captions Off" : "Closed-Captions On"}
-      </TooltipContent>
-    </Tooltip>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <CaptionButton className={buttonClass}>
+            {isOn ? (
+              // <ClosedCaptionsOnIcon className="h-6 w-6" />
+              <div>icon</div>
+            ) : (
+              // <ClosedCaptionsIcon className="h-6 w-6" />
+              <div>icon</div>
+            )}
+          </CaptionButton>
+        </TooltipTrigger>
+        <TooltipContent sideOffset={30}>
+          {isOn ? "Closed-Captions Off" : "Closed-Captions On"}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 

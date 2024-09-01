@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { Captions, Controls, Gesture } from "@vidstack/react";
 import captionStyles from "./css-modules/captions.module.css";
 import styles from "./css-modules/video-layout.module.css";
@@ -20,9 +19,6 @@ export default function VideoLayout({
   thumbnails,
   disablePlay = false,
 }: VideoLayoutProps & { disablePlay?: boolean }) {
-  const isFullscreen = true;
-  const [isChatActive, setIsChatActive] = useState(false);
-
   return (
     <>
       <Gestures />
@@ -43,9 +39,6 @@ export default function VideoLayout({
         <Controls.Group className="flex w-full flex-1 overflow-hidden">
           <UsersStatus />
           <div className="flex-1" />
-          {isFullscreen && isChatActive && (
-            <div className="h-full">dsadasd</div>
-          )}
         </Controls.Group>
 
         <Controls.Group className="flex w-full items-center px-2">
@@ -60,6 +53,7 @@ export default function VideoLayout({
           <div className="flex-1" />
           <Buttons.Together />
           <Menus.Settings placement="top end" tooltipPlacement="top" />
+          {/* <Buttons.Caption /> */}
           <Buttons.PIP tooltipPlacement="top" />
           <Buttons.FullScreen tooltipPlacement="top" />
         </Controls.Group>

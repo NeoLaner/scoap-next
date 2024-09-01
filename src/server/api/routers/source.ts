@@ -100,8 +100,10 @@ export const sourceRouter = createTRPCRouter({
           },
         },
       });
-      // if (pubMediaSrcs.length > 0) return await ctx.db.source;
+      const bestSrcId = pubMediaSrcs[0];
+      if (bestSrcId?.id)
+        return await ctx.db.source.create({
+          data: { mediaSourceId: bestSrcId.id, roomId, userId },
+        });
     }),
 });
-
-function name() {}
