@@ -46,6 +46,7 @@ import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
 import { BsShare, BsShareFill } from "react-icons/bs";
 import { ExternalToast, toast } from "sonner";
 import { cn } from "~/lib/utils";
+import { Captions, CaptionsOff } from "lucide-react";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -129,11 +130,9 @@ export function Caption() {
         <TooltipTrigger asChild>
           <CaptionButton className={buttonClass}>
             {isOn ? (
-              // <ClosedCaptionsOnIcon className="h-6 w-6" />
-              <div>icon</div>
+              <CaptionsOff className="h-6 w-6" />
             ) : (
-              // <ClosedCaptionsIcon className="h-6 w-6" />
-              <div>icon</div>
+              <Captions className="h-6 w-6" />
             )}
           </CaptionButton>
         </TooltipTrigger>

@@ -53,7 +53,7 @@ export default function VideoLayout({
           <div className="flex-1" />
           <Buttons.Together />
           <Menus.Settings placement="top end" tooltipPlacement="top" />
-          {/* <Buttons.Caption /> */}
+          <Buttons.Caption />
           <Buttons.PIP tooltipPlacement="top" />
           <Buttons.FullScreen tooltipPlacement="top" />
         </Controls.Group>

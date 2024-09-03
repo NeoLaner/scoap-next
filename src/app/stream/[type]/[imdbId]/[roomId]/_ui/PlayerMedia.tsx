@@ -18,6 +18,7 @@ import { useMetaData } from "~/app/_hooks/useMetaData";
 import { makeRawSource } from "~/lib/source";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
+import { api } from "~/trpc/react";
 
 function PlayerMedia({
   playerRef,
@@ -48,7 +49,12 @@ function PlayerMedia({
   });
 
   console.log(currentMediaSrc);
-
+  const subtitleUrl =
+    "https://dl10.dl1acemovies.xyz/dl/English/Series/Hannibal/S01/Srt/Hannibal.S01E01.BluRay.FA.srt";
+  const { data } = api.subtitle.getSubtitle.useQuery(
+    { url: subtitleUrl },
+    { staleTime: Infinity },
+  );
   return (
     <MediaPlayer
       ref={playerRef}
@@ -71,15 +77,15 @@ function PlayerMedia({
           className={`h-full object-cover object-top  ${!source ? "opacity-70" : "opacity-0"} transition-all`}
           quality="90"
         />
-        {/* <Track
-          src="https://dl10.dl1acemovies.xyz/dl/English/Series/Hannibal/S01/Srt/Hannibal.S01E01.BluRay.FA.srt"
+        <Track
+          content={data?.subtitle}
           label="Farsi"
           language="FA"
           kind="subtitles"
           default
           key="1"
           type={"srt"}
-        /> */}
+        />
       </MediaProvider>
 
       <div className="absolute hidden h-full w-full animate-pulse items-center justify-center transition-all media-buffering:flex">
