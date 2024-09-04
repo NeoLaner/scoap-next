@@ -51,6 +51,7 @@ model User {
   Sources              Source[]
   MediaLinkInteraction MediaSourceInteraction[]
   MediaSource          MediaSource[]
+  SubtitleSource       SubtitleSource[]
 }
 
 model VerificationToken {
@@ -89,9 +90,11 @@ model Source {
   // fileIdx     Int?
   mediaSourceId String @db.ObjectId
 
-  room        Room        @relation(fields: [roomId], references: [id])
-  user        User        @relation(fields: [userId], references: [id])
-  MediaSource MediaSource @relation(fields: [mediaSourceId], references: [id])
+  room             Room            @relation(fields: [roomId], references: [id])
+  user             User            @relation(fields: [userId], references: [id])
+  MediaSource      MediaSource     @relation(fields: [mediaSourceId], references: [id])
+  SubtitleSource   SubtitleSource? @relation(fields: [subtitleSourceId], references: [id])
+  subtitleSourceId String?         @db.ObjectId
 }
 
 // Define the enums
@@ -143,4 +146,35 @@ model MediaSourceInteraction {
   user      User        @relation(fields: [userId], references: [id])
 
   @@unique([userId, mediaLinkId])
+}
+
+model SubtitleSource {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  ownerId   String   @db.ObjectId
+  imdbId    String
+
+  subUrl String
+
+  translator   String?
+  language     String
+  description  String? // if there is no description provided, the videoLink shows instead
+  roomId       String   @db.ObjectId
+  isPublic     Boolean  @default(false)
+  disabled     Boolean // change by owner and admins
+  canBePublic  Boolean // change by admins
+  usersLikesId String[] @db.ObjectId // if the link is private, this should never change
+  name         String   @default("")
+  quality      String?
+  tags         Tag[]
+  crossorigin  Boolean
+
+  //if is Dynamic
+  seasonBoundary Int[] // if link type is dynamic for series
+  //if is Static
+  episode        Int?
+  season         Int?
+
+  sources Source[]
+  user    User     @relation(fields: [ownerId], references: [id])
 }
