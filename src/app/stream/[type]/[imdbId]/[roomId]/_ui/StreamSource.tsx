@@ -34,7 +34,13 @@ import {
   DropdownMenuPortal,
   DropdownMenuSeparator,
 } from "~/app/_components/ui/dropdown-menu";
-import { PiCopyBold } from "react-icons/pi";
+import {
+  PiCardsThree,
+  PiCardsThreeFill,
+  PiCopyBold,
+  PiHighDefinition,
+  PiHighDefinitionFill,
+} from "react-icons/pi";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { toast } from "sonner";
 import {
@@ -100,12 +106,20 @@ export function StreamSource({ source }: { source: MediaSource }) {
 
   return (
     <div
-      className={`flex flex-col gap-2 rounded-lg border p-4 py-2 ${isSelectedSource ? "border-success-foreground  " : ""}`}
+      className={`flex w-full flex-col gap-2 rounded-lg border p-4 py-2 ${isSelectedSource ? "border-success-foreground  " : ""}`}
     >
       <Dialog>
         <div className="flex items-center justify-between">
           {/* Users Profile */}
-          <div className="">{source.name}</div>
+          <div className="flex gap-2">
+            <UserProfile source={source} />
+            <div className="flex flex-col">
+              <p className=" text-sm">{source.name}</p>
+              <p className=" text-xs text-muted-foreground">
+                provided by: {source.user.name}
+              </p>
+            </div>
+          </div>
 
           <div className="flex items-center">
             {roomData.season &&
@@ -254,54 +268,15 @@ export function StreamSource({ source }: { source: MediaSource }) {
             </Button>
           </div>
         </div>
-        {/* <Separator />
 
-      <div className="relative h-20 rounded-lg ">
-        <Button
-          className="absolute bottom-1 right-2 z-50 h-6 w-6 p-1"
-          variant={"secondary"}
-          onClick={() => setShowDesc((prv) => !prv)}
-        >
-          <PiArrowClockwiseBold size={30} />
-        </Button>
-        <ScrollArea className="h-full">
-          <div className="break-all p-2 text-sm text-primary-foreground/90">
-            {desc ? (showDesc ? desc : source) : source}{" "}
-          </div>{" "}
-        </ScrollArea>
-      </div> */}
+        <div className="flex flex-wrap items-center gap-1">
+          {checkIsDynamic(source.videoLink) && <PiCardsThreeFill size={26} />}
 
-        <Separator />
+          <QualityIcon source={source} />
 
-        <div className="flex items-center justify-between">
-          <div className="flex flex-wrap items-center gap-1">
-            {checkIsDynamic(source.videoLink) && (
-              <Badge className="bg-purple-700 text-purple-50 hover:bg-purple-800">
-                Dynamic
-              </Badge>
-            )}
-            {source.quality && (
-              <Badge className="bg-blue-700 text-blue-50 hover:bg-blue-800">
-                {source.quality}p
-              </Badge>
-            )}
-
-            {source.tags.map((tag) => (
-              <Badge key={tag}>{tag}</Badge>
-            ))}
-
-            <Webdl />
-          </div>
-          <div className="flex items-center gap-1">
-            <Avatar
-              className={`flex h-8 w-8 items-center justify-center rounded-md border-2 shadow-2xl transition-all`}
-            >
-              <AvatarImage src={source.user.image ?? ""} className="" />
-              <AvatarFallback className="rounded-md">
-                {getFirstTwoLetters(source.user.name)}
-              </AvatarFallback>
-            </Avatar>
-          </div>
+          {/* {source.tags.map((tag) => (
+            <Badge key={tag}>{tag}</Badge>
+          ))} */}
         </div>
 
         <DialogContent>
@@ -326,3 +301,22 @@ export function StreamSource({ source }: { source: MediaSource }) {
     </div>
   );
 }
+
+const UserProfile = function ({ source }: { source: MediaSource }) {
+  return (
+    <div className="flex items-center">
+      <Avatar
+        className={`flex h-10 w-10 items-center justify-center rounded-md border-2 shadow-2xl transition-all`}
+      >
+        <AvatarImage src={source.user.image ?? ""} className="" />
+        <AvatarFallback className="rounded-md">
+          {getFirstTwoLetters(source.user.name)}
+        </AvatarFallback>
+      </Avatar>
+    </div>
+  );
+};
+
+const QualityIcon = function ({ source }: { source: MediaSource }) {
+  return source.quality === "720" && <PiHighDefinitionFill size={26} />;
+};
