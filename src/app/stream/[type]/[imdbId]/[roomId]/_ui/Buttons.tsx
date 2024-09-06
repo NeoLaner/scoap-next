@@ -14,6 +14,7 @@ import {
   PiCardsThree,
   PiCardsThreeFill,
   PiChatsLight,
+  PiClosedCaptioningBold,
   PiPauseCircleFill,
   PiPlayCircleFill,
   PiQueueBold,
@@ -312,5 +313,30 @@ export function Share({ showTooltip = true }: { showTooltip?: boolean }) {
     >
       <BsShareFill size={18} />
     </Button>
+  );
+}
+
+export function Subtitle() {
+  const { setRoomSettings } = useRoomSettings();
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <Button
+          onClick={() =>
+            setRoomSettings((prv) => {
+              return { ...prv, currentTab: "subtitles" };
+            })
+          }
+          className={buttonClass}
+          variant={"ghost"}
+          size={"icon"}
+        >
+          <PiClosedCaptioningBold size={26} className="text-solid-primary-2" />
+        </Button>
+
+        <TooltipContent sideOffset={30}>Streams</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

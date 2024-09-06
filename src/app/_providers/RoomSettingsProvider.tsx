@@ -5,7 +5,7 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import { useRoomData } from "../_hooks/useRoomData";
 
 type RoomSettings = {
-  currentTab: "chat" | "episodes" | "streams";
+  currentTab: "chat" | "episodes" | "streams" | "subtitles";
   isRightPanelOpen: boolean;
 };
 

@@ -15,6 +15,7 @@ import EpisodesHeading from "./EpisodesHeading";
 import StreamsHeading from "./StreamsHeading";
 import Streams from "./Streams";
 import ChatFooter from "./ChatFooter";
+import Subtitles from "./Subtitles";
 
 function PlayerLayout({ roomId }: { roomId: string }) {
   return (
@@ -50,6 +51,16 @@ function PlayerLayout({ roomId }: { roomId: string }) {
             JSXMain: (
               <Suspense fallback={<Loader />}>
                 <Streams roomId={roomId} />
+              </Suspense>
+            ),
+            JSXHeader: <StreamsHeading />,
+          },
+
+          {
+            key: "subtitles",
+            JSXMain: (
+              <Suspense fallback={<Loader />}>
+                <Subtitles />
               </Suspense>
             ),
             JSXHeader: <StreamsHeading />,

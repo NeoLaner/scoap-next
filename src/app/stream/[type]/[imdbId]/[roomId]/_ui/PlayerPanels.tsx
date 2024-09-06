@@ -148,8 +148,9 @@ export function RightPanel({
             <div className=" h-[72px] w-full border-t bg-background p-4">
               <div className="flex justify-between">
                 <Buttons.Chat />
-                {<Buttons.Episodes />}
+                <Buttons.Episodes />
                 <Buttons.Streams />
+                <Buttons.Subtitle />
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "~/app/_components/ui/Button";
+import { Webdl } from "~/app/_components/ui/icons/Webdl";
 
 import { Badge } from "~/app/_components/ui/badge";
 import {
@@ -284,9 +285,12 @@ export function StreamSource({ source }: { source: MediaSource }) {
                 {source.quality}p
               </Badge>
             )}
+
             {source.tags.map((tag) => (
               <Badge key={tag}>{tag}</Badge>
             ))}
+
+            <Webdl />
           </div>
           <div className="flex items-center gap-1">
             <Avatar
