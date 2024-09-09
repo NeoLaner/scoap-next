@@ -39,7 +39,7 @@ import { Checkbox } from "~/app/_components/ui/checkbox";
 import { z } from "zod";
 
 import { Input } from "~/app/_components/ui/input";
-import { TagEnum } from "~/lib/@types/Media";
+import { QualityTypeEnum, TagEnum } from "~/lib/@types/Media";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { extractUniqueSeasons } from "~/lib/metadata";
 import Loader from "~/app/_ui/Loader";
@@ -62,7 +62,7 @@ const formSchema = z.object({
   isPublic: z.boolean().optional(),
   seasonBoundary: z.array(z.string()),
   quality: z.string(),
-  tags: z.array(TagEnum),
+  qualityType: QualityTypeEnum,
 });
 
 function StreamForm() {
@@ -84,7 +84,7 @@ function StreamForm() {
       isPublic: false,
       seasonBoundary: [String(roomData.season)],
       quality: "",
-      tags: [],
+      qualityType: "WebDl",
     },
   });
 
@@ -329,11 +329,11 @@ function StreamForm() {
 
                   <FormField
                     control={form.control}
-                    name="tags"
+                    name="qualityType"
                     render={({ field }) => (
                       <FormItem className=" gap-2">
                         <ToggleGroup
-                          type="multiple"
+                          type="single"
                           className="mt-2 flex-wrap justify-start"
                           value={field.value}
                           onValueChange={field.onChange}
@@ -341,15 +341,6 @@ function StreamForm() {
                         >
                           <FormLabel>Tags:</FormLabel>
 
-                          <ToggleGroupItem value="Hardsub">
-                            HardSub
-                          </ToggleGroupItem>
-                          <ToggleGroupItem value="Softsub">
-                            SoftSub
-                          </ToggleGroupItem>
-                          <ToggleGroupItem value="Dubbed">
-                            Dubbed
-                          </ToggleGroupItem>
                           <ToggleGroupItem value="WebDl">
                             Web-dl
                           </ToggleGroupItem>

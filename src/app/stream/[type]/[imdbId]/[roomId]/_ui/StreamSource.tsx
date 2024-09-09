@@ -1,15 +1,13 @@
 "use client";
 
 import { Button } from "~/app/_components/ui/Button";
-import { Webdl } from "~/app/_components/ui/icons/Webdl";
 
-import { Badge } from "~/app/_components/ui/badge";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "~/app/_components/ui/avatar";
-import { getFirstTwoLetters } from "~/lib/utils";
+import { cn, getFirstTwoLetters } from "~/lib/utils";
 import { checkIsDynamic, makeRawSource } from "~/lib/source";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { useRoomData } from "~/app/_hooks/useRoomData";
@@ -37,6 +35,7 @@ import {
 import {
   PiCardsThree,
   PiCardsThreeFill,
+  PiClosedCaptioningFill,
   PiCopyBold,
   PiHighDefinition,
   PiHighDefinitionFill,
@@ -54,7 +53,7 @@ import {
   DialogClose,
 } from "~/app/_components/ui/dialog";
 import { deleteMySource } from "~/app/_actions/deleteMySource";
-import { useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { useSourceData } from "~/app/_hooks/useSourceData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { updateSource } from "~/app/_actions/updateSource";
@@ -80,7 +79,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
 
   const [_, copyToClipboard] = useCopyToClipboard();
   const rawSource = makeRawSource({
-    source: source.videoLink,
+    source: source.videoUrl,
     season: roomData.season,
     episode: roomData.episode,
   });
@@ -106,177 +105,191 @@ export function StreamSource({ source }: { source: MediaSource }) {
 
   return (
     <div
-      className={`flex w-full flex-col gap-2 rounded-lg border p-4 py-2 ${isSelectedSource ? "border-success-foreground  " : ""}`}
+      className={`w-full  gap-2 rounded-lg border p-4 py-2 ${isSelectedSource ? "border-success-foreground  " : ""}`}
     >
       <Dialog>
-        <div className="flex items-center justify-between">
+        <div className="flex w-full items-center justify-between ">
           {/* Users Profile */}
           <div className="flex gap-2">
             <UserProfile source={source} />
             <div className="flex flex-col">
               <p className=" text-sm">{source.name}</p>
               <p className=" text-xs text-muted-foreground">
-                provided by: {source.user.name}
+                Made by: {source.user.name}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center">
-            {roomData.season &&
-              !source.seasonBoundary.includes(roomData.season) && (
-                <TooltipProvider delayDuration={50}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant={"ghost"}
-                        size={"icon"}
-                        className="text-warning-foreground hover:text-warning-foreground"
-                      >
-                        <TriangleAlert />
-                      </Button>
-                    </TooltipTrigger>
-
-                    <TooltipContent className="text-sm">
-                      This link just provided
-                      <span className="font-bold text-primary">
-                        {" "}
-                        {source.seasonBoundary.length > 1
-                          ? "seasons"
-                          : "season"}{" "}
-                        {source.seasonBoundary.join(", ")}
-                      </span>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )}
-
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button
-                  asChild
-                  variant={"ghost"}
-                  size={"icon"}
-                  className="items-center justify-center overflow-hidden rounded-md p-1"
-                >
-                  <CircleEllipsis size={20} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="z-50 text-sm">
-                {roomData.type === "movie" && (
-                  <DropdownMenuItem
-                    onClick={async () => {
-                      await copyToClipboard(source.videoLink);
-                      toast.success(
-                        "Link copied to your clipboard successfully.",
-                      );
-                    }}
-                  >
-                    <div className="flex gap-2">
-                      <PiCopyBold size={22} />
-
-                      <span>Copy </span>
-                    </div>
-                  </DropdownMenuItem>
+          <div className="flex items-center space-x-1">
+            <div className="flex flex-col flex-wrap items-center  gap-1 ">
+              <div className="flex">
+                <QualityIcon source={source} />
+                <SubtitleIcon source={source} />
+                <QualityTypeIcon source={source} />
+              </div>
+              <div className="flex">
+                {checkIsDynamic(source.videoUrl) && <IconText>dyn</IconText>}
+                {source.dubbed ? (
+                  <IconText>dub</IconText>
+                ) : (
+                  <IconText disable>dub</IconText>
                 )}
-                {roomData.type === "series" && (
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
+              </div>
+
+              {/* {source.tags.map((tag) => (
+            <Badge key={tag}>{tag}</Badge>
+          ))} */}
+            </div>
+
+            <Separator orientation="vertical" className="h-full" />
+
+            <div className="flex flex-col items-center border-l-2 pl-2">
+              {roomData.season &&
+                !source.seasonBoundary.includes(roomData.season) && (
+                  <TooltipProvider delayDuration={50}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={"ghost"}
+                          size={"icon"}
+                          className="text-warning-foreground hover:text-warning-foreground"
+                        >
+                          <TriangleAlert />
+                        </Button>
+                      </TooltipTrigger>
+
+                      <TooltipContent className="text-sm">
+                        This link just provided
+                        <span className="font-bold text-primary">
+                          {" "}
+                          {source.seasonBoundary.length > 1
+                            ? "seasons"
+                            : "season"}{" "}
+                          {source.seasonBoundary.join(", ")}
+                        </span>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button
+                    asChild
+                    variant={"ghost"}
+                    size={"icon"}
+                    className="items-center justify-center overflow-hidden rounded-md p-1"
+                  >
+                    <CircleEllipsis size={20} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="z-50 text-sm">
+                  {roomData.type === "movie" && (
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        await copyToClipboard(source.videoUrl);
+                        toast.success(
+                          "Link copied to your clipboard successfully.",
+                        );
+                      }}
+                    >
                       <div className="flex gap-2">
                         <PiCopyBold size={22} />
 
                         <span>Copy </span>
                       </div>
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuItem
-                          onClick={async () => {
-                            await copyToClipboard(source.videoLink);
-                            toast.success(
-                              "Link copied to your clipboard successfully.",
-                            );
-                          }}
-                        >
-                          {/* <Mail className="mr-2 h-4 w-4" /> */}
-                          <span>Copy the main link</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={async () => {
-                            await copyToClipboard(rawSource);
-                            toast.success(
-                              "Link copied to your clipboard successfully.",
-                            );
-                          }}
-                        >
-                          {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
-                          <span>Copy the current episode link</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                )}
-
-                {isOwner && (
-                  <>
-                    <DropdownMenuSeparator />
-
-                    <DialogTrigger asChild>
-                      <DropdownMenuItem>
-                        {" "}
+                    </DropdownMenuItem>
+                  )}
+                  {roomData.type === "series" && (
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
                         <div className="flex gap-2">
-                          <Trash2 size={22} />
+                          <PiCopyBold size={22} />
 
-                          <span>Delete </span>
+                          <span>Copy </span>
                         </div>
-                      </DropdownMenuItem>
-                    </DialogTrigger>
-                  </>
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          <DropdownMenuItem
+                            onClick={async () => {
+                              await copyToClipboard(source.videoUrl);
+                              toast.success(
+                                "Link copied to your clipboard successfully.",
+                              );
+                            }}
+                          >
+                            {/* <Mail className="mr-2 h-4 w-4" /> */}
+                            <span>Copy the main link</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={async () => {
+                              await copyToClipboard(rawSource);
+                              toast.success(
+                                "Link copied to your clipboard successfully.",
+                              );
+                            }}
+                          >
+                            {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
+                            <span>Copy the current episode link</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  )}
+
+                  {isOwner && (
+                    <>
+                      <DropdownMenuSeparator />
+
+                      <DialogTrigger asChild>
+                        <DropdownMenuItem>
+                          {" "}
+                          <div className="flex gap-2">
+                            <Trash2 size={22} />
+
+                            <span>Delete </span>
+                          </div>
+                        </DropdownMenuItem>
+                      </DialogTrigger>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                className="items-center justify-center overflow-hidden rounded-sm hover:bg-success"
+                onClick={async () => {
+                  setSourceData((prvSrc) => {
+                    if (!prvSrc) return;
+                    const newSource = {
+                      ...prvSrc,
+                      mediaSourceId: source.id,
+                    };
+                    return newSource;
+                  });
+                  const newSource = curUserSource?.id
+                    ? await updateSource({
+                        sourceId: curUserSource?.id,
+                        mediaSourceId: source.id,
+                      })
+                    : await createSource({
+                        roomId: roomData.id,
+                        mediaSourceId: source.id,
+                      });
+                  if (newSource) setCurrentMediaSrc(source);
+                }}
+              >
+                {isSelectedSource ? (
+                  <CheckCircle2 className="text-success-foreground " />
+                ) : (
+                  <ArrowRightCircle />
                 )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Button
-              variant={"ghost"}
-              size={"icon"}
-              className="items-center justify-center overflow-hidden rounded-sm hover:bg-success"
-              onClick={async () => {
-                setSourceData((prvSrc) => {
-                  if (!prvSrc) return;
-                  const newSource = {
-                    ...prvSrc,
-                    mediaSourceId: source.id,
-                  };
-                  return newSource;
-                });
-                const newSource = curUserSource?.id
-                  ? await updateSource({
-                      sourceId: curUserSource?.id,
-                      mediaSourceId: source.id,
-                    })
-                  : await createSource({
-                      roomId: roomData.id,
-                      mediaSourceId: source.id,
-                    });
-                if (newSource) setCurrentMediaSrc(source);
-              }}
-            >
-              {isSelectedSource ? (
-                <CheckCircle2 className="text-success-foreground " />
-              ) : (
-                <ArrowRightCircle />
-              )}
-            </Button>
+              </Button>
+            </div>
           </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-1">
-          {checkIsDynamic(source.videoLink) && <PiCardsThreeFill size={26} />}
-
-          <QualityIcon source={source} />
-
-          {/* {source.tags.map((tag) => (
-            <Badge key={tag}>{tag}</Badge>
-          ))} */}
         </div>
 
         <DialogContent>
@@ -317,6 +330,79 @@ const UserProfile = function ({ source }: { source: MediaSource }) {
   );
 };
 
+const SubtitleIcon = function ({ source }: { source: MediaSource }) {
+  const text = source.hardsub ? "hcc" : "cc";
+
+  return <IconText disable={!source.hardsub}>{text}</IconText>;
+};
+
 const QualityIcon = function ({ source }: { source: MediaSource }) {
-  return source.quality === "720" && <PiHighDefinitionFill size={26} />;
+  let text;
+  switch (source.quality) {
+    case "360":
+      text = "sd";
+      break;
+    case "480":
+      text = "sd";
+      break;
+    case "720":
+      text = "hd";
+      break;
+    case "1080":
+      text = "fhd";
+      break;
+    case "1440":
+      text = "qhd";
+      break;
+    case "2160":
+      text = "uhd";
+      break;
+    default:
+      text = "FHD";
+      break;
+  }
+  return <IconText disable={!source.quality}>{text}</IconText>;
+};
+
+const QualityTypeIcon = function ({ source }: { source: MediaSource }) {
+  let text;
+  switch (source.qualityType) {
+    case "BluRay":
+      text = "blu";
+      break;
+    case "WebDl":
+      text = "web";
+      break;
+    case "CAM":
+      text = "cam";
+      break;
+    default:
+      text = "cam";
+      break;
+  }
+  return <IconText disable={!source.quality}>{text}</IconText>;
+};
+
+const IconText = function ({
+  className,
+  disable = false,
+  children,
+}: {
+  className?: string;
+  disable?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        `mx-[0.1rem] h-fit w-[1.8rem] select-none self-center rounded-[2px] px-[1px] text-center text-[0.68rem]  font-bold uppercase leading-4`,
+        disable
+          ? "bg-foreground/50 text-background"
+          : "bg-foreground text-background",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
 };

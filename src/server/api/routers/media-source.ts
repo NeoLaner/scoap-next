@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TagEnum } from "~/lib/@types/Media";
+import { QualityTypeEnum } from "~/lib/@types/Media";
 import { checkIsDynamic, containsEpisode, containsSeason } from "~/lib/source";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
@@ -51,15 +51,17 @@ export const mediaSourceRouter = createTRPCRouter({
       z.object({
         roomId: z.string(),
         imdbId: z.string(),
-        videoLink: z.string(),
+        videoUrl: z.string(),
         description: z.string().optional(),
         isPublic: z.boolean(),
         name: z.string().optional(),
         seasonBoundary: z.array(z.number()),
         season: z.number().optional(),
         episode: z.number().optional(),
-        tags: z.array(TagEnum).optional(),
         quality: z.string().optional(),
+        dubbed: z.boolean().optional(),
+        hardsub: z.boolean().optional(),
+        qualityType: QualityTypeEnum.optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -67,16 +69,16 @@ export const mediaSourceRouter = createTRPCRouter({
       const existingSource = await ctx.db.mediaSource.findFirst({
         where: {
           roomId: input.roomId,
-          videoLink: input.videoLink,
+          videoUrl: input.videoUrl,
         },
         include: { user: true },
       });
 
       if (existingSource) return existingSource; //TODO: THROW ERROR
 
-      const isContainsSeason = containsSeason(input.videoLink);
-      const isContainsEpisode = containsEpisode(input.videoLink);
-      const isDynamic = checkIsDynamic(input.videoLink);
+      const isContainsSeason = containsSeason(input.videoUrl);
+      const isContainsEpisode = containsEpisode(input.videoUrl);
+      const isDynamic = checkIsDynamic(input.videoUrl);
       if (isDynamic && !isContainsSeason) return; //TODO: THROW ERROR
       if (isDynamic && !isContainsEpisode) return; //TODO: THROW ERROR
 
@@ -87,15 +89,17 @@ export const mediaSourceRouter = createTRPCRouter({
           canBePublic: true,
           disabled: false,
           imdbId: input.imdbId,
-          videoLink: input.videoLink,
+          videoUrl: input.videoUrl,
           description: input.description,
           isPublic: input.isPublic,
           name: input.name,
           seasonBoundary: input.seasonBoundary,
           season: input.season,
           episode: input.episode,
-          tags: input.tags,
           quality: input.quality,
+          dubbed: input.dubbed,
+          hardsub: input.hardsub,
+          qualityType: input.qualityType,
         },
         include: { user: true },
       });

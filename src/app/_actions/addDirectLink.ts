@@ -2,7 +2,7 @@
 import { checkIsDynamic } from "~/lib/source";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import { type TagEnum } from "~/lib/@types/Media";
+import { type TagEnum, QualityTypeEnum } from "~/lib/@types/Media";
 import { type z } from "zod";
 
 export async function addDirectLink({
@@ -15,8 +15,10 @@ export async function addDirectLink({
   name = "",
   season = 1,
   episode = 1,
-  tags,
   quality,
+  dubbed,
+  hardsub,
+  qualityType,
 }: {
   sourceLink: string;
   roomId: string;
@@ -27,8 +29,10 @@ export async function addDirectLink({
   name?: string;
   season?: number;
   episode?: number;
-  tags?: z.infer<typeof TagEnum>[];
   quality?: string;
+  dubbed?: boolean;
+  hardsub?: boolean;
+  qualityType?: z.infer<typeof QualityTypeEnum>;
 }) {
   const isDynamic = checkIsDynamic(sourceLink);
   const session = await getServerAuthSession();
@@ -36,36 +40,38 @@ export async function addDirectLink({
   if (!sourceLink || !roomId || !userId) return;
   const source = await api.source.getMe({ roomId });
   const seasonBoundaryToNumbers = seasonBoundary?.map((str) => Number(str));
-  let mediaSource;
-  if (isDynamic) {
-    mediaSource = {
-      videoLink: sourceLink,
-      seasonBoundary: seasonBoundaryToNumbers,
-      roomId,
-      isPublic,
-      description,
-      imdbId,
-      name,
-      tags,
-      quality,
-    };
-  } else {
-    mediaSource = {
-      videoLink: sourceLink,
-      seasonBoundary: [],
-      roomId,
-      isPublic,
-      description,
-      imdbId,
-      name,
-      season,
-      episode,
-      tags,
-      quality,
-    };
-  }
 
-  const mediaSourceData = await api.mediaSource.create(mediaSource);
+  const mediaSourceData = await api.mediaSource.create(
+    isDynamic
+      ? {
+          videoUrl: sourceLink,
+          seasonBoundary: seasonBoundaryToNumbers,
+          roomId,
+          isPublic,
+          description,
+          imdbId,
+          name,
+          quality,
+          dubbed,
+          hardsub,
+          qualityType,
+        }
+      : {
+          videoUrl: sourceLink,
+          seasonBoundary: [],
+          roomId,
+          isPublic,
+          description,
+          imdbId,
+          name,
+          season,
+          episode,
+          quality,
+          dubbed,
+          hardsub,
+          qualityType,
+        },
+  );
   if (!mediaSourceData) return; //TODO: ERROR
   let sourceData;
   if (source)
