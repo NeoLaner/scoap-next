@@ -9,9 +9,9 @@ import { Toaster } from "./_components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
-  display: "swap",
   variable: "--font-inter",
-  // variable: "--font-sans",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata = {
