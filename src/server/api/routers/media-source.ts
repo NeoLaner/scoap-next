@@ -62,6 +62,7 @@ export const mediaSourceRouter = createTRPCRouter({
         dubbed: z.boolean().optional(),
         hardsub: z.boolean().optional(),
         qualityType: QualityTypeEnum.optional(),
+        isHdr: z.boolean().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -100,6 +101,7 @@ export const mediaSourceRouter = createTRPCRouter({
           dubbed: input.dubbed,
           hardsub: input.hardsub,
           qualityType: input.qualityType,
+          isHdr: input.isHdr,
         },
         include: { user: true },
       });

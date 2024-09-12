@@ -128,6 +128,7 @@ model MediaSource {
   name         String   @default("")
   quality      String?
   qualityType  QualityTypes?
+  isHdr         Boolean @default(false)
   softsub      Boolean  @default(false)
   hardsub      Boolean  @default(false)
   dubbed       Boolean  @default(false)

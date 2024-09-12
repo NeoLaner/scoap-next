@@ -64,6 +64,7 @@ const formSchema = z.object({
   seasonBoundary: z.array(z.string()),
   quality: z.string(),
   qualityType: QualityTypeEnum,
+  isHdr: z.boolean(),
 });
 
 function StreamForm() {
@@ -86,6 +87,7 @@ function StreamForm() {
       seasonBoundary: [String(roomData.season)],
       quality: "",
       qualityType: "WebDl",
+      isHdr: false,
     },
   });
 
@@ -149,7 +151,7 @@ function StreamForm() {
           </Button>
         </SheetTrigger>
 
-        <SheetContent side={"right"} className="h-full w-full px-0">
+        <SheetContent side={"right"} className="h-full w-full px-0 pb-2">
           <ScrollArea className="h-full">
             <div className="h-fit px-6">
               <SheetHeader className="mb-4">
@@ -175,7 +177,7 @@ function StreamForm() {
                           <FormControl>
                             <div className="flex w-full max-w-sm items-center space-x-2">
                               <Input
-                                placeholder="name for your link"
+                                placeholder="Name for your link"
                                 {...field}
                               />
                               <PopoverTrigger>
@@ -232,7 +234,7 @@ function StreamForm() {
                         <FormLabel>Source link</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="add a media url with mp4/mkv/m3u8 formats."
+                            placeholder="Add a media url with mp4/mkv/m3u8 formats."
                             {...field}
                           />
                         </FormControl>
@@ -359,9 +361,26 @@ function StreamForm() {
 
                   <FormField
                     control={form.control}
+                    name="isHdr"
+                    render={({ field }) => (
+                      <FormItem className="flex items-end gap-2 ">
+                        <FormControl className="flex items-center justify-center">
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormLabel>Is that in HDR format?</FormLabel>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
                     name="isPublic"
                     render={({ field }) => (
-                      <FormItem className="flex items-end gap-2">
+                      <FormItem className="flex items-end gap-2 pb-[60px]">
                         <FormControl className="flex items-center justify-center">
                           <Checkbox
                             checked={field.value}
@@ -376,7 +395,11 @@ function StreamForm() {
                     )}
                   />
 
-                  <Button type="submit">Submit</Button>
+                  <div className="absolute  bottom-0 !mt-0 w-full pr-10">
+                    <Button className="  w-full" type="submit">
+                      Submit
+                    </Button>
+                  </div>
                 </form>
               </Form>
             </div>

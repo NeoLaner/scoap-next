@@ -115,7 +115,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
             <div className="flex flex-col">
               <p className=" text-sm">{source.name}</p>
               <p className=" text-xs text-muted-foreground">
-                Made by: {source.user.name}
+                Shared by: {source.user.name}
               </p>
             </div>
           </div>
@@ -129,11 +129,9 @@ export function StreamSource({ source }: { source: MediaSource }) {
               </div>
               <div className="flex">
                 {checkIsDynamic(source.videoUrl) && <IconText>dyn</IconText>}
-                {source.dubbed ? (
-                  <IconText>dub</IconText>
-                ) : (
-                  <IconText disable>dub</IconText>
-                )}
+
+                <IconText disable={!source.dubbed}>dub</IconText>
+                <IconText>{source.isHdr ? "hdr" : "sdr"}</IconText>
               </div>
 
               {/* {source.tags.map((tag) => (
