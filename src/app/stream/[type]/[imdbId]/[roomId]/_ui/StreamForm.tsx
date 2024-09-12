@@ -55,6 +55,7 @@ import { useUsersSourceData } from "~/app/_hooks/useUsersSourceData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { usePublicSources } from "~/app/_hooks/usePublicSources";
 import { useRoomSources } from "~/app/_hooks/useRoomSources";
+import { Separator } from "~/app/_components/ui/separator";
 
 const formSchema = z.object({
   sourceLink: z.string().url().max(250),
@@ -166,55 +167,6 @@ function StreamForm() {
                 >
                   <FormField
                     control={form.control}
-                    name="sourceLink"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Source link</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="add a media url with mp4/mkv/m3u8 formats."
-                            {...field}
-                          />
-                        </FormControl>
-                        {seasonBoundary?.length !== 0 && isDynamic && (
-                          <FormDescription className="text-wrap break-all text-xs">
-                            <span className="font-bold text-primary">
-                              Preview:{" "}
-                            </span>
-                            <span>
-                              {" "}
-                              {makeRawSource({
-                                source: form.getValues("sourceLink"),
-                                season: Math.min(
-                                  ...(seasonBoundary?.map((s) => Number(s)) ??
-                                    []),
-                                ),
-                                episode: 1,
-                              })}
-                            </span>
-                          </FormDescription>
-                        )}
-
-                        {
-                          <>
-                            {!isDynamic && roomData.type === "series" && (
-                              <FormDescription className="text-wrap break-all text-xs">
-                                <span>It just applied to: </span>
-                                <span className="font-bold text-primary">
-                                  Season {roomData.season} & Episode{" "}
-                                  {roomData.episode}
-                                </span>
-                              </FormDescription>
-                            )}
-                          </>
-                        }
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
                     name="name"
                     render={({ field }) => (
                       <Popover>
@@ -267,6 +219,57 @@ function StreamForm() {
                           </PopoverContent>
                         </FormItem>
                       </Popover>
+                    )}
+                  />
+
+                  <Separator />
+
+                  <FormField
+                    control={form.control}
+                    name="sourceLink"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Source link</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="add a media url with mp4/mkv/m3u8 formats."
+                            {...field}
+                          />
+                        </FormControl>
+                        {seasonBoundary?.length !== 0 && isDynamic && (
+                          <FormDescription className="text-wrap break-all text-xs">
+                            <span className="font-bold text-primary">
+                              Preview:{" "}
+                            </span>
+                            <span>
+                              {" "}
+                              {makeRawSource({
+                                source: form.getValues("sourceLink"),
+                                season: Math.min(
+                                  ...(seasonBoundary?.map((s) => Number(s)) ??
+                                    []),
+                                ),
+                                episode: 1,
+                              })}
+                            </span>
+                          </FormDescription>
+                        )}
+
+                        {
+                          <>
+                            {!isDynamic && roomData.type === "series" && (
+                              <FormDescription className="text-wrap break-all text-xs">
+                                <span>It just applied to: </span>
+                                <span className="font-bold text-primary">
+                                  Season {roomData.season} & Episode{" "}
+                                  {roomData.episode}
+                                </span>
+                              </FormDescription>
+                            )}
+                          </>
+                        }
+                        <FormMessage />
+                      </FormItem>
                     )}
                   />
 
@@ -339,7 +342,7 @@ function StreamForm() {
                           onValueChange={field.onChange}
                           size={"sm"}
                         >
-                          <FormLabel>Tags:</FormLabel>
+                          <FormLabel>Format: </FormLabel>
 
                           <ToggleGroupItem value="WebDl">
                             Web-dl

@@ -105,7 +105,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
 
   return (
     <div
-      className={`w-full  gap-2 rounded-lg border p-4 py-2 ${isSelectedSource ? "border-success-foreground  " : ""}`}
+      className={`w-full  gap-2 rounded-lg  border-2 p-4 py-2 ${isSelectedSource ? "border-success-foreground bg-success/50" : ""}`}
     >
       <Dialog>
         <div className="flex w-full items-center justify-between ">

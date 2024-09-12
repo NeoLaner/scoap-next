@@ -43,14 +43,14 @@ function PlayerMedia({
   }
 
   const source = makeRawSource({
-    source: currentMediaSrc?.videoLink ?? "",
+    source: currentMediaSrc?.videoUrl ?? "",
     season: roomData.season,
     episode: roomData.episode,
   });
 
   console.log(currentMediaSrc);
   const subtitleUrl =
-    "https://dl10.dl1acemovies.xyz/dl/English/Series/Hannibal/S01/Srt/Hannibal.S01E01.BluRay.FA.srt";
+    "https://dl4.tabar805.sbs/English/Series/The.Lord.of.the.Rings.The.Rings.of.Power/S02/srt/The.Lord.of.the.Rings.The.Rings.of.Power.S02E01.WEB-DL.EN.srt";
   const { data } = api.subtitle.getSubtitle.useQuery(
     { url: subtitleUrl },
     { staleTime: Infinity },
