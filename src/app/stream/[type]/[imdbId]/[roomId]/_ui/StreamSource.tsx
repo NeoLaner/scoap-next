@@ -18,6 +18,7 @@ import {
   CircleEllipsis,
   Trash2,
   TriangleAlert,
+  XCircle,
 } from "lucide-react";
 import { type api } from "~/trpc/server";
 
@@ -32,14 +33,7 @@ import {
   DropdownMenuPortal,
   DropdownMenuSeparator,
 } from "~/app/_components/ui/dropdown-menu";
-import {
-  PiCardsThree,
-  PiCardsThreeFill,
-  PiClosedCaptioningFill,
-  PiCopyBold,
-  PiHighDefinition,
-  PiHighDefinitionFill,
-} from "react-icons/pi";
+import { PiCopyBold } from "react-icons/pi";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { toast } from "sonner";
 import {
@@ -53,7 +47,7 @@ import {
   DialogClose,
 } from "~/app/_components/ui/dialog";
 import { deleteMySource } from "~/app/_actions/deleteMySource";
-import { ReactNode, useRef } from "react";
+import { type ReactNode, useRef } from "react";
 import { useSourceData } from "~/app/_hooks/useSourceData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { updateSource } from "~/app/_actions/updateSource";
@@ -76,6 +70,11 @@ export function StreamSource({ source }: { source: MediaSource }) {
   const { setCurrentMediaSrc } = useCurMediaSrc();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const isOwner = userData.id === source.ownerId;
+  const outOfBoundary = Boolean(
+    checkIsDynamic(source.videoUrl) &&
+      roomData.season &&
+      !source.seasonBoundary.includes(roomData.season),
+  );
 
   const [_, copyToClipboard] = useCopyToClipboard();
   const rawSource = makeRawSource({
@@ -128,48 +127,16 @@ export function StreamSource({ source }: { source: MediaSource }) {
                 <QualityTypeIcon source={source} />
               </div>
               <div className="flex">
-                {checkIsDynamic(source.videoUrl) && <IconText>dyn</IconText>}
+                <DynamicIcon source={source} />
 
                 <IconText disable={!source.dubbed}>dub</IconText>
                 <IconText>{source.isHdr ? "hdr" : "sdr"}</IconText>
               </div>
-
-              {/* {source.tags.map((tag) => (
-            <Badge key={tag}>{tag}</Badge>
-          ))} */}
             </div>
 
             <Separator orientation="vertical" className="h-full" />
 
             <div className="flex flex-col items-center border-l-2 pl-2">
-              {roomData.season &&
-                !source.seasonBoundary.includes(roomData.season) && (
-                  <TooltipProvider delayDuration={50}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={"ghost"}
-                          size={"icon"}
-                          className="text-warning-foreground hover:text-warning-foreground"
-                        >
-                          <TriangleAlert />
-                        </Button>
-                      </TooltipTrigger>
-
-                      <TooltipContent className="text-sm">
-                        This link just provided
-                        <span className="font-bold text-primary">
-                          {" "}
-                          {source.seasonBoundary.length > 1
-                            ? "seasons"
-                            : "season"}{" "}
-                          {source.seasonBoundary.join(", ")}
-                        </span>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Button
@@ -256,6 +223,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
               </DropdownMenu>
 
               <Button
+                disabled={outOfBoundary}
                 variant={"ghost"}
                 size={"icon"}
                 className="items-center justify-center overflow-hidden rounded-sm hover:bg-success"
@@ -280,11 +248,11 @@ export function StreamSource({ source }: { source: MediaSource }) {
                   if (newSource) setCurrentMediaSrc(source);
                 }}
               >
-                {isSelectedSource ? (
+                {isSelectedSource && (
                   <CheckCircle2 className="text-success-foreground " />
-                ) : (
-                  <ArrowRightCircle />
                 )}
+                {!isSelectedSource && !outOfBoundary && <ArrowRightCircle />}
+                {outOfBoundary && <XCircle />}
               </Button>
             </div>
           </div>
@@ -404,3 +372,35 @@ const IconText = function ({
     </div>
   );
 };
+
+function DynamicIcon({ source }: { source: MediaSource }) {
+  const { roomData } = useRoomData();
+  const outOfBoundary =
+    roomData.season && !source.seasonBoundary.includes(roomData.season);
+  const isDynamic = checkIsDynamic(source.videoUrl);
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger>
+          <IconText
+            disable={!isDynamic}
+            className={cn(outOfBoundary && "bg-danger-foreground")}
+          >
+            dyn
+          </IconText>
+        </TooltipTrigger>
+        {isDynamic && (
+          <TooltipContent>
+            <p>
+              This source just included{" "}
+              <span className="text-danger-foreground">
+                {source.seasonBoundary.length > 1 ? "seasons" : "season"}{" "}
+                {source.seasonBoundary.join(", ")}
+              </span>
+            </p>
+          </TooltipContent>
+        )}
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
