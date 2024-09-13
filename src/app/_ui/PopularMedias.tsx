@@ -37,7 +37,7 @@ function PopularMedias({
               className="flex flex-col items-center gap-4 transition-all hover:scale-105"
               title={item.name}
             >
-              <div className="bg-gray-4 relative h-40 w-28 overflow-hidden rounded-lg md:h-52 md:w-36">
+              <div className="bg-gray-4 md:w-30 relative h-40 w-28 overflow-hidden rounded-lg md:h-44 lg:h-52 lg:w-36">
                 {item.poster && (
                   <Image
                     src={item.poster}
