@@ -380,7 +380,7 @@ function DynamicIcon({ source }: { source: MediaSource }) {
   const isDynamic = checkIsDynamic(source.videoUrl);
   return (
     <TooltipProvider>
-      <Tooltip>
+      <Tooltip delayDuration={500}>
         <TooltipTrigger>
           <IconText
             disable={!isDynamic}

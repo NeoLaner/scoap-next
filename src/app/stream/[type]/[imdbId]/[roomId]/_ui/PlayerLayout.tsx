@@ -16,6 +16,7 @@ import StreamsHeading from "./StreamsHeading";
 import Streams from "./Streams";
 import ChatFooter from "./ChatFooter";
 import Subtitles from "./Subtitles";
+import SubHeading from "./SubHeading";
 
 function PlayerLayout({ roomId }: { roomId: string }) {
   return (
@@ -63,7 +64,7 @@ function PlayerLayout({ roomId }: { roomId: string }) {
                 <Subtitles />
               </Suspense>
             ),
-            JSXHeader: <StreamsHeading />,
+            JSXHeader: <SubHeading />,
           },
         ]}
       />
