@@ -49,7 +49,7 @@ function PlayerMedia({
   });
 
   const subtitleUrl =
-    "https://dl4.tabar10.lol/English/Series/The.Lord.of.the.Rings.The.Rings.of.Power/S02/srt/The.Lord.of.the.Rings.The.Rings.of.Power.S02E03.WEB-DL.FA.srt";
+    "https://dl4.tabar10.lol/English/Series/The.Lord.of.the.Rings.The.Rings.of.Power/S02/srt/The.Lord.of.the.Rings.The.Rings.of.Power.S02E05.WEB-DL.FA.srt";
   const { data } = api.subtitle.getSubtitle.useQuery(
     { url: subtitleUrl },
     { staleTime: Infinity },

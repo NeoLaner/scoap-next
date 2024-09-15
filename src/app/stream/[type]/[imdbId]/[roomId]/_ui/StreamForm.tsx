@@ -45,7 +45,7 @@ import { extractUniqueSeasons } from "~/lib/metadata";
 import Loader from "~/app/_ui/Loader";
 import dynamic from "next/dynamic";
 import { Categories, Theme } from "emoji-picker-react";
-import { GlobeIcon } from "lucide-react";
+import { CheckIcon, GlobeIcon } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -56,6 +56,16 @@ import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { usePublicSources } from "~/app/_hooks/usePublicSources";
 import { useRoomSources } from "~/app/_hooks/useRoomSources";
 import { Separator } from "~/app/_components/ui/separator";
+import flagEmojis from "~/lib/flags";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "~/app/_components/ui/command";
+import { cn } from "~/lib/utils";
 
 const formSchema = z.object({
   sourceLink: z.string().url().max(250),
@@ -137,6 +147,19 @@ function StreamForm() {
     btnClose.current?.click();
   }
 
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+
+  const listRef = useRef<HTMLDivElement>(null);
+
+  const handleInputChange = () => {
+    // Scroll the list to the top whenever input changes
+    if (listRef.current) {
+      listRef.current.scrollTop = 0;
+    }
+    // Handle other input change logic here if necessary
+  };
+
   return (
     <div className="flex w-full items-center justify-center">
       <Sheet>
@@ -171,59 +194,71 @@ function StreamForm() {
                     control={form.control}
                     name="name"
                     render={({ field }) => (
-                      <Popover>
-                        <FormItem className="relative">
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <div className="flex w-full max-w-sm items-center space-x-2">
-                              <Input
-                                placeholder="Name for your link"
-                                {...field}
-                              />
-                              <PopoverTrigger>
-                                <Button
-                                  asChild
-                                  size={"icon"}
-                                  variant={"ghost"}
-                                  className="  right-2 top-9 z-50 w-8 px-1"
-                                  onClick={(e) => {
-                                    setShowFlags(true);
-                                  }}
-                                >
-                                  <GlobeIcon size={30} />
-                                </Button>
-                              </PopoverTrigger>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-
-                          <PopoverContent className=" min-h-28 min-w-36">
-                            <EmojiPicker
-                              width={255}
-                              height={200}
-                              skinTonesDisabled
-                              categories={[
-                                {
-                                  category: Categories.FLAGS,
-                                  name: "Countries",
-                                },
-                              ]}
-                              theme={Theme.DARK}
-                              lazyLoadEmojis
-                              onEmojiClick={(emoji) => {
-                                form.setValue(
-                                  "name",
-                                  `${form.watch("name")} ${emoji.emoji}`,
-                                );
-                                form.setFocus("name");
-                              }}
-                            />
-                          </PopoverContent>
-                        </FormItem>
-                      </Popover>
+                      <FormItem className="relative">
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Name for your link" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
                     )}
                   />
 
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={open}
+                        className="w-[200px] justify-between"
+                      >
+                        {value
+                          ? flagEmojis.find((emoji) => emoji.label === value)
+                              ?.value +
+                            " " +
+                            flagEmojis.find((emoji) => emoji.label === value)
+                              ?.label
+                          : "Select country..."}
+                        {/* <CaretSort className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="h-36 w-[200px] overflow-hidden p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search country..."
+                          className="h-9"
+                          onChangeCapture={handleInputChange}
+                        />
+                        <CommandList ref={listRef}>
+                          <CommandEmpty>No country found.</CommandEmpty>
+                          <CommandGroup>
+                            {flagEmojis.map((emoji) => (
+                              <CommandItem
+                                key={emoji.label}
+                                value={emoji.label}
+                                onSelect={(currentValue) => {
+                                  setValue(
+                                    currentValue === value ? "" : currentValue,
+                                  );
+                                  setOpen(false);
+                                }}
+                              >
+                                {emoji.value} {emoji.label}
+                                <CheckIcon
+                                  className={cn(
+                                    "ml-auto h-4 w-4",
+                                    value === emoji.value
+                                      ? "opacity-100"
+                                      : "opacity-0",
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <Separator />
 
                   <FormField
@@ -395,7 +430,7 @@ function StreamForm() {
                     )}
                   />
 
-                  <div className="absolute  bottom-0 !mt-0 w-full pr-10">
+                  <div className="absolute  bottom-0  !mt-2 w-full bg-background pr-10 pt-2">
                     <Button className="  w-full" type="submit">
                       Submit
                     </Button>
