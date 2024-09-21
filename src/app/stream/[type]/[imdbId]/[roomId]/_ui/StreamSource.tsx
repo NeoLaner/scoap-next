@@ -104,7 +104,11 @@ export function StreamSource({ source }: { source: MediaSource }) {
 
   return (
     <div
-      className={`w-full  gap-2 rounded-lg  border-2 p-4 py-2 ${isSelectedSource ? "border-success-foreground bg-success/50" : ""}`}
+      className={cn(
+        `w-full  gap-2 rounded-lg  border-2 p-4 py-2`,
+        isSelectedSource ? "border-success-foreground bg-success/55" : "",
+        outOfBoundary && "border-danger-foreground bg-danger/55",
+      )}
     >
       <Dialog>
         <div className="flex w-full items-center justify-between ">
@@ -112,7 +116,10 @@ export function StreamSource({ source }: { source: MediaSource }) {
           <div className="flex gap-2">
             <UserProfile source={source} />
             <div className="flex flex-col">
-              <p className=" text-sm">{source.name}</p>
+              <p className=" text-sm">
+                {source.name}
+                <span className="text-md"> {source.country}</span>
+              </p>
               <p className=" text-xs text-muted-foreground">
                 Shared by: {source.user.name}
               </p>
@@ -248,7 +255,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
                   if (newSource) setCurrentMediaSrc(source);
                 }}
               >
-                {isSelectedSource && (
+                {isSelectedSource && !outOfBoundary && (
                   <CheckCircle2 className="text-success-foreground " />
                 )}
                 {!isSelectedSource && !outOfBoundary && <ArrowRightCircle />}

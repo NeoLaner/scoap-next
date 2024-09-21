@@ -19,6 +19,7 @@ export async function addDirectLink({
   dubbed,
   hardsub,
   qualityType,
+  countryEmoji,
 }: {
   sourceLink: string;
   roomId: string;
@@ -33,6 +34,7 @@ export async function addDirectLink({
   dubbed?: boolean;
   hardsub?: boolean;
   qualityType?: z.infer<typeof QualityTypeEnum>;
+  countryEmoji: string;
 }) {
   const isDynamic = checkIsDynamic(sourceLink);
   const session = await getServerAuthSession();
@@ -55,6 +57,7 @@ export async function addDirectLink({
           dubbed,
           hardsub,
           qualityType,
+          countryEmoji,
         }
       : {
           videoUrl: sourceLink,
@@ -70,6 +73,7 @@ export async function addDirectLink({
           dubbed,
           hardsub,
           qualityType,
+          countryEmoji,
         },
   );
   if (!mediaSourceData) return; //TODO: ERROR

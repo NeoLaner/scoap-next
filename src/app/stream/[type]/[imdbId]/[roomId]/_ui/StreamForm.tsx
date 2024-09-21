@@ -39,33 +39,18 @@ import { Checkbox } from "~/app/_components/ui/checkbox";
 import { z } from "zod";
 
 import { Input } from "~/app/_components/ui/input";
-import { QualityTypeEnum, TagEnum } from "~/lib/@types/Media";
+import { QualityTypeEnum } from "~/lib/@types/Media";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { extractUniqueSeasons } from "~/lib/metadata";
 import Loader from "~/app/_ui/Loader";
 import dynamic from "next/dynamic";
-import { Categories, Theme } from "emoji-picker-react";
-import { CheckIcon, GlobeIcon } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/app/_components/ui/popover";
+
 import { useUsersSourceData } from "~/app/_hooks/useUsersSourceData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { usePublicSources } from "~/app/_hooks/usePublicSources";
 import { useRoomSources } from "~/app/_hooks/useRoomSources";
 import { Separator } from "~/app/_components/ui/separator";
-import flagEmojis from "~/lib/flags";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "~/app/_components/ui/command";
-import { cn } from "~/lib/utils";
+import Countries from "./Countries";
 
 const formSchema = z.object({
   sourceLink: z.string().url().max(250),
@@ -81,11 +66,11 @@ function StreamForm() {
   const btnClose = useRef<HTMLButtonElement>(null);
   const { roomData } = useRoomData();
   const { metaData } = useMetaData();
-  const [showFlags, setShowFlags] = useState(false);
   const { setPublicSources } = usePublicSources();
   const { setUsersSourceData } = useUsersSourceData();
   const { setRoomSourcesData } = useRoomSources();
   const { setCurrentMediaSrc } = useCurMediaSrc();
+  const [countryEmoji, setCountryEmoji] = useState("");
 
   const { setSourceData } = useSourceData();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -115,6 +100,7 @@ function StreamForm() {
       imdbId: roomData.imdbId,
       season: roomData.season ?? undefined,
       episode: roomData.episode ?? undefined,
+      countryEmoji,
     });
 
     if (!sourceData) return;
@@ -146,19 +132,6 @@ function StreamForm() {
 
     btnClose.current?.click();
   }
-
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
-
-  const listRef = useRef<HTMLDivElement>(null);
-
-  const handleInputChange = () => {
-    // Scroll the list to the top whenever input changes
-    if (listRef.current) {
-      listRef.current.scrollTop = 0;
-    }
-    // Handle other input change logic here if necessary
-  };
 
   return (
     <div className="flex w-full items-center justify-center">
@@ -204,61 +177,8 @@ function StreamForm() {
                     )}
                   />
 
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className="w-[200px] justify-between"
-                      >
-                        {value
-                          ? flagEmojis.find((emoji) => emoji.label === value)
-                              ?.value +
-                            " " +
-                            flagEmojis.find((emoji) => emoji.label === value)
-                              ?.label
-                          : "Select country..."}
-                        {/* <CaretSort className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="h-36 w-[200px] overflow-hidden p-0">
-                      <Command>
-                        <CommandInput
-                          placeholder="Search country..."
-                          className="h-9"
-                          onChangeCapture={handleInputChange}
-                        />
-                        <CommandList ref={listRef}>
-                          <CommandEmpty>No country found.</CommandEmpty>
-                          <CommandGroup>
-                            {flagEmojis.map((emoji) => (
-                              <CommandItem
-                                key={emoji.label}
-                                value={emoji.label}
-                                onSelect={(currentValue) => {
-                                  setValue(
-                                    currentValue === value ? "" : currentValue,
-                                  );
-                                  setOpen(false);
-                                }}
-                              >
-                                {emoji.value} {emoji.label}
-                                <CheckIcon
-                                  className={cn(
-                                    "ml-auto h-4 w-4",
-                                    value === emoji.value
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                  {/* countries */}
+                  <Countries setCountryEmoji={setCountryEmoji} />
                   <Separator />
 
                   <FormField

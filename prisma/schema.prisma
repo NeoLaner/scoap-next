@@ -99,7 +99,6 @@ model Source {
 
 // Define the enums
 
-
 enum QualityTypes {
   WebDl
   BluRay
@@ -113,26 +112,27 @@ enum Subtitle {
 
 // Update the MediaSource model
 model MediaSource {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
- createdAt   DateTime @default(now())
-  ownerId   String @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  ownerId   String   @db.ObjectId
   imdbId    String
-  videoUrl String
+  videoUrl  String
 
   description  String? // if there is no description provided, the videoLink shows instead
-  roomId       String   @db.ObjectId
-  isPublic     Boolean  @default(false)
+  roomId       String        @db.ObjectId
+  isPublic     Boolean       @default(false)
   disabled     Boolean // change by owner and admins
   canBePublic  Boolean // change by admins
-  usersLikesId String[] @db.ObjectId // if the link is private, this should never change
-  name         String   @default("")
+  usersLikesId String[]      @db.ObjectId // if the link is private, this should never change
+  name         String        @default("")
   quality      String?
   qualityType  QualityTypes?
-  isHdr         Boolean @default(false)
-  softsub      Boolean  @default(false)
-  hardsub      Boolean  @default(false)
-  dubbed       Boolean  @default(false)
+  isHdr        Boolean       @default(false)
+  softsub      Boolean       @default(false)
+  hardsub      Boolean       @default(false)
+  dubbed       Boolean       @default(false)
 
+  country        String @default("")
   //if is Dynamic
   seasonBoundary Int[] // if link type is dynamic for series
   //if is Static
@@ -165,15 +165,15 @@ model SubtitleSource {
 
   subUrl String
 
-  translator   String?
-  language     String
-  description  String? // if there is no description provided, the videoLink shows instead
-  roomId       String   @db.ObjectId
-  isPublic     Boolean  @default(false)
-  disabled     Boolean // change by owner and admins
-  canBePublic  Boolean // change by admins
-  name         String   @default("")
-  crossorigin  Boolean
+  translator  String?
+  language    String
+  description String? // if there is no description provided, the videoLink shows instead
+  roomId      String  @db.ObjectId
+  isPublic    Boolean @default(false)
+  disabled    Boolean // change by owner and admins
+  canBePublic Boolean // change by admins
+  name        String  @default("")
+  crossorigin Boolean
 
   //if is Dynamic
   seasonBoundary Int[] // if link type is dynamic for series
