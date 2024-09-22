@@ -91,6 +91,7 @@ function PlayerMedia({
         <Image
           src={metaData.logo}
           alt={metaData.name}
+          priority
           width={800}
           height={310}
           className="z-10 w-96"

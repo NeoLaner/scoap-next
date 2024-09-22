@@ -2,13 +2,7 @@ import Image from "next/image";
 import ScrollAreaX from "~/app/_ui/ScrollAreaX";
 import Link from "next/link";
 import { BsImage } from "react-icons/bs";
-
-const truncateText = (text: string, maxLength: number) => {
-  if (text.length <= maxLength) {
-    return text;
-  }
-  return text.substring(0, maxLength) + "...";
-};
+import { truncateText } from "~/lib/utils";
 
 function PopularMedias({
   heading,

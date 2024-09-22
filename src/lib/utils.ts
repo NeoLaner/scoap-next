@@ -17,3 +17,10 @@ export const getFirstTwoLetters = (word?: string | null): string => {
   // Return the first two letters
   return capitalizedWord.substring(0, 2);
 };
+
+export const truncateText = (text: string, maxLength: number) => {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.substring(0, maxLength) + "...";
+};
