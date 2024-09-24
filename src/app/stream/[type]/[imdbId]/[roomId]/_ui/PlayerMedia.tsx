@@ -75,6 +75,7 @@ function PlayerMedia({
           fill
           className={`h-full object-cover object-top  ${!source ? "opacity-70" : "opacity-0"} transition-all`}
           quality="90"
+          priority
         />
         <Track
           content={data?.subtitle}

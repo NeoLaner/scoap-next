@@ -15,6 +15,12 @@ import { AspectRatio } from "~/app/_components/ui/aspect-ratio";
 
 import { useState } from "react";
 import { CircleCheck, CirclePlay } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/app/_components/ui/accordion";
 
 const formatDate = (isoString: string) => {
   const date = new Date(isoString);
@@ -23,27 +29,58 @@ const formatDate = (isoString: string) => {
 };
 
 function Episodes({ className = "" }: { className?: string }) {
-  const searchParams = useSearchParams();
-  const { roomData, setRoomData } = useRoomData();
+  const { roomData } = useRoomData();
 
-  const season = searchParams.get("season") ?? roomData.season ?? 1;
   const { metaData } = useMetaData();
 
-  const episodesOfSeason = metaData.videos.filter(
-    (video) => video.season === Number(season),
-  );
+  const episodesBySeason = {} as Record<string, Video[]>;
 
-  const episodesOfSeasonSorted = episodesOfSeason.sort(
-    (a, b) => a.number - b.number,
-  );
+  metaData.videos.forEach((video) => {
+    const currentSeason = episodesBySeason[video.season];
+    episodesBySeason[video.season] = currentSeason
+      ? [...currentSeason, video]
+      : [video];
+  });
+  console.log(episodesBySeason);
+
   return (
     <div
       className={`${className} relative flex flex-col gap-2  rounded-lg bg-background `}
     >
-      {/* Episodes */}
-      {episodesOfSeasonSorted?.map((episode) => (
-        <Episode key={episode.number} episode={episode} />
-      ))}
+      <Accordion
+        type="single"
+        collapsible
+        defaultValue={String(roomData.season)}
+      >
+        {Object.keys(episodesBySeason).map((season) => (
+          <AccordionItem key={season} value={season}>
+            <AccordionTrigger className="hover:no-underline">
+              <div
+                className={cn(
+                  "flex items-center gap-2 pl-1 ",
+                  String(roomData.season) === season &&
+                    "text-success-foreground",
+                )}
+              >
+                Season{" "}
+                {season.toString().padStart(2, "0") === "00"
+                  ? "Special"
+                  : season.toString().padStart(2, "0")}
+                <span className="text-xs text-muted-foreground">
+                  {episodesBySeason[season]?.length} Episodes
+                </span>
+              </div>
+            </AccordionTrigger>
+            {episodesBySeason[season]
+              ?.sort((a, b) => a.number - b.number)
+              .map((episode) => (
+                <AccordionContent key={episode.number}>
+                  <Episode episode={episode} />
+                </AccordionContent>
+              ))}
+          </AccordionItem>
+        ))}
+      </Accordion>
     </div>
   );
 }
@@ -92,7 +129,12 @@ function Episode({ episode }: { episode: Video }) {
           isSelected && "text-success-foreground",
         )}
       >
-        <div className="relative pl-1 text-xl font-bold text-muted-foreground">
+        <div
+          className={cn(
+            "relative pl-1 text-xl font-bold text-muted-foreground",
+            isSelected && "text-success-foreground",
+          )}
+        >
           <EpisodeDisplay episode={episode.number} />
         </div>
         <div
@@ -136,7 +178,7 @@ const EpisodeDisplay: React.FC<EpisodeProps> = ({ episode }) => {
     <div
       className={cn(
         "absolute bottom-0 left-0 z-10 px-6 text-lg text-muted-foreground",
-        "xs:relative",
+        "text-inherit xs:relative",
       )}
     >
       {formattedEpisode}
