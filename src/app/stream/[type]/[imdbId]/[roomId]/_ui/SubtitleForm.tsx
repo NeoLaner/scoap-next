@@ -42,13 +42,8 @@ import { useMetaData } from "~/app/_hooks/useMetaData";
 import { extractUniqueSeasons } from "~/lib/metadata";
 import Loader from "~/app/_ui/Loader";
 import dynamic from "next/dynamic";
-import { Categories, Theme } from "emoji-picker-react";
-import { GlobeIcon } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/app/_components/ui/popover";
+import Countries from "./Countries";
+import { Separator } from "~/app/_components/ui/separator";
 
 const formSchema = z.object({
   subUrl: z.string().url().max(250),
@@ -63,10 +58,20 @@ function SubtitleForm() {
   const btnClose = useRef<HTMLButtonElement>(null);
   const { roomData } = useRoomData();
   const { metaData } = useMetaData();
-  const [showFlags, setShowFlags] = useState(false);
+  const [countryEmoji, setCountryEmoji] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(
+      formSchema.superRefine((form, context) => {
+        if (!form.language) {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Choose a language",
+            path: ["language"], // specify the path to the field with the issue
+          });
+        }
+      }),
+    ),
     defaultValues: {
       subUrl: "",
       name: "",
@@ -166,6 +171,24 @@ function SubtitleForm() {
 
                   <FormField
                     control={form.control}
+                    name="language"
+                    render={({ field }) => (
+                      <FormItem className="relative">
+                        <FormLabel>Language</FormLabel>
+                        <FormControl>
+                          <Countries
+                            setCountryEmoji={field.onChange}
+                            placeHolder="Choose a language..."
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Separator />
+                  <FormField
+                    control={form.control}
                     name="name"
                     render={({ field }) => (
                       <FormItem className="relative">
@@ -187,56 +210,15 @@ function SubtitleForm() {
                     control={form.control}
                     name="language"
                     render={({ field }) => (
-                      <Popover>
-                        <FormItem className="relative">
-                          <FormLabel>Language</FormLabel>
-                          <FormControl>
-                            <div className="flex w-full max-w-sm items-center space-x-2">
-                              <Input
-                                placeholder="Select a language"
-                                {...field}
-                              />
-                              <PopoverTrigger>
-                                <Button
-                                  asChild
-                                  size={"icon"}
-                                  variant={"ghost"}
-                                  className="  right-2 top-9 z-50 w-8 px-1"
-                                  onClick={() => {
-                                    setShowFlags(true);
-                                  }}
-                                >
-                                  <GlobeIcon size={30} />
-                                </Button>
-                              </PopoverTrigger>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-
-                          <PopoverContent className=" min-h-28 min-w-36">
-                            <EmojiPicker
-                              width={255}
-                              height={200}
-                              skinTonesDisabled
-                              categories={[
-                                {
-                                  category: Categories.FLAGS,
-                                  name: "Countries",
-                                },
-                              ]}
-                              theme={Theme.DARK}
-                              lazyLoadEmojis
-                              onEmojiClick={(emoji) => {
-                                form.setValue(
-                                  "name",
-                                  `${form.watch("name")} ${emoji.emoji}`,
-                                );
-                                form.setFocus("name");
-                              }}
-                            />
-                          </PopoverContent>
-                        </FormItem>
-                      </Popover>
+                      <FormItem className="relative">
+                        <FormLabel>Language</FormLabel>
+                        <FormControl>
+                          <div className="flex w-full max-w-sm items-center space-x-2">
+                            <Input placeholder="Select a language" {...field} />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
                     )}
                   />
 

@@ -19,8 +19,10 @@ import { cn } from "~/lib/utils";
 
 function Countries({
   setCountryEmoji,
+  placeHolder,
 }: {
   setCountryEmoji: Dispatch<SetStateAction<string>>;
+  placeHolder: string;
 }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -47,7 +49,7 @@ function Countries({
             ? flagEmojis.find((emoji) => emoji.label === value)?.value +
               " " +
               flagEmojis.find((emoji) => emoji.label === value)?.label
-            : "Select country... (optional)"}
+            : placeHolder}
           {/* <CaretSort className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
         </Button>
       </PopoverTrigger>

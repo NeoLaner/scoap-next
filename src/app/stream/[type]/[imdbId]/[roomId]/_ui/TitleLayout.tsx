@@ -7,7 +7,11 @@ function TitleLayout() {
     <div>
       {roomData.type === "series" && (
         <>
-          {roomData?.name} S{roomData?.season}E{roomData?.episode}
+          {roomData?.name}
+          <span className="font-bold text-primary">
+            {" "}
+            S{roomData?.season}E{roomData?.episode}
+          </span>
         </>
       )}
 

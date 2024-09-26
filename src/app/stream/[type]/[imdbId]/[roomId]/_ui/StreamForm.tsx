@@ -178,7 +178,10 @@ function StreamForm() {
                   />
 
                   {/* countries */}
-                  <Countries setCountryEmoji={setCountryEmoji} />
+                  <Countries
+                    setCountryEmoji={setCountryEmoji}
+                    placeHolder="Select country... (optional)"
+                  />
                   <Separator />
 
                   <FormField

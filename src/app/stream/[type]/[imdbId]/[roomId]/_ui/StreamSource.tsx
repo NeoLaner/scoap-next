@@ -61,9 +61,11 @@ import {
 import { usePublicSources } from "~/app/_hooks/usePublicSources";
 import { useUsersSourceData } from "~/app/_hooks/useUsersSourceData";
 import { useRoomSources } from "~/app/_hooks/useRoomSources";
+import { useGetRightPanelSize } from "~/app/_hooks/useGetRightPanelSize";
 
 type MediaSource = NonNullable<Awaited<ReturnType<typeof api.mediaSource.get>>>;
 export function StreamSource({ source }: { source: MediaSource }) {
+  const { rightPanelWidth } = useGetRightPanelSize();
   const { userData } = useUserData();
   const { roomData } = useRoomData();
   const { sourceData: curUserSource, setSourceData } = useSourceData();
@@ -114,7 +116,9 @@ export function StreamSource({ source }: { source: MediaSource }) {
         <div className="flex w-full items-center justify-between ">
           {/* Users Profile */}
           <div className="flex gap-2">
-            <UserProfile source={source} />
+            <div className={cn(rightPanelWidth < 360 && "hidden")}>
+              <UserProfile source={source} />
+            </div>
             <div className="flex flex-col">
               <p className=" text-sm">
                 {source.name}
@@ -192,7 +196,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
                             }}
                           >
                             {/* <Mail className="mr-2 h-4 w-4" /> */}
-                            <span>Copy the main link</span>
+                            <span>Dynamic URL</span>
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={async () => {
@@ -203,7 +207,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
                             }}
                           >
                             {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
-                            <span>Copy the current episode link</span>
+                            <span>Current episode</span>
                           </DropdownMenuItem>
                         </DropdownMenuSubContent>
                       </DropdownMenuPortal>

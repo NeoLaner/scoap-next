@@ -27,7 +27,7 @@ function StreamSources({
         onValueChange={(value: Filter) => {
           setFilter((prvValue) => (value ? value : prvValue));
         }}
-        className="mb-2"
+        className="mb-2 w-full justify-start"
       >
         <ToggleGroupItem value="all" aria-label="Toggle all">
           All
