@@ -147,7 +147,7 @@ function StreamForm() {
           </Button>
         </SheetTrigger>
 
-        <SheetContent side={"right"} className="h-full w-full px-0 pb-2">
+        <SheetContent side={"right"} className="h-full w-full px-0">
           <ScrollArea className="h-full">
             <div className="h-fit px-6">
               <SheetHeader className="mb-4">

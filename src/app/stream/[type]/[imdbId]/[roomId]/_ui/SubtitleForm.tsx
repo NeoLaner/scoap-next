@@ -104,7 +104,7 @@ function SubtitleForm() {
           </Button>
         </SheetTrigger>
 
-        <SheetContent side={"right"} className="h-full w-full px-0">
+        <SheetContent side={"right"} className="h-full w-full px-0 ">
           <ScrollArea className="h-full">
             <div className="h-fit px-6">
               <SheetHeader className="mb-4">
@@ -120,6 +120,25 @@ function SubtitleForm() {
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-4"
                 >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem className="relative">
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <div className="flex w-full max-w-sm items-center space-x-2">
+                            <Input
+                              placeholder="Name for your link"
+                              {...field}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="subUrl"
@@ -187,40 +206,6 @@ function SubtitleForm() {
                   />
 
                   <Separator />
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem className="relative">
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <div className="flex w-full max-w-sm items-center space-x-2">
-                            <Input
-                              placeholder="Name for your link"
-                              {...field}
-                            />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="language"
-                    render={({ field }) => (
-                      <FormItem className="relative">
-                        <FormLabel>Language</FormLabel>
-                        <FormControl>
-                          <div className="flex w-full max-w-sm items-center space-x-2">
-                            <Input placeholder="Select a language" {...field} />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
 
                   {isDynamic && (
                     <FormField
@@ -257,7 +242,7 @@ function SubtitleForm() {
                     control={form.control}
                     name="isPublic"
                     render={({ field }) => (
-                      <FormItem className="flex items-end gap-2">
+                      <FormItem className="flex items-end gap-2 pb-[60px]">
                         <FormControl className="flex items-center justify-center">
                           <Checkbox
                             checked={field.value}
@@ -272,7 +257,11 @@ function SubtitleForm() {
                     )}
                   />
 
-                  <Button type="submit">Submit</Button>
+                  <div className="absolute  bottom-0  !mt-2 w-full bg-background pr-10 pt-2">
+                    <Button className="  w-full" type="submit">
+                      Submit
+                    </Button>
+                  </div>
                 </form>
               </Form>
             </div>
