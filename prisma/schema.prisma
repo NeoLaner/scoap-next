@@ -89,12 +89,12 @@ model Source {
   // infoHash    String?
   // fileIdx     Int?
   mediaSourceId String @db.ObjectId
+  subtitleSourceId String?         @db.ObjectId
 
   room             Room            @relation(fields: [roomId], references: [id])
   user             User            @relation(fields: [userId], references: [id])
   MediaSource      MediaSource     @relation(fields: [mediaSourceId], references: [id])
   SubtitleSource   SubtitleSource? @relation(fields: [subtitleSourceId], references: [id])
-  subtitleSourceId String?         @db.ObjectId
 }
 
 // Define the enums

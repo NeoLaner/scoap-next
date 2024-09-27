@@ -44,11 +44,12 @@ import Loader from "~/app/_ui/Loader";
 import dynamic from "next/dynamic";
 import Countries from "./Countries";
 import { Separator } from "~/app/_components/ui/separator";
+import { addSubtitle } from "~/app/_actions/addSubtitle";
 
 const formSchema = z.object({
   subUrl: z.string().url().max(250),
   name: z.string().min(3).max(20),
-  translator: z.string().min(3).max(50),
+  translator: z.string().optional(),
   isPublic: z.boolean().optional(),
   seasonBoundary: z.array(z.string()),
   language: z.string(),
@@ -58,7 +59,6 @@ function SubtitleForm() {
   const btnClose = useRef<HTMLButtonElement>(null);
   const { roomData } = useRoomData();
   const { metaData } = useMetaData();
-  const [countryEmoji, setCountryEmoji] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(
@@ -69,6 +69,18 @@ function SubtitleForm() {
             message: "Choose a language",
             path: ["language"], // specify the path to the field with the issue
           });
+
+          if (
+            form.translator &&
+            (form.translator.length < 3 || form.translator.length > 20)
+          ) {
+            context.addIssue({
+              code: z.ZodIssueCode.custom,
+              message:
+                "String must contain at least 3 character(s) and max 20 character(s)",
+              path: ["translator"],
+            });
+          }
         }
       }),
     ),
@@ -87,6 +99,11 @@ function SubtitleForm() {
   const seasonBoundary = form.watch("seasonBoundary");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    await addSubtitle({
+      ...values,
+      roomId: roomData.id,
+      imdbId: roomData.imdbId,
+    });
     btnClose.current?.click();
   }
 
@@ -132,6 +149,22 @@ function SubtitleForm() {
                               placeholder="Name for your link"
                               {...field}
                             />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="translator"
+                    render={({ field }) => (
+                      <FormItem className="relative">
+                        <FormLabel>Translator</FormLabel>
+                        <FormControl>
+                          <div className="flex w-full max-w-sm items-center space-x-2">
+                            <Input placeholder="Translator's name" {...field} />
                           </div>
                         </FormControl>
                         <FormMessage />

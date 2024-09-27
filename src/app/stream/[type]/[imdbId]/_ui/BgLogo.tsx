@@ -22,6 +22,7 @@ function BgLogo({ className = "" }: { className?: string }) {
             height={310}
             className={`z-10 w-96 ${className}`}
             quality="100"
+            priority
           />
         </div>
       )}

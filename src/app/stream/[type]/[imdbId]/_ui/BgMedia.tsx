@@ -17,6 +17,7 @@ function BgMedia() {
           fill
           className={`h-full w-full object-cover object-top opacity-70 ${showStreams ?? season ? "blur-sm" : ""}`}
           quality="90"
+          priority
         />
       )}
     </div>

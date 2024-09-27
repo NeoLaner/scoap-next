@@ -64,6 +64,24 @@ export const sourceRouter = createTRPCRouter({
       });
     }),
 
+  // Update a source
+  updateSubMe: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        subtitleSourceId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.source.update({
+        where: { id: input.id, userId: ctx.session.user.id },
+        data: {
+          subtitleSourceId: input.subtitleSourceId,
+        },
+        include: { SubtitleSource: true },
+      });
+    }),
+
   bestSrcForMe: protectedProcedure
     .input(z.object({ roomId: z.string() }))
     .mutation(async ({ ctx, input }) => {

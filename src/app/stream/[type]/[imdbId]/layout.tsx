@@ -1,10 +1,7 @@
 import { type ReactNode } from "react";
 import StremioService from "~/app/_services/stremIo/stremIoServices";
 import { type MetaInfo } from "~/app/_services/stremIo/types";
-import { getServerAuthSession } from "~/server/auth";
 import { MetaDataProvider } from "~/app/_providers/MetaProvider";
-import ProtectedRoute from "~/app/_ui/ProtectedRoute";
-import { redirect } from "next/navigation";
 
 async function layout({
   children,
