@@ -102,17 +102,21 @@ export const roomRouter = createTRPCRouter({
       return await ctx.db.room.findFirst({
         where: { id: input.roomId },
         select: {
-          Sources: {
-            select: {
-              id: true,
-              roomId: true,
-              // user: true,
-              userId: true,
-              MediaSource: { include: { user: true } },
-            },
-          },
+          Sources: { include: { MediaSource: { include: { user: true } } } },
         },
       });
+    }),
+
+  getUsersSubs: protectedProcedure
+    .input(z.object({ roomId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const roomData = await ctx.db.room.findFirst({
+        where: { id: input.roomId },
+        select: {
+          Sources: { include: { SubtitleSource: { include: { user: true } } } },
+        },
+      });
+      return roomData?.Sources;
     }),
 
   joinRoom: protectedProcedure

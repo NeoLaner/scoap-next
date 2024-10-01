@@ -28,6 +28,17 @@ function isValidUrl(input: string): boolean {
 }
 
 export const subtitleRouter = createTRPCRouter({
+  getMySubCurRoom: protectedProcedure
+    .input(
+      z.object({
+        roomId: z.string(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      return await ctx.db.subtitleSource.findFirst({
+        where: { roomId: input.roomId },
+      });
+    }),
   getSubtitle: protectedProcedure
     .input(
       z.object({

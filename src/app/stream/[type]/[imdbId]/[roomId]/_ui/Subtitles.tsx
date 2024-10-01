@@ -1,9 +1,8 @@
-import StreamForm from "./StreamForm";
-import { UsersSource } from "./UsersSource";
-import { RoomSources } from "./RoomSources";
-import { PublicSources } from "./PublicSources";
 import StreamSources from "./StreamSources";
 import SubtitleForm from "./SubtitleForm";
+import { UsersSubs } from "./UsersSubs";
+import { RoomSubs } from "./RoomSubs";
+import { PublicSubs } from "./PublicSubs";
 
 async function Subtitles() {
   return (
@@ -11,9 +10,9 @@ async function Subtitles() {
       <SubtitleForm />
 
       <StreamSources
-        Users={<UsersSource />}
-        Room={<RoomSources />}
-        Public={<PublicSources />}
+        Users={<UsersSubs />}
+        Room={<RoomSubs />}
+        Public={<PublicSubs />}
       />
     </div>
   );

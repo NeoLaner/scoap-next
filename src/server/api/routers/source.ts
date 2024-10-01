@@ -46,6 +46,29 @@ export const sourceRouter = createTRPCRouter({
       });
     }),
 
+  addSubMe: protectedProcedure
+    .input(
+      z.object({
+        roomId: z.string(),
+        subtitleSourceId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const session = ctx.session;
+      const existingSource = await ctx.db.source.update({
+        where: {
+          roomId: input.roomId,
+          userId: session.user.id,
+        },
+        data: { subtitleSourceId: input.subtitleSourceId },
+        include: { SubtitleSource: true },
+      });
+
+      if (!existingSource)
+        return; //TODO: ERROR
+      else return existingSource;
+    }),
+
   // Update a source
   updateMe: protectedProcedure
     .input(
@@ -61,24 +84,6 @@ export const sourceRouter = createTRPCRouter({
           mediaSourceId: input.mediaSourceId,
         },
         include: { MediaSource: true },
-      });
-    }),
-
-  // Update a source
-  updateSubMe: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        subtitleSourceId: z.string(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.db.source.update({
-        where: { id: input.id, userId: ctx.session.user.id },
-        data: {
-          subtitleSourceId: input.subtitleSourceId,
-        },
-        include: { SubtitleSource: true },
       });
     }),
 

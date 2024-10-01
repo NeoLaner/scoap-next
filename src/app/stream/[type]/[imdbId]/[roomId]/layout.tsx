@@ -13,6 +13,13 @@ import { redirect } from "next/navigation";
 import { UsersSourceDataProvider } from "~/app/_providers/UsersSourceDataProvider";
 import { PublicSourcesProvider } from "~/app/_providers/PublicSourcesProvider";
 import { CurrentMediaSrcProvider } from "~/app/_providers/CurrentMediaSrcProvider";
+import {
+  UsersSubDataContext,
+  UsersSubDataProvider,
+} from "~/app/_providers/UsersSubsProvider";
+import { PublicSubsProvider } from "~/app/_providers/PublicSubsProvider";
+import { RoomSubsProvider } from "~/app/_providers/RoomSubsProvider";
+import { CurSubProvider } from "~/app/_providers/CurrentSubProvider";
 
 async function Layout({
   children,
@@ -74,6 +81,21 @@ async function Layout({
     roomId,
   });
 
+  const initialUsersSource = await api.room.getUsersSubs({ roomId });
+
+  let subtitleData;
+  if (sourceData?.subtitleSourceId) {
+    subtitleData = await api.subtitle.get({
+      id: sourceData.subtitleSourceId,
+    });
+  }
+
+  const initialPublicSubs = await api.subtitle.getAllPublicSubs({
+    roomId,
+    imdbId: params.imdbId,
+  });
+  const initialRoomSubs = await api.subtitle.getAllRoomSubs({ roomId });
+
   return (
     <ProtectedRoute>
       <RoomDataProvider initialRoomData={roomData}>
@@ -91,7 +113,21 @@ async function Layout({
                     <UsersSourceDataProvider
                       initialUsersSourceData={usersSource.Sources}
                     >
-                      <div className="relative h-full w-full">{children}</div>
+                      <CurSubProvider initialSubtitle={subtitleData}>
+                        <PublicSubsProvider
+                          initialPublicSubs={initialPublicSubs}
+                        >
+                          <RoomSubsProvider initialRoomSubs={initialRoomSubs}>
+                            <UsersSubDataProvider
+                              initialUsersSubData={initialUsersSource}
+                            >
+                              <div className="relative h-full w-full">
+                                {children}
+                              </div>
+                            </UsersSubDataProvider>
+                          </RoomSubsProvider>
+                        </PublicSubsProvider>
+                      </CurSubProvider>
                     </UsersSourceDataProvider>
                   </RoomSourcesDataProvider>
                 </PublicSourcesProvider>
