@@ -45,6 +45,10 @@ import dynamic from "next/dynamic";
 import Countries from "./Countries";
 import { Separator } from "~/app/_components/ui/separator";
 import { addSubtitle } from "~/app/_actions/addSubtitle";
+import { checkSubUrl } from "~/app/_actions/checkSubUrl";
+import { usePublicSubs } from "~/app/_hooks/usePublicSubs";
+import { useRoomSubs } from "~/app/_hooks/useRoomSubs";
+import { useUsersSubData } from "~/app/_hooks/useUsersSub";
 
 const formSchema = z.object({
   subUrl: z.string().url().max(250),
@@ -59,6 +63,9 @@ function SubtitleForm() {
   const btnClose = useRef<HTMLButtonElement>(null);
   const { roomData } = useRoomData();
   const { metaData } = useMetaData();
+  const { setPublicSubs } = usePublicSubs();
+  const { setRoomSubs } = useRoomSubs();
+  const { setUsersSubData } = useUsersSubData();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(
@@ -99,12 +106,33 @@ function SubtitleForm() {
   const seasonBoundary = form.watch("seasonBoundary");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await addSubtitle({
-      ...values,
-      roomId: roomData.id,
-      imdbId: roomData.imdbId,
-    });
-    btnClose.current?.click();
+    try {
+      const { corsStatus } = await checkSubUrl(values.subUrl);
+      const sub = await addSubtitle({
+        ...values,
+        roomId: roomData.id,
+        imdbId: roomData.imdbId,
+        crossorigin: corsStatus,
+      });
+      btnClose.current?.click();
+      if (values.isPublic)
+        setPublicSubs((prv) => {
+          if (sub?.subtitleData)
+            return prv ? [...prv, sub.subtitleData] : [sub?.subtitleData];
+        });
+
+      setRoomSubs((prv) => {
+        if (sub?.subtitleData)
+          return prv ? [...prv, sub.subtitleData] : [sub?.subtitleData];
+      });
+
+      setUsersSubData((prv) => {
+        if (sub?.subtitleData)
+          return prv ? [...prv, sub.sourceData] : [sub.sourceData];
+      });
+    } catch (err) {
+      //TODO:Handle err
+    }
   }
 
   return (

@@ -15,6 +15,7 @@ export async function addSubtitle({
   episode = 1,
   language,
   translator,
+  crossorigin,
 }: {
   subUrl: string;
   roomId: string;
@@ -27,6 +28,7 @@ export async function addSubtitle({
   episode?: number;
   translator?: string;
   language: string;
+  crossorigin: boolean;
 }) {
   const isDynamic = checkIsDynamic(subUrl);
   const session = await getServerAuthSession();
@@ -38,7 +40,7 @@ export async function addSubtitle({
   const subtitleData = await api.subtitle.create(
     isDynamic
       ? {
-          crossorigin: true,
+          crossorigin,
           imdbId,
           isPublic,
           language,
@@ -50,7 +52,7 @@ export async function addSubtitle({
           translator,
         }
       : {
-          crossorigin: true,
+          crossorigin,
           imdbId,
           isPublic,
           language,
@@ -67,8 +69,8 @@ export async function addSubtitle({
   if (!subtitleData) return; //TODO: ERROR
   let sourceData;
   if (source)
-    sourceData = await api.source.updateSubMe({
-      id: source.id,
+    sourceData = await api.source.addSubMe({
+      roomId: roomId,
       subtitleSourceId: subtitleData.id,
     });
 

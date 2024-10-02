@@ -61,7 +61,7 @@ export const sourceRouter = createTRPCRouter({
           userId: session.user.id,
         },
         data: { subtitleSourceId: input.subtitleSourceId },
-        include: { SubtitleSource: true },
+        include: { SubtitleSource: { include: { user: true } } },
       });
 
       if (!existingSource)

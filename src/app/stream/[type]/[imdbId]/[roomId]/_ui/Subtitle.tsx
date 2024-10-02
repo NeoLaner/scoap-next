@@ -16,6 +16,7 @@ import {
   ArrowRightCircle,
   CheckCircle2,
   CircleEllipsis,
+  Pencil,
   Trash2,
   XCircle,
 } from "lucide-react";
@@ -45,11 +46,10 @@ import {
   DialogFooter,
   DialogClose,
 } from "~/app/_components/ui/dialog";
-import { deleteMySource } from "~/app/_actions/deleteMySource";
+
 import { type ReactNode, useRef } from "react";
 import { useSourceData } from "~/app/_hooks/useSourceData";
-import { updateSource } from "~/app/_actions/updateSource";
-import { createSource } from "~/app/_actions/createSource";
+
 import {
   Tooltip,
   TooltipContent,
@@ -63,6 +63,7 @@ import { useRoomSubs } from "~/app/_hooks/useRoomSubs";
 import { usePublicSubs } from "~/app/_hooks/usePublicSubs";
 import { useCurSub } from "~/app/_hooks/useCurSub";
 import { addSub } from "~/app/_actions/addSub";
+import { deleteMySub } from "~/app/_actions/deleteMySub";
 
 type SubtitleType = NonNullable<Awaited<ReturnType<typeof api.subtitle.get>>>;
 export function Subtitle({ source }: { source: SubtitleType }) {
@@ -92,7 +93,7 @@ export function Subtitle({ source }: { source: SubtitleType }) {
   const { setUsersSubData } = useUsersSubData();
   const { setRoomSubs } = useRoomSubs();
   const deleteHandler = async () => {
-    await deleteMySource(source.id);
+    await deleteMySub(source.id);
     closeBtnRef.current?.click();
 
     //delete sources from source tab
@@ -126,9 +127,14 @@ export function Subtitle({ source }: { source: SubtitleType }) {
                 <span className="text-md"> {source.language}</span>
               </p>
               <p className=" text-xs text-muted-foreground">
-                {source.translator
-                  ? `Translated by: ${source.translator}`
-                  : `Shared by ${source.user.name}`}
+                {source.translator ? (
+                  <div className="flex items-center gap-1">
+                    <Pencil size={16} />
+                    <p>{source.translator}</p>
+                  </div>
+                ) : (
+                  `Shared by ${source.user.name}`
+                )}
               </p>
             </div>
           </div>

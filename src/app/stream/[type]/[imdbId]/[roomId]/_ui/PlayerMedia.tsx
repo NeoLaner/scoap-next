@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { type RefObject } from "react";
+import { useEffect, useState, type RefObject } from "react";
 import HLS from "hls.js";
 import {
   type MediaPlayerInstance,
@@ -19,6 +19,7 @@ import { makeRawSource } from "~/lib/source";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { api } from "~/trpc/react";
+import { useCurSub } from "~/app/_hooks/useCurSub";
 
 function PlayerMedia({
   playerRef,
@@ -29,6 +30,14 @@ function PlayerMedia({
 
   const { roomData } = useRoomData();
   const { currentMediaSrc } = useCurMediaSrc();
+  const { currentSubtitle } = useCurSub();
+  const subtitleUrl = currentSubtitle?.subUrl;
+  console.log(currentSubtitle?.subUrl);
+
+  const { data } = api.subtitle.getSubtitle.useQuery(
+    { url: subtitleUrl },
+    { staleTime: Infinity },
+  );
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
@@ -48,12 +57,6 @@ function PlayerMedia({
     episode: roomData.episode,
   });
 
-  const subtitleUrl =
-    "https://dl4.tabar10.lol/English/Series/The.Lord.of.the.Rings.The.Rings.of.Power/S02/srt/The.Lord.of.the.Rings.The.Rings.of.Power.S02E05.WEB-DL.FA.srt";
-  const { data } = api.subtitle.getSubtitle.useQuery(
-    { url: subtitleUrl },
-    { staleTime: Infinity },
-  );
   return (
     <MediaPlayer
       ref={playerRef}
@@ -77,8 +80,18 @@ function PlayerMedia({
           quality="90"
           priority
         />
-        <Track
+        {/* <Track
           content={data?.subtitle}
+          label="Farsi"
+          language="FA"
+          kind="subtitles"
+          default
+          key="1"
+          type={"srt"}
+        /> */}
+        <Track
+          // content={data?.subtitle}
+          src={currentSubtitle?.subUrl}
           label="Farsi"
           language="FA"
           kind="subtitles"
