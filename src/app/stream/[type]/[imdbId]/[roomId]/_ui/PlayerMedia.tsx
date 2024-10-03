@@ -20,6 +20,8 @@ import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { api } from "~/trpc/react";
 import { useCurSub } from "~/app/_hooks/useCurSub";
+import { getSubtitle } from "~/app/_actions/getSubFromUrl";
+import { toast } from "sonner";
 
 function PlayerMedia({
   playerRef,
@@ -33,11 +35,23 @@ function PlayerMedia({
   const { currentSubtitle } = useCurSub();
   const subtitleUrl = currentSubtitle?.subUrl;
   console.log(currentSubtitle?.subUrl);
+  const [subContent, setSubContent] = useState("");
 
-  const { data } = api.subtitle.getSubtitle.useQuery(
-    { url: subtitleUrl },
-    { staleTime: Infinity },
-  );
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        if (!subtitleUrl) return;
+        setSubContent((await getSubtitle(subtitleUrl)).subtitle);
+      } catch (error) {
+        toast.error(`Getting subtitle: ${(error as Error).message}`);
+        throw new Error((error as Error).message);
+      }
+
+      // ...
+    }
+    //eslint-disable-next-line
+    fetchData();
+  }, [subtitleUrl]);
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
@@ -80,16 +94,16 @@ function PlayerMedia({
           quality="90"
           priority
         />
-        {/* <Track
-          content={data?.subtitle}
+        <Track
+          content={subContent}
           label="Farsi"
           language="FA"
           kind="subtitles"
           default
           key="1"
           type={"srt"}
-        /> */}
-        <Track
+        />
+        {/* <Track
           // content={data?.subtitle}
           src={currentSubtitle?.subUrl}
           label="Farsi"
@@ -98,7 +112,7 @@ function PlayerMedia({
           default
           key="1"
           type={"srt"}
-        />
+        /> */}
       </MediaProvider>
 
       <div className="absolute hidden h-full w-full animate-pulse items-center justify-center transition-all media-buffering:flex">
