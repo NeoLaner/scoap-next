@@ -21,7 +21,7 @@ function PopularMedias({ heading, items }: { heading: string; items: Item[] }) {
         <h2 className="text-xl font-semibold">{heading}</h2>
       </div>
       <ScrollAreaX>
-        <div className="flex min-w-0 shrink grow basis-0 gap-4 py-6">
+        <div className="flex min-w-0 shrink grow basis-0 select-none gap-4 py-6">
           {items.map((item) => (
             <MediaCard key={item.id} item={item} />
           ))}
@@ -42,6 +42,7 @@ export function MediaCard({ item }: { item: Item }) {
       title={item.name}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
+      draggable={false}
     >
       <div className="bg-gray-4 md:w-30 relative h-40 w-28 overflow-hidden rounded-lg md:h-44 lg:h-52 lg:w-36">
         {item.poster && (
@@ -51,7 +52,10 @@ export function MediaCard({ item }: { item: Item }) {
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             style={{ objectFit: "cover", opacity: 0.9 }}
-            className={cn("transition-all", isHover && "scale-105")}
+            className={cn(
+              "pointer-events-none select-none transition-all",
+              isHover && "scale-105",
+            )}
           />
         )}
 

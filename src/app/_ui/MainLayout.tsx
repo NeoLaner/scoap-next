@@ -8,7 +8,7 @@ function MainLayout({ children }: { children: ReactNode }) {
       <div className="h-full ">
         <MainHeader />
         <MainNav />
-        <div className="h-full pb-[72px] pt-[72px] md:pb-2 md:pl-[72px] md:pt-[72px]">
+        <div className="h-full pb-[72px] pt-[72px] md:pb-0 md:pl-[72px] md:pt-[72px]">
           {children}
         </div>
       </div>

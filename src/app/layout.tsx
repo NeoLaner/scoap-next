@@ -31,7 +31,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`h-dvh ${inter.variable}`}>
+      <body
+        className={`h-dvh ${inter.variable} selection:bg-primary/60 selection:text-primary-foreground`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

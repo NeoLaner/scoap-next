@@ -13,7 +13,7 @@ function BgLogo({ className = "" }: { className?: string }) {
     <>
       {metaData.logo && (
         <div
-          className={`${showStreams ?? season ? "opacity-0" : "opacity-100"} flex h-full items-center justify-center transition-all transition-all`}
+          className={` pointer-events-none select-none ${showStreams ?? season ? "opacity-0" : "opacity-100"} flex h-full items-center justify-center transition-all transition-all`}
         >
           <Image
             src={metaData.logo}
@@ -23,6 +23,7 @@ function BgLogo({ className = "" }: { className?: string }) {
             className={`z-10 w-96 ${className}`}
             quality="100"
             priority
+            draggable={false}
           />
         </div>
       )}
