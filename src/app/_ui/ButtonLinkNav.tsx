@@ -26,7 +26,7 @@ function ButtonLinkNav({
     >
       {active ? IconActive : Icon}
 
-      <p className=" text-sm">{name}</p>
+      <p className=" pt-[0.2rem] text-xs font-semibold">{name}</p>
     </Link>
   );
 }

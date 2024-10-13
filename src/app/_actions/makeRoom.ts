@@ -26,6 +26,7 @@ export async function makeRoom(inputs: {
     episode,
     imdbId,
     type,
+    status: "watching",
   });
 
   permanentRedirect(

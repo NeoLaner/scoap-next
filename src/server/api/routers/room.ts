@@ -39,6 +39,8 @@ export const roomRouter = createTRPCRouter({
         season: z.number().optional(),
         episode: z.number().optional(),
         guests: z.array(z.string()).optional(),
+        isFavorite: z.boolean().optional(),
+        status: z.enum(["watching", "watched", "willWatched"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -65,6 +67,8 @@ export const roomRouter = createTRPCRouter({
           bannedGuestsId: [],
           imdbId: input.imdbId,
           type: input.type,
+          isFavorite: input.isFavorite ?? false,
+          status: input.status,
         },
       });
     }),

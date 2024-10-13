@@ -6,6 +6,7 @@ import {
   PiQuestion,
   PiQuestionFill,
 } from "react-icons/pi";
+import { GalleryVerticalEnd } from "lucide-react";
 
 function MainNav() {
   return (
@@ -14,26 +15,32 @@ function MainNav() {
         <ButtonLinkNav
           name="Home"
           href="/home"
-          Icon={<HiOutlineHome size={30} />}
-          IconActive={<HiHome size={30} />}
+          Icon={<HiOutlineHome size={28} />}
+          IconActive={<HiHome size={28} />}
+        />
+        <ButtonLinkNav
+          name="Collections"
+          href="/collections"
+          Icon={<GalleryVerticalEnd size={26} />}
+          IconActive={<GalleryVerticalEnd fill="red" size={26} />}
         />
         {/* <ButtonLinkNav
           name="Discover"
           href="/Discover"
-          Icon={<HiOutlineHome size={30} />}
-          IconActive={<HiHome size={30} />}
+          Icon={<HiOutlineHome size={28} />}
+          IconActive={<HiHome size={28} />}
         /> */}
         <ButtonLinkNav
           name="Help"
           href="/help"
-          Icon={<PiQuestion size={30} />}
-          IconActive={<PiQuestionFill size={30} />}
+          Icon={<PiQuestion size={28} />}
+          IconActive={<PiQuestionFill size={28} />}
         />
         <ButtonLinkNav
           name="Settings"
           href="/settings"
-          Icon={<PiGearFine size={30} />}
-          IconActive={<PiGearFineFill size={30} />}
+          Icon={<PiGearFine size={28} />}
+          IconActive={<PiGearFineFill size={28} />}
         />
       </div>
     </nav>

@@ -40,6 +40,8 @@ model Session {
 model User {
   id                   String                   @id @default(auto()) @map("_id") @db.ObjectId
   userId               String?                  @unique
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
   name                 String?
   email                String?                  @unique
   emailVerified        DateTime?
@@ -52,6 +54,7 @@ model User {
   MediaLinkInteraction MediaSourceInteraction[]
   MediaSource          MediaSource[]
   SubtitleSource       SubtitleSource[]
+  Collection           Collection[]
 }
 
 model VerificationToken {
@@ -63,8 +66,16 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+enum Status {
+  watching
+  watched
+  willWatched
+}
+
 model Room {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   type        String
   imdbId      String
   password    String?   @default("")
@@ -75,26 +86,32 @@ model Room {
   season      Int?
   episode     Int?
   isPublic    Boolean   @default(false)
+  status      Status?
+  isFavorite  Boolean
 
-  owner           User     @relation(fields: [ownerId], references: [id])
-  allowedGuestsId String[] @db.ObjectId
-  bannedGuestsId  String[] @db.ObjectId
+  owner           User        @relation(fields: [ownerId], references: [id])
+  allowedGuestsId String[]    @db.ObjectId
+  bannedGuestsId  String[]    @db.ObjectId
   Sources         Source[]
+  Collection      Collection? @relation(fields: [collectionId], references: [id])
+  collectionId    String?     @db.ObjectId
 }
 
 model Source {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  roomId        String @unique @db.ObjectId
-  userId        String @unique @db.ObjectId
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  roomId           String   @unique @db.ObjectId
+  userId           String   @unique @db.ObjectId
   // infoHash    String?
   // fileIdx     Int?
-  mediaSourceId String @db.ObjectId
-  subtitleSourceId String?         @db.ObjectId
+  mediaSourceId    String   @db.ObjectId
+  subtitleSourceId String?  @db.ObjectId
 
-  room             Room            @relation(fields: [roomId], references: [id])
-  user             User            @relation(fields: [userId], references: [id])
-  MediaSource      MediaSource     @relation(fields: [mediaSourceId], references: [id])
-  SubtitleSource   SubtitleSource? @relation(fields: [subtitleSourceId], references: [id])
+  room           Room            @relation(fields: [roomId], references: [id])
+  user           User            @relation(fields: [userId], references: [id])
+  MediaSource    MediaSource     @relation(fields: [mediaSourceId], references: [id])
+  SubtitleSource SubtitleSource? @relation(fields: [subtitleSourceId], references: [id])
 }
 
 // Define the enums
@@ -114,6 +131,7 @@ enum Subtitle {
 model MediaSource {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   ownerId   String   @db.ObjectId
   imdbId    String
   videoUrl  String
@@ -145,10 +163,11 @@ model MediaSource {
 }
 
 model MediaSourceInteraction {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime @default(now())
-  userId      String   @db.ObjectId
-  mediaLinkId String   @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+
+  userId      String  @db.ObjectId
+  mediaLinkId String  @db.ObjectId
   isLike      Boolean
 
   mediaLink MediaSource @relation(fields: [mediaLinkId], references: [id])
@@ -160,6 +179,7 @@ model MediaSourceInteraction {
 model SubtitleSource {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   ownerId   String   @db.ObjectId
   imdbId    String
 
@@ -183,4 +203,26 @@ model SubtitleSource {
 
   sources Source[]
   user    User     @relation(fields: [ownerId], references: [id])
+}
+
+enum Visibility {
+  public
+  friends
+  private
+}
+
+model Collection {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  uniqueName String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  ownerId    String     @db.ObjectId
+  rooms      Room[]
+  visibility Visibility
+  editable   Boolean    @default(false)
+
+  owner User @relation(fields: [ownerId], references: [id])
+
+  @@unique([ownerId, uniqueName])
 }
