@@ -12,9 +12,9 @@ function UserProfile() {
   const { userData } = useUserData();
   return (
     <Avatar className="h-16 w-16 rounded-md">
-      <AvatarImage src={userData.image ?? ""} alt={userData.name ?? ""} />
+      <AvatarImage src={userData?.image ?? ""} alt={userData?.name ?? ""} />
       <AvatarFallback className="h-16 w-16 rounded-md text-3xl" delayMs={600}>
-        {getFirstTwoLetters(userData.name)}
+        {getFirstTwoLetters(userData?.name)}
       </AvatarFallback>
     </Avatar>
   );

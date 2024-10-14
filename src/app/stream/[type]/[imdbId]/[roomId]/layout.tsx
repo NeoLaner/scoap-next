@@ -8,7 +8,6 @@ import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import Entrance from "./_ui/Entrance";
 import MinimalLayout from "~/app/_ui/MinimalLayout";
-import ProtectedRoute from "~/app/_ui/ProtectedRoute";
 import { redirect } from "next/navigation";
 import { UsersSourceDataProvider } from "~/app/_providers/UsersSourceDataProvider";
 import { PublicSourcesProvider } from "~/app/_providers/PublicSourcesProvider";
@@ -49,13 +48,11 @@ async function Layout({
     (!isOwner && !roomData.online)
   )
     return (
-      <ProtectedRoute>
-        <RoomDataProvider initialRoomData={roomData}>
-          <MinimalLayout>
-            <Entrance roomId={params.roomId} userId={session.user.id} />
-          </MinimalLayout>
-        </RoomDataProvider>
-      </ProtectedRoute>
+      <RoomDataProvider initialRoomData={roomData}>
+        <MinimalLayout>
+          <Entrance roomId={params.roomId} userId={session.user.id} />
+        </MinimalLayout>
+      </RoomDataProvider>
     );
 
   const sourceData = await api.source.getMe({
@@ -97,46 +94,42 @@ async function Layout({
   const initialRoomSubs = await api.subtitle.getAllRoomSubs({ roomId });
 
   return (
-    <ProtectedRoute>
-      <RoomDataProvider initialRoomData={roomData}>
-        <RoomSettingsProvider>
-          <ChatDataProvider>
-            {/*NOTE: The source data not must be null!! */}
-            <SourceDataProvider initialSourceData={bestSrc ?? sourceData}>
-              <CurrentMediaSrcProvider initialCurMediaSrc={mediaCurSrc}>
-                <PublicSourcesProvider
-                  initialPublicSources={initialPublicSources}
+    <RoomDataProvider initialRoomData={roomData}>
+      <RoomSettingsProvider>
+        <ChatDataProvider>
+          {/*NOTE: The source data not must be null!! */}
+          <SourceDataProvider initialSourceData={bestSrc ?? sourceData}>
+            <CurrentMediaSrcProvider initialCurMediaSrc={mediaCurSrc}>
+              <PublicSourcesProvider
+                initialPublicSources={initialPublicSources}
+              >
+                <RoomSourcesDataProvider
+                  initialRoomSourcesData={initialRoomSources}
                 >
-                  <RoomSourcesDataProvider
-                    initialRoomSourcesData={initialRoomSources}
+                  <UsersSourceDataProvider
+                    initialUsersSourceData={usersSource.Sources}
                   >
-                    <UsersSourceDataProvider
-                      initialUsersSourceData={usersSource.Sources}
-                    >
-                      <CurSubProvider initialSubtitle={subtitleData}>
-                        <PublicSubsProvider
-                          initialPublicSubs={initialPublicSubs}
-                        >
-                          <RoomSubsProvider initialRoomSubs={initialRoomSubs}>
-                            <UsersSubDataProvider
-                              initialUsersSubData={initialUsersSource}
-                            >
-                              <div className="relative h-full w-full">
-                                {children}
-                              </div>
-                            </UsersSubDataProvider>
-                          </RoomSubsProvider>
-                        </PublicSubsProvider>
-                      </CurSubProvider>
-                    </UsersSourceDataProvider>
-                  </RoomSourcesDataProvider>
-                </PublicSourcesProvider>
-              </CurrentMediaSrcProvider>
-            </SourceDataProvider>
-          </ChatDataProvider>
-        </RoomSettingsProvider>
-      </RoomDataProvider>
-    </ProtectedRoute>
+                    <CurSubProvider initialSubtitle={subtitleData}>
+                      <PublicSubsProvider initialPublicSubs={initialPublicSubs}>
+                        <RoomSubsProvider initialRoomSubs={initialRoomSubs}>
+                          <UsersSubDataProvider
+                            initialUsersSubData={initialUsersSource}
+                          >
+                            <div className="relative h-full w-full">
+                              {children}
+                            </div>
+                          </UsersSubDataProvider>
+                        </RoomSubsProvider>
+                      </PublicSubsProvider>
+                    </CurSubProvider>
+                  </UsersSourceDataProvider>
+                </RoomSourcesDataProvider>
+              </PublicSourcesProvider>
+            </CurrentMediaSrcProvider>
+          </SourceDataProvider>
+        </ChatDataProvider>
+      </RoomSettingsProvider>
+    </RoomDataProvider>
   );
 }
 

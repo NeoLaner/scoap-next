@@ -33,7 +33,7 @@ function UserDetails() {
             type="name"
             required
             placeholder="example: Yasin"
-            defaultValue={userData.name ?? ""}
+            defaultValue={userData?.name ?? ""}
           />
         </Form.Control>
       </Form.Field>
@@ -53,7 +53,7 @@ function UserDetails() {
           <Input
             required
             placeholder="example: ylaner"
-            defaultValue={userData.userId ?? ""}
+            defaultValue={userData?.userId ?? ""}
           />
         </Form.Control>
       </Form.Field>

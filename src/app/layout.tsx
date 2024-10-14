@@ -6,6 +6,8 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { PlayerProvider } from "./_providers/PlayerProvider";
 import { ThemeProvider } from "./_ui/theme-provider";
 import { Toaster } from "./_components/ui/sonner";
+import ProtectedRoute from "./_ui/ProtectedRoute";
+import { getServerAuthSession } from "~/server/auth";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,7 +26,7 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.png" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -41,12 +43,14 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TRPCReactProvider>
-            <PlayerProvider>
-              <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-background to-background-secondary  text-foreground">
-                {children}
-              </main>
-              <Toaster position="top-left" richColors />
-            </PlayerProvider>
+            <ProtectedRoute>
+              <PlayerProvider>
+                <main className="flex h-full flex-col items-center justify-center bg-gradient-to-r from-background to-background-secondary  text-foreground">
+                  {children}
+                </main>
+                <Toaster position="top-left" richColors />
+              </PlayerProvider>
+            </ProtectedRoute>
             {/* <ReactQueryDevtools /> */}
           </TRPCReactProvider>
         </ThemeProvider>
