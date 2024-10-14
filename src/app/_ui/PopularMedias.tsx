@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BsImage } from "react-icons/bs";
 import { cn, truncateText } from "~/lib/utils";
 import { useState } from "react";
+import { useUserData } from "../_hooks/useUserData";
 
 type Item = {
   id: string;
@@ -14,11 +15,20 @@ type Item = {
   type: string;
 };
 
-function PopularMedias({ heading, items }: { heading: string; items: Item[] }) {
+function PopularMedias({
+  heading,
+  items,
+  // collectionUniqueName,
+}: {
+  heading: string;
+  items: Item[];
+  // collectionUniqueName: string;
+}) {
   return (
     <section>
       <div className="flex justify-between">
         <h2 className="text-xl font-semibold">{heading}</h2>
+        <CollectionLink collectionUniqueName={"recent"} />
       </div>
       <ScrollAreaX>
         <div className="flex min-w-0 shrink grow basis-0 select-none gap-4 py-6">
@@ -32,6 +42,18 @@ function PopularMedias({ heading, items }: { heading: string; items: Item[] }) {
 }
 
 export default PopularMedias;
+
+export function CollectionLink({
+  collectionUniqueName,
+}: {
+  collectionUniqueName: string;
+}) {
+  return (
+    <Link href={`/collections/${"670b4a4dbca43552aa3f4af6"}/${"recent"}`}>
+      Show all
+    </Link>
+  );
+}
 
 export function MediaCard({ item }: { item: Item }) {
   const [isHover, setIsHover] = useState(false);
@@ -51,7 +73,7 @@ export function MediaCard({ item }: { item: Item }) {
             alt={item.name}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            style={{ objectFit: "cover", opacity: 0.9 }}
+            style={{ objectFit: "cover", opacity: 0.8 }}
             className={cn(
               "pointer-events-none select-none transition-all",
               isHover && "scale-105",

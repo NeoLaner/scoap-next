@@ -1,6 +1,6 @@
 export const preservedCollectionNames = [
   "watch later",
-  "watching now",
+  "recent",
   "watched",
   "favorite",
 ] as const;
@@ -8,6 +8,9 @@ export const preservedCollectionNames = [
 export const generateUniqueNames = (name: string) =>
   name.toLowerCase().replaceAll(" ", "_");
 
-export const preservedCollectionUniqueNames = preservedCollectionNames.map(
-  (name) => generateUniqueNames(name),
-);
+export const preservedCollectionUniqueNames = [
+  "watch_later",
+  "recent",
+  "watched",
+  "favorite",
+] as const;

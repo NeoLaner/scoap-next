@@ -11,13 +11,15 @@ async function page() {
   // const watchingCollectionMedia =
   return (
     <div>
-      <WatchingCollection />
+      <RecentCollection />
     </div>
   );
 }
 
-async function WatchingCollection() {
-  const medias = await api.collection.getMyWatchingCollection();
+async function RecentCollection() {
+  const medias = await api.collection.getMyCollection({
+    uniqueName: "recent",
+  });
 
   return (
     <div>

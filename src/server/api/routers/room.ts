@@ -40,7 +40,7 @@ export const roomRouter = createTRPCRouter({
         episode: z.number().optional(),
         guests: z.array(z.string()).optional(),
         isFavorite: z.boolean().optional(),
-        status: z.enum(["watching", "watched", "willWatched"]),
+        status: z.enum(["recent", "watched", "watch_later"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {

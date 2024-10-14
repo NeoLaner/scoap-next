@@ -67,9 +67,9 @@ model VerificationToken {
 }
 
 enum Status {
-  watching
+  recent
   watched
-  willWatched
+  watch_later
 }
 
 model Room {
