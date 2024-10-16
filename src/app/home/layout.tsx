@@ -7,7 +7,7 @@ function Layout({ children }: { children: ReactNode }) {
     <MainLayout>
       <ScrollAreaY className="h-full w-full">
         <section className="h-fit">
-          <div className="px-4 py-8 md:px-8">{children}</div>
+          <div className="h-full pl-8 pr-4 pt-8">{children}</div>
         </section>
       </ScrollAreaY>
     </MainLayout>

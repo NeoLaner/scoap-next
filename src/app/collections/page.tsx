@@ -1,18 +1,14 @@
 import { api } from "~/trpc/server";
 import PopularMedias from "../_ui/PopularMedias";
-import StremioService from "../_services/stremIo/stremIoServices";
+import ScrollAreaY from "../_ui/ScrollAreaY";
 
 async function page() {
-  const collections = await api.collection.getAllMyCollections();
-  const watchingCollection = collections.filter(
-    (collection) => (collection.name = "watching now"),
-  );
-
-  // const watchingCollectionMedia =
   return (
-    <div>
-      <RecentCollection />
-    </div>
+    <ScrollAreaY className="h-full w-full">
+      <div className="h-fit pr-2">
+        <RecentCollection />
+      </div>
+    </ScrollAreaY>
   );
 }
 
@@ -21,11 +17,7 @@ async function RecentCollection() {
     uniqueName: "recent",
   });
 
-  return (
-    <div>
-      <PopularMedias heading="Continue watching" items={medias} />
-    </div>
-  );
+  return <PopularMedias heading="Continue watching" items={medias.medias} />;
 }
 
 export default page;

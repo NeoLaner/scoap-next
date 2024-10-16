@@ -3,11 +3,11 @@ import React from "react";
 import * as Form from "@radix-ui/react-form";
 import { Button } from "~/app/_components/ui/Button";
 import { Input } from "~/app/_components/ui/input";
-import { useUserData } from "~/app/_hooks/useUserData";
 import { updateUserInfo } from "~/app/_actions/updateUserInfo";
+import { api } from "~/trpc/react";
 
 function UserDetails() {
-  const { userData } = useUserData();
+  const { data: userData } = api.user.me.useQuery();
   return (
     <Form.Root className="w-[260px]" action={updateUserInfo}>
       <Form.Field className="mb-[10px] grid" name="name">
