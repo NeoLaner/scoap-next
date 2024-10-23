@@ -5,7 +5,7 @@ import ScrollAreaY from "../_ui/ScrollAreaY";
 async function page() {
   return (
     <ScrollAreaY className="h-full w-full">
-      <div className="h-fit pr-2">
+      <div className="mt-8 h-fit pr-2">
         <RecentCollection />
       </div>
     </ScrollAreaY>
@@ -15,6 +15,7 @@ async function page() {
 async function RecentCollection() {
   const medias = await api.collection.getMyCollection({
     uniqueName: "recent",
+    limit: 20,
   });
 
   return <PopularMedias heading="Continue watching" items={medias.medias} />;

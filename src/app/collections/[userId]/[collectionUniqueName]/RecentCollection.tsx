@@ -2,8 +2,10 @@
 
 import { useIntersectionObserver } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
-import { type MetaInfo } from "~/app/_services/stremIo/types";
 import { MediaCard } from "~/app/_ui/MediaCard";
+import MediasHeading from "~/app/_ui/MediasHeading";
+import PopularMediasSkeleton from "~/app/_ui/PopularMediasSkeleton";
+import { SkeletonCard } from "~/app/_ui/SkeletonCard";
 import { api } from "~/trpc/react";
 
 function RecentCollection() {
@@ -13,11 +15,11 @@ function RecentCollection() {
     rootMargin: "0px",
   });
   const [page, setPage] = useState(0);
-  const { isLoading, data, fetchNextPage } =
+  const { status, hasNextPage, data, fetchNextPage, isFetchingNextPage } =
     api.collection.getMyCollection.useInfiniteQuery(
       {
         uniqueName: "recent",
-        limit: 16,
+        limit: 20,
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -27,45 +29,32 @@ function RecentCollection() {
   useEffect(
     function () {
       const fn = async () => {
-        const handleFetchNextPage = async () => {
-          await fetchNextPage();
-          setPage((prev) => prev + 1);
-        };
-
-        const handleFetchPreviousPage = () => {
-          setPage((prev) => prev - 1);
-        };
-
-        if (
-          entry?.isIntersecting &&
-          data?.pages[page]?.nextCursor &&
-          !isLoading
-        )
-          await handleFetchNextPage();
+        if (entry?.isIntersecting && hasNextPage) await fetchNextPage();
       };
       //eslint-disable-next-line
       fn();
     },
-    [data?.pages, entry?.isIntersecting, fetchNextPage, page],
+    [entry, fetchNextPage, page, hasNextPage],
   );
 
-  let medias: MetaInfo[] = [];
-  data?.pages.forEach((page) => {
-    medias = [...medias, ...page.medias];
-  });
-  const lastItem = medias.pop();
+  const content = data?.pages.map((page) =>
+    page.medias.map((media, i) => {
+      if (page.medias.length - 1 === i)
+        return <MediaCard innerRef={ref} key={media.id} item={media} />;
+      return <MediaCard key={media.id} item={media} />;
+    }),
+  );
 
   return (
-    <div className="flex flex-wrap gap-3">
-      {medias?.map((media) => <MediaCard key={media.id} item={media} />)}
-      <div>
-        {lastItem && (
-          <div key={lastItem.id} ref={ref}>
-            <MediaCard item={lastItem} />
-          </div>
+    <section className=" pr-4">
+      <MediasHeading>Continue watching</MediasHeading>
+      <div className="flex flex-wrap content-center items-center justify-center gap-3">
+        {content}
+        {((isFetchingNextPage && hasNextPage) || status === "pending") && (
+          <SkeletonCard length={20} />
         )}
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -6,11 +6,11 @@ import PopularSeries from "./_ui/PopularSeries";
 export default async function Home() {
   return (
     <div className="space-y-10">
-      <Suspense fallback={<PopularMediasSkeleton />}>
+      <Suspense fallback={<PopularMediasSkeleton size={20} />}>
         <PopularMovies />
       </Suspense>
 
-      <Suspense fallback={<PopularMediasSkeleton />}>
+      <Suspense fallback={<PopularMediasSkeleton size={20} />}>
         <PopularSeries />
       </Suspense>
     </div>

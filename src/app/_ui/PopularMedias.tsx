@@ -3,6 +3,7 @@
 import ScrollAreaX from "~/app/_ui/ScrollAreaX";
 import Link from "next/link";
 import { MediaCard } from "./MediaCard";
+import MediasHeading from "./MediasHeading";
 
 type Item = {
   id: string;
@@ -24,11 +25,11 @@ function PopularMedias({
   return (
     <section>
       <div className="flex justify-between">
-        <h2 className="text-xl font-semibold">{heading}</h2>
+        <MediasHeading>{heading}</MediasHeading>
         <CollectionLink collectionUniqueName={"recent"} />
       </div>
       <ScrollAreaX>
-        <div className="flex min-w-0 shrink grow basis-0 select-none gap-4 py-6">
+        <div className="flex min-w-0 shrink grow basis-0 select-none gap-4 pb-6">
           {items.map((item) => (
             <MediaCard key={item.id} item={item} />
           ))}

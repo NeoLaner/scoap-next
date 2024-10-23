@@ -40,7 +40,7 @@ export const collectionRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const limit = input.limit ?? 50;
+      const limit = input.limit ?? 40;
       // cursor is a reference to the last item in the previous batch
       // it's used to fetch the next batch
       const { cursor } = input;

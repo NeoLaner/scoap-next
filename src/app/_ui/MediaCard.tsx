@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { BsImage } from "react-icons/bs";
 import { cn, truncateText } from "~/lib/utils";
-import { useState } from "react";
+import { Ref, useState } from "react";
 import Link from "next/link";
 
 type Item = {
@@ -12,10 +12,17 @@ type Item = {
   type: string;
 };
 
-export function MediaCard({ item }: { item: Item }) {
+export function MediaCard({
+  item,
+  innerRef,
+}: {
+  item: Item;
+  innerRef?: Ref<HTMLAnchorElement>;
+}) {
   const [isHover, setIsHover] = useState(false);
   return (
     <Link
+      ref={innerRef}
       href={`/stream/${item.type}/${item.imdb_id}`}
       className="flex flex-col items-center gap-4 transition-all"
       title={item.name}
@@ -48,7 +55,7 @@ export function MediaCard({ item }: { item: Item }) {
           </div>
         )}
       </div>
-      <div className="max-h-8 max-w-32 overflow-hidden text-center text-xs font-medium">
+      <div className="h-8 max-w-28 overflow-hidden text-center text-xs font-medium">
         {truncateText(item.name, 28)}
       </div>
     </Link>

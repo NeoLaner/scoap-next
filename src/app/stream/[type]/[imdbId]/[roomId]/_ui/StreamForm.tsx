@@ -53,7 +53,7 @@ import { Separator } from "~/app/_components/ui/separator";
 import Countries from "./Countries";
 
 const formSchema = z.object({
-  sourceLink: z.string().url().max(250),
+  sourceLink: z.string().url().max(1000),
   name: z.string().min(3).max(20),
   isPublic: z.boolean().optional(),
   seasonBoundary: z.array(z.string()),

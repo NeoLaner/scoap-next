@@ -1,40 +1,36 @@
+import { cn } from "~/lib/utils";
 import { Skeleton } from "../_components/ui/Skeleton";
+import { SkeletonCard } from "./SkeletonCard";
 
-function PopularMediasSkeleton() {
+function PopularMediasSkeleton({
+  size,
+  flexWrap = false,
+  showHeading = true,
+}: {
+  size: number;
+  flexWrap?: boolean;
+  showHeading?: boolean;
+}) {
   return (
     <section className="overflow-hidden">
-      <div className="flex justify-between">
-        <Skeleton className="h-6 w-32 rounded-xl" />
-      </div>
+      {showHeading && (
+        <div className="mb-6 flex justify-between">
+          <Skeleton className="h-6 w-32 rounded-xl" />
+        </div>
+      )}
       <>
-        <div className="flex min-w-0 shrink grow basis-0 gap-4 overflow-hidden py-6">
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+        <div
+          className={cn(
+            "flex gap-4 ",
+            flexWrap
+              ? "min-w-0 shrink grow basis-0 flex-wrap gap-3 overflow-hidden pb-6"
+              : "",
+          )}
+        >
+          {<SkeletonCard length={size} />}
         </div>
       </>
     </section>
-  );
-}
-
-function Card() {
-  return (
-    <div className="flex flex-col items-center gap-4 rounded-xl">
-      <Skeleton className="relative h-40 w-28 overflow-hidden rounded-lg md:h-52 md:w-36">
-        <div style={{ objectFit: "cover", opacity: 0.9 }} />
-      </Skeleton>
-      <Skeleton className="h-4 w-16"></Skeleton>
-    </div>
   );
 }
 

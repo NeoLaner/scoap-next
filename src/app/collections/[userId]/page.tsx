@@ -7,7 +7,7 @@ async function page({
   params: { userId: string; collectionUniqueName: string };
 }) {
   return (
-    <div>
+    <div className="mt-8">
       <WatchingCollection userId={params.userId} />
     </div>
   );

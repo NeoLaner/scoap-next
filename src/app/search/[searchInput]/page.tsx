@@ -6,10 +6,10 @@ import PopularSeries from "../_ui/PopularSeries";
 async function page({ params }: { params: { searchInput: string } }) {
   return (
     <div className="space-y-10">
-      <Suspense fallback={<PopularMediasSkeleton />}>
+      <Suspense fallback={<PopularMediasSkeleton size={20} />}>
         <PopularMovies params={params} />
       </Suspense>
-      <Suspense fallback={<PopularMediasSkeleton />}>
+      <Suspense fallback={<PopularMediasSkeleton size={20} />}>
         <PopularSeries params={params} />
       </Suspense>
     </div>

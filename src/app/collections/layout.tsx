@@ -8,7 +8,7 @@ async function Layout({ children }: { children: ReactNode }) {
 
   return (
     <MainLayout>
-      <section className="h-full pl-8  pt-8">
+      <section className="h-full pl-8">
         {session?.user.id ? (
           <div className="h-full  py-1 ">{children}</div>
         ) : (
