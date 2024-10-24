@@ -1,47 +1,48 @@
 "use client";
-import { useRef, useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import * as ScrollAreaRadix from "@radix-ui/react-scroll-area";
 import { cn } from "~/lib/utils";
 
 const ScrollAreaX = ({ children }: { children: ReactNode }) => {
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  // const [isDragging, setIsDragging] = useState(false);
+  // const [startX, setStartX] = useState(0);
+  // const [scrollLeft, setScrollLeft] = useState(0);
 
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setStartX(e.pageX - (scrollRef.current?.offsetLeft ?? 0));
-    setScrollLeft(scrollRef.current?.scrollLeft ?? 0);
-  };
+  // const scrollRef = useRef<HTMLDivElement | null>(null);
+  // const handleMouseDown = (e: React.MouseEvent) => {
+  //   setIsDragging(true);
+  //   setStartX(e.pageX - (scrollRef.current?.offsetLeft ?? 0));
+  //   setScrollLeft(scrollRef.current?.scrollLeft ?? 0);
+  // };
 
-  const handleMouseLeave = () => {
-    setIsDragging(false);
-  };
+  // const handleMouseLeave = () => {
+  //   setIsDragging(false);
+  // };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
+  // const handleMouseUp = () => {
+  //   setIsDragging(false);
+  // };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - (scrollRef.current?.offsetLeft ?? 0);
-    const walk = (x - startX) * 3; // Adjust the multiplier for faster/slower scroll
-    if (scrollRef.current) scrollRef.current.scrollLeft = scrollLeft - walk;
-  };
+  // const handleMouseMove = (e: React.MouseEvent) => {
+  //   if (!isDragging) return;
+  //   e.preventDefault();
+  //   const x = e.pageX - (scrollRef.current?.offsetLeft ?? 0);
+  //   const walk = (x - startX) * 3; // Adjust the multiplier for faster/slower scroll
+  //   if (scrollRef.current) scrollRef.current.scrollLeft = scrollLeft - walk;
+  // };
   return (
     <ScrollAreaRadix.Root className="shadow-blackA4 h-full w-full  overflow-hidden rounded">
       <ScrollAreaRadix.Viewport
-        onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
+        // onMouseDown={handleMouseDown}
+        // onMouseLeave={handleMouseLeave}
+        // onMouseUp={handleMouseUp}
+        // onMouseMove={handleMouseMove}
         className={cn(
-          "h-full w-full cursor-grab rounded",
-          isDragging && "cursor-grabbing",
+          // isDragging && "cursor-grabbing",
+          // "cursor-grab",
+          "h-full w-full rounded",
         )}
-        ref={scrollRef}
+        // ref={scrollRef}
       >
         {children}
       </ScrollAreaRadix.Viewport>
