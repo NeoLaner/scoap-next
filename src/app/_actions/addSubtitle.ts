@@ -4,7 +4,7 @@ import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
 export async function addSubtitle({
-  subUrl,
+  url,
   roomId,
   seasonBoundary,
   imdbId,
@@ -17,7 +17,7 @@ export async function addSubtitle({
   translator,
   crossorigin,
 }: {
-  subUrl: string;
+  url: string;
   roomId: string;
   seasonBoundary: string[];
   imdbId: string;
@@ -30,10 +30,10 @@ export async function addSubtitle({
   language: string;
   crossorigin: boolean;
 }) {
-  const isDynamic = checkIsDynamic(subUrl);
+  const isDynamic = checkIsDynamic(url);
   const session = await getServerAuthSession();
   const userId = session?.user.id;
-  if (!subUrl || !roomId || !userId) return;
+  if (!url || !roomId || !userId) return;
   const source = await api.source.getMe({ roomId });
   const seasonBoundaryToNumbers = seasonBoundary?.map((str) => Number(str));
 
@@ -46,7 +46,7 @@ export async function addSubtitle({
           language,
           roomId,
           seasonBoundary: seasonBoundaryToNumbers,
-          subUrl,
+          url,
           name,
           description,
           translator,
@@ -58,7 +58,7 @@ export async function addSubtitle({
           language,
           roomId,
           seasonBoundary: [],
-          subUrl,
+          url,
           name,
           episode,
           season,

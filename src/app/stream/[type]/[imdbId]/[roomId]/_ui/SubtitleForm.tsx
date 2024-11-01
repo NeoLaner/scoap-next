@@ -51,7 +51,7 @@ import { useRoomSubs } from "~/app/_hooks/useRoomSubs";
 import { useUsersSubData } from "~/app/_hooks/useUsersSub";
 
 const formSchema = z.object({
-  subUrl: z.string().url().max(250),
+  url: z.string().url().max(250),
   name: z.string().min(3).max(20),
   translator: z.string().optional(),
   isPublic: z.boolean().optional(),
@@ -92,7 +92,7 @@ function SubtitleForm() {
       }),
     ),
     defaultValues: {
-      subUrl: "",
+      url: "",
       name: "",
       isPublic: false,
       seasonBoundary: [String(roomData.season)],
@@ -102,12 +102,12 @@ function SubtitleForm() {
   });
 
   const isDynamic =
-    checkIsDynamic(form.watch("subUrl") ?? "") && roomData.type === "series";
+    checkIsDynamic(form.watch("url") ?? "") && roomData.type === "series";
   const seasonBoundary = form.watch("seasonBoundary");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const { corsStatus } = await checkSubUrl(values.subUrl);
+      const { corsStatus } = await checkSubUrl(values.url);
       const sub = await addSubtitle({
         ...values,
         roomId: roomData.id,
@@ -202,7 +202,7 @@ function SubtitleForm() {
 
                   <FormField
                     control={form.control}
-                    name="subUrl"
+                    name="url"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Source link</FormLabel>
@@ -220,7 +220,7 @@ function SubtitleForm() {
                             <span>
                               {" "}
                               {makeRawSource({
-                                source: form.getValues("subUrl"),
+                                source: form.getValues("url"),
                                 season: Math.min(
                                   ...(seasonBoundary?.map((s) => Number(s)) ??
                                     []),

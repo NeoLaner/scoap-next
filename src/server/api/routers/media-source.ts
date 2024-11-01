@@ -51,7 +51,7 @@ export const mediaSourceRouter = createTRPCRouter({
       z.object({
         roomId: z.string(),
         imdbId: z.string(),
-        videoUrl: z.string(),
+        url: z.string(),
         description: z.string().optional(),
         isPublic: z.boolean(),
         name: z.string().optional(),
@@ -71,16 +71,16 @@ export const mediaSourceRouter = createTRPCRouter({
       const existingSource = await ctx.db.mediaSource.findFirst({
         where: {
           roomId: input.roomId,
-          videoUrl: input.videoUrl,
+          url: input.url,
         },
         include: { user: true },
       });
 
       if (existingSource) return existingSource; //TODO: THROW ERROR
 
-      const isContainsSeason = containsSeason(input.videoUrl);
-      const isContainsEpisode = containsEpisode(input.videoUrl);
-      const isDynamic = checkIsDynamic(input.videoUrl);
+      const isContainsSeason = containsSeason(input.url);
+      const isContainsEpisode = containsEpisode(input.url);
+      const isDynamic = checkIsDynamic(input.url);
       if (isDynamic && !isContainsSeason) return; //TODO: THROW ERROR
       if (isDynamic && !isContainsEpisode) return; //TODO: THROW ERROR
 
@@ -91,7 +91,7 @@ export const mediaSourceRouter = createTRPCRouter({
           canBePublic: true,
           disabled: false,
           imdbId: input.imdbId,
-          videoUrl: input.videoUrl,
+          url: input.url,
           description: input.description,
           isPublic: input.isPublic,
           name: input.name,

@@ -61,7 +61,7 @@ export const subtitleRouter = createTRPCRouter({
       z.object({
         roomId: z.string(),
         imdbId: z.string(),
-        subUrl: z.string(),
+        url: z.string(),
         description: z.string().optional(),
         isPublic: z.boolean(),
         name: z.string().optional(),
@@ -78,16 +78,16 @@ export const subtitleRouter = createTRPCRouter({
       const existingSource = await ctx.db.subtitleSource.findFirst({
         where: {
           roomId: input.roomId,
-          subUrl: input.subUrl,
+          url: input.url,
         },
         include: { user: true },
       });
 
       if (existingSource) return existingSource; //TODO: THROW ERROR
 
-      const isContainsSeason = containsSeason(input.subUrl);
-      const isContainsEpisode = containsEpisode(input.subUrl);
-      const isDynamic = checkIsDynamic(input.subUrl);
+      const isContainsSeason = containsSeason(input.url);
+      const isContainsEpisode = containsEpisode(input.url);
+      const isDynamic = checkIsDynamic(input.url);
       if (isDynamic && !isContainsSeason) return; //TODO: THROW ERROR
       if (isDynamic && !isContainsEpisode) return; //TODO: THROW ERROR
 
@@ -98,7 +98,7 @@ export const subtitleRouter = createTRPCRouter({
           canBePublic: true,
           disabled: false,
           imdbId: input.imdbId,
-          subUrl: input.subUrl,
+          url: input.url,
           description: input.description,
           isPublic: input.isPublic,
           name: input.name,

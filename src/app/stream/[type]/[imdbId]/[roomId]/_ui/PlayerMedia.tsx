@@ -33,8 +33,8 @@ function PlayerMedia({
   const { roomData } = useRoomData();
   const { currentMediaSrc } = useCurMediaSrc();
   const { currentSubtitle } = useCurSub();
-  const subtitleUrl = currentSubtitle?.subUrl;
-  console.log(currentSubtitle?.subUrl);
+  const subtitleUrl = currentSubtitle?.url;
+  console.log(currentSubtitle?.url);
   const [subContent, setSubContent] = useState("");
 
   useEffect(() => {
@@ -66,7 +66,7 @@ function PlayerMedia({
   }
 
   const source = makeRawSource({
-    source: currentMediaSrc?.videoUrl ?? "",
+    source: currentMediaSrc?.url ?? "",
     season: roomData.season,
     episode: roomData.episode,
   });
@@ -105,7 +105,7 @@ function PlayerMedia({
         />
         {/* <Track
           // content={data?.subtitle}
-          src={currentSubtitle?.subUrl}
+          src={currentSubtitle?.url}
           label="Farsi"
           language="FA"
           kind="subtitles"

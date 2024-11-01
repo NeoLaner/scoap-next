@@ -192,7 +192,7 @@ const StremioService = {
 
 async function getOpenSubInfo(streamUrl: string) {
   const { data } = await axios.get(
-    `${STREMIO_STREAMING_SERVER}/opensubHash?videoUrl=${streamUrl}`,
+    `${STREMIO_STREAMING_SERVER}/opensubHash?url=${streamUrl}`,
   );
   const { result } = data;
   return result;

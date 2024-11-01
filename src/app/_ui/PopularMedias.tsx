@@ -48,7 +48,7 @@ export function CollectionLink({
 }) {
   return (
     <Link href={`/collections/${"670b4a4dbca43552aa3f4af6"}/${"recent"}`}>
-      Show all
+      Show All
     </Link>
   );
 }

@@ -33,7 +33,7 @@ export const CurrentMediaSrcProvider = ({
   const [currentMediaSrc, setCurrentMediaSrc] = useState(initialCurMediaSrc);
 
   useEffect(function () {
-    if (!currentMediaSrc?.videoUrl)
+    if (!currentMediaSrc?.url)
       setTimeout(() => {
         eventEmitter.emit("server:message", "NO_SOURCE");
       }, 900);

@@ -73,16 +73,16 @@ export function Subtitle({ source }: { source: SubtitleType }) {
   const { sourceData: curUserSource, setSourceData } = useSourceData();
   const { setCurrentSubtitle } = useCurSub();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
-  const isOwner = userData.id === source.ownerId;
+  const isOwner = userData?.id === source.ownerId;
   const outOfBoundary = Boolean(
-    checkIsDynamic(source.subUrl) &&
+    checkIsDynamic(source.url) &&
       roomData.season &&
       !source.seasonBoundary.includes(roomData.season),
   );
 
   const [_, copyToClipboard] = useCopyToClipboard();
   const rawSource = makeRawSource({
-    source: source.subUrl,
+    source: source.url,
     season: roomData.season,
     episode: roomData.episode,
   });
@@ -160,7 +160,7 @@ export function Subtitle({ source }: { source: SubtitleType }) {
                   {roomData.type === "movie" && (
                     <DropdownMenuItem
                       onClick={async () => {
-                        await copyToClipboard(source.subUrl);
+                        await copyToClipboard(source.url);
                         toast.success(
                           "Link copied to your clipboard successfully.",
                         );
@@ -186,7 +186,7 @@ export function Subtitle({ source }: { source: SubtitleType }) {
                         <DropdownMenuSubContent>
                           <DropdownMenuItem
                             onClick={async () => {
-                              await copyToClipboard(source.subUrl);
+                              await copyToClipboard(source.url);
                               toast.success(
                                 "Link copied to your clipboard successfully.",
                               );
@@ -328,7 +328,7 @@ function DynamicIcon({ source }: { source: SubtitleType }) {
   const { roomData } = useRoomData();
   const outOfBoundary =
     roomData.season && !source.seasonBoundary.includes(roomData.season);
-  const isDynamic = checkIsDynamic(source.subUrl);
+  const isDynamic = checkIsDynamic(source.url);
   return (
     <TooltipProvider>
       <Tooltip delayDuration={500}>

@@ -73,14 +73,14 @@ export function StreamSource({ source }: { source: MediaSource }) {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const isOwner = userData.id === source.ownerId;
   const outOfBoundary = Boolean(
-    checkIsDynamic(source.videoUrl) &&
+    checkIsDynamic(source.url) &&
       roomData.season &&
       !source.seasonBoundary.includes(roomData.season),
   );
 
   const [_, copyToClipboard] = useCopyToClipboard();
   const rawSource = makeRawSource({
-    source: source.videoUrl,
+    source: source.url,
     season: roomData.season,
     episode: roomData.episode,
   });
@@ -163,7 +163,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
                   {roomData.type === "movie" && (
                     <DropdownMenuItem
                       onClick={async () => {
-                        await copyToClipboard(source.videoUrl);
+                        await copyToClipboard(source.url);
                         toast.success(
                           "Link copied to your clipboard successfully.",
                         );
@@ -189,7 +189,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
                         <DropdownMenuSubContent>
                           <DropdownMenuItem
                             onClick={async () => {
-                              await copyToClipboard(source.videoUrl);
+                              await copyToClipboard(source.url);
                               toast.success(
                                 "Link copied to your clipboard successfully.",
                               );
@@ -388,7 +388,7 @@ function DynamicIcon({ source }: { source: MediaSource }) {
   const { roomData } = useRoomData();
   const outOfBoundary =
     roomData.season && !source.seasonBoundary.includes(roomData.season);
-  const isDynamic = checkIsDynamic(source.videoUrl);
+  const isDynamic = checkIsDynamic(source.url);
   return (
     <TooltipProvider>
       <Tooltip delayDuration={500}>

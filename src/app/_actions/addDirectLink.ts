@@ -46,7 +46,7 @@ export async function addDirectLink({
   const mediaSourceData = await api.mediaSource.create(
     isDynamic
       ? {
-          videoUrl: sourceLink,
+          url: sourceLink,
           seasonBoundary: seasonBoundaryToNumbers,
           roomId,
           isPublic,
@@ -60,7 +60,7 @@ export async function addDirectLink({
           countryEmoji,
         }
       : {
-          videoUrl: sourceLink,
+          url: sourceLink,
           seasonBoundary: [],
           roomId,
           isPublic,
