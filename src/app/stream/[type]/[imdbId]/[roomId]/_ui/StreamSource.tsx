@@ -52,16 +52,18 @@ import { useSourceData } from "~/app/_hooks/useSourceData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { updateSource } from "~/app/_actions/updateSource";
 import { createSource } from "~/app/_actions/createSource";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/app/_components/ui/tooltip";
+
 import { usePublicSources } from "~/app/_hooks/usePublicSources";
 import { useUsersSourceData } from "~/app/_hooks/useUsersSourceData";
 import { useRoomSources } from "~/app/_hooks/useRoomSources";
 import { useGetRightPanelSize } from "~/app/_hooks/useGetRightPanelSize";
+import {
+  DynamicIcon,
+  IconText,
+  QualityIcon,
+  QualityTypeIcon,
+  SubtitleIcon,
+} from "~/app/_components/ui/IconComponents";
 
 type MediaSource = NonNullable<Awaited<ReturnType<typeof api.mediaSource.get>>>;
 export function StreamSource({ source }: { source: MediaSource }) {
@@ -71,7 +73,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
   const { sourceData: curUserSource, setSourceData } = useSourceData();
   const { setCurrentMediaSrc } = useCurMediaSrc();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
-  const isOwner = userData.id === source.ownerId;
+  const isOwner = userData?.id === source.ownerId;
   const outOfBoundary = Boolean(
     checkIsDynamic(source.url) &&
       roomData.season &&
@@ -306,112 +308,3 @@ const UserProfile = function ({ source }: { source: MediaSource }) {
     </div>
   );
 };
-
-const SubtitleIcon = function ({ source }: { source: MediaSource }) {
-  const text = source.hardsub ? "hcc" : "cc";
-
-  return <IconText disable={!source.hardsub}>{text}</IconText>;
-};
-
-const QualityIcon = function ({ source }: { source: MediaSource }) {
-  let text;
-  switch (source.quality) {
-    case "360":
-      text = "sd";
-      break;
-    case "480":
-      text = "sd";
-      break;
-    case "720":
-      text = "hd";
-      break;
-    case "1080":
-      text = "fhd";
-      break;
-    case "1440":
-      text = "qhd";
-      break;
-    case "2160":
-      text = "uhd";
-      break;
-    default:
-      text = "FHD";
-      break;
-  }
-  return <IconText disable={!source.quality}>{text}</IconText>;
-};
-
-const QualityTypeIcon = function ({ source }: { source: MediaSource }) {
-  let text;
-  switch (source.qualityType) {
-    case "BluRay":
-      text = "blu";
-      break;
-    case "WebDl":
-      text = "web";
-      break;
-    case "CAM":
-      text = "cam";
-      break;
-    default:
-      text = "cam";
-      break;
-  }
-  return <IconText disable={!source.quality}>{text}</IconText>;
-};
-
-const IconText = function ({
-  className,
-  disable = false,
-  children,
-}: {
-  className?: string;
-  disable?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      className={cn(
-        `mx-[0.1rem] h-fit w-[1.8rem] select-none self-center rounded-[2px] px-[1px] text-center text-[0.68rem]  font-bold uppercase leading-4`,
-        disable
-          ? "bg-foreground/50 text-background"
-          : "bg-foreground text-background",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
-};
-
-function DynamicIcon({ source }: { source: MediaSource }) {
-  const { roomData } = useRoomData();
-  const outOfBoundary =
-    roomData.season && !source.seasonBoundary.includes(roomData.season);
-  const isDynamic = checkIsDynamic(source.url);
-  return (
-    <TooltipProvider>
-      <Tooltip delayDuration={500}>
-        <TooltipTrigger>
-          <IconText
-            disable={!isDynamic}
-            className={cn(outOfBoundary && "bg-danger-foreground")}
-          >
-            dyn
-          </IconText>
-        </TooltipTrigger>
-        {isDynamic && (
-          <TooltipContent>
-            <p>
-              This source just included{" "}
-              <span className="text-danger-foreground">
-                {source.seasonBoundary.length > 1 ? "seasons" : "season"}{" "}
-                {source.seasonBoundary.join(", ")}
-              </span>
-            </p>
-          </TooltipContent>
-        )}
-      </Tooltip>
-    </TooltipProvider>
-  );
-}
