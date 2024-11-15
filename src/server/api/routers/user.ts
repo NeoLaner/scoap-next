@@ -71,4 +71,13 @@ export const userRouter = createTRPCRouter({
     });
     return { sourcesGroupedByDomain, domains: uniqueDomains };
   }),
+
+  updateSrcsDomain: protectedProcedure
+    .input(z.object({ srcIds: z.array(z.string()), domain: z.string() }))
+    .query(async ({ ctx, input }) => {
+      await ctx.db.source.updateMany({
+        where: { id: { in: input.srcIds } },
+        data: {},
+      });
+    }),
 });

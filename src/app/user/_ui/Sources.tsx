@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/app/_components/ui/accordion";
+import { Checkbox } from "~/app/_components/ui/checkbox";
 import { IconText } from "~/app/_components/ui/IconComponents";
 import {
   Tooltip,
@@ -15,16 +16,21 @@ import {
 } from "~/app/_components/ui/tooltip";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
+import { type api as apiServer } from "~/trpc/server";
+
+type DomainsStatus = {
+  error: boolean;
+  domain: string;
+  message: string;
+}[];
+
+type Srcs = NonNullable<
+  Awaited<ReturnType<typeof apiServer.user.getAllSrcByDomain>>
+>["sourcesGroupedByDomain"][number];
 
 function Sources() {
   const { data } = api.user.getAllSrcByDomain.useQuery();
-  const [domainsStatus, setDomainsStatus] = useState(
-    [] as {
-      error: boolean;
-      domain: string;
-      message: string;
-    }[],
-  );
+  const [domainsStatus, setDomainsStatus] = useState([] as DomainsStatus);
   const domains = data?.domains;
 
   useEffect(
@@ -72,7 +78,6 @@ function Sources() {
     [domains],
   );
 
-  console.log(domainsStatus);
   return (
     <div>
       {data?.sourcesGroupedByDomain?.map((srcs, i) => {
@@ -80,75 +85,14 @@ function Sources() {
           <div key={i}>
             {Object.keys(srcs).map((domain) => {
               return (
-                <Accordion key={domain} type="multiple">
-                  <AccordionItem value={domain}>
-                    <AccordionTrigger className="justify-normal gap-4">
-                      <TooltipProvider>
-                        <Tooltip delayDuration={0}>
-                          <TooltipTrigger asChild>
-                            <div
-                              className={cn(
-                                domainsStatus.filter(
-                                  (domainStatus) =>
-                                    domainStatus.domain === domain,
-                                )[0]?.error
-                                  ? "text-danger-foreground"
-                                  : "text-success-foreground",
-                              )}
-                            >
-                              {domain}
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <div>
-                              {
-                                domainsStatus.filter(
-                                  (domainStatus) =>
-                                    domainStatus.domain === domain &&
-                                    domainStatus.error,
-                                )[0]?.message
-                              }
-                            </div>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                      <div>{srcs?.[domain]?.srcs.length} total</div>
-                      <div>
-                        {
-                          srcs?.[domain]?.srcs.filter(
-                            (src) => src.type === "media",
-                          ).length
-                        }{" "}
-                        videos
-                      </div>
-                      <div>
-                        {
-                          srcs?.[domain]?.srcs.filter(
-                            (src) => src.type === "subtitle",
-                          ).length
-                        }{" "}
-                        subs
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="space-y-1">
-                      {srcs?.[domain]?.srcs.map((src) => {
-                        return (
-                          <div
-                            key={src.url}
-                            className="flex items-center gap-4"
-                          >
-                            <div>
-                              <IconText>
-                                {src.type === "media" ? "med" : "sub"}
-                              </IconText>{" "}
-                            </div>
-                            <div>{src.name} </div>
-                            <div>{src.imdbId} </div>
-                            {/* <div key={src.url}>{src.name} </div> */}
-                          </div>
-                        );
-                      })}
-                    </AccordionContent>
+                <Accordion key={domain} type="multiple" className="w-full">
+                  <AccordionItem value={domain} className="w-full">
+                    <Trigger
+                      domainsStatus={domainsStatus}
+                      srcs={srcs}
+                      domain={domain}
+                    />
+                    <Content domain={domain} srcs={srcs} />
                   </AccordionItem>
                 </Accordion>
               );
@@ -157,6 +101,85 @@ function Sources() {
         );
       })}
     </div>
+  );
+}
+
+function Trigger({
+  domainsStatus,
+  srcs,
+  domain,
+}: {
+  domainsStatus: DomainsStatus;
+  srcs: Srcs;
+  domain: string;
+}) {
+  const [check, onCheckedChange] = useState(false);
+  return (
+    <div className="flex w-full items-center gap-2">
+      <Checkbox
+        checked={check}
+        onCheckedChange={(prv) => onCheckedChange(Boolean(prv))}
+      />
+      <AccordionTrigger className="w-full justify-normal gap-4 text-muted-foreground">
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <div
+                className={cn(
+                  domainsStatus.filter(
+                    (domainStatus) => domainStatus.domain === domain,
+                  )[0]?.error
+                    ? "text-danger-foreground"
+                    : "text-success-foreground",
+                )}
+              >
+                {domain}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <div>
+                {
+                  domainsStatus.filter(
+                    (domainStatus) =>
+                      domainStatus.domain === domain && domainStatus.error,
+                  )[0]?.message
+                }
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <div>{srcs?.[domain]?.srcs.length} total</div>
+        <div>
+          {srcs?.[domain]?.srcs.filter((src) => src.type === "media").length}{" "}
+          videos
+        </div>
+        <div>
+          {srcs?.[domain]?.srcs.filter((src) => src.type === "subtitle").length}{" "}
+          subs
+        </div>
+      </AccordionTrigger>
+    </div>
+  );
+}
+
+function Content({ srcs, domain }: { srcs: Srcs; domain: string }) {
+  return (
+    <AccordionContent className="space-y-1">
+      {srcs?.[domain]?.srcs.map((src) => {
+        return (
+          <div key={src.url} className="ml-4 flex items-center gap-2">
+            <Checkbox />
+            <div className="flex items-center gap-4 text-muted-foreground">
+              <div>
+                <IconText>{src.type === "media" ? "med" : "sub"}</IconText>{" "}
+              </div>
+              <div>{src.name}</div>
+              <div>{src.imdbId}</div>
+            </div>
+          </div>
+        );
+      })}
+    </AccordionContent>
   );
 }
 
