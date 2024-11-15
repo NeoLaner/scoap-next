@@ -14,6 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/app/_components/ui/tooltip";
+import { createUrlFromPrats } from "~/lib/source";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { type api as apiServer } from "~/trpc/server";
@@ -167,7 +168,14 @@ function Content({ srcs, domain }: { srcs: Srcs; domain: string }) {
     <AccordionContent className="space-y-1">
       {srcs?.[domain]?.srcs.map((src) => {
         return (
-          <div key={src.url} className="ml-4 flex items-center gap-2">
+          <div
+            key={createUrlFromPrats({
+              pathname: src.pathname,
+              domain: src.domain,
+              protocol: src.protocol,
+            })}
+            className="ml-4 flex items-center gap-2"
+          >
             <Checkbox />
             <div className="flex items-center gap-4 text-muted-foreground">
               <div>

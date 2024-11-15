@@ -1,6 +1,12 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { checkIsDynamic, containsEpisode, containsSeason } from "~/lib/source";
+import {
+  checkIsDynamic,
+  containsEpisode,
+  containsSeason,
+  extractUrlParts,
+} from "~/lib/source";
+import { url } from "inspector";
 
 export const subtitleRouter = createTRPCRouter({
   getMySubCurRoom: protectedProcedure
@@ -75,22 +81,23 @@ export const subtitleRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const session = ctx.session;
-      const existingSource = await ctx.db.subtitleSource.findFirst({
-        where: {
-          roomId: input.roomId,
-          url: input.url,
-        },
-        include: { user: true },
-      });
+      // const existingSource = await ctx.db.subtitleSource.findFirst({
+      //   where: {
+      //     roomId: input.roomId,
+      //     url: input.url,
+      //   },
+      //   include: { user: true },
+      // });
 
-      if (existingSource) return existingSource; //TODO: THROW ERROR
+      // if (existingSource) return existingSource; //TODO: THROW ERROR
 
       const isContainsSeason = containsSeason(input.url);
       const isContainsEpisode = containsEpisode(input.url);
       const isDynamic = checkIsDynamic(input.url);
       if (isDynamic && !isContainsSeason) return; //TODO: THROW ERROR
       if (isDynamic && !isContainsEpisode) return; //TODO: THROW ERROR
-
+      const urlParts = extractUrlParts(input.url);
+      if (urlParts.type !== "success") return; //TODO: THROW ERROR
       return await ctx.db.subtitleSource.create({
         data: {
           roomId: input.roomId,
@@ -98,7 +105,9 @@ export const subtitleRouter = createTRPCRouter({
           canBePublic: true,
           disabled: false,
           imdbId: input.imdbId,
-          url: input.url,
+          domain: urlParts.domain,
+          pathname: urlParts.pathname,
+          protocol: urlParts.protocol,
           description: input.description,
           isPublic: input.isPublic,
           name: input.name,

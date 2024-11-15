@@ -15,7 +15,7 @@ import {
 import VideoLayout from "./VideoLayout";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 
-import { makeRawSource } from "~/lib/source";
+import { createUrlFromPrats, makeRawSource } from "~/lib/source";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { api } from "~/trpc/react";
@@ -33,8 +33,12 @@ function PlayerMedia({
   const { roomData } = useRoomData();
   const { currentMediaSrc } = useCurMediaSrc();
   const { currentSubtitle } = useCurSub();
-  const subtitleUrl = currentSubtitle?.url;
-  console.log(currentSubtitle?.url);
+  const subtitleUrl = createUrlFromPrats({
+    domain: currentSubtitle?.domain,
+    pathname: currentSubtitle?.pathname,
+    protocol: currentSubtitle?.protocol,
+  });
+
   const [subContent, setSubContent] = useState("");
 
   useEffect(() => {
@@ -66,7 +70,11 @@ function PlayerMedia({
   }
 
   const source = makeRawSource({
-    source: currentMediaSrc?.url ?? "",
+    source: createUrlFromPrats({
+      domain: currentMediaSrc?.domain,
+      pathname: currentMediaSrc?.pathname,
+      protocol: currentMediaSrc?.protocol,
+    }),
     season: roomData.season,
     episode: roomData.episode,
   });

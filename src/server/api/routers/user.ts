@@ -1,16 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
-function getDomainFromUrl(url: string): string {
-  try {
-    const domain = new URL(url).hostname;
-    return domain;
-  } catch (error) {
-    console.error("Invalid URL", error);
-    return "";
-  }
-}
-
 export const userRouter = createTRPCRouter({
   me: protectedProcedure.query(async ({ ctx }) => {
     const user = await ctx.db.user.findUnique({
@@ -51,15 +41,13 @@ export const userRouter = createTRPCRouter({
     const sources = [...MediaSource, ...SubtitleSource];
     //Group them by uniqueDomains
     const uniqueDomains = sources.reduce<string[]>((acc, src) => {
-      const curDomain = getDomainFromUrl(src.url);
+      const curDomain = src.domain;
       if (acc.includes(curDomain)) return acc;
       else return [...acc, curDomain];
     }, []);
 
     const sourcesGroupedByDomain = uniqueDomains.map((domain) => {
-      const srcs = sources.filter(
-        (src) => getDomainFromUrl(src.url) === domain,
-      );
+      const srcs = sources.filter((src) => src.domain === domain);
       const newSrcsType = srcs.map((src) => {
         return { ...src, domain };
       });

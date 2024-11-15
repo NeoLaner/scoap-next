@@ -8,7 +8,11 @@ import {
   AvatarImage,
 } from "~/app/_components/ui/avatar";
 import { cn, getFirstTwoLetters } from "~/lib/utils";
-import { checkIsDynamic, makeRawSource } from "~/lib/source";
+import {
+  checkIsDynamic,
+  createUrlFromPrats,
+  makeRawSource,
+} from "~/lib/source";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { Separator } from "~/app/_components/ui/separator";
@@ -75,14 +79,18 @@ export function StreamSource({ source }: { source: MediaSource }) {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const isOwner = userData?.id === source.ownerId;
   const outOfBoundary = Boolean(
-    checkIsDynamic(source.url) &&
+    checkIsDynamic(source.pathname) &&
       roomData.season &&
       !source.seasonBoundary.includes(roomData.season),
   );
 
   const [_, copyToClipboard] = useCopyToClipboard();
   const rawSource = makeRawSource({
-    source: source.url,
+    source: createUrlFromPrats({
+      domain: source?.domain,
+      pathname: source?.pathname,
+      protocol: source?.protocol,
+    }),
     season: roomData.season,
     episode: roomData.episode,
   });
@@ -165,7 +173,13 @@ export function StreamSource({ source }: { source: MediaSource }) {
                   {roomData.type === "movie" && (
                     <DropdownMenuItem
                       onClick={async () => {
-                        await copyToClipboard(source.url);
+                        await copyToClipboard(
+                          createUrlFromPrats({
+                            domain: source?.domain,
+                            pathname: source?.pathname,
+                            protocol: source?.protocol,
+                          }),
+                        );
                         toast.success(
                           "Link copied to your clipboard successfully.",
                         );
@@ -191,7 +205,13 @@ export function StreamSource({ source }: { source: MediaSource }) {
                         <DropdownMenuSubContent>
                           <DropdownMenuItem
                             onClick={async () => {
-                              await copyToClipboard(source.url);
+                              await copyToClipboard(
+                                createUrlFromPrats({
+                                  domain: source?.domain,
+                                  pathname: source?.pathname,
+                                  protocol: source?.protocol,
+                                }),
+                              );
                               toast.success(
                                 "Link copied to your clipboard successfully.",
                               );

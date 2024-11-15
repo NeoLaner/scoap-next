@@ -25,6 +25,7 @@ export function makeRawSource({
   episode?: number | null;
 }): string {
   let updatedSource = source;
+  console.log(source);
 
   if (season !== null && season !== undefined) {
     // Replace all season placeholders (case-insensitive)
@@ -47,7 +48,7 @@ export function makeRawSource({
       },
     );
   }
-
+  console.log(updatedSource);
   return updatedSource;
 }
 
@@ -62,4 +63,43 @@ export function getUserIdToSourceData(
   //{ 6525134131232131 : 465364251341231,
   // 23525134131232131 : 1265364251341231 }
   return UsersSourceId;
+}
+
+export function extractUrlParts(url: string) {
+  try {
+    const protocol = new URL(url).protocol;
+    const domain = new URL(url).hostname;
+    const pathname = new URL(url).pathname;
+    return {
+      type: "success",
+      protocol,
+      domain,
+      pathname,
+      url,
+    } as const;
+  } catch (error) {
+    console.error("Invalid URL", error);
+    const errorObj = error as Error;
+    return {
+      type: "error",
+      name: errorObj.name,
+      message: errorObj.message,
+      cause: errorObj.cause,
+    } as const;
+  }
+}
+
+export function createUrlFromPrats({
+  protocol,
+  domain,
+  pathname,
+}: {
+  protocol: string | undefined;
+  domain: string | undefined;
+  pathname: string | undefined;
+}) {
+  if (!protocol || !domain || !pathname) return "";
+  //replace u8codes with {}
+  const editedPathname = pathname.replaceAll("%7B", "{").replaceAll("%7D", "}");
+  return `${protocol}//${domain}${editedPathname}`;
 }

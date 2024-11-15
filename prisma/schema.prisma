@@ -137,7 +137,9 @@ model MediaSource {
   updatedAt    DateTime        @updatedAt
   ownerId      String          @db.ObjectId
   imdbId       String
-  url          String
+  protocol     String
+  domain       String
+  pathname         String
   type         MediaSourceType @default(media)
   description  String? // if there is no description provided, the videoLink shows instead
   roomId       String          @db.ObjectId
@@ -175,7 +177,9 @@ model SubtitleSource {
   updatedAt   DateTime      @updatedAt
   ownerId     String        @db.ObjectId
   imdbId      String
-  url         String
+  protocol    String
+  domain      String
+  pathname        String
   type        SubSourceType @default(subtitle)
   translator  String?
   language    String
