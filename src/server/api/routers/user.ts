@@ -63,9 +63,14 @@ export const userRouter = createTRPCRouter({
   updateSrcsDomain: protectedProcedure
     .input(z.object({ srcIds: z.array(z.string()), domain: z.string() }))
     .query(async ({ ctx, input }) => {
-      await ctx.db.source.updateMany({
-        where: { id: { in: input.srcIds } },
-        data: {},
+      await ctx.db.mediaSource.updateMany({
+        where: { id: { in: input.srcIds }, ownerId: ctx.session.user.id },
+        data: { domain: input.domain },
+      });
+
+      await ctx.db.subtitleSource.updateMany({
+        where: { id: { in: input.srcIds }, ownerId: ctx.session.user.id },
+        data: { domain: input.domain },
       });
     }),
 });

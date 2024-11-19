@@ -79,7 +79,13 @@ export function StreamSource({ source }: { source: MediaSource }) {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const isOwner = userData?.id === source.ownerId;
   const outOfBoundary = Boolean(
-    checkIsDynamic(source.pathname) &&
+    checkIsDynamic(
+      createUrlFromPrats({
+        protocol: source.protocol,
+        domain: source.domain,
+        pathname: source.pathname,
+      }),
+    ) &&
       roomData.season &&
       !source.seasonBoundary.includes(roomData.season),
   );

@@ -8,7 +8,11 @@ import {
   AvatarImage,
 } from "~/app/_components/ui/avatar";
 import { cn, getFirstTwoLetters } from "~/lib/utils";
-import { checkIsDynamic, makeRawSource } from "~/lib/source";
+import {
+  checkIsDynamic,
+  createUrlFromPrats,
+  makeRawSource,
+} from "~/lib/source";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { Separator } from "~/app/_components/ui/separator";
@@ -75,14 +79,24 @@ export function Subtitle({ source }: { source: SubtitleType }) {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const isOwner = userData?.id === source.ownerId;
   const outOfBoundary = Boolean(
-    checkIsDynamic(source.url) &&
+    checkIsDynamic(
+      createUrlFromPrats({
+        protocol: source.protocol,
+        domain: source.domain,
+        pathname: source.pathname,
+      }),
+    ) &&
       roomData.season &&
       !source.seasonBoundary.includes(roomData.season),
   );
 
   const [_, copyToClipboard] = useCopyToClipboard();
   const rawSource = makeRawSource({
-    source: source.url,
+    source: createUrlFromPrats({
+      protocol: source.protocol,
+      domain: source.domain,
+      pathname: source.pathname,
+    }),
     season: roomData.season,
     episode: roomData.episode,
   });
@@ -160,7 +174,13 @@ export function Subtitle({ source }: { source: SubtitleType }) {
                   {roomData.type === "movie" && (
                     <DropdownMenuItem
                       onClick={async () => {
-                        await copyToClipboard(source.url);
+                        await copyToClipboard(
+                          createUrlFromPrats({
+                            protocol: source.protocol,
+                            domain: source.domain,
+                            pathname: source.pathname,
+                          }),
+                        );
                         toast.success(
                           "Link copied to your clipboard successfully.",
                         );
@@ -186,7 +206,13 @@ export function Subtitle({ source }: { source: SubtitleType }) {
                         <DropdownMenuSubContent>
                           <DropdownMenuItem
                             onClick={async () => {
-                              await copyToClipboard(source.url);
+                              await copyToClipboard(
+                                createUrlFromPrats({
+                                  protocol: source.protocol,
+                                  domain: source.domain,
+                                  pathname: source.pathname,
+                                }),
+                              );
                               toast.success(
                                 "Link copied to your clipboard successfully.",
                               );
@@ -328,7 +354,13 @@ function DynamicIcon({ source }: { source: SubtitleType }) {
   const { roomData } = useRoomData();
   const outOfBoundary =
     roomData.season && !source.seasonBoundary.includes(roomData.season);
-  const isDynamic = checkIsDynamic(source.url);
+  const isDynamic = checkIsDynamic(
+    createUrlFromPrats({
+      protocol: source.protocol,
+      domain: source.domain,
+      pathname: source.pathname,
+    }),
+  );
   return (
     <TooltipProvider>
       <Tooltip delayDuration={500}>

@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "~/app/_components/ui/tooltip";
 import { useRoomData } from "~/app/_hooks/useRoomData";
-import { checkIsDynamic } from "~/lib/source";
+import { checkIsDynamic, createUrlFromPrats } from "~/lib/source";
 import { cn } from "~/lib/utils";
 import { type api } from "~/trpc/server";
 
@@ -93,7 +93,13 @@ export function DynamicIcon({ source }: { source: MediaSource }) {
   const { roomData } = useRoomData();
   const outOfBoundary =
     roomData.season && !source.seasonBoundary.includes(roomData.season);
-  const isDynamic = checkIsDynamic(source.url);
+  const isDynamic = checkIsDynamic(
+    createUrlFromPrats({
+      protocol: source.protocol,
+      domain: source.domain,
+      pathname: source.pathname,
+    }),
+  );
   return (
     <TooltipProvider>
       <Tooltip delayDuration={500}>

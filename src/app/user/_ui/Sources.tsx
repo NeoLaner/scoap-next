@@ -1,14 +1,43 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { type CheckedState } from "@radix-ui/react-checkbox";
-import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "~/app/_components/ui/accordion";
+
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/app/_components/ui/form";
+import { Input } from "~/app/_components/ui/input";
+
 import { Button } from "~/app/_components/ui/Button";
 import { Checkbox } from "~/app/_components/ui/checkbox";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/app/_components/ui/dialog";
 import { IconText } from "~/app/_components/ui/IconComponents";
 import {
   Tooltip,
@@ -16,10 +45,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/app/_components/ui/tooltip";
+import { z } from "zod";
 import { createUrlFromPrats } from "~/lib/source";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { type api as apiServer } from "~/trpc/server";
+import { updateSourcesDomain } from "~/app/_actions/updateSourcesDomain";
 
 type DomainsStatus = {
   error: boolean;
@@ -33,10 +64,33 @@ type Srcs = NonNullable<
 
 type Src = Srcs[string]["srcs"][number];
 
+const formSchema = z.object({
+  domain: z.string().min(3).max(50),
+});
+
 function Sources() {
   const { data } = api.user.getAllSrcByDomain.useQuery();
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
   const [domainsStatus, setDomainsStatus] = useState([] as DomainsStatus);
   const [selectedUrls, setSelectedUrls] = useState([] as Src[]);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      domain: "",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+
+    // ✅ This will be type-safe and validated.
+    await updateSourcesDomain(
+      selectedUrls.map((src) => src.id),
+      values.domain,
+    );
+    closeBtnRef.current?.click();
+    await api.useUtils().user.getAllSrcByDomain.invalidate();
+  }
 
   const domains = data?.domains;
 
@@ -87,39 +141,75 @@ function Sources() {
 
   return (
     <div>
-      <div className="flex w-full justify-between">
-        <div>
-          <div>{selectedUrls.length} Selected</div>
-        </div>
-        <Button>Edit</Button>
-      </div>
-      {data?.sourcesGroupedByDomain?.map((srcs, i) => {
-        return (
-          <div key={i}>
-            {Object.keys(srcs).map((domain) => {
-              return (
-                <Accordion key={domain} type="multiple" className="w-full">
-                  <AccordionItem value={domain} className="w-full">
-                    <Trigger
-                      selectedUrls={selectedUrls}
-                      domainsStatus={domainsStatus}
-                      srcs={srcs}
-                      domain={domain}
-                      setSelectedUrls={setSelectedUrls}
-                    />
-                    <Content
-                      selectedUrls={selectedUrls}
-                      setSelectedUrls={setSelectedUrls}
-                      domain={domain}
-                      srcs={srcs}
-                    />
-                  </AccordionItem>
-                </Accordion>
-              );
-            })}
+      <Dialog>
+        <div className="flex w-full justify-between">
+          <div>
+            <div>{selectedUrls.length} Selected</div>
           </div>
-        );
-      })}
+          <DialogTrigger asChild>
+            <div>
+              <Button>Edit</Button>
+              <DialogClose ref={closeBtnRef} className="hidden" />
+            </div>
+          </DialogTrigger>
+        </div>
+        {data?.sourcesGroupedByDomain?.map((srcs, i) => {
+          return (
+            <div key={i}>
+              {Object.keys(srcs).map((domain) => {
+                return (
+                  <Accordion key={domain} type="multiple" className="w-full">
+                    <AccordionItem value={domain} className="w-full">
+                      <Trigger
+                        selectedUrls={selectedUrls}
+                        domainsStatus={domainsStatus}
+                        srcs={srcs}
+                        domain={domain}
+                        setSelectedUrls={setSelectedUrls}
+                      />
+                      <Content
+                        selectedUrls={selectedUrls}
+                        setSelectedUrls={setSelectedUrls}
+                        domain={domain}
+                        srcs={srcs}
+                      />
+                    </AccordionItem>
+                  </Accordion>
+                );
+              })}
+            </div>
+          );
+        })}
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Update sources domain</DialogTitle>
+            <DialogDescription>
+              Update selected sources domain by specify new domain.
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="domain"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input placeholder="dl.movies.com" {...field} />
+                    </FormControl>
+                    {/* <FormDescription>
+                      This is your public display name.
+                    </FormDescription> */}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Submit</Button>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
