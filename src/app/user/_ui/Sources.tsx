@@ -46,7 +46,11 @@ import {
   TooltipTrigger,
 } from "~/app/_components/ui/tooltip";
 import { z } from "zod";
-import { createUrlFromPrats } from "~/lib/source";
+import {
+  checkIsDynamic,
+  createUrlFromPrats,
+  makeRawSource,
+} from "~/lib/source";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { type api as apiServer } from "~/trpc/server";
@@ -54,7 +58,7 @@ import { updateSourcesDomain } from "~/app/_actions/updateSourcesDomain";
 
 type DomainsStatus = {
   error: boolean;
-  domain: string;
+  url: string;
   message: string;
 }[];
 
@@ -67,6 +71,29 @@ type Src = Srcs[string]["srcs"][number];
 const formSchema = z.object({
   domain: z.string().min(3).max(50),
 });
+
+async function checkUrlStatus(url: string) {
+  try {
+    const res = await fetch(url);
+    return {
+      error: false,
+      url,
+      message: "",
+    };
+  } catch (err) {
+    // If fetch fails, log the error message
+    let errorMessage = "An unknown error occurred";
+    if (err instanceof Error) {
+      errorMessage = err.message;
+    }
+
+    return {
+      url,
+      error: true,
+      message: errorMessage,
+    };
+  }
+}
 
 function Sources() {
   const { data } = api.user.getAllSrcByDomain.useQuery();
@@ -86,10 +113,9 @@ function Sources() {
     // ✅ This will be type-safe and validated.
     await updateSourcesDomain(
       selectedUrls.map((src) => src.id),
-      values.domain,
+      new URL(values.domain).hostname,
     );
     closeBtnRef.current?.click();
-    await api.useUtils().user.getAllSrcByDomain.invalidate();
   }
 
   const domains = data?.domains;
@@ -100,35 +126,10 @@ function Sources() {
         if (!domains) return;
         const responds = await Promise.all(
           domains.map(async (domain) => {
-            try {
-              const res = await fetch(`https://${domain}`);
-              setDomainsStatus((prv) => {
-                return [
-                  ...prv,
-                  {
-                    error: false,
-                    domain,
-                    message: "",
-                  },
-                ];
-              });
-            } catch (err) {
-              // If fetch fails, log the error message
-              let errorMessage = "An unknown error occurred";
-              if (err instanceof Error) {
-                errorMessage = err.message;
-              }
-              setDomainsStatus((prv) => {
-                return [
-                  ...prv,
-                  {
-                    domain,
-                    error: true,
-                    message: errorMessage,
-                  },
-                ];
-              });
-            }
+            const domainStatus = await checkUrlStatus(`https://${domain}`);
+            setDomainsStatus((prv) => {
+              return [...prv, domainStatus];
+            });
           }),
         );
       }
@@ -149,7 +150,6 @@ function Sources() {
           <DialogTrigger asChild>
             <div>
               <Button>Edit</Button>
-              <DialogClose ref={closeBtnRef} className="hidden" />
             </div>
           </DialogTrigger>
         </div>
@@ -194,7 +194,7 @@ function Sources() {
                 name="domain"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>New domain</FormLabel>
                     <FormControl>
                       <Input placeholder="dl.movies.com" {...field} />
                     </FormControl>
@@ -208,6 +208,11 @@ function Sources() {
               <Button type="submit">Submit</Button>
             </form>
           </Form>
+          <DialogClose asChild>
+            <Button ref={closeBtnRef} className="hidden">
+              close
+            </Button>
+          </DialogClose>
         </DialogContent>
       </Dialog>
     </div>
@@ -272,7 +277,7 @@ function Trigger({
               <div
                 className={cn(
                   domainsStatus.filter(
-                    (domainStatus) => domainStatus.domain === domain,
+                    (domainStatus) => domainStatus.url === `https://${domain}`,
                   )[0]?.error
                     ? "text-danger-foreground"
                     : "text-success-foreground",
@@ -286,7 +291,7 @@ function Trigger({
                 {
                   domainsStatus.filter(
                     (domainStatus) =>
-                      domainStatus.domain === domain && domainStatus.error,
+                      domainStatus.url === domain && domainStatus.error,
                   )[0]?.message
                 }
               </div>
@@ -322,37 +327,82 @@ function Content({
     <AccordionContent className="space-y-1">
       {srcs?.[domain]?.srcs.map((src) => {
         return (
-          <div
-            key={createUrlFromPrats({
-              pathname: src.pathname,
-              domain: src.domain,
-              protocol: src.protocol,
-            })}
-            className="ml-4 flex items-center gap-2"
-          >
-            <Checkbox
-              checked={
-                selectedUrls.filter((selSrc) => selSrc.id === src.id).length > 0
-              }
-              onCheckedChange={(checked) => {
-                if (checked === true) setSelectedUrls((prv) => [...prv, src]);
-                if (checked === false)
-                  setSelectedUrls((prv) => {
-                    return prv.filter((source) => source.id !== src.id);
-                  });
-              }}
-            />
-            <div className="flex items-center gap-4 text-muted-foreground">
-              <div>
-                <IconText>{src.type === "media" ? "med" : "sub"}</IconText>{" "}
-              </div>
-              <div>{src.name}</div>
-              <div>{src.imdbId}</div>
-            </div>
-          </div>
+          <Url
+            key={src.id}
+            src={src}
+            selectedUrls={selectedUrls}
+            setSelectedUrls={setSelectedUrls}
+          />
         );
       })}
     </AccordionContent>
+  );
+}
+
+function Url({
+  src,
+  selectedUrls,
+  setSelectedUrls,
+}: {
+  src: Src;
+  selectedUrls: Src[];
+  setSelectedUrls: Dispatch<SetStateAction<Src[]>>;
+}) {
+  const [urlStatus, setUrlStatus] = useState<DomainsStatus[number]>();
+  let url = createUrlFromPrats({
+    protocol: src.protocol,
+    domain: src.domain,
+    pathname: src.pathname,
+  });
+  if (checkIsDynamic(url))
+    url = makeRawSource({
+      source: url,
+      season: src.seasonBoundary[0],
+      episode: 1,
+    });
+
+  useEffect(
+    function () {
+      async function promise() {
+        if (!url) return;
+        console.log("wtf", url);
+
+        const respond = await checkUrlStatus(url);
+        setUrlStatus(respond);
+      }
+
+      //eslint-disable-next-line
+      promise();
+    },
+    [url],
+  );
+  return (
+    <div className="ml-4 flex items-center gap-2">
+      <Checkbox
+        checked={
+          selectedUrls.filter((selSrc) => selSrc.id === src.id).length > 0
+        }
+        onCheckedChange={(checked) => {
+          if (checked === true) setSelectedUrls((prv) => [...prv, src]);
+          if (checked === false)
+            setSelectedUrls((prv) => {
+              return prv.filter((source) => source.id !== src.id);
+            });
+        }}
+      />
+      <div
+        className={cn(
+          "flex items-center gap-4",
+          urlStatus?.error ? "text-danger-foreground" : "text-muted-foreground",
+        )}
+      >
+        <div>
+          <IconText>{src.type === "media" ? "med" : "sub"}</IconText>{" "}
+        </div>
+        <div>{src.name}</div>
+        <div>{src.imdbId}</div>
+      </div>
+    </div>
   );
 }
 

@@ -2,7 +2,6 @@ import StreamForm from "./StreamForm";
 import { UsersSource } from "./UsersSource";
 import { RoomSources } from "./RoomSources";
 import { PublicSources } from "./PublicSources";
-import { Separator } from "~/app/_components/ui/separator";
 import StreamSources from "./StreamSources";
 
 // http://127.0.0.1:11470/6ee1a751d67aae51dfd067b0a11e2f06d1098461/create

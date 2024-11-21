@@ -48,7 +48,7 @@ export function makeRawSource({
       },
     );
   }
-  console.log(updatedSource);
+
   return updatedSource;
 }
 
