@@ -165,14 +165,14 @@ export function StreamSource({ source }: { source: MediaSource }) {
 
             <div className="flex flex-col items-center border-l-2 pl-2">
               <DropdownMenu>
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger asChild>
                   <Button
-                    asChild
                     variant={"ghost"}
                     size={"icon"}
                     className="items-center justify-center overflow-hidden rounded-md p-1"
+                    asChild
                   >
-                    <CircleEllipsis size={20} />
+                    <CircleEllipsis size={20} className="cursor-pointer" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="z-50 text-sm">
@@ -246,16 +246,15 @@ export function StreamSource({ source }: { source: MediaSource }) {
                     <>
                       <DropdownMenuSeparator />
 
-                      <DialogTrigger asChild>
-                        <DropdownMenuItem>
-                          {" "}
+                      <DropdownMenuItem asChild>
+                        <DialogTrigger asChild>
                           <div className="flex gap-2">
                             <Trash2 size={22} />
 
                             <span>Delete </span>
                           </div>
-                        </DropdownMenuItem>
-                      </DialogTrigger>
+                        </DialogTrigger>
+                      </DropdownMenuItem>
                     </>
                   )}
                 </DropdownMenuContent>
