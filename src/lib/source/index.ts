@@ -25,8 +25,6 @@ export function makeRawSource({
   episode?: number | null;
 }): string {
   let updatedSource = source;
-  console.log(source);
-
   if (season !== null && season !== undefined) {
     // Replace all season placeholders (case-insensitive)
     updatedSource = updatedSource.replace(

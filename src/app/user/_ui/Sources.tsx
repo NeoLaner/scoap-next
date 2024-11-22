@@ -365,8 +365,6 @@ function Url({
     function () {
       async function promise() {
         if (!url) return;
-        console.log("wtf", url);
-
         const respond = await checkUrlStatus(url);
         setUrlStatus(respond);
       }

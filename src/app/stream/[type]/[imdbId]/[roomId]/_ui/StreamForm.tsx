@@ -92,8 +92,6 @@ function StreamForm() {
   const seasonBoundary = form.watch("seasonBoundary");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-
     const sourceData = await addDirectLink({
       ...values,
       roomId: roomData.id,
