@@ -69,6 +69,7 @@ export const mediaSourceRouter = createTRPCRouter({
         qualityType: QualityTypeEnum.optional(),
         isHdr: z.boolean().optional(),
         countryEmoji: z.string().optional(),
+        mediaType: z.enum(["movie", "series"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -112,6 +113,7 @@ export const mediaSourceRouter = createTRPCRouter({
           qualityType: input.qualityType,
           isHdr: input.isHdr,
           country: input.countryEmoji,
+          mediaType: input.mediaType,
         },
         include: { user: true },
       });

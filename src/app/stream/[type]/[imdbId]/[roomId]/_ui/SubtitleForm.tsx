@@ -112,6 +112,7 @@ function SubtitleForm() {
         ...values,
         roomId: roomData.id,
         imdbId: roomData.imdbId,
+        mediaType: roomData.type === "series" ? "series" : "movie",
         crossorigin: corsStatus,
       });
       btnClose.current?.click();

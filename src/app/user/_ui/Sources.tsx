@@ -19,7 +19,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -55,8 +54,8 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { type api as apiServer } from "~/trpc/server";
 import { updateSourcesDomain } from "~/app/_actions/updateSourcesDomain";
-import { useQueries, useQuery } from "@tanstack/react-query";
-import { CircleCheck, CircleEllipsis, TriangleAlert } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { TriangleAlert } from "lucide-react";
 import Link from "next/link";
 
 type DomainsStatus = {
@@ -75,9 +74,18 @@ const formSchema = z.object({
   domain: z.string().min(3).max(50),
 });
 
+function isValidUrl(urlString: string): boolean {
+  try {
+    new URL(urlString);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 async function checkUrlStatus(url: string) {
   try {
-    const res = await fetch(url);
+    await fetch(url);
     return {
       error: false,
       url,
@@ -100,6 +108,7 @@ async function checkUrlStatus(url: string) {
 
 function Sources() {
   const { data } = api.user.getAllSrcByDomain.useQuery();
+  const { user } = api.useUtils();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const [domainsStatus, setDomainsStatus] = useState([] as DomainsStatus);
   const [selectedUrls, setSelectedUrls] = useState([] as Src[]);
@@ -116,8 +125,12 @@ function Sources() {
     // ✅ This will be type-safe and validated.
     await updateSourcesDomain(
       selectedUrls.map((src) => src.id),
-      new URL(values.domain).hostname,
+      isValidUrl(values.domain)
+        ? new URL(values.domain).hostname
+        : values.domain,
     );
+    await user.invalidate();
+    setSelectedUrls([]);
     closeBtnRef.current?.click();
   }
 
@@ -127,7 +140,7 @@ function Sources() {
     function () {
       async function promise() {
         if (!domains) return;
-        const responds = await Promise.all(
+        await Promise.all(
           domains.map(async (domain) => {
             const domainStatus = await checkUrlStatus(`https://${domain}`);
             setDomainsStatus((prv) => {
@@ -358,7 +371,7 @@ function Url({
     domain: src.domain,
     pathname: src.pathname,
   });
-  const { data, error, status } = useQuery({
+  const { error, status } = useQuery({
     queryFn: () => {
       let source = url;
       if (checkIsDynamic(url))
@@ -428,7 +441,11 @@ function Url({
         </div>
         <div>{src.name}</div>
 
-        <div>{/* <Link href={src.}>{src.imdbId}</Link> */}</div>
+        <div>
+          <Link href={`/stream/${src.mediaType}/${src.imdbId}`} target="_blank">
+            {src.imdbId}
+          </Link>
+        </div>
       </div>
     </div>
   );

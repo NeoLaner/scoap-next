@@ -77,6 +77,7 @@ export const subtitleRouter = createTRPCRouter({
         crossorigin: z.boolean(),
         language: z.string(),
         translator: z.string().optional(),
+        mediaType: z.enum(["movie", "series"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -117,6 +118,7 @@ export const subtitleRouter = createTRPCRouter({
           crossorigin: input.crossorigin,
           language: input.language,
           translator: input.translator,
+          mediaType: input.mediaType,
         },
         include: { user: true },
       });

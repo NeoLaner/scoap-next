@@ -98,6 +98,7 @@ function StreamForm() {
       imdbId: roomData.imdbId,
       season: roomData.season ?? undefined,
       episode: roomData.episode ?? undefined,
+      mediaType: roomData.type === "series" ? "series" : "movie",
       countryEmoji,
     });
 

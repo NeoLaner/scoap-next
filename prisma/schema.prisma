@@ -139,8 +139,9 @@ model MediaSource {
   imdbId       String
   protocol     String
   domain       String
-  pathname         String
+  pathname     String
   type         MediaSourceType @default(media)
+  mediaType    MediaType
   description  String? // if there is no description provided, the videoLink shows instead
   roomId       String          @db.ObjectId
   isPublic     Boolean         @default(false)
@@ -171,6 +172,12 @@ enum SubSourceType {
   subtitle
 }
 
+enum MediaType {
+  movie
+  series
+  other
+}
+
 model SubtitleSource {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   createdAt   DateTime      @default(now())
@@ -179,8 +186,9 @@ model SubtitleSource {
   imdbId      String
   protocol    String
   domain      String
-  pathname        String
+  pathname    String
   type        SubSourceType @default(subtitle)
+  mediaType   MediaType
   translator  String?
   language    String
   description String? // if there is no description provided, the videoLink shows instead

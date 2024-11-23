@@ -16,6 +16,7 @@ export async function addSubtitle({
   language,
   translator,
   crossorigin,
+  mediaType,
 }: {
   url: string;
   roomId: string;
@@ -29,6 +30,7 @@ export async function addSubtitle({
   translator?: string;
   language: string;
   crossorigin: boolean;
+  mediaType: "series" | "movie";
 }) {
   const isDynamic = checkIsDynamic(url);
   const session = await getServerAuthSession();
@@ -50,6 +52,7 @@ export async function addSubtitle({
           name,
           description,
           translator,
+          mediaType,
         }
       : {
           crossorigin,
@@ -64,6 +67,7 @@ export async function addSubtitle({
           season,
           description,
           translator,
+          mediaType,
         },
   );
   if (!subtitleData) return; //TODO: ERROR
