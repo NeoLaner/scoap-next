@@ -55,6 +55,9 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { type api as apiServer } from "~/trpc/server";
 import { updateSourcesDomain } from "~/app/_actions/updateSourcesDomain";
+import { useQueries, useQuery } from "@tanstack/react-query";
+import { CircleCheck, CircleEllipsis, TriangleAlert } from "lucide-react";
+import Link from "next/link";
 
 type DomainsStatus = {
   error: boolean;
@@ -143,16 +146,18 @@ function Sources() {
   return (
     <div>
       <Dialog>
-        <div className="flex w-full justify-between">
-          <div>
-            <div>{selectedUrls.length} Selected</div>
-          </div>
-          <DialogTrigger asChild>
+        {selectedUrls.length > 0 && (
+          <div className="flex w-full justify-between">
             <div>
-              <Button>Edit</Button>
+              <div>{selectedUrls.length} Selected</div>
             </div>
-          </DialogTrigger>
-        </div>
+            <DialogTrigger asChild>
+              <div>
+                <Button>Edit</Button>
+              </div>
+            </DialogTrigger>
+          </div>
+        )}
         {data?.sourcesGroupedByDomain?.map((srcs, i) => {
           return (
             <div key={i}>
@@ -348,34 +353,56 @@ function Url({
   selectedUrls: Src[];
   setSelectedUrls: Dispatch<SetStateAction<Src[]>>;
 }) {
-  const [urlStatus, setUrlStatus] = useState<DomainsStatus[number]>();
-  let url = createUrlFromPrats({
+  const url = createUrlFromPrats({
     protocol: src.protocol,
     domain: src.domain,
     pathname: src.pathname,
   });
-  if (checkIsDynamic(url))
-    url = makeRawSource({
-      source: url,
-      season: src.seasonBoundary[0],
-      episode: 1,
-    });
-
-  useEffect(
-    function () {
-      async function promise() {
-        if (!url) return;
-        const respond = await checkUrlStatus(url);
-        setUrlStatus(respond);
-      }
-
-      //eslint-disable-next-line
-      promise();
+  const { data, error, status } = useQuery({
+    queryFn: () => {
+      let source = url;
+      if (checkIsDynamic(url))
+        source = makeRawSource({
+          source: url,
+          season: src.seasonBoundary[0],
+          episode: 1,
+        });
+      return fetch(source, { method: "HEAD" });
     },
-    [url],
-  );
+    queryKey: [url],
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    retryOnMount: false,
+  });
+
+  // useEffect(
+  //   function () {
+  //     async function promise() {
+  //       if (!url) return;
+  //       const respond = await checkUrlStatus(url);
+  //       setUrlStatus(respond);
+  //     }
+
+  //     //eslint-disable-next-line
+  //     promise();
+  //   },
+  //   [url],
+  // );
   return (
-    <div className="ml-4 flex items-center gap-2">
+    <div className="flex items-center gap-2">
+      {status === "pending" && <div className="loader-spinner mr-1 !w-1" />}
+      {status === "error" && (
+        <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger>
+              <TriangleAlert className="w-5 text-danger-foreground" />
+            </TooltipTrigger>
+            <TooltipContent>{error.message}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+      {status === "success" && <div className="w-5" />}
       <Checkbox
         checked={
           selectedUrls.filter((selSrc) => selSrc.id === src.id).length > 0
@@ -391,14 +418,17 @@ function Url({
       <div
         className={cn(
           "flex items-center gap-4",
-          urlStatus?.error ? "text-danger-foreground" : "text-muted-foreground",
+          status === "error" && "text-danger-foreground",
+          status === "pending" && "text-muted-foreground",
+          status === "success" && "text-success-foreground",
         )}
       >
         <div>
           <IconText>{src.type === "media" ? "med" : "sub"}</IconText>{" "}
         </div>
         <div>{src.name}</div>
-        <div>{src.imdbId}</div>
+
+        <div>{/* <Link href={src.}>{src.imdbId}</Link> */}</div>
       </div>
     </div>
   );
