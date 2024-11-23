@@ -83,7 +83,7 @@ function Episode({ episode }: { episode: Video }) {
       roomData.season === episode.season
     )
       return null;
-    if (roomData.ownerId !== userData.id)
+    if (roomData.ownerId !== userData?.id)
       return toast.error("Only the host can change the episode");
     setIsPending(true);
     const updatedRoomData = await updateEpisode({
