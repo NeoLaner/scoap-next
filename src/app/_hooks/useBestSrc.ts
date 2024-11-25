@@ -62,23 +62,29 @@ export function useBestSrc() {
     );
   });
 
+  //Sort allSrcWorked
+  //Choose the first sources if get an error in player go to the next one
+  const curSrcNumber = 0;
+  const curSrc = allSrcWorked[curSrcNumber];
+
   useEffect(
     function () {
-      if (
-        allSrcWorked.length > 0 &&
-        sourceData?.mediaSourceId !== allSrcWorked[0]?.id
-      ) {
+      if (curSrc && sourceData?.mediaSourceId !== curSrc?.id) {
         setSourceData((src) => {
           const source = {
-            ...src,
-            mediaSourceId: allSrcWorked[0]?.id ?? "",
             id: src?.id ?? "",
+            mediaSourceId: curSrc?.id ?? "",
+            subtitleSourceId: src?.subtitleSourceId ?? "",
+            createdAt: src?.createdAt ?? curSrc.createdAt,
+            updatedAt: src?.updatedAt ?? curSrc.updatedAt,
+            userId: src?.userId ?? "",
+            roomId: src?.roomId ?? "",
           };
           return source;
         });
-        setCurrentMediaSrc(allSrcWorked[0]);
+        setCurrentMediaSrc(curSrc);
       }
     },
-    [setCurrentMediaSrc, setSourceData, allSrcWorked, sourceData],
+    [setCurrentMediaSrc, setSourceData, allSrcWorked, sourceData, curSrc],
   );
 }
