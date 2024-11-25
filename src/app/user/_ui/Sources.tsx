@@ -389,19 +389,6 @@ function Url({
     retryOnMount: false,
   });
 
-  // useEffect(
-  //   function () {
-  //     async function promise() {
-  //       if (!url) return;
-  //       const respond = await checkUrlStatus(url);
-  //       setUrlStatus(respond);
-  //     }
-
-  //     //eslint-disable-next-line
-  //     promise();
-  //   },
-  //   [url],
-  // );
   return (
     <div className="flex items-center gap-2">
       {status === "pending" && <div className="loader-spinner mr-1 !w-1" />}

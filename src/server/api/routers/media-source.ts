@@ -31,12 +31,13 @@ export const mediaSourceRouter = createTRPCRouter({
           where: {
             imdbId: input.imdbId,
             isPublic: true,
+            mediaType: "series",
           },
           include: { user: true },
         });
       if (roomData.type === "movie")
         return await ctx.db.mediaSource.findMany({
-          where: { imdbId: input.imdbId, isPublic: true },
+          where: { imdbId: input.imdbId, mediaType: "movie", isPublic: true },
           include: { user: true },
         });
     }),

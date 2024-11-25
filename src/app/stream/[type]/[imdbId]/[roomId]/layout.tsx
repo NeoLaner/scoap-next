@@ -12,10 +12,7 @@ import { redirect } from "next/navigation";
 import { UsersSourceDataProvider } from "~/app/_providers/UsersSourceDataProvider";
 import { PublicSourcesProvider } from "~/app/_providers/PublicSourcesProvider";
 import { CurrentMediaSrcProvider } from "~/app/_providers/CurrentMediaSrcProvider";
-import {
-  UsersSubDataContext,
-  UsersSubDataProvider,
-} from "~/app/_providers/UsersSubsProvider";
+import { UsersSubDataProvider } from "~/app/_providers/UsersSubsProvider";
 import { PublicSubsProvider } from "~/app/_providers/PublicSubsProvider";
 import { RoomSubsProvider } from "~/app/_providers/RoomSubsProvider";
 import { CurSubProvider } from "~/app/_providers/CurrentSubProvider";
@@ -59,10 +56,6 @@ async function Layout({
     roomId: roomData.id,
   });
 
-  let bestSrc;
-  if (!sourceData?.mediaSourceId)
-    bestSrc = await api.source.bestSrcForMe({ roomId: roomData.id });
-
   const mediaCurSrc = sourceData?.mediaSourceId
     ? await api.mediaSource.get({ id: sourceData?.mediaSourceId })
     : undefined;
@@ -98,7 +91,7 @@ async function Layout({
       <RoomSettingsProvider>
         <ChatDataProvider>
           {/*NOTE: The source data not must be null!! */}
-          <SourceDataProvider initialSourceData={bestSrc ?? sourceData}>
+          <SourceDataProvider initialSourceData={sourceData}>
             <CurrentMediaSrcProvider initialCurMediaSrc={mediaCurSrc}>
               <PublicSourcesProvider
                 initialPublicSources={initialPublicSources}

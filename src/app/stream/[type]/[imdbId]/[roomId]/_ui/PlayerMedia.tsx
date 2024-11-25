@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState, type RefObject } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import HLS from "hls.js";
 import {
   type MediaPlayerInstance,
@@ -15,25 +15,31 @@ import {
 import VideoLayout from "./VideoLayout";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 
-import { createUrlFromPrats, makeRawSource } from "~/lib/source";
+import {
+  checkIsDynamic,
+  createUrlFromPrats,
+  makeRawSource,
+} from "~/lib/source";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
-import { api } from "~/trpc/react";
 import { useCurSub } from "~/app/_hooks/useCurSub";
 import { getSubtitle } from "~/app/_actions/getSubFromUrl";
 import { toast } from "sonner";
+import { useBestSrc } from "~/app/_hooks/useBestSrc";
 
 function PlayerMedia({
   playerRef,
 }: {
   playerRef: RefObject<MediaPlayerInstance>;
 }) {
+  useBestSrc();
   const { metaData } = useMetaData();
 
   const { roomData } = useRoomData();
   const { currentMediaSrc } = useCurMediaSrc();
   const { currentSubtitle } = useCurSub();
-  const subtitleUrl = createUrlFromPrats({
+  const subtitleUrl = useRef<string>();
+  subtitleUrl.current = createUrlFromPrats({
     domain: currentSubtitle?.domain,
     pathname: currentSubtitle?.pathname,
     protocol: currentSubtitle?.protocol,
@@ -44,8 +50,14 @@ function PlayerMedia({
   useEffect(() => {
     async function fetchData() {
       try {
-        if (!subtitleUrl) return;
-        setSubContent((await getSubtitle(subtitleUrl)).subtitle);
+        if (!subtitleUrl.current) return;
+        if (checkIsDynamic(subtitleUrl.current))
+          subtitleUrl.current = makeRawSource({
+            source: subtitleUrl.current,
+            season: roomData.season,
+            episode: roomData.episode,
+          });
+        setSubContent((await getSubtitle(subtitleUrl.current)).subtitle);
       } catch (error) {
         toast.error(`Getting subtitle: ${(error as Error).message}`);
         throw new Error((error as Error).message);

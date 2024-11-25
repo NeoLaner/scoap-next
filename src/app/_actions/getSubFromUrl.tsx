@@ -22,6 +22,7 @@ function isValidUrl(input: string): boolean {
 
 export async function getSubtitle(url: string) {
   console.log("💥💥💥 Getting Sub");
+  console.log(url);
 
   if (!isValidUrl(url)) {
     throw new Error("Invalid or unauthorized URL");

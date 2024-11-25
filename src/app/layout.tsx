@@ -7,7 +7,7 @@ import { PlayerProvider } from "./_providers/PlayerProvider";
 import { ThemeProvider } from "./_ui/theme-provider";
 import { Toaster } from "./_components/ui/sonner";
 import ProtectedRoute from "./_ui/ProtectedRoute";
-import { getServerAuthSession } from "~/server/auth";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const inter = Inter({
   subsets: ["latin"],

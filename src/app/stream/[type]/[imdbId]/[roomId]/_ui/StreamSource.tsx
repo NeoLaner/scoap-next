@@ -68,6 +68,13 @@ import {
   QualityTypeIcon,
   SubtitleIcon,
 } from "~/app/_components/ui/IconComponents";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/app/_components/ui/tooltip";
 
 type MediaSource = NonNullable<Awaited<ReturnType<typeof api.mediaSource.get>>>;
 export function StreamSource({ source }: { source: MediaSource }) {
@@ -89,6 +96,28 @@ export function StreamSource({ source }: { source: MediaSource }) {
       roomData.season &&
       !source.seasonBoundary.includes(roomData.season),
   );
+  const url = createUrlFromPrats({
+    protocol: source.protocol,
+    domain: source.domain,
+    pathname: source.pathname,
+  });
+  const { error, status } = useQuery({
+    queryFn: () => {
+      let source = url;
+      if (checkIsDynamic(url))
+        source = makeRawSource({
+          source: url,
+          season: roomData.season,
+          episode: 1,
+        });
+      return fetch(source, { method: "HEAD" });
+    },
+    queryKey: [url],
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    retryOnMount: false,
+  });
 
   const [_, copyToClipboard] = useCopyToClipboard();
   const rawSource = makeRawSource({
@@ -106,6 +135,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
   const { setPublicSources } = usePublicSources();
   const { setUsersSourceData } = useUsersSourceData();
   const { setRoomSourcesData } = useRoomSources();
+
   const deleteHandler = async () => {
     await deleteMySource(source.id);
     closeBtnRef.current?.click();
@@ -126,6 +156,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
         `w-full  gap-2 rounded-lg  border-2 p-4 py-2`,
         isSelectedSource ? "border-success-foreground bg-success/55" : "",
         outOfBoundary && "border-danger-foreground bg-danger/55",
+        error && "opacity-60",
       )}
     >
       <Dialog>
@@ -136,10 +167,27 @@ export function StreamSource({ source }: { source: MediaSource }) {
               <UserProfile source={source} />
             </div>
             <div className="flex flex-col">
-              <p className=" text-sm">
-                {source.name}
-                <span className="text-md"> {source.country}</span>
-              </p>
+              <div className="flex items-center">
+                <p className=" text-sm">
+                  {source.name}
+                  <span className="text-md"> {source.country}</span>
+                </p>
+
+                {status === "error" && (
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <TriangleAlert className="w-4 text-danger-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>{error.message}</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+
+                {status === "pending" && (
+                  <div className="loader-spinner mr-1 !w-1" />
+                )}
+              </div>
               <p className=" text-xs text-muted-foreground">
                 Shared by: {source.user.name}
               </p>
