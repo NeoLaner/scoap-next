@@ -36,12 +36,12 @@ import { useUserData } from "~/app/_hooks/useUserData";
 import { changeInstanceOnline } from "~/app/_actions/changeInstanceOnline";
 import { mediaSocket } from "~/lib/socket/socket";
 import { useRoomData } from "~/app/_hooks/useRoomData";
-import { Button } from "~/app/_components/ui/Button";
+import { Button } from "~/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "~/app/_components/ui/tooltip";
+} from "~/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
 import { BsShare, BsShareFill } from "react-icons/bs";

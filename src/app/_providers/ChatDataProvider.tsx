@@ -11,7 +11,7 @@ import { useRoomData } from "../_hooks/useRoomData";
 import { useRoomSettings } from "../_hooks/useRoomSettings";
 import { toast } from "sonner";
 import eventEmitter from "~/lib/eventEmitter/eventEmitter";
-import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { getFirstTwoLetters } from "~/lib/utils";
 import { type MessageProp } from "~/lib/@types/Message";
 import { type ServerMessagesId } from "../stream/[type]/[imdbId]/[roomId]/_ui/ServerMessages";

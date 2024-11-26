@@ -1,4 +1,4 @@
-import { Button } from "~/app/_components/ui/Button";
+import { Button } from "~/components/ui/button";
 import * as Buttons from "./Buttons";
 import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 export type ServerMessagesId = "NO_SOURCE" | "OFFLINE" | "ONLINE";

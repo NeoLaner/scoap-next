@@ -1,6 +1,6 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { Button } from "~/app/_components/ui/Button";
+import { Button } from "~/components/ui/button";
 
 function MenuButtons() {
   return (

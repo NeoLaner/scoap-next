@@ -7,14 +7,11 @@ const EmojiPicker = dynamic(() => import("emoji-picker-react"), {
 
 import { useRef, useState } from "react";
 import { addDirectLink } from "~/app/_actions/addDirectLink";
-import { Textarea } from "~/app/_components/ui/Textarea";
+import { Textarea } from "~/components/ui/textarea";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useSourceData } from "~/app/_hooks/useSourceData";
-import { Button } from "~/app/_components/ui/Button";
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "~/app/_components/ui/toggle-group";
+import { Button } from "~/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { checkIsDynamic, makeRawSource } from "~/lib/source";
 import {
   Sheet,
@@ -24,7 +21,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "~/app/_components/ui/sheet";
+} from "~/components/ui/sheet";
 import {
   Form,
   FormControl,
@@ -33,12 +30,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/app/_components/ui/form";
-import { ScrollArea } from "~/app/_components/ui/scroll-area";
-import { Checkbox } from "~/app/_components/ui/checkbox";
+} from "~/components/ui/form";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Checkbox } from "~/components/ui/checkbox";
 import { z } from "zod";
 
-import { Input } from "~/app/_components/ui/input";
+import { Input } from "~/components/ui/input";
 import { QualityTypeEnum } from "~/lib/@types/Media";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { extractUniqueSeasons } from "~/lib/metadata";
@@ -49,7 +46,7 @@ import { useUsersSourceData } from "~/app/_hooks/useUsersSourceData";
 import { useCurMediaSrc } from "~/app/_hooks/useCurMediaSrc";
 import { usePublicSources } from "~/app/_hooks/usePublicSources";
 import { useRoomSources } from "~/app/_hooks/useRoomSources";
-import { Separator } from "~/app/_components/ui/separator";
+import { Separator } from "~/components/ui/separator";
 import Countries from "./Countries";
 
 const formSchema = z.object({

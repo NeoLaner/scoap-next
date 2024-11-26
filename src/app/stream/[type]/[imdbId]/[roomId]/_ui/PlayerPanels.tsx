@@ -7,19 +7,19 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "~/app/_components/ui/resizable";
+} from "~/components/ui/resizable";
 import { createContext, type ReactNode, useContext, useEffect } from "react";
-import { Button } from "~/app/_components/ui/Button";
+import { Button } from "~/components/ui/button";
 import { PiDiceSixFill } from "react-icons/pi";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "~/app/_components/ui/tooltip";
+} from "~/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import * as Buttons from "./Buttons";
 import { useRoomSettings } from "~/app/_hooks/useRoomSettings";
-import { ScrollArea } from "~/app/_components/ui/scroll-area";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import useServerMessages from "~/app/_hooks/useServerMessages";
 
 const PanelContext = createContext<{

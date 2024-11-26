@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "~/app/_components/ui/Button";
+import { Button } from "~/components/ui/button";
 import { joinRoom } from "~/app/_actions/joinRoom";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useParams, useRouter } from "next/navigation";

@@ -11,7 +11,7 @@ import { useUserData } from "~/app/_hooks/useUserData";
 import { toast } from "sonner";
 import { cn, truncateText } from "~/lib/utils";
 
-import { AspectRatio } from "~/app/_components/ui/aspect-ratio";
+import { AspectRatio } from "~/components/ui/aspect-ratio";
 
 import { useState } from "react";
 import { CircleCheck, CirclePlay } from "lucide-react";
@@ -20,7 +20,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "~/app/_components/ui/accordion";
+} from "~/components/ui/accordion";
 
 import { useGetRightPanelSize } from "~/app/_hooks/useGetRightPanelSize";
 

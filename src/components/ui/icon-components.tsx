@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "~/app/_components/ui/tooltip";
+} from "~/components/ui/tooltip";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { checkIsDynamic, createUrlFromPrats } from "~/lib/source";
 import { cn } from "~/lib/utils";

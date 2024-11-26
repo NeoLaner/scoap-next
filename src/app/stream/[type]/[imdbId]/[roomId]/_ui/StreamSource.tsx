@@ -1,12 +1,8 @@
 "use client";
 
-import { Button } from "~/app/_components/ui/Button";
+import { Button } from "~/components/ui/button";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "~/app/_components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { cn, getFirstTwoLetters } from "~/lib/utils";
 import {
   checkIsDynamic,
@@ -15,7 +11,7 @@ import {
 } from "~/lib/source";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { useRoomData } from "~/app/_hooks/useRoomData";
-import { Separator } from "~/app/_components/ui/separator";
+import { Separator } from "~/components/ui/separator";
 import {
   ArrowRightCircle,
   CheckCircle2,
@@ -36,7 +32,7 @@ import {
   DropdownMenuItem,
   DropdownMenuPortal,
   DropdownMenuSeparator,
-} from "~/app/_components/ui/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import { PiCopyBold } from "react-icons/pi";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { toast } from "sonner";
@@ -49,7 +45,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
-} from "~/app/_components/ui/dialog";
+} from "~/components/ui/dialog";
 import { deleteMySource } from "~/app/_actions/deleteMySource";
 import { useRef } from "react";
 import { useSourceData } from "~/app/_hooks/useSourceData";
@@ -67,14 +63,14 @@ import {
   QualityIcon,
   QualityTypeIcon,
   SubtitleIcon,
-} from "~/app/_components/ui/IconComponents";
+} from "~/components/ui/icon-components";
 import { useQuery } from "@tanstack/react-query";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "~/app/_components/ui/tooltip";
+} from "~/components/ui/tooltip";
 
 type MediaSource = NonNullable<Awaited<ReturnType<typeof api.mediaSource.get>>>;
 export function StreamSource({ source }: { source: MediaSource }) {

@@ -1,8 +1,8 @@
 import { Suspense, type ReactNode } from "react";
 import MainLayout from "../_ui/MainLayout";
-import { Separator } from "../_components/ui/separator";
+import { Separator } from "~/components/ui/separator";
 import MenuButtons from "./_ui/MenuButtons";
-import { ScrollArea } from "../_components/ui/scroll-area";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 function Layout({ children }: { children: ReactNode }) {
   return (

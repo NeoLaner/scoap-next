@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import * as Form from "@radix-ui/react-form";
-import { Button } from "~/app/_components/ui/Button";
-import { Input } from "~/app/_components/ui/input";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import { updateUserInfo } from "~/app/_actions/updateUserInfo";
 import { api } from "~/trpc/react";
 

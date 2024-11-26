@@ -2,7 +2,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "~/app/_components/ui/popover";
+} from "~/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -10,9 +10,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "~/app/_components/ui/command";
+} from "~/components/ui/command";
 import { type Dispatch, type SetStateAction, useRef, useState } from "react";
-import { Button } from "~/app/_components/ui/Button";
+import { Button } from "~/components/ui/button";
 import flagEmojis from "~/lib/flags";
 import { CheckIcon } from "lucide-react";
 import { cn } from "~/lib/utils";

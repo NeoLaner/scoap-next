@@ -22,7 +22,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
   TooltipContent,
-} from "~/app/_components/ui/tooltip";
+} from "~/components/ui/tooltip";
 
 export interface SettingsProps {
   placement: MenuPlacement;

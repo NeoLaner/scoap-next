@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "~/app/_components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { useUserData } from "~/app/_hooks/useUserData";
 import { getFirstTwoLetters } from "~/lib/utils";
 

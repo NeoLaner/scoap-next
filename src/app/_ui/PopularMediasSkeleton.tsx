@@ -1,5 +1,5 @@
 import { cn } from "~/lib/utils";
-import { Skeleton } from "../_components/ui/Skeleton";
+import { Skeleton } from "~/components/ui/skeleton";
 import { SkeletonCard } from "./SkeletonCard";
 
 function PopularMediasSkeleton({

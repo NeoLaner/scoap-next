@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "~/trpc/react";
-import { Button } from "../_components/ui/Button";
+import { Button } from "~/components/ui/button";
 
 export function CreatePost() {
   const router = useRouter();

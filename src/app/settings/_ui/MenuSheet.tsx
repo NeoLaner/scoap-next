@@ -1,4 +1,4 @@
-import { Button } from "~/app/_components/ui/Button";
+import { Button } from "~/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -6,7 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "~/app/_components/ui/sheet";
+} from "~/components/ui/sheet";
 import MenuButtons from "./MenuButtons";
 
 function MenuSheet() {

@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { ScrollArea } from "~/app/_components/ui/scroll-area";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 function layout({ children }: { children: ReactNode }) {
   return (

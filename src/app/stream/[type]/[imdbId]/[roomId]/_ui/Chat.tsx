@@ -2,12 +2,8 @@
 import { useState, type FormEvent, useEffect, useRef } from "react";
 import socketEmitters from "~/app/_services/socket/socketEmit";
 import { getFirstTwoLetters } from "~/lib/utils";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "~/app/_components/ui/avatar";
-import { Input } from "~/app/_components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Input } from "~/components/ui/input";
 import { useChatData } from "~/app/_hooks/useChatData";
 import ServerMessages from "./ServerMessages";
 

@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import { PlayerProvider } from "./_providers/PlayerProvider";
 import { ThemeProvider } from "./_ui/theme-provider";
-import { Toaster } from "./_components/ui/sonner";
+import { Toaster } from "~/components/ui/sonner";
 import ProtectedRoute from "./_ui/ProtectedRoute";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 

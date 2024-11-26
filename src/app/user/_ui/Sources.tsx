@@ -14,7 +14,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "~/app/_components/ui/accordion";
+} from "~/components/ui/accordion";
 
 import {
   Form,
@@ -23,11 +23,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/app/_components/ui/form";
-import { Input } from "~/app/_components/ui/input";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 
-import { Button } from "~/app/_components/ui/Button";
-import { Checkbox } from "~/app/_components/ui/checkbox";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -36,14 +36,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/app/_components/ui/dialog";
-import { IconText } from "~/app/_components/ui/IconComponents";
+} from "~/components/ui/dialog";
+import { IconText } from "~/components/ui/icon-components";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "~/app/_components/ui/tooltip";
+} from "~/components/ui/tooltip";
 import { z } from "zod";
 import {
   checkIsDynamic,

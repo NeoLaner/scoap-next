@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Button } from "../_components/ui/Button";
+import { Button } from "~/components/ui/button";
 
 function LoginLogoutBtn({
   user,

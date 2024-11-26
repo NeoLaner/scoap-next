@@ -4,15 +4,15 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "~/app/_components/ui/popover";
+} from "~/components/ui/popover";
 import { ButtonFullscreen } from "./ButtonFullscreen";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
-import { Button } from "../_components/ui/Button";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
 import { getFirstTwoLetters } from "~/lib/utils";
 import { useRouter } from "next/navigation";
 import { PiTelegramLogo, PiTelegramLogoFill } from "react-icons/pi";
-import { Separator } from "../_components/ui/separator";
+import { Separator } from "~/components/ui/separator";
 import LoginLogoutBtn from "./LoginLogoutBtn";
 
 const UserDropMenu = ({

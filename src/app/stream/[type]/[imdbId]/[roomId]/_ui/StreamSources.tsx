@@ -1,11 +1,8 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Separator } from "~/app/_components/ui/separator";
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "~/app/_components/ui/toggle-group";
+import { Separator } from "~/components/ui/separator";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
 type Filter = "all" | "users" | "room" | "public";
 

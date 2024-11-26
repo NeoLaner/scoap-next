@@ -2,7 +2,7 @@ import { useParams } from "next/navigation";
 import { BsFillPlayCircleFill } from "react-icons/bs";
 import { toast } from "sonner";
 import { makeRoom } from "~/app/_actions/makeRoom";
-import { Button } from "~/app/_components/ui/Button";
+import { Button } from "~/components/ui/button";
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { useUserData } from "~/app/_hooks/useUserData";
 

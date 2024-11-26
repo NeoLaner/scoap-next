@@ -1,8 +1,8 @@
 "use client";
 import { type FormEvent, useState } from "react";
 import { PiPaperPlaneBold } from "react-icons/pi";
-import { Button } from "~/app/_components/ui/Button";
-import { Input } from "~/app/_components/ui/input";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import { mediaSocket } from "~/lib/socket/socket";
 
 function ChatFooter() {

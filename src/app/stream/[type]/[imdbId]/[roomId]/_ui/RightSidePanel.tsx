@@ -1,4 +1,4 @@
-import { ResizablePanel } from "~/app/_components/ui/resizable";
+import { ResizablePanel } from "~/components/ui/resizable";
 import { type ReactNode } from "react";
 
 function RightSidePanel({

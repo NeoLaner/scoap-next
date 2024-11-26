@@ -6,13 +6,10 @@ const EmojiPicker = dynamic(() => import("emoji-picker-react"), {
 });
 
 import { useRef, useState } from "react";
-import { Textarea } from "~/app/_components/ui/Textarea";
+import { Textarea } from "~/components/ui/textarea";
 import { useRoomData } from "~/app/_hooks/useRoomData";
-import { Button } from "~/app/_components/ui/Button";
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "~/app/_components/ui/toggle-group";
+import { Button } from "~/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { checkIsDynamic, makeRawSource } from "~/lib/source";
 import {
   Sheet,
@@ -22,7 +19,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "~/app/_components/ui/sheet";
+} from "~/components/ui/sheet";
 import {
   Form,
   FormControl,
@@ -31,19 +28,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/app/_components/ui/form";
-import { ScrollArea } from "~/app/_components/ui/scroll-area";
-import { Checkbox } from "~/app/_components/ui/checkbox";
+} from "~/components/ui/form";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Checkbox } from "~/components/ui/checkbox";
 import { z } from "zod";
 
-import { Input } from "~/app/_components/ui/input";
+import { Input } from "~/components/ui/input";
 
 import { useMetaData } from "~/app/_hooks/useMetaData";
 import { extractUniqueSeasons } from "~/lib/metadata";
 import Loader from "~/app/_ui/Loader";
 import dynamic from "next/dynamic";
 import Countries from "./Countries";
-import { Separator } from "~/app/_components/ui/separator";
+import { Separator } from "~/components/ui/separator";
 import { addSubtitle } from "~/app/_actions/addSubtitle";
 import { checkSubUrl } from "~/app/_actions/checkSubUrl";
 import { usePublicSubs } from "~/app/_hooks/usePublicSubs";

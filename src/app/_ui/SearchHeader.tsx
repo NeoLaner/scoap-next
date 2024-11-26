@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
-import { Input } from "../_components/ui/input";
+import { Input } from "~/components/ui/input";
 
 function SearchHeader() {
   const params = useParams();

@@ -1,7 +1,7 @@
 "use client";
 
 import { PiTelegramLogoFill } from "react-icons/pi";
-import { Button } from "~/app/_components/ui/Button";
+import { Button } from "~/components/ui/button";
 import LogoSVG from "~/app/_ui/LogoSVG";
 
 function AboutUsContents() {

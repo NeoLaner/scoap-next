@@ -1,11 +1,7 @@
 import { type MediaUserState } from "@socket/@types/mediaTypes";
 import { useEffect, useState } from "react";
 import { PiArrowRightBold } from "react-icons/pi";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "~/app/_components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { mediaSocket } from "~/lib/socket/socket";
