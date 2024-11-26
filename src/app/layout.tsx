@@ -51,7 +51,7 @@ export default async function RootLayout({
                 <Toaster position="top-left" richColors />
               </PlayerProvider>
             </ProtectedRoute>
-            <ReactQueryDevtools />
+            {/* <ReactQueryDevtools /> */}
           </TRPCReactProvider>
         </ThemeProvider>
       </body>
