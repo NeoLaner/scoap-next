@@ -241,16 +241,15 @@ export function Subtitle({ source }: { source: SubtitleType }) {
                     <>
                       <DropdownMenuSeparator />
 
-                      <DialogTrigger asChild>
-                        <DropdownMenuItem>
-                          {" "}
+                      <DropdownMenuItem asChild>
+                        <DialogTrigger asChild>
                           <div className="flex gap-2">
                             <Trash2 size={22} />
 
                             <span>Delete </span>
                           </div>
-                        </DropdownMenuItem>
-                      </DialogTrigger>
+                        </DialogTrigger>
+                      </DropdownMenuItem>
                     </>
                   )}
                 </DropdownMenuContent>
@@ -262,19 +261,18 @@ export function Subtitle({ source }: { source: SubtitleType }) {
                 size={"icon"}
                 className="items-center justify-center overflow-hidden rounded-sm hover:bg-success"
                 onClick={async () => {
-                  setSourceData((prvSrc) => {
-                    if (!prvSrc) return;
-                    const newSource = {
-                      ...prvSrc,
-                      mediaSourceId: source.id,
-                    };
-                    return newSource;
-                  });
                   const newSource = await addSub({
                     roomId: roomData.id,
                     subtitleSourceId: source.id,
                   });
-
+                  setSourceData((prvSrc) => {
+                    if (!prvSrc) return;
+                    const newSource = {
+                      ...prvSrc,
+                      subtitleSourceId: source.id,
+                    };
+                    return newSource;
+                  });
                   if (newSource) setCurrentSubtitle(source);
                 }}
               >

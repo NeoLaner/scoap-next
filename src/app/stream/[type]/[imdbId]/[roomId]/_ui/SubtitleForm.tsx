@@ -49,6 +49,7 @@ import { checkSubUrl } from "~/app/_actions/checkSubUrl";
 import { usePublicSubs } from "~/app/_hooks/usePublicSubs";
 import { useRoomSubs } from "~/app/_hooks/useRoomSubs";
 import { useUsersSubData } from "~/app/_hooks/useUsersSub";
+import { useSourceData } from "~/app/_hooks/useSourceData";
 
 const formSchema = z.object({
   url: z.string().url().max(250),
@@ -66,6 +67,7 @@ function SubtitleForm() {
   const { setPublicSubs } = usePublicSubs();
   const { setRoomSubs } = useRoomSubs();
   const { setUsersSubData } = useUsersSubData();
+  const { setSourceData } = useSourceData();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(
@@ -130,6 +132,14 @@ function SubtitleForm() {
       setUsersSubData((prv) => {
         if (sub?.subtitleData)
           return prv ? [...prv, sub.sourceData] : [sub.sourceData];
+      });
+
+      setSourceData((prv) => {
+        if (!prv) return;
+        return {
+          ...prv,
+          subtitleSourceId: sub?.subtitleData.id ?? "",
+        };
       });
     } catch (err) {
       //TODO:Handle err

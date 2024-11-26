@@ -1,4 +1,4 @@
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { usePublicSources } from "./usePublicSources";
 import { useRoomSources } from "./useRoomSources";
 import {
@@ -12,6 +12,8 @@ import { useCurMediaSrc } from "./useCurMediaSrc";
 import { useEffect } from "react";
 
 export function useBestSrc() {
+  const queryClient = useQueryClient();
+
   const { publicSources } = usePublicSources();
   const { roomSourcesData } = useRoomSources();
   const { roomData } = useRoomData();
@@ -33,8 +35,9 @@ export function useBestSrc() {
         domain: src.domain,
         pathname: src.pathname,
       });
+      const isDynamic = checkIsDynamic(url);
       return {
-        queryKey: [url],
+        queryKey: ["status", isDynamic ? "dynamic" : "static", url],
         staleTime: Infinity,
         refetchOnWindowFocus: false,
         refetchOnMount: false,
@@ -53,6 +56,17 @@ export function useBestSrc() {
       };
     }),
   });
+
+  useEffect(
+    function () {
+      const promise = async () =>
+        await queryClient.invalidateQueries({
+          queryKey: ["status", "dynamic"],
+        });
+      promise();
+    },
+    [roomData.season, queryClient],
+  );
 
   const allSrcWorked = allSrc.filter((src) => {
     return (

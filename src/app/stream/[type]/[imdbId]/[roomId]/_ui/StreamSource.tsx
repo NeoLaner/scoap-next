@@ -112,7 +112,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
         });
       return fetch(source, { method: "HEAD" });
     },
-    queryKey: [url],
+    queryKey: ["status", checkIsDynamic(url) ? "dynamic" : "static", url],
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -167,7 +167,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
               <UserProfile source={source} />
             </div>
             <div className="flex flex-col">
-              <div className="flex items-center">
+              <div className="flex items-center gap-1">
                 <p className=" text-sm">
                   {source.name}
                   <span className="text-md"> {source.country}</span>
