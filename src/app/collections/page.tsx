@@ -5,7 +5,7 @@ import ScrollAreaY from "../_ui/ScrollAreaY";
 async function page() {
   return (
     <ScrollAreaY className="h-full w-full">
-      <div className="mt-8 h-fit pr-2">
+      <div className="mr-2 mt-8 h-fit pr-2">
         <RecentCollection />
       </div>
     </ScrollAreaY>

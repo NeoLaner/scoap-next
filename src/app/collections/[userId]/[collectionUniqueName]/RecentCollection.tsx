@@ -19,7 +19,7 @@ function RecentCollection() {
     api.collection.getMyCollection.useInfiniteQuery(
       {
         uniqueName: "recent",
-        limit: 20,
+        limit: 30,
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -51,7 +51,7 @@ function RecentCollection() {
       <div className="flex flex-wrap content-center items-center justify-center gap-3">
         {content}
         {((isFetchingNextPage && hasNextPage) || status === "pending") && (
-          <SkeletonCard length={20} />
+          <SkeletonCard length={30} />
         )}
       </div>
     </section>
