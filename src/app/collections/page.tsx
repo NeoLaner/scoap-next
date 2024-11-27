@@ -1,7 +1,7 @@
 import { api } from "~/trpc/server";
 import PopularMedias from "../_ui/PopularMedias";
 import ScrollAreaY from "../_ui/ScrollAreaY";
-import { Frown, Ghost } from "lucide-react";
+import { Ghost } from "lucide-react";
 
 async function page() {
   return (
