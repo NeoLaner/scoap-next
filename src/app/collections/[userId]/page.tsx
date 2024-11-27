@@ -14,11 +14,17 @@ async function page({
 }
 
 async function WatchingCollection({ userId }: { userId: string }) {
-  const medias = await api.collection.getWatchingCollection({ userId: userId });
+  const popularMedias = await api.collection.getWatchingCollection({
+    userId: userId,
+  });
 
   return (
     <div>
-      <PopularMedias heading="Watching recently" items={medias} />
+      {popularMedias.length === 0 ? (
+        <div></div>
+      ) : (
+        <PopularMedias heading="Watching recently" items={popularMedias} />
+      )}
     </div>
   );
 }

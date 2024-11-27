@@ -16,7 +16,7 @@ function Layout({ children }: { children: ReactNode }) {
             <div className="hidden h-fit flex-col rounded-lg bg-card md:flex">
               <div className="text-md p-4">Account settings</div>
               <Separator />
-              <MenuSheet />
+              {/* <MenuSheet /> */}
               <MenuButtons />
             </div>
 

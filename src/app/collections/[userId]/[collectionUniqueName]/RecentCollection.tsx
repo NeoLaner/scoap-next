@@ -43,7 +43,7 @@ function RecentCollection() {
         return <MediaCard innerRef={ref} key={media.id} item={media} />;
       return <MediaCard key={media.id} item={media} />;
     }),
-  );
+  )?.[0];
 
   return (
     <section className=" pr-4">
