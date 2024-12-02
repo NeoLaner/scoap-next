@@ -2,8 +2,9 @@
 import { checkIsDynamic } from "~/lib/source";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import { type TagEnum, QualityTypeEnum } from "~/lib/@types/Media";
+import { type QualityTypeEnum } from "~/lib/@types/Media";
 import { type z } from "zod";
+import { type languages } from "~/lib/languages";
 
 export async function addDirectLink({
   sourceLink,
@@ -21,6 +22,7 @@ export async function addDirectLink({
   qualityType,
   countryEmoji,
   mediaType,
+  softsub,
 }: {
   sourceLink: string;
   roomId: string;
@@ -32,8 +34,9 @@ export async function addDirectLink({
   season?: number;
   episode?: number;
   quality?: string;
-  dubbed?: boolean;
-  hardsub?: boolean;
+  dubbed?: Array<(typeof languages)[number]>;
+  softsub?: Array<(typeof languages)[number]>;
+  hardsub?: (typeof languages)[number];
   qualityType?: z.infer<typeof QualityTypeEnum>;
   countryEmoji: string;
   mediaType: "series" | "movie";
@@ -61,6 +64,7 @@ export async function addDirectLink({
           qualityType,
           countryEmoji,
           mediaType,
+          softsub,
         }
       : {
           url: sourceLink,
@@ -78,6 +82,7 @@ export async function addDirectLink({
           qualityType,
           countryEmoji,
           mediaType,
+          softsub,
         },
   );
   if (!mediaSourceData) return; //TODO: ERROR

@@ -152,9 +152,9 @@ model MediaSource {
   quality      String?
   qualityType  QualityTypes?
   isHdr        Boolean         @default(false)
-  softsub      Boolean         @default(false)
-  hardsub      Boolean         @default(false)
-  dubbed       Boolean         @default(false)
+  softsub      String[]        @default([])
+  hardsub      String          @default("")
+  dubbed       String[]        @default([])
 
   country        String @default("")
   //if is Dynamic

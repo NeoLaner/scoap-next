@@ -48,6 +48,7 @@ import { usePublicSources } from "~/app/_hooks/usePublicSources";
 import { useRoomSources } from "~/app/_hooks/useRoomSources";
 import { Separator } from "~/components/ui/separator";
 import Countries from "./Countries";
+import { languages } from "~/lib/languages";
 
 const formSchema = z.object({
   sourceLink: z.string().url().max(1000),
@@ -57,6 +58,9 @@ const formSchema = z.object({
   quality: z.string(),
   qualityType: QualityTypeEnum,
   isHdr: z.boolean(),
+  dubbed: z.array(z.enum(languages)),
+  softsub: z.array(z.enum(languages)),
+  hardsub: z.enum(languages),
 });
 
 function StreamForm() {

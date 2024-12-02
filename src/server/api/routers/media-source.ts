@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { QualityTypeEnum } from "~/lib/@types/Media";
+import { languages } from "~/lib/languages";
 import {
   checkIsDynamic,
   containsEpisode,
@@ -65,8 +66,9 @@ export const mediaSourceRouter = createTRPCRouter({
         season: z.number().optional(),
         episode: z.number().optional(),
         quality: z.string().optional(),
-        dubbed: z.boolean().optional(),
-        hardsub: z.boolean().optional(),
+        dubbed: z.array(z.enum(languages)).optional(),
+        softsub: z.array(z.enum(languages)).optional(),
+        hardsub: z.enum(languages).optional(),
         qualityType: QualityTypeEnum.optional(),
         isHdr: z.boolean().optional(),
         countryEmoji: z.string().optional(),
@@ -110,6 +112,7 @@ export const mediaSourceRouter = createTRPCRouter({
           episode: input.episode,
           quality: input.quality,
           dubbed: input.dubbed,
+          softsub: input.softsub,
           hardsub: input.hardsub,
           qualityType: input.qualityType,
           isHdr: input.isHdr,
