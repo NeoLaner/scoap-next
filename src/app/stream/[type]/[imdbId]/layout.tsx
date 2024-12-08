@@ -3,13 +3,18 @@ import StremioService from "~/app/_services/stremIo/stremIoServices";
 import { type MetaInfo } from "~/app/_services/stremIo/types";
 import { MetaDataProvider } from "~/app/_providers/MetaProvider";
 
-async function layout({
-  children,
-  params,
-}: {
-  params: { imdbId: string; type: "movie" | "series" };
-  children: ReactNode;
-}) {
+async function layout(
+  props: {
+    params: Promise<{ imdbId: string; type: "movie" | "series" }>;
+    children: ReactNode;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const { imdbId, type } = params;
   let metaData = {} as MetaInfo;
   if (type === "movie") metaData = await StremioService.getMetaMovie(imdbId);

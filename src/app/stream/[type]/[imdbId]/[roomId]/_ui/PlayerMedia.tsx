@@ -30,7 +30,7 @@ import { useBestSrc } from "~/app/_hooks/useBestSrc";
 function PlayerMedia({
   playerRef,
 }: {
-  playerRef: RefObject<MediaPlayerInstance>;
+  playerRef: RefObject<MediaPlayerInstance | null>;
 }) {
   useBestSrc();
   const { metaData } = useMetaData();
@@ -38,7 +38,7 @@ function PlayerMedia({
   const { roomData } = useRoomData();
   const { currentMediaSrc } = useCurMediaSrc();
   const { currentSubtitle } = useCurSub();
-  const subtitleUrl = useRef<string>();
+  const subtitleUrl = useRef<string>(undefined);
   subtitleUrl.current = createUrlFromPrats({
     domain: currentSubtitle?.domain,
     pathname: currentSubtitle?.pathname,

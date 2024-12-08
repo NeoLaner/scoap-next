@@ -14,7 +14,7 @@ import { mediaSocket } from "~/lib/socket/socket";
 function PlayerRemote({
   playerRef,
 }: {
-  playerRef: RefObject<MediaPlayerInstance>;
+  playerRef: RefObject<MediaPlayerInstance | null>;
 }) {
   const remote = useMediaRemote(playerRef);
   const { currentTime, waiting, playbackRate } = useMediaStore(playerRef);

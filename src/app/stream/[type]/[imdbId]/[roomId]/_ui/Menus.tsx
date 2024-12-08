@@ -116,7 +116,7 @@ interface SubmenuButtonProps {
   label: string;
   hint: string;
   disabled?: boolean;
-  icon: ReactElement;
+  icon: ReactElement<any>;
 }
 
 function SubmenuButton({

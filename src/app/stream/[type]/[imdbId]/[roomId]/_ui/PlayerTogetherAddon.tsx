@@ -6,7 +6,7 @@ import PlayerRemote from "./PlayerRemote";
 function PlayerTogetherAddon({
   playerRef,
 }: {
-  playerRef: RefObject<MediaPlayerInstance>;
+  playerRef: RefObject<MediaPlayerInstance | null>;
 }) {
   useSocketListeners();
   return (
