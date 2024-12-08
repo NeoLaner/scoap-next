@@ -28,7 +28,7 @@ function SearchHeader() {
         onChange={(e) => setSearchInput(e.target.value)}
         autoCorrect="off"
         autoComplete="off"
-        autoCapitalize="off"
+        autoCapitalize="none"
         spellCheck="false"
       />
     </form>
