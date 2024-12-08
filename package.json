@@ -23,7 +23,6 @@
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
-    "@radix-ui/react-form": "^0.0.3",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-popover": "^1.1.2",
     "@radix-ui/react-scroll-area": "^1.2.1",
@@ -41,7 +40,7 @@
     "@trpc/react-query": "next",
     "@trpc/server": "next",
     "@uidotdev/usehooks": "^2.4.1",
-    "@vidstack/react": "^1.11.21",
+    "@vidstack/react": "^1.12.12",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
@@ -56,7 +55,7 @@
     "nanoevents": "^9.0.0",
     "next": "15.0.4",
     "next-auth": "^4.24.6",
-    "next-themes": "^0.3.0",
+    "next-themes": "^0.4.4",
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.13",
     "react": "19.0.0",
@@ -90,14 +89,13 @@
     "postcss": "^8.4.34",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "prisma": "^5.10.2",
+    "prisma": "^5.22.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.2"
   },
   "ct3aMetadata": {
     "initVersion": "7.32.0"
   },
-  "packageManager": "npm@10.2.0",
   "overrides": {
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.1"
