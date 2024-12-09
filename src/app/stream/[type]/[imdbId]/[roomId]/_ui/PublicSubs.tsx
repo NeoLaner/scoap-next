@@ -10,7 +10,7 @@ export function PublicSubs() {
   return (
     <>
       {publicSubs?.length !== 0 && (
-        <StreamsHeadingType heading="Room sources" />
+        <StreamsHeadingType heading="public subtitles" />
       )}
       <div className="space-y-2">
         {publicSubs?.map((sub) => <Subtitle key={sub.id} source={sub} />)}

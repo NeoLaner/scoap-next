@@ -9,7 +9,9 @@ export function RoomSubs() {
 
   return (
     <>
-      {roomSubs?.length !== 0 && <StreamsHeadingType heading="Room sources" />}
+      {roomSubs?.length !== 0 && (
+        <StreamsHeadingType heading="Room subtitles" />
+      )}
       <div className="space-y-2">
         {roomSubs?.map((sub) => <Subtitle key={sub.id} source={sub} />)}
       </div>
