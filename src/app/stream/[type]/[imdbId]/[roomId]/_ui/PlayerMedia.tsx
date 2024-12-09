@@ -95,7 +95,7 @@ function PlayerMedia({
     <MediaPlayer
       ref={playerRef}
       src={{
-        src: source ?? "",
+        src: source ?? null,
         type: "video/mp4",
       }}
       playsInline
