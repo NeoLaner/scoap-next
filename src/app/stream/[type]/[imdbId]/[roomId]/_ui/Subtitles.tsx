@@ -10,7 +10,7 @@ async function Subtitles() {
       <SubtitleForm />
 
       <StreamSources
-        Users={<UsersSubs />}
+        // Users={<UsersSubs />}
         Room={<RoomSubs />}
         Public={<PublicSubs />}
       />

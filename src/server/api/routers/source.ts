@@ -55,18 +55,30 @@ export const sourceRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const session = ctx.session;
-      const existingSource = await ctx.db.source.update({
-        where: {
-          roomId: input.roomId,
-          userId: session.user.id,
-        },
-        data: { subtitleSourceId: input.subtitleSourceId },
-        include: { SubtitleSource: { include: { user: true } } },
+      let src = await ctx.db.source.findFirst({
+        where: { roomId: input.roomId, userId: session.user.id },
       });
 
-      if (!existingSource)
+      if (src)
+        src = await ctx.db.source.update({
+          where: {
+            roomId: input.roomId,
+            userId: session.user.id,
+          },
+          data: { subtitleSourceId: input.subtitleSourceId },
+          include: { SubtitleSource: { include: { user: true } } },
+        });
+      if (!src)
+        src = await ctx.db.source.create({
+          data: {
+            subtitleSourceId: input.subtitleSourceId,
+            roomId: input.roomId,
+            userId: session.user.id,
+          },
+        });
+      if (!src)
         return; //TODO: ERROR
-      else return existingSource;
+      else return src;
     }),
 
   // Update a source

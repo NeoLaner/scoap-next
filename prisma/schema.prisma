@@ -105,12 +105,12 @@ model Source {
   userId           String   @unique @db.ObjectId
   // infoHash    String?
   // fileIdx     Int?
-  mediaSourceId    String   @db.ObjectId
+  mediaSourceId    String?   @db.ObjectId
   subtitleSourceId String?  @db.ObjectId
 
   room           Room            @relation(fields: [roomId], references: [id])
   user           User            @relation(fields: [userId], references: [id])
-  MediaSource    MediaSource     @relation(fields: [mediaSourceId], references: [id])
+  MediaSource    MediaSource?     @relation(fields: [mediaSourceId], references: [id])
   SubtitleSource SubtitleSource? @relation(fields: [subtitleSourceId], references: [id])
 }
 

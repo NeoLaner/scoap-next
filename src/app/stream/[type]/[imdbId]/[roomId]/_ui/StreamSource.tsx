@@ -140,7 +140,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
     setPublicSources((prv) => prv?.filter((src) => src.id !== source.id));
     setRoomSourcesData((prv) => prv?.filter((src) => src.id !== source.id));
     setUsersSourceData((prv) =>
-      prv?.filter((src) => src.MediaSource.id !== source.id),
+      prv?.filter((src) => src.MediaSource?.id !== source.id),
     );
 
     toast.success("The source successfully deleted.");
@@ -200,7 +200,7 @@ export function StreamSource({ source }: { source: MediaSource }) {
               <div className="flex">
                 <DynamicIcon source={source} />
 
-                <IconText disable={!source.dubbed}>dub</IconText>
+                <IconText disable={source.dubbed.length === 0}>dub</IconText>
                 <IconText>{source.isHdr ? "hdr" : "sdr"}</IconText>
               </div>
             </div>

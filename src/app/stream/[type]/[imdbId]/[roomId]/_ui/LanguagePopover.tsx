@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -16,6 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
+import { languages } from "~/lib/languages";
 
 type Status = {
   value: string;
@@ -45,19 +46,24 @@ const statuses: Status[] = [
   },
 ];
 
-export function LanguagePopover() {
-  const [open, setOpen] = React.useState(false);
-  const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
-    null,
-  );
+export function LanguagePopover({
+  selectedLanguage,
+  setSelectedLanguage,
+}: {
+  selectedLanguage: (typeof languages)[number] | null;
+  setSelectedLanguage: Dispatch<
+    SetStateAction<(typeof languages)[number] | null>
+  >;
+}) {
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex items-center space-x-4">
-      <p className="text-sm text-muted-foreground">Status</p>
+      <p className="text-sm text-muted-foreground">Language</p>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-[150px] justify-start">
-            {selectedStatus ? <>{selectedStatus.label}</> : <>+ Set status</>}
+            {selectedLanguage ? <>{selectedLanguage}</> : <>+ Set language</>}
           </Button>
         </PopoverTrigger>
         <PopoverContent
@@ -66,23 +72,23 @@ export function LanguagePopover() {
           align="start"
         >
           <Command>
-            <CommandInput placeholder="Change status..." />
+            <CommandInput placeholder="Change language..." />
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                {statuses.map((status) => (
+                {languages.map((language) => (
                   <CommandItem
-                    key={status.value}
-                    value={status.value}
+                    key={language}
+                    value={language}
                     onSelect={(value) => {
-                      setSelectedStatus(
-                        statuses.find((priority) => priority.value === value) ??
+                      setSelectedLanguage(
+                        languages.find((priority) => priority === value) ??
                           null,
                       );
                       setOpen(false);
                     }}
                   >
-                    {status.label}
+                    {language}
                   </CommandItem>
                 ))}
               </CommandGroup>

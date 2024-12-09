@@ -95,7 +95,9 @@ function PlayerMedia({
     <MediaPlayer
       ref={playerRef}
       src={{
-        src: source ?? null,
+        //eslint-disable-next-line
+        //@ts-ignore
+        src: source || null,
         type: "video/mp4",
       }}
       playsInline

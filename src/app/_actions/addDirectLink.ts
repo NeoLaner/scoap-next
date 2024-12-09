@@ -34,9 +34,9 @@ export async function addDirectLink({
   season?: number;
   episode?: number;
   quality?: string;
-  dubbed?: Array<(typeof languages)[number]>;
-  softsub?: Array<(typeof languages)[number]>;
-  hardsub?: (typeof languages)[number];
+  dubbed?: Array<(typeof languages)[number]> | [] | null;
+  softsub?: Array<(typeof languages)[number]> | [] | null;
+  hardsub?: (typeof languages)[number] | null;
   qualityType?: z.infer<typeof QualityTypeEnum>;
   countryEmoji: string;
   mediaType: "series" | "movie";

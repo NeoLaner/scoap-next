@@ -7,15 +7,15 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 type Filter = "all" | "users" | "room" | "public";
 
 function StreamSources({
-  Users,
+  // Users,
   Room,
   Public,
 }: {
-  Users: ReactNode;
+  // Users: ReactNode;
   Room: ReactNode;
   Public: ReactNode;
 }) {
-  const [filter, setFilter] = useState<Filter>("users");
+  const [filter, setFilter] = useState<Filter>("all");
   return (
     <>
       <ToggleGroup
@@ -29,9 +29,9 @@ function StreamSources({
         <ToggleGroupItem value="all" aria-label="Toggle all">
           All
         </ToggleGroupItem>
-        <ToggleGroupItem value="users" aria-label="Toggle users">
+        {/* <ToggleGroupItem value="users" aria-label="Toggle users">
           Users
-        </ToggleGroupItem>
+        </ToggleGroupItem> */}
         <ToggleGroupItem value="room" aria-label="Toggle room">
           Room
         </ToggleGroupItem>
@@ -40,36 +40,12 @@ function StreamSources({
         </ToggleGroupItem>
       </ToggleGroup>
       <div className="flex w-full flex-col gap-4">
-        {filter === "users" && (
+        {/* {filter === "users" && (
           <StreamsByFilter heading="users sources">{Users}</StreamsByFilter>
-        )}
-        {(filter === "room" || filter === "all") && (
-          <StreamsByFilter heading="room sources">{Room}</StreamsByFilter>
-        )}
-        {(filter === "public" || filter === "all") && (
-          <StreamsByFilter heading="public sources">{Public}</StreamsByFilter>
-        )}
+        )} */}
+        {(filter === "room" || filter === "all") && <>{Room}</>}
+        {(filter === "public" || filter === "all") && <>{Public}</>}
       </div>
-    </>
-  );
-}
-
-function StreamsByFilter({
-  heading,
-  children,
-}: {
-  heading: string;
-  children: ReactNode;
-}) {
-  return (
-    <>
-      <div className="relative w-full">
-        <Separator />
-        <p className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs uppercase">
-          {heading}
-        </p>
-      </div>
-      {children}
     </>
   );
 }

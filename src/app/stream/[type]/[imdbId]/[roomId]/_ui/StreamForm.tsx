@@ -48,7 +48,16 @@ import { usePublicSources } from "~/app/_hooks/usePublicSources";
 import { useRoomSources } from "~/app/_hooks/useRoomSources";
 import { Separator } from "~/components/ui/separator";
 import Countries from "./Countries";
-import { languages } from "~/lib/languages";
+import { type languages } from "~/lib/languages";
+
+import { LanguagePopover } from "./LanguagePopover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 
 const formSchema = z.object({
   sourceLink: z.string().url().max(1000),
@@ -58,12 +67,14 @@ const formSchema = z.object({
   quality: z.string(),
   qualityType: QualityTypeEnum,
   isHdr: z.boolean(),
-  dubbed: z.array(z.enum(languages)),
-  softsub: z.array(z.enum(languages)),
-  hardsub: z.enum(languages),
 });
 
+type Subtypes = "softsub" | "hardsub" | "noSub";
 function StreamForm() {
+  const [subType, setSubType] = useState<Subtypes>("noSub");
+  const [selectedLanguage, setSelectedLanguage] = useState<
+    (typeof languages)[number] | null
+  >(null);
   const btnClose = useRef<HTMLButtonElement>(null);
   const { roomData } = useRoomData();
   const { metaData } = useMetaData();
@@ -101,9 +112,14 @@ function StreamForm() {
       episode: roomData.episode ?? undefined,
       mediaType: roomData.type === "series" ? "series" : "movie",
       countryEmoji,
+      softsub:
+        subType === "softsub" && selectedLanguage ? [selectedLanguage] : [],
+      hardsub:
+        subType === "hardsub" && selectedLanguage ? selectedLanguage : null,
     });
 
     if (!sourceData) return;
+
     setSourceData(sourceData.sourceData);
     setCurrentMediaSrc(sourceData.mediaSourceData);
     if (values.isPublic)
@@ -263,6 +279,29 @@ function StreamForm() {
                       )}
                     />
                   )}
+
+                  <Separator />
+                  <FormLabel className="mt-4 block">Subtitle</FormLabel>
+                  <Select
+                    defaultValue="noSub"
+                    onValueChange={(val: Subtypes) => setSubType(val)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={subType} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="noSub">
+                        Select a subtitle type
+                      </SelectItem>
+                      <SelectItem value="softsub">Softsub</SelectItem>
+                      <SelectItem value="hardsub">Hardsub</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <LanguagePopover
+                    selectedLanguage={selectedLanguage}
+                    setSelectedLanguage={setSelectedLanguage}
+                  />
+                  <Separator />
 
                   <FormField
                     control={form.control}
