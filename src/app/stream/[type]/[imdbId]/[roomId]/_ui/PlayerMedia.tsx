@@ -38,11 +38,14 @@ function PlayerMedia({
   const { roomData } = useRoomData();
   const { currentMediaSrc } = useCurMediaSrc();
   const { currentSubtitle } = useCurSub();
-  const subtitleUrl = useRef<string>(undefined);
-  subtitleUrl.current = createUrlFromPrats({
-    domain: currentSubtitle?.domain,
-    pathname: currentSubtitle?.pathname,
-    protocol: currentSubtitle?.protocol,
+  const subtitleUrl = makeRawSource({
+    source: createUrlFromPrats({
+      domain: currentSubtitle?.domain,
+      pathname: currentSubtitle?.pathname,
+      protocol: currentSubtitle?.protocol,
+    }),
+    season: roomData.season,
+    episode: roomData.episode,
   });
 
   const [subContent, setSubContent] = useState("");
@@ -50,14 +53,10 @@ function PlayerMedia({
   useEffect(() => {
     async function fetchData() {
       try {
-        if (!subtitleUrl.current) return;
-        if (checkIsDynamic(subtitleUrl.current))
-          subtitleUrl.current = makeRawSource({
-            source: subtitleUrl.current,
-            season: roomData.season,
-            episode: roomData.episode,
-          });
-        setSubContent((await getSubtitle(subtitleUrl.current)).subtitle);
+        if (!subtitleUrl) return;
+        console.log("sub: ", subtitleUrl);
+
+        setSubContent((await getSubtitle(subtitleUrl)).subtitle);
       } catch (error) {
         toast.error(`Getting subtitle: ${(error as Error).message}`);
         throw new Error((error as Error).message);
@@ -97,7 +96,7 @@ function PlayerMedia({
       src={{
         //eslint-disable-next-line
         //@ts-ignore
-        src: source || null,
+        src: source,
         type: "video/mp4",
       }}
       playsInline

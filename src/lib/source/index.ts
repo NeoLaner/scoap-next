@@ -20,10 +20,11 @@ export function makeRawSource({
   season,
   episode,
 }: {
-  source: string;
+  source?: string | null;
   season?: number | null;
   episode?: number | null;
-}): string {
+}): string | null {
+  if (!source) return null;
   let updatedSource = source;
   if (season !== null && season !== undefined) {
     // Replace all season placeholders (case-insensitive)

@@ -219,6 +219,7 @@ export function Subtitle({ source }: { source: SubtitleType }) {
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={async () => {
+                              if (!rawSource) return;
                               await copyToClipboard(rawSource);
                               toast.success(
                                 "Link copied to your clipboard successfully.",

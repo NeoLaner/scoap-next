@@ -47,6 +47,7 @@ import { usePublicSubs } from "~/app/_hooks/usePublicSubs";
 import { useRoomSubs } from "~/app/_hooks/useRoomSubs";
 import { useUsersSubData } from "~/app/_hooks/useUsersSub";
 import { useSourceData } from "~/app/_hooks/useSourceData";
+import { useCurSub } from "~/app/_hooks/useCurSub";
 
 const formSchema = z.object({
   url: z.string().url().max(250),
@@ -58,6 +59,7 @@ const formSchema = z.object({
 });
 
 function SubtitleForm() {
+  const { setCurrentSubtitle } = useCurSub();
   const btnClose = useRef<HTMLButtonElement>(null);
   const { roomData } = useRoomData();
   const { metaData } = useMetaData();
@@ -126,10 +128,10 @@ function SubtitleForm() {
           return prv ? [...prv, sub.subtitleData] : [sub?.subtitleData];
       });
 
-      setUsersSubData((prv) => {
-        if (sub?.subtitleData)
-          return prv ? [...prv, sub.sourceData] : [sub.sourceData];
-      });
+      // setUsersSubData((prv) => {
+      //   if (sub?.subtitleData)
+      //     return prv ? [...prv, sub.sourceData] : [sub.sourceData];
+      // });
 
       setSourceData((prv) => {
         if (!prv) return;
@@ -138,6 +140,8 @@ function SubtitleForm() {
           subtitleSourceId: sub?.subtitleData.id ?? "",
         };
       });
+      if (!sub) return;
+      setCurrentSubtitle(sub.subtitleData);
     } catch (err) {
       //TODO:Handle err
     }
