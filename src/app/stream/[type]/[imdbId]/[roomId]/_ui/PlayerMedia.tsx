@@ -115,6 +115,7 @@ function PlayerMedia({
           quality="90"
           priority
         />
+
         <Track
           content={subContent}
           label="Farsi"
@@ -124,6 +125,7 @@ function PlayerMedia({
           key="1"
           type={"srt"}
         />
+
         {/* <Track
           // content={data?.subtitle}
           src={currentSubtitle?.url}

@@ -10,6 +10,7 @@ import { TimeGroup } from "./Time-group";
 
 import TitleLayout from "./TitleLayout";
 import UsersStatus from "./UsersStatus";
+import { useCurSub } from "~/app/_hooks/useCurSub";
 
 export interface VideoLayoutProps {
   thumbnails?: string;
@@ -19,12 +20,15 @@ export default function VideoLayout({
   thumbnails,
   disablePlay = false,
 }: VideoLayoutProps & { disablePlay?: boolean }) {
+  const { currentSubtitle } = useCurSub();
+  console.log(currentSubtitle?.language);
+
   return (
     <>
       <Gestures />
 
       <Captions
-        className={`bg-none ${captionStyles.captions} unique-captions-class absolute inset-0 bottom-2 select-none break-words opacity-0 transition-[opacity,bottom] duration-300 media-captions:opacity-100 media-controls:bottom-[85px] media-preview:opacity-0`}
+        className={`${currentSubtitle?.language === "persian" && "font-farsi"} bg-none ${captionStyles.captions} unique-captions-class absolute inset-0 bottom-2 select-none break-words opacity-0 transition-[opacity,bottom] duration-300 media-captions:opacity-100 media-controls:bottom-[85px] media-preview:opacity-0`}
       />
 
       <Controls.Root

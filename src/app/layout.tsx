@@ -1,7 +1,7 @@
 import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
-
+import localFont from "next/font/local";
 import { TRPCReactProvider } from "~/trpc/react";
 import { PlayerProvider } from "./_providers/PlayerProvider";
 import { ThemeProvider } from "./_ui/theme-provider";
@@ -14,6 +14,12 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
   weight: ["300", "400", "500", "600", "700"],
+});
+
+const fontFarsi = localFont({
+  src: "./IRAN_SemiBold.woff2",
+  variable: "--font-farsi",
+  display: "swap",
 });
 
 export const metadata = {
@@ -34,7 +40,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`h-dvh ${inter.variable} selection:bg-primary/60 selection:text-primary-foreground`}
+        className={`h-dvh ${inter.variable} ${fontFarsi.variable} selection:bg-primary/60 selection:text-primary-foreground`}
       >
         <ThemeProvider
           attribute="class"
