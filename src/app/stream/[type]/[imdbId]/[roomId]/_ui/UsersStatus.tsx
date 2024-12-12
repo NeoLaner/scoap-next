@@ -42,7 +42,7 @@ function UsersStatus() {
   if (usersState.length === 0) return null;
   return (
     <div
-      className={` ${hover || waitingForDataUsers.length ? "" : "ml-6  -translate-x-full"} my-auto flex h-fit items-center justify-center  transition-all`}
+      className={`z-50 ${hover || waitingForDataUsers.length ? "" : "ml-4  -translate-x-full"} my-auto flex h-fit items-center justify-center  transition-all`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -61,8 +61,8 @@ function UsersStatus() {
           </div>
         ))}
       </div>
-      <div className={`rounded-r-xl bg-background px-1 py-3`}>
-        <PiArrowRightBold size={20} className="" />
+      <div className={`rounded-r-xl bg-background py-2`}>
+        <PiArrowRightBold size={16} className="" />
       </div>
     </div>
   );

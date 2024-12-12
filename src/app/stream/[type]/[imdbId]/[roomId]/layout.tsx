@@ -16,23 +16,20 @@ import { UsersSubDataProvider } from "~/app/_providers/UsersSubsProvider";
 import { PublicSubsProvider } from "~/app/_providers/PublicSubsProvider";
 import { RoomSubsProvider } from "~/app/_providers/RoomSubsProvider";
 import { CurSubProvider } from "~/app/_providers/CurrentSubProvider";
+import { PlayerRefProvider } from "~/app/_providers/PlayerRefProvider";
 
-async function Layout(
-  props: {
-    children: ReactNode;
-    params: Promise<{
-      roomId: string;
-      imdbId: string;
-      type: "string";
-      instanceId: "string";
-    }>;
-  }
-) {
+async function Layout(props: {
+  children: ReactNode;
+  params: Promise<{
+    roomId: string;
+    imdbId: string;
+    type: "string";
+    instanceId: "string";
+  }>;
+}) {
   const params = await props.params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   const session = await getServerAuthSession();
   if (!session) return redirect("/api/auth/signin");
@@ -113,9 +110,11 @@ async function Layout(
                           <UsersSubDataProvider
                             initialUsersSubData={initialUsersSource}
                           >
-                            <div className="relative h-full w-full">
-                              {children}
-                            </div>
+                            <PlayerRefProvider>
+                              <div className="relative h-full w-full">
+                                {children}
+                              </div>
+                            </PlayerRefProvider>
                           </UsersSubDataProvider>
                         </RoomSubsProvider>
                       </PublicSubsProvider>

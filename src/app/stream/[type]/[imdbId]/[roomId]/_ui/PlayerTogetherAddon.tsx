@@ -1,17 +1,11 @@
-import { type MediaPlayerInstance } from "@vidstack/react";
-import { type RefObject } from "react";
 import { useSocketListeners } from "~/app/_hooks/useSocketListeners";
 import PlayerRemote from "./PlayerRemote";
 
-function PlayerTogetherAddon({
-  playerRef,
-}: {
-  playerRef: RefObject<MediaPlayerInstance | null>;
-}) {
+function PlayerTogetherAddon() {
   useSocketListeners();
   return (
     <>
-      <PlayerRemote playerRef={playerRef} />
+      <PlayerRemote />
     </>
   );
 }

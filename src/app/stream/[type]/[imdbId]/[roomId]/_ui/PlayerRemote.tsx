@@ -6,16 +6,14 @@ import {
 import { useEffect, type RefObject } from "react";
 import { toast } from "sonner";
 import { useIsMediaConnected } from "~/app/_hooks/useIsMediaConnected";
+import { usePlayerRef } from "~/app/_hooks/usePlayerRef";
 import { useRoomData } from "~/app/_hooks/useRoomData";
 import { useUserData } from "~/app/_hooks/useUserData";
 import eventEmitter from "~/lib/eventEmitter/eventEmitter";
 import { mediaSocket } from "~/lib/socket/socket";
 
-function PlayerRemote({
-  playerRef,
-}: {
-  playerRef: RefObject<MediaPlayerInstance | null>;
-}) {
+function PlayerRemote() {
+  const { playerRef } = usePlayerRef();
   const remote = useMediaRemote(playerRef);
   const { currentTime, waiting, playbackRate } = useMediaStore(playerRef);
   const videoTs = Math.floor(currentTime);
@@ -121,7 +119,7 @@ function PlayerRemote({
         return currentUser.videoTs > maxUser.videoTs ? currentUser : maxUser;
       });
       const curUser = wsData.payload.filter(
-        (user) => user.id === userData.id,
+        (user) => user.id === userData?.id,
       )[0];
       let pbr = 1.01;
       const delta = leader.videoTs - (curUser?.videoTs ?? 0);

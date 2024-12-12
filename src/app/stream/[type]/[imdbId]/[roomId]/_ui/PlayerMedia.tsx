@@ -26,12 +26,10 @@ import { useCurSub } from "~/app/_hooks/useCurSub";
 import { getSubtitle } from "~/app/_actions/getSubFromUrl";
 import { toast } from "sonner";
 import { useBestSrc } from "~/app/_hooks/useBestSrc";
+import { usePlayerRef } from "~/app/_hooks/usePlayerRef";
 
-function PlayerMedia({
-  playerRef,
-}: {
-  playerRef: RefObject<MediaPlayerInstance | null>;
-}) {
+function PlayerMedia() {
+  const { playerRef } = usePlayerRef();
   useBestSrc();
   const { metaData } = useMetaData();
 

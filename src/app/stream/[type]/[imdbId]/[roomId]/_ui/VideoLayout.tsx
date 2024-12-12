@@ -5,7 +5,9 @@ import {
   Gesture,
   type GestureAction,
   type GestureWillTriggerEvent,
+  useMediaRemote,
   useMediaState,
+  useMediaStore,
 } from "@vidstack/react";
 import captionStyles from "./css-modules/captions.module.css";
 import styles from "./css-modules/video-layout.module.css";
@@ -21,6 +23,7 @@ import { useCurSub } from "~/app/_hooks/useCurSub";
 import { mediaSocket } from "~/lib/socket/socket";
 import { toggleFullscreen } from "~/lib/btnEvent";
 import { useEffect, useState } from "react";
+import { usePlayerRef } from "~/app/_hooks/usePlayerRef";
 
 export interface VideoLayoutProps {
   thumbnails?: string;
@@ -50,7 +53,7 @@ export default function VideoLayout({
           </div>
         </Controls.Group>
 
-        <Controls.Group className="flex w-fit flex-1 overflow-hidden">
+        <Controls.Group className="flex w-4 flex-1">
           <UsersStatus />
           <div className="-z-50 flex-1" />
         </Controls.Group>
@@ -78,7 +81,11 @@ export default function VideoLayout({
 
 function Gestures() {
   const [isActive, setIsActive] = useState(false);
+  const { playerRef } = usePlayerRef();
+  const remote = useMediaRemote(playerRef);
+  const { currentTime, waiting, playbackRate } = useMediaStore(playerRef);
   useEffect(() => setIsActive(document.fullscreenElement !== null), []);
+
   function onPaused(
     action: GestureAction,
     nativeEvent: GestureWillTriggerEvent,
@@ -105,7 +112,8 @@ function Gestures() {
   ) {
     // Prevent the gesture from triggering.
     // nativeEvent.preventDefault();
-    const videoTs = Number(action.split(":")[1]);
+    const seekTs = Number(action.split(":")[1]);
+    const videoTs = currentTime + seekTs;
     mediaSocket.emit("seek", { payload: { videoTs } });
   }
 
@@ -115,7 +123,8 @@ function Gestures() {
   ) {
     // Prevent the gesture from triggering.
     // nativeEvent.preventDefault();
-    const videoTs = Number(action.split(":")[1]);
+    const seekTs = Number(action.split(":")[1]);
+    const videoTs = currentTime + seekTs;
     mediaSocket.emit("seek", { payload: { videoTs } });
   }
 
