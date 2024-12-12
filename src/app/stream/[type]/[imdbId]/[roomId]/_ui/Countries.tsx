@@ -18,14 +18,15 @@ import { CheckIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 
 function Countries({
+  countryEmoji,
   setCountryEmoji,
   placeHolder,
 }: {
+  countryEmoji: string;
   setCountryEmoji: Dispatch<SetStateAction<string>>;
   placeHolder: string;
 }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
 
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -45,10 +46,10 @@ function Countries({
           aria-expanded={open}
           className="w-full justify-between "
         >
-          {value
-            ? flagEmojis.find((emoji) => emoji.label === value)?.value +
+          {countryEmoji
+            ? flagEmojis.find((emoji) => emoji.value === countryEmoji)?.value +
               " " +
-              flagEmojis.find((emoji) => emoji.label === value)?.label
+              flagEmojis.find((emoji) => emoji.value === countryEmoji)?.label
             : placeHolder}
           {/* <CaretSort className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
         </Button>
@@ -68,16 +69,17 @@ function Countries({
                   key={emoji.label}
                   value={emoji.label}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
                     setCountryEmoji(emoji.value);
+                    setOpen(false);
                   }}
                 >
                   {emoji.value} {emoji.label}
                   <CheckIcon
                     className={cn(
                       "ml-auto h-4 w-4",
-                      value === emoji.value ? "opacity-100" : "opacity-0",
+                      countryEmoji === emoji.value
+                        ? "opacity-100"
+                        : "opacity-0",
                     )}
                   />
                 </CommandItem>

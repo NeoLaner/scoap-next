@@ -39,7 +39,6 @@ import { useMetaData } from "~/app/_hooks/useMetaData";
 import { extractUniqueSeasons } from "~/lib/metadata";
 import Loader from "~/app/_ui/Loader";
 import dynamic from "next/dynamic";
-import Countries from "./Countries";
 import { Separator } from "~/components/ui/separator";
 import { addSubtitle } from "~/app/_actions/addSubtitle";
 import { checkSubUrl } from "~/app/_actions/checkSubUrl";
@@ -49,16 +48,21 @@ import { useUsersSubData } from "~/app/_hooks/useUsersSub";
 import { useSourceData } from "~/app/_hooks/useSourceData";
 import { useCurSub } from "~/app/_hooks/useCurSub";
 
+import { LanguagePopover } from "./LanguagePopover";
+import { type languages } from "~/lib/languages";
+
 const formSchema = z.object({
   url: z.string().url().max(250),
   name: z.string().min(3).max(20),
   translator: z.string().optional(),
   isPublic: z.boolean().optional(),
   seasonBoundary: z.array(z.string()),
-  language: z.string(),
 });
 
 function SubtitleForm() {
+  const [selectedLanguage, setSelectedLanguage] = useState<
+    (typeof languages)[number] | null
+  >(null);
   const { setCurrentSubtitle } = useCurSub();
   const btnClose = useRef<HTMLButtonElement>(null);
   const { roomData } = useRoomData();
@@ -71,7 +75,8 @@ function SubtitleForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(
       formSchema.superRefine((form, context) => {
-        if (!form.language) {
+        // if (!form.language) {
+        if (!selectedLanguage) {
           context.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Choose a language",
@@ -98,7 +103,6 @@ function SubtitleForm() {
       isPublic: false,
       seasonBoundary: [String(roomData.season)],
       translator: "",
-      language: "",
     },
   });
 
@@ -115,6 +119,7 @@ function SubtitleForm() {
         imdbId: roomData.imdbId,
         mediaType: roomData.type === "series" ? "series" : "movie",
         crossorigin: corsStatus,
+        language: selectedLanguage!,
       });
       btnClose.current?.click();
       if (values.isPublic)
@@ -261,23 +266,11 @@ function SubtitleForm() {
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="language"
-                    render={({ field }) => (
-                      <FormItem className="relative">
-                        <FormLabel>Language</FormLabel>
-                        <FormControl>
-                          <Countries
-                            setCountryEmoji={field.onChange}
-                            placeHolder="Choose a language..."
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                  <Separator />
+                  <LanguagePopover
+                    selectedLanguage={selectedLanguage}
+                    setSelectedLanguage={setSelectedLanguage}
                   />
-
                   <Separator />
 
                   {isDynamic && (

@@ -33,7 +33,7 @@ import {
 } from "~/components/ui/form";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Checkbox } from "~/components/ui/checkbox";
-import { z } from "zod";
+import { string, z } from "zod";
 
 import { Input } from "~/components/ui/input";
 import { QualityTypeEnum } from "~/lib/@types/Media";
@@ -67,6 +67,7 @@ const formSchema = z.object({
   quality: z.string(),
   qualityType: QualityTypeEnum,
   isHdr: z.boolean(),
+  countryEmoji: z.string(),
 });
 
 type Subtypes = "softsub" | "hardsub" | "noSub";
@@ -82,7 +83,6 @@ function StreamForm() {
   const { setUsersSourceData } = useUsersSourceData();
   const { setRoomSourcesData } = useRoomSources();
   const { setCurrentMediaSrc } = useCurMediaSrc();
-  const [countryEmoji, setCountryEmoji] = useState("");
 
   const { setSourceData } = useSourceData();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -95,6 +95,7 @@ function StreamForm() {
       quality: "",
       qualityType: "WebDl",
       isHdr: false,
+      countryEmoji: "",
     },
   });
 
@@ -111,7 +112,6 @@ function StreamForm() {
       season: roomData.season ?? undefined,
       episode: roomData.episode ?? undefined,
       mediaType: roomData.type === "series" ? "series" : "movie",
-      countryEmoji,
       softsub:
         subType === "softsub" && selectedLanguage ? [selectedLanguage] : [],
       hardsub:
@@ -194,9 +194,22 @@ function StreamForm() {
                   />
 
                   {/* countries */}
-                  <Countries
-                    setCountryEmoji={setCountryEmoji}
-                    placeHolder="Select country... (optional)"
+                  <FormField
+                    control={form.control}
+                    name="countryEmoji"
+                    render={({ field }) => (
+                      <FormItem className="relative">
+                        <FormLabel>Region</FormLabel>
+                        <FormControl>
+                          <Countries
+                            countryEmoji={field.value}
+                            setCountryEmoji={field.onChange}
+                            placeHolder="Choose a restricted access location..."
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                   <Separator />
 

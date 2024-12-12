@@ -28,7 +28,7 @@ export default function VideoLayout({
       <Gestures />
 
       <Captions
-        className={`${currentSubtitle?.language === "persian" && "font-farsi"} bg-none ${captionStyles.captions} unique-captions-class absolute inset-0 bottom-2 select-none break-words opacity-0 transition-[opacity,bottom] duration-300 media-captions:opacity-100 media-controls:bottom-[85px] media-preview:opacity-0`}
+        className={`${currentSubtitle?.language.toLowerCase() === "persian" && "font-farsi"} bg-none ${captionStyles.captions} unique-captions-class absolute inset-0 bottom-2 select-none break-words opacity-0 transition-[opacity,bottom] duration-300 media-captions:opacity-100 media-controls:bottom-[85px] media-preview:opacity-0`}
       />
 
       <Controls.Root
@@ -40,9 +40,9 @@ export default function VideoLayout({
           </div>
         </Controls.Group>
 
-        <Controls.Group className="flex w-full flex-1 overflow-hidden">
+        <Controls.Group className="flex w-fit flex-1 overflow-hidden">
           <UsersStatus />
-          <div className="flex-1" />
+          <div className="-z-50 flex-1" />
         </Controls.Group>
 
         <Controls.Group className="flex w-full items-center px-2">
