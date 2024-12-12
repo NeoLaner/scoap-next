@@ -34,7 +34,6 @@ export function Time({
 }: TimeSliderProps & { disabled?: boolean }) {
   function handleOnSeek(videoTs: number) {
     mediaSocket.emit("seek", { payload: { videoTs } });
-    1;
   }
   return (
     <TimeSlider.Root

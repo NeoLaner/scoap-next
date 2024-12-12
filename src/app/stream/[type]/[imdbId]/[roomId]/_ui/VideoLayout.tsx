@@ -1,5 +1,12 @@
 "use client";
-import { Captions, Controls, Gesture } from "@vidstack/react";
+import {
+  Captions,
+  Controls,
+  Gesture,
+  type GestureAction,
+  type GestureWillTriggerEvent,
+  useMediaState,
+} from "@vidstack/react";
 import captionStyles from "./css-modules/captions.module.css";
 import styles from "./css-modules/video-layout.module.css";
 
@@ -11,6 +18,9 @@ import { TimeGroup } from "./Time-group";
 import TitleLayout from "./TitleLayout";
 import UsersStatus from "./UsersStatus";
 import { useCurSub } from "~/app/_hooks/useCurSub";
+import { mediaSocket } from "~/lib/socket/socket";
+import { toggleFullscreen } from "~/lib/btnEvent";
+import { useEffect, useState } from "react";
 
 export interface VideoLayoutProps {
   thumbnails?: string;
@@ -67,27 +77,73 @@ export default function VideoLayout({
 }
 
 function Gestures() {
+  const [isActive, setIsActive] = useState(false);
+  useEffect(() => setIsActive(document.fullscreenElement !== null), []);
+  function onPaused(
+    action: GestureAction,
+    nativeEvent: GestureWillTriggerEvent,
+  ) {
+    // Prevent the gesture from triggering.
+    // nativeEvent.preventDefault();
+    if (isPaused) mediaSocket.emit("play");
+    else mediaSocket.emit("pause");
+  }
+  const isPaused = useMediaState("paused");
+
+  async function onFullscreen(
+    action: GestureAction,
+    nativeEvent: GestureWillTriggerEvent,
+  ) {
+    // Prevent the gesture from triggering.
+    nativeEvent.preventDefault();
+    await toggleFullscreen({ setIsActive: setIsActive });
+  }
+
+  async function onSeekForward(
+    action: GestureAction,
+    nativeEvent: GestureWillTriggerEvent,
+  ) {
+    // Prevent the gesture from triggering.
+    // nativeEvent.preventDefault();
+    const videoTs = Number(action.split(":")[1]);
+    mediaSocket.emit("seek", { payload: { videoTs } });
+  }
+
+  async function onSeekBackward(
+    action: GestureAction,
+    nativeEvent: GestureWillTriggerEvent,
+  ) {
+    // Prevent the gesture from triggering.
+    // nativeEvent.preventDefault();
+    const videoTs = Number(action.split(":")[1]);
+    mediaSocket.emit("seek", { payload: { videoTs } });
+  }
+
   return (
     <>
       <Gesture
         className="absolute inset-0 z-0 block h-full w-full"
         event="pointerup"
         action="toggle:paused"
+        onWillTrigger={onPaused}
       />
       <Gesture
         className="absolute inset-0 z-0 block h-full w-full"
         event="dblpointerup"
         action="toggle:fullscreen"
+        onWillTrigger={onFullscreen}
       />
       <Gesture
         className="absolute left-0 top-0 z-10 block h-full w-1/5"
         event="dblpointerup"
         action="seek:-10"
+        onWillTrigger={onSeekBackward}
       />
       <Gesture
         className="absolute right-0 top-0 z-10 block h-full w-1/5"
         event="dblpointerup"
         action="seek:10"
+        onWillTrigger={onSeekForward}
       />
     </>
   );

@@ -64,8 +64,6 @@ export function Play({
   disabled = false,
 }: MediaButtonProps & { disabled?: boolean }) {
   const isPaused = useMediaState("paused");
-  const { roomData: room } = useRoomData();
-  const { userData } = useUserData();
 
   return (
     <TooltipProvider>
