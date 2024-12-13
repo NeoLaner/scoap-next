@@ -32,12 +32,12 @@ export const CurrentMediaSrcProvider = ({
 }) => {
   const [currentMediaSrc, setCurrentMediaSrc] = useState(initialCurMediaSrc);
 
-  useEffect(function () {
-    if (!currentMediaSrc?.url)
-      setTimeout(() => {
-        eventEmitter.emit("server:message", "NO_SOURCE");
-      }, 900);
-  }, []);
+  // useEffect(function () {
+  //   if (!currentMediaSrc?.pathname)
+  //     setTimeout(() => {
+  //       eventEmitter.emit("server:message", "NO_SOURCE");
+  //     }, 900);
+  // }, []);
 
   return (
     <CurrentMediaSrcContext.Provider
