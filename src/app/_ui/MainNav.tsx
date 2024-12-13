@@ -1,12 +1,13 @@
 import { HiHome, HiOutlineHome } from "react-icons/hi";
 import ButtonLinkNav from "./ButtonLinkNav";
 import {
+  PiBooks,
+  PiBooksFill,
   PiGearFine,
   PiGearFineFill,
-  PiQuestion,
-  PiQuestionFill,
+  PiNotebook,
+  PiNotebookFill,
 } from "react-icons/pi";
-import { GalleryVerticalEnd } from "lucide-react";
 
 function MainNav() {
   return (
@@ -21,8 +22,8 @@ function MainNav() {
         <ButtonLinkNav
           name="Collections"
           href="/collections"
-          Icon={<GalleryVerticalEnd size={26} />}
-          IconActive={<GalleryVerticalEnd fill="red" size={26} />}
+          Icon={<PiBooks size={28} />}
+          IconActive={<PiBooksFill fill="red" size={28} />}
         />
         {/* <ButtonLinkNav
           name="Discover"
@@ -33,8 +34,8 @@ function MainNav() {
         <ButtonLinkNav
           name="Help"
           href="/help"
-          Icon={<PiQuestion size={28} />}
-          IconActive={<PiQuestionFill size={28} />}
+          Icon={<PiNotebook size={28} />}
+          IconActive={<PiNotebookFill size={28} />}
         />
         <ButtonLinkNav
           name="Settings"

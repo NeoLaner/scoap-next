@@ -61,7 +61,7 @@ function UserDetails() {
     //     <Button className="w-full">Update profile</Button>
     //   </Form.Submit>
     // </Form.Root>
-    <div>das</div>
+    <></>
   );
 }
 
