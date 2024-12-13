@@ -32,6 +32,7 @@ async function RecentCollection() {
         <PopularMedias
           heading="Watching recently"
           items={popularMedias.medias}
+          collectionUniqueName="recent"
         />
       )}
     </div>

@@ -6,7 +6,9 @@ import {
   MuteButton,
   PIPButton,
   PlayButton,
+  useMediaRemote,
   useMediaState,
+  useMediaStore,
   type TooltipPlacement,
 } from "@vidstack/react";
 
@@ -48,6 +50,7 @@ import { BsShare, BsShareFill } from "react-icons/bs";
 import { ExternalToast, toast } from "sonner";
 import { cn } from "~/lib/utils";
 import { Captions, CaptionsOff } from "lucide-react";
+import { usePlayerRef } from "~/app/_hooks/usePlayerRef";
 
 export interface MediaButtonProps {
   tooltipPlacement: TooltipPlacement;
@@ -63,21 +66,30 @@ export function Play({
   tooltipPlacement,
   disabled = false,
 }: MediaButtonProps & { disabled?: boolean }) {
-  const isPaused = useMediaState("paused");
+  const { playerRef } = usePlayerRef();
+  const { paused } = useMediaStore(playerRef);
+  const remote = useMediaRemote(playerRef);
 
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <PlayButton
+          <Button
+            variant={"ghost"}
+            size={"icon"}
             className={buttonClass}
             disabled={disabled}
             onClick={() => {
-              if (isPaused) mediaSocket.emit("play");
-              else mediaSocket.emit("pause");
+              if (paused) {
+                mediaSocket.emit("play");
+                remote.play();
+              } else {
+                mediaSocket.emit("pause");
+                remote.pause();
+              }
             }}
           >
-            {isPaused ? (
+            {paused ? (
               <PiPlayCircleFill
                 className={`h-6 w-6 ${disabled && "opacity-30"} text-solid-primary-2`}
               />
@@ -85,10 +97,10 @@ export function Play({
               // <div>icon</div>
               <PiPauseCircleFill size={26} className="text-solid-primary-2" />
             )}
-          </PlayButton>
+          </Button>
         </TooltipTrigger>
         <TooltipContent sideOffset={30}>
-          {isPaused ? "Play" : "Pause"}
+          {paused ? "Play" : "Pause"}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

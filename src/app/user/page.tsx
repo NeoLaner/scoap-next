@@ -6,7 +6,6 @@ import { getServerAuthSession } from "~/server/auth";
 async function page() {
   const user = await getServerAuthSession();
   if (!user?.user.id) return <div>Login</div>;
-  const srcs = await api.user.getAllSrcByDomain();
 
   return (
     <div>

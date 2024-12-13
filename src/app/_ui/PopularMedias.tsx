@@ -16,17 +16,19 @@ type Item = {
 function PopularMedias({
   heading,
   items,
-  // collectionUniqueName,
+  collectionUniqueName,
 }: {
   heading: string;
   items: Item[];
-  // collectionUniqueName: string;
+  collectionUniqueName?: string;
 }) {
   return (
     <section>
       <div className="flex justify-between">
         <MediasHeading>{heading}</MediasHeading>
-        <CollectionLink collectionUniqueName={"recent"} />
+        {collectionUniqueName && (
+          <CollectionLink collectionUniqueName={collectionUniqueName} />
+        )}
       </div>
       <ScrollAreaX>
         <div className="flex min-w-0 shrink grow basis-0 select-none gap-4 pb-6">
@@ -47,7 +49,9 @@ export function CollectionLink({
   collectionUniqueName: string;
 }) {
   return (
-    <Link href={`/collections/${"670b4a4dbca43552aa3f4af6"}/${"recent"}`}>
+    <Link
+      href={`/collections/${"670b4a4dbca43552aa3f4af6"}/${collectionUniqueName}`}
+    >
       Show All
     </Link>
   );

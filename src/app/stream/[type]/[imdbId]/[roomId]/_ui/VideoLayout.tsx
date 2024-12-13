@@ -82,8 +82,7 @@ export default function VideoLayout({
 function Gestures() {
   const [isActive, setIsActive] = useState(false);
   const { playerRef } = usePlayerRef();
-  const remote = useMediaRemote(playerRef);
-  const { currentTime, waiting, playbackRate } = useMediaStore(playerRef);
+  const { currentTime, paused } = useMediaStore(playerRef);
   useEffect(() => setIsActive(document.fullscreenElement !== null), []);
 
   function onPaused(
@@ -92,10 +91,9 @@ function Gestures() {
   ) {
     // Prevent the gesture from triggering.
     // nativeEvent.preventDefault();
-    if (isPaused) mediaSocket.emit("play");
+    if (paused) mediaSocket.emit("play");
     else mediaSocket.emit("pause");
   }
-  const isPaused = useMediaState("paused");
 
   async function onFullscreen(
     action: GestureAction,
@@ -131,7 +129,7 @@ function Gestures() {
   return (
     <>
       <Gesture
-        className="absolute inset-0 z-0 block h-full w-full"
+        className="absolute inset-0 z-0 mx-auto block h-full w-5/6"
         event="pointerup"
         action="toggle:paused"
         onWillTrigger={onPaused}
